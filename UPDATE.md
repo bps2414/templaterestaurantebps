@@ -1,0 +1,353 @@
+# 🔎 UPDATE — Auditoria Final + Plano de Melhorias
+
+> **Data:** 11/02/2026  
+> **Versão:** 1.0  
+> **Status:** Produto vendável com correções pendentes
+
+---
+
+## 📋 ÍNDICE
+
+1. [Resumo Executivo](#1--resumo-executivo)
+2. [Auditoria Técnica](#2--auditoria-técnica)
+3. [Auditoria Comercial](#3--auditoria-comercial)
+4. [Auditoria de UX](#4--auditoria-de-ux)
+5. [Riscos Reais](#5--riscos-reais)
+6. [Notas Finais](#6--notas-finais)
+7. [Plano de Melhorias por Fases](#7--plano-de-melhorias-por-fases)
+8. [Changelog](#8--changelog)
+
+---
+
+## 1 — Resumo Executivo
+
+### O produto é vendável?
+
+**SIM.** O sistema está funcional, seguro o suficiente e pronto para restaurantes pequenos no Brasil. Com **3 correções obrigatórias** (~3 horas de trabalho), fica pronto para a primeira venda.
+
+### Notas
+
+| Critério | Nota | Justificativa |
+|---|---|---|
+| **Técnica** | **7.5/10** | Backend bem estruturado, segurança acima da média, mas tem debug logs em produção, refresh token plain-text, e filesystem efêmero para uploads. |
+| **Comercial** | **7/10** | Vendável para restaurante pequeno BR. Faltam QR Code, SEO e seletor de tema para competir com cardápio digital. Mas o WhatsApp order é diferencial matador. |
+| **Vendabilidade** | **7/10** | Pronto para vender com 3 correções obrigatórias. Depois disso, sobe para 8.5/10. |
+
+---
+
+## 2 — Auditoria Técnica
+
+### ✅ Pontos Fortes
+
+| Área | Detalhes |
+|---|---|
+| **Estrutura backend** | Boa separação: routes → middlewares → services → prisma. Padrão Express profissional. |
+| **Validação de input** | Zod em todas as rotas com schemas tipados. Nenhuma rota de escrita aceita dados sem validação. |
+| **Error handler centralizado** | Trata Prisma (P2002, P2025), Multer, Zod, CORS, JSON parse. Nunca vaza stack trace em produção. |
+| **Upload seguro** | 3 camadas de proteção: MIME whitelist → extensão whitelist → magic bytes (file signature). Padrão profissional. |
+| **Auth com JWT** | Access + Refresh tokens, `tokenVersion` para invalidação imediata após troca de senha, hash SHA-256 no refresh. |
+| **Brute force protection** | In-memory tracker com lock de 15min após 5 tentativas. Timing attack prevention (dummy hash quando user não existe). |
+| **CSRF** | Double Submit Cookie com `crypto.timingSafeEqual`. Implementação correta e stateless. |
+| **Helmet** | CSP configurado com whitelists, HSTS com preload, X-Frame-Options DENY, Permissions-Policy restritivo. |
+| **Rate limiting** | 3 limiters calibrados: API (100/15min), Auth (10/15min), Upload (30/h). |
+| **Prisma schema** | Limpo, enums corretos, cascade deletes, UUIDs, indexes adequados. |
+| **Logger Winston** | Structured logging, file rotation em produção (10MB/5 files), sanitized (nunca loga PII). |
+| **Config sanitization** | Whitelist de keys + strip de `<script>`, `javascript:`, `<iframe>`, event handlers. Proteção XSS no backend. |
+
+### ⚠️ Problemas Encontrados
+
+| # | Severidade | Problema | Arquivo | Status |
+|---|---|---|---|---|
+| 1 | 🔴 **ALTA** | **Console.logs de debug em produção** — CSRF middleware loga tokens parciais, headers, origin. Upload route loga nomes de arquivo. Vaza informação sensível nos logs do Render. | `server/src/middlewares/csrf.ts`, `server/src/routes/upload.ts`, `server/src/app.ts` | ❌ Pendente |
+| 2 | 🔴 **ALTA** | **CSRF retorna `debug` info na resposta 403** — `{ hasCookie, hasHeader }` expõe informação interna para atacante na resposta HTTP. | `server/src/middlewares/csrf.ts` | ❌ Pendente |
+| 3 | 🟡 **MÉDIA** | **Uploads no filesystem efêmero** — Render Free/Starter reinicia e perde todo o filesystem. Imagens do cliente **desaparecem** no redeploy. | Arquitetura (sem storage externo) | ❌ Pendente |
+| 4 | 🟡 **MÉDIA** | **Rate limit in-memory** — Se o servidor reinicia (Render cold start), todos os locks de brute force resetam. Sem Redis = sem persistência. | `server/src/middlewares/rateLimit.ts`, `server/src/services/authService.ts` | ⏳ Aceitável por agora |
+| 5 | 🟡 **MÉDIA** | **Refresh token armazenado plain-text no banco** — O campo `refreshToken` guarda o token original. O `refreshTokenHash` existe mas a busca é feita por `refreshToken` (plain). | `server/src/services/authService.ts` | ⏳ Aceitável (banco é privado) |
+| 6 | 🟡 **MÉDIA** | **Dockerfile referencia paths frágeis** — `COPY --from=builder /app/../*.html` é frágil e pode quebrar em alguns Docker builders. Também referencia "fluxpay" em docker-compose.dev. | `server/Dockerfile`, `docker-compose.dev.yml` | ⏳ Não afeta Render |
+| 7 | 🟢 **BAIXA** | **`validators.ts` tem schemas de outro projeto** — `registerSchema`, `forgotPasswordSchema`, `resetPasswordSchema`, `checkoutSchema` com `planId`/`organizationId` que não existem neste template. Código morto. | `server/src/utils/validators.ts` | ⏳ Limpeza futura |
+| 8 | 🟢 **BAIXA** | **Sem testes automatizados** — Jest configurado mas sem suíte de testes atual. `auth.test.ts` e `billing.test.ts` existem só nos backups. | `server/src/__tests__/` | ⏳ Fase futura |
+| 9 | 🟢 **BAIXA** | **Admin não é responsivo** — Sidebar fixa de 260px. Em celular do dono do restaurante, layout quebra. | `public/admin.html` | ⏳ Após primeira venda |
+
+### Escalabilidade
+
+- **Para restaurante pequeno (1 admin, ~50 pratos, ~20 imagens): PERFEITO.** Não precisa escalar.
+- **Limite real**: Neon Free (0.5GB). Com ~50 pratos + configs = ~5MB. Vai durar anos.
+- **Gargalo futuro**: uploads no filesystem. Se cliente subir 200 fotos HD e o Render redeployar, perde tudo.
+
+---
+
+## 3 — Auditoria Comercial
+
+### ✅ Por que é vendável
+
+1. **Painel admin funcional** — O dono do restaurante mexe sem saber código
+2. **Pedido via WhatsApp** — É assim que 90% dos restaurantes pequenos no BR funcionam
+3. **Visual profissional** — Tailwind + dark theme dá cara de premium
+4. **Custo operacional mínimo** — R$0 (free tier) ou ~R$42/mês (Starter)
+5. **Entrega rápida** — Troca nome, cores, WhatsApp, deploy = 1-2 horas por cliente
+
+### ⚠️ O que o cliente vai perguntar (e você precisa ter resposta)
+
+| Pergunta do Cliente | Resposta Atual | Status |
+|---|---|---|
+| "Tem cardápio digital com QR Code?" | Não tem geração automática de QR. | ❌ Não tem — Fase 2 |
+| "Aparece no Google?" | Sem SEO técnico (meta description, OG tags, sitemap.xml, robots.txt). | ❌ Falta — Fase 2 |
+| "Aceita Pix?" | Checkout é via Stripe (cartão). Pix é 80% do Brasil. | ❌ Sem Pix nativo — contorno: pedido via WhatsApp |
+| "Posso mudar a cor do site?" | Precisa de você. Não tem seletor de tema no admin. | ❌ Não tem — Fase 3 |
+| "E o Instagram?" | Só link, sem feed integrado. | ⚠️ OK (link basta para restaurante pequeno) |
+| "E se eu trocar o número de WhatsApp?" | Muda pelo painel admin. | ✅ Funciona |
+| "E domínio próprio?" | Configurável no Render. Custo: R$40-60/ano. | ✅ Funciona |
+
+### 📈 O que aumentaria valor percebido
+
+1. **QR Code gerado automaticamente** para mesa → "Imprime e cola na mesa"
+2. **Seletor de cores/tema** no painel admin → "Escolha a cara do seu restaurante"
+3. **Meta tags dinâmicas + sitemap.xml** → "Seu restaurante aparece no Google"
+4. **Link "Powered by [SuaMarca]"** no footer → Marketing passivo grátis
+5. **Contador de visitas simples** → "X pessoas viram seu cardápio essa semana"
+
+### 🔻 Pontos fracos comerciais
+
+| Fraqueza | Impacto | Solução |
+|---|---|---|
+| Sem domínio incluído | Cliente paga R$40-60/ano à parte | Oferecer como extra no pacote |
+| Sem email profissional | contato@restaurante.com.br precisa config separada | Indicar Zoho Mail (grátis) |
+| Sem app nativo | Mas PWA resolve parcialmente | Fase futura |
+| Hard-coded em PT-BR | Bom para BR, limita mercado | OK para o alvo atual |
+
+---
+
+## 4 — Auditoria de UX
+
+### Painel Admin
+
+| Aspecto | Nota | Comentário |
+|---|---|---|
+| **Simplicidade** | 8/10 | 4 abas claras: Pratos, Categorias, Galeria, Configurações. Intuitivo. |
+| **CRUD de pratos** | 9/10 | Modal limpo, upload de foto, preço em R$, checkbox destaque/ativo. Funcional. |
+| **Configurações** | 7/10 | Todas as fields têm label claro. Mas **não tem preview** — cliente salva às cegas. |
+| **Responsivo (admin)** | 5/10 | Sidebar fixa de 260px. Em celular do dono do restaurante, **quebra**. Precisa de menu hamburger. |
+| **Feedback** | 8/10 | Toast de sucesso/erro. Confirmação antes de deletar. Bom. |
+| **Onboarding** | 6/10 | Não tem tutorial in-app. Cliente precisa de treinamento externo (vídeo/call). |
+
+### Cliente leigo consegue usar?
+
+**SIM, com tutorial de 10 minutos.** Mas atenção a estes problemas:
+
+| Problema de UX | Risco | Solução |
+|---|---|---|
+| Campo "Preço" aceita valor livre | Se cliente digitar "3990" achando que é centavos → R$39.900 | Adicionar máscara de input (R$ XX,XX) |
+| "WhatsApp (com DDI)" | Cliente não sabe o que é DDI | Placeholder melhor: "5511999998888" |
+| Imagens placeholder | Se não subir fotos, aparece "via.placeholder.com" → parece site quebrado | Usar imagem padrão bonita |
+| Sem preview das configurações | Cliente salva e precisa ir no site pra ver como ficou | Adicionar preview ao vivo na aba Config |
+
+### Fluxo de Pedido via WhatsApp
+
+| Etapa | Status | Comentário |
+|---|---|---|
+| Botão "Pedir pelo WhatsApp" | ✅ Funciona | Abre chat direto com mensagem pré-formatada |
+| Quick order (clicou no prato) | ✅ Funciona | Vai pro WhatsApp com nome + preço |
+| Carrinho | ✅ Funciona | Adiciona itens, calcula total, envia lista formatada pelo WhatsApp |
+
+---
+
+## 5 — Riscos Reais
+
+### 💰 Custos de Infra (por cliente)
+
+| Serviço | Free | Pago | Quando migrar |
+|---|---|---|---|
+| **Render** | Grátis (dorme em 15min) | $7/mês (Starter, ~R$42) | Quando vender — Starter é obrigatório |
+| **Neon** | 0.5GB, 100 projetos, sem expiração | $19/mês (Scale) | Nunca para restaurante pequeno |
+| **Domínio** | — | R$40-60/ano (~R$4/mês) | Se cliente quiser .com.br |
+| **Cloudinary (uploads)** | 25GB/mês grátis | $89/mês (Pro) | Usar Free sempre — sobra muito |
+| **Total mínimo** | R$0/mês | ~R$42-46/mês | Cobrar R$100-200/mês do cliente |
+
+### 🔧 Manutenção
+
+| Risco | Probabilidade | Impacto | Mitigação |
+|---|---|---|---|
+| **Imagens somem no redeploy** | 🔴 ALTA (100%) | Cliente perde todas as fotos | Migrar para Cloudinary/S3 **ANTES de vender** |
+| **Dependências desatualizadas** | 🟡 MÉDIA | Vulnerabilidades futuras | Update a cada 3-6 meses |
+| **Sem backup automático** | 🟡 MÉDIA | Perde tudo se Neon morrer | pg_dump periódico ou Neon pago |
+| **Render Free dorme** | 🟢 BAIXA (se usar Starter) | 30s de espera | Usar Starter ($7/mês) para clientes pagantes |
+
+### 🔒 Segurança
+
+| Risco | Severidade | Status |
+|---|---|---|
+| Console.logs de debug em produção | 🔴 ALTA | **Corrigir ANTES de vender** |
+| Debug info na resposta CSRF 403 | 🔴 ALTA | **Corrigir ANTES de vender** |
+| Rate limit sem persistência (Redis) | 🟡 MÉDIA | Aceitável para restaurante pequeno |
+| Refresh token plain-text no banco | 🟡 MÉDIA | Aceitável (banco é privado no Neon) |
+| Sem WAF (Web Application Firewall) | 🟢 BAIXA | Cloudflare Free resolve (fase futura) |
+
+### ⛓ Dependência Técnica
+
+- **Cliente depende 100% de você** para infra, deploy, updates
+- **Isso é BOM** para receita recorrente (manutenção mensal)
+- **Isso é RUIM** se você sumir (cliente fica na mão)
+- **Mitigação**: GUIA_COMPLETO_DEPLOY.md e GUIA_VENDAS_E_CUSTOMIZACAO.md documentam tudo
+
+---
+
+## 6 — Notas Finais
+
+### 🚨 ANTES da Primeira Venda — Obrigatório
+
+| # | O que | Por quê | Esforço | Fase |
+|---|---|---|---|---|
+| 1 | Remover TODOS os `console.log` de debug | Vaza info sensível nos logs do Render | 10 min | **FASE 0** |
+| 2 | Remover campo `debug` da resposta CSRF 403 | Expõe internals para atacante | 2 min | **FASE 0** |
+| 3 | Migrar uploads para Cloudinary ou S3 | Imagens do cliente DESAPARECEM no redeploy | 2-3 horas | **FASE 0** |
+
+### 📈 DEPOIS do Primeiro Cliente — Melhorias de Valor
+
+| # | O que | Impacto em Vendas | Esforço |
+|---|---|---|---|
+| 1 | Gerador de QR Code no admin | +30% valor percebido | 1-2h |
+| 2 | Meta tags dinâmicas + sitemap.xml | SEO, "aparece no Google" | 1h |
+| 3 | Admin responsivo (mobile) | Dono edita pelo celular | 2-3h |
+| 4 | Máscara de preço no input | Evita erro do cliente | 30 min |
+| 5 | Limpar código legado (validators.ts, docker-compose) | Profissionalismo | 30 min |
+| 6 | Imagens placeholder padrão | Não parecer site quebrado | 1h |
+| 7 | Preview ao vivo na aba Config | "Salvar e ver como ficou" | 2-3h |
+
+---
+
+## 7 — Plano de Melhorias por Fases
+
+### FASE 0 — Correções Obrigatórias (ANTES da 1ª venda)
+
+> ⏱️ Estimativa total: **3-4 horas**
+> 🎯 Objetivo: Deixar seguro e funcional para produção real
+
+| # | Tarefa | Esforço | Prioridade |
+|---|---|---|---|
+| 0.1 | Remover `console.log` de debug em `csrf.ts` | 5 min | 🔴 Crítico |
+| 0.2 | Remover `console.log` de debug em `app.ts` (CORS logs) | 5 min | 🔴 Crítico |
+| 0.3 | Remover `console.log` de debug em `upload.ts` (route) | 5 min | 🔴 Crítico |
+| 0.4 | Remover campo `debug` da resposta 403 do CSRF | 2 min | 🔴 Crítico |
+| 0.5 | Integrar Cloudinary para uploads (substituir filesystem local) | 2-3h | 🔴 Crítico |
+| 0.6 | Testar deploy completo com Cloudinary | 30 min | 🔴 Crítico |
+| 0.7 | Commit + push tudo para o GitHub | 5 min | 🔴 Crítico |
+
+**Detalhes da integração Cloudinary (0.5):**
+1. Criar conta no Cloudinary (https://cloudinary.com) — plano Free: 25GB/mês
+2. Instalar SDK: `npm install cloudinary`
+3. Adicionar env vars: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`
+4. Modificar `server/src/middlewares/upload.ts` para fazer upload para Cloudinary
+5. Modificar rotas de dishes, gallery, upload para usar URLs do Cloudinary
+6. Remover dependência do filesystem local para uploads
+7. Manter magic bytes validation (validar ANTES de enviar pro Cloudinary)
+
+---
+
+### FASE 1 — Melhorias Rápidas (Primeiras 2 semanas após 1ª venda)
+
+> ⏱️ Estimativa total: **5-8 horas**
+> 🎯 Objetivo: Resolver os problemas de UX mais evidentes
+
+| # | Tarefa | Esforço | Impacto |
+|---|---|---|---|
+| 1.1 | Máscara de preço no input (R$ XX,XX) no admin | 30 min | Evita erros de preço |
+| 1.2 | Placeholder de WhatsApp melhor ("5511999998888") | 10 min | Cliente sabe o formato |
+| 1.3 | Imagem padrão bonita quando não há foto (em vez de via.placeholder.com) | 1h | Site não parece quebrado |
+| 1.4 | Limpar `validators.ts` (remover schemas mortos do SaaS) | 20 min | Código limpo |
+| 1.5 | Limpar `docker-compose.dev.yml` (trocar "fluxpay" por nomes corretos) | 10 min | Profissionalismo |
+| 1.6 | Limpar `Dockerfile` (paths frágeis de cópia de frontend) | 20 min | Build mais robusto |
+| 1.7 | Meta tags dinâmicas (title, description, OG) baseadas no SiteConfig | 1-2h | SEO básico |
+| 1.8 | Gerar `sitemap.xml` e `robots.txt` dinâmicos | 1h | Google indexa o site |
+| 1.9 | Admin responsivo — menu hamburger para mobile | 2-3h | Dono edita pelo celular |
+
+---
+
+### FASE 2 — Valor Agregado (Semanas 3-6)
+
+> ⏱️ Estimativa total: **10-15 horas**
+> 🎯 Objetivo: Funcionalidades que vendem mais pacotes (Profissional/Premium)
+
+| # | Tarefa | Esforço | Impacto Comercial |
+|---|---|---|---|
+| 2.1 | **Gerador de QR Code** no admin (link do cardápio digital) | 2h | +30% valor percebido — "QR Code para mesa" |
+| 2.2 | **Preview ao vivo** na aba Configurações (iframe com preview) | 2-3h | Cliente vê resultado antes de salvar |
+| 2.3 | **Contador de visitas simples** (pageviews por dia, gráfico básico) | 3-4h | "X pessoas viram seu cardápio essa semana" |
+| 2.4 | **Link "Powered by [SuaMarca]"** no footer do site | 30 min | Marketing passivo grátis em cada site |
+| 2.5 | **Horários de funcionamento** visível no site (não só no admin) | 1h | Cliente pergunta isso |
+| 2.6 | **Google Maps embed** funcional na página de contato | 1h | Dá credibilidade |
+| 2.7 | **Botão "Ver no Mapa"** no footer/contato | 30 min | UX melhor para quem busca endereço |
+
+---
+
+### FASE 3 — Diferencial Competitivo (Mês 2-3)
+
+> ⏱️ Estimativa total: **20-30 horas**
+> 🎯 Objetivo: Se destacar dos concorrentes (Cardápio Digital, iFood, etc.)
+
+| # | Tarefa | Esforço | Impacto Comercial |
+|---|---|---|---|
+| 3.1 | **Seletor de cores/tema** no painel admin | 4-6h | Cliente customiza sem você — menos suporte |
+| 3.2 | **PWA (Progressive Web App)** — instalar como app no celular | 3-4h | "Baixe o app do restaurante!" |
+| 3.3 | **Sistema de avaliações** (estrelas nos pratos) | 4-6h | Social proof — "4.8 ★ — 52 avaliações" |
+| 3.4 | **Notificações push** (promoções) | 4-6h | Engajamento — "Promoção: 2x1 hoje!" |
+| 3.5 | **Multi-idioma** (PT-BR / EN / ES) | 4-6h | Abre mercado para turistas |
+| 3.6 | **Integração Pix** (QR Code de pagamento) | 6-8h | 80% do Brasil paga com Pix |
+| 3.7 | **Dashboard com métricas** (pratos mais vistos, horários de pico) | 6-8h | Valor premium — "dados do seu negócio" |
+
+---
+
+### FASE 4 — Escala (Mês 3+)
+
+> ⏱️ Estimativa: contínuo
+> 🎯 Objetivo: Automatizar e escalar o negócio
+
+| # | Tarefa | Esforço | Impacto |
+|---|---|---|---|
+| 4.1 | **Painel de admin multi-tenant** (gerenciar N clientes de um lugar) | 20-30h | Você gerencia 50 clientes sem abrir 50 painéis |
+| 4.2 | **Auto-provisioning** (cliente preenche form → Render/Neon cria automaticamente) | 15-20h | Escala sem trabalho manual |
+| 4.3 | **Testes automatizados** (Jest + Supertest) | 8-10h | Qualidade garantida em updates |
+| 4.4 | **CI/CD pipeline** (GitHub Actions) | 3-4h | Deploy automático com testes |
+| 4.5 | **Migrar para Redis** (rate limit, sessões, cache) | 4-6h | Performance e persistência |
+| 4.6 | **Buscar refresh token por hash** (não plain-text) | 2h | Security best practice |
+| 4.7 | **Monitoramento** (Sentry, UptimeRobot, alertas) | 2-3h | Saber quando cai antes do cliente |
+| 4.8 | **Backup automático** (pg_dump via cron) | 2h | Nunca perder dados |
+
+---
+
+### Resumo Visual das Fases
+
+```
+📅 TIMELINE
+
+AGORA (Fase 0)          Semana 1-2 (Fase 1)     Semana 3-6 (Fase 2)      Mês 2-3 (Fase 3)        Mês 3+ (Fase 4)
+━━━━━━━━━━━━━━━━━       ━━━━━━━━━━━━━━━━━        ━━━━━━━━━━━━━━━━━        ━━━━━━━━━━━━━━━━━       ━━━━━━━━━━━━━━━━━
+🔴 Debug logs           🟡 Máscara preço         🟢 QR Code               🔵 Seletor de tema      ⚪ Multi-tenant
+🔴 CSRF debug info      🟡 Placeholder WA        🟢 Preview config        🔵 PWA                  ⚪ Auto-provision
+🔴 Cloudinary           🟡 Imagem padrão         🟢 Contador visitas      🔵 Avaliações           ⚪ Testes auto
+                        🟡 Limpar validators     🟢 Powered by            🔵 Pix                  ⚪ CI/CD
+                        🟡 Meta tags/SEO         🟢 Maps embed            🔵 Dashboard métricas   ⚪ Redis
+                        🟡 Admin responsivo                                                       ⚪ Monitoramento
+
+🔴 = Obrigatório        🟡 = Importante          🟢 = Valor agregado      🔵 = Diferencial        ⚪ = Escala
+    (3-4h)                  (5-8h)                   (10-15h)                 (20-30h)               (contínuo)
+```
+
+---
+
+## 8 — Changelog
+
+| Data | Versão | Mudanças |
+|---|---|---|
+| 11/02/2026 | 1.0 | Auditoria inicial completa. Plano de melhorias em 5 fases documentado. |
+
+---
+
+## Referências
+
+- [GUIA_VENDAS_E_CUSTOMIZACAO.md](GUIA_VENDAS_E_CUSTOMIZACAO.md) — Como vender, preços, customização, FAQ
+- [GUIA_COMPLETO_DEPLOY.md](GUIA_COMPLETO_DEPLOY.md) — Deploy passo a passo (local → produção → cliente)
+- [README.md](README.md) — Documentação técnica do projeto
+
+---
+
+> **Próximo passo:** Execute a **Fase 0** (3-4 horas) e faça a primeira venda.

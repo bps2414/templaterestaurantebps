@@ -1,7 +1,8 @@
 # 🚀 Guia de Vendas e Customização — Template Restaurante
 
 > **Para:** Você que vai vender templates para restaurantes  
-> **Atualização:** Fevereiro 2026
+> **Atualização:** 11/02/2026  
+> **Auditoria:** Ver [UPDATE.md](UPDATE.md) para relatório completo de auditoria técnica + comercial
 
 ---
 
@@ -12,6 +13,8 @@
 3. [Customização do Frontend](#3--customização-do-frontend)
 4. [Preços Sugeridos](#4--preços-sugeridos)
 5. [FAQ de Vendas](#5--faq-de-vendas)
+6. [Riscos e Limitações Conhecidas](#6--riscos-e-limitações-conhecidas)
+7. [Roadmap de Melhorias](#7--roadmap-de-melhorias)
 
 ---
 
@@ -374,13 +377,22 @@ Render vai redeploy automaticamente (~3 min).
 
 ## 4 — Preços Sugeridos
 
+### ⚠️ Antes de Vender — Checklist Obrigatório
+
+Antes de fechar qualquer venda, garanta que completou a **Fase 0** do [UPDATE.md](UPDATE.md):
+
+- [ ] Removeu todos os `console.log` de debug (csrf.ts, app.ts, upload.ts)
+- [ ] Removeu campo `debug` da resposta 403 do CSRF
+- [ ] Integrou Cloudinary para uploads (imagens somem sem isso!)
+- [ ] Testou deploy completo com Cloudinary funcionando
+
 ### Pacotes
 
-| Pacote | O que Inclui | Preço Sugerido |
-|--------|--------------|----------------|
-| **Básico** | Setup inicial + Render Free + Neon Free + Suporte 30 dias | **R$ 300-500** |
-| **Profissional** | Setup + Render Starter ($7/mês) + Domínio customizado + Suporte 90 dias | **R$ 600-900** |
-| **Premium** | Setup + Render Starter + Domínio + Customização de cores/logo + Suporte 180 dias | **R$ 1200-1800** |
+| Pacote | O que Inclui | Preço Sugerido | Seu Custo Mensal | Lucro na Venda |
+|--------|--------------|----------------|------------------|----------------|
+| **Básico** | Setup + Render Starter + Neon Free + Cloudinary Free + Suporte 30 dias | **R$ 500** | ~R$42/mês | ~R$458 |
+| **Profissional** | Básico + Domínio customizado + Troca de cores + Logo + Suporte 90 dias | **R$ 800** | ~R$46/mês | ~R$708 |
+| **Premium** | Profissional + QR Code + SEO + Treinamento 1h + Suporte 180 dias | **R$ 1.400** | ~R$46/mês | ~R$1.308 |
 
 ### Mensalidade (Opcional)
 
@@ -515,3 +527,69 @@ Antes de marcar como "entregue", verifique:
 5. **Cobre mensalidade** para garantir renda recorrente
 
 **Boa sorte nas vendas! 🚀**
+
+---
+
+## 6 — Riscos e Limitações Conhecidas
+
+> ⚠️ Leia antes de vender. Saiba o que pode dar errado e como resolver.
+
+### Riscos Técnicos
+
+| Risco | Probabilidade | O que acontece | Como resolver |
+|---|---|---|---|
+| **Imagens somem no redeploy** | 🔴 100% (sem Cloudinary) | Cliente perde todas as fotos do cardápio/galeria | Integrar Cloudinary (Fase 0 — **obrigatório**) |
+| **Render Free dorme** | 🔴 ALTA | Site leva 30s para abrir | Usar Render Starter ($7/mês) para clientes reais |
+| **Neon Free cai** | 🟢 BAIXA | Raro, mas possível | Backup pg_dump mensal |
+| **Dependências desatualizadas** | 🟡 MÉDIA a longo prazo | Vulnerabilidades futuras | `npm audit` + update a cada 3-6 meses |
+
+### Riscos Comerciais
+
+| Risco | O que acontece | Como resolver |
+|---|---|---|
+| **Cliente quer Pix** | 80% do BR paga com Pix — seu sistema não aceita nativamente | Pedido via WhatsApp contorna ("me manda o Pix"). Integração Pix na Fase 3. |
+| **Cliente quer app** | "Quero baixar no celular" | PWA resolve parcialmente (Fase 3). Fale "funciona como app" |
+| **Cliente para de pagar** | Você paga a infra e ele usa de graça | Cobre mensalidade obrigatória. Sem pagamento = derrubar no Render |
+| **Cliente quer mudar cores sozinho** | Precisa de você hoje | Seletor de tema no admin (Fase 3) resolve |
+
+### O que NÃO prometer ao cliente
+
+- ❌ "Seu site aparece em primeiro no Google" (SEO leva meses)
+- ❌ "Aceita pagamento online" (sem Pix nativo ainda)
+- ❌ "O site nunca sai do ar" (Render Free dorme; Starter tem 99.9% uptime)
+- ❌ "Você pode mudar tudo sozinho" (cores/layout precisam de dev)
+
+### O que PODE prometer
+
+- ✅ "Você edita cardápio, preços, fotos e WhatsApp sozinho pelo painel"
+- ✅ "O site é profissional e funciona no celular"
+- ✅ "Suporte técnico incluso por X dias"
+- ✅ "Domínio próprio configurado" (se incluir no pacote)
+
+---
+
+## 7 — Roadmap de Melhorias
+
+> Veja o plano completo com detalhes técnicos em [UPDATE.md](UPDATE.md)
+
+### Resumo das Fases
+
+| Fase | Quando | O que | Impacto em Vendas |
+|---|---|---|---|
+| **0 — Correções** | **AGORA** (antes da 1ª venda) | Debug logs, Cloudinary, CSRF fix | Obrigatório — sem isso não vende |
+| **1 — UX Rápido** | Semana 1-2 | Máscara preço, placeholder WA, SEO, admin mobile | Site mais profissional |
+| **2 — Valor** | Semana 3-6 | QR Code, preview config, contador visitas, maps | Justifica pacote Premium |
+| **3 — Diferencial** | Mês 2-3 | Seletor tema, PWA, avaliações, Pix, dashboard | Compete com iFood/cardápio digital |
+| **4 — Escala** | Mês 3+ | Multi-tenant, auto-provisioning, CI/CD, testes | Gerenciar 50+ clientes sem estresse |
+
+### O que fazer AGORA vs DEPOIS
+
+**AGORA (Fase 0 — 3 horas):**
+1. Remover debug logs
+2. Integrar Cloudinary
+3. Testar e commitar
+
+**Após 1ª venda (com dinheiro no bolso):**
+1. Admin responsivo (dono edita pelo celular)
+2. SEO (meta tags, sitemap)
+3. QR Code (vende mais pacotes Premium)

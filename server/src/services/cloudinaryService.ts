@@ -13,6 +13,9 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+// Optional folder prefix for multi-tenant organization
+const FOLDER_PREFIX = process.env.CLOUDINARY_FOLDER_PREFIX || '';
+
 /**
  * Validate Cloudinary configuration on startup
  */
@@ -41,10 +44,13 @@ export function validateCloudinaryConfig(): boolean {
 export async function uploadToCloudinary(
     filePath: string,
     folder: string = 'restaurant'
-): Promise<string | null> {
+): Promise<string> {
     try {
+        // Build full folder path with optional prefix
+        const fullFolder = FOLDER_PREFIX ? `${FOLDER_PREFIX}/${folder}` : folder;
+
         const result: UploadApiResponse = await cloudinary.uploader.upload(filePath, {
-            folder,
+            folder: fullFolder,
             resource_type: 'image',
             transformation: [
                 { width: 1200, height: 1200, crop: 'limit' }, // Max 1200x1200
@@ -79,7 +85,7 @@ export async function uploadToCloudinary(
             // Ignore
         }
 
-        return null;
+        throw new Error(`Falha ao fazer upload da imagem: ${error.message}`);
     }
 }
 

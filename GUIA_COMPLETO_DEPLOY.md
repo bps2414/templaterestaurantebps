@@ -1,8 +1,11 @@
 # 🚀 GUIA COMPLETO — Do Teste Local ao Cliente Final
 
-> **Projeto:** Restaurant Template (Express + Prisma + PostgreSQL)
-> **Última atualização:** 11/02/2026
+> **Projeto:** Restaurant Template (Express + Prisma + PostgreSQL)  
+> **Última atualização:** 11/02/2026  
+> **Auditoria:** Ver [UPDATE.md](UPDATE.md) para relatório completo (nota 7.5/10 técnica, 7/10 comercial)  
 > **Leia na ordem. Cada passo depende do anterior.**
+
+> ⚠️ **IMPORTANTE:** Antes de seguir este guia, complete a **Fase 0** do [UPDATE.md](UPDATE.md) (remover debug logs + integrar Cloudinary). Sem isso, imagens dos clientes vão desaparecer no redeploy.
 
 ---
 
@@ -10,6 +13,7 @@
 
 | # | Etapa | Tempo estimado |
 |---|-------|----------------|
+| [0](#0--fase-0--correções-obrigatórias-da-auditoria) | 🔴 Correções obrigatórias (auditoria) | ~3-4 h |
 | [1](#1--consertar-o-que-falta-antes-de-subir) | Consertar o que falta (obrigatório) | ~10 min |
 | [2](#2--testar-tudo-localmente) | Testar tudo localmente | ~15 min |
 | [3](#3--preparar-o-repositório-github) | Preparar repositório GitHub | ~10 min |
@@ -20,6 +24,62 @@
 | [8](#8--clonar-para-novo-cliente) | Clonar para novo cliente | ~10 min |
 | [9](#9--manutenção-e-updates) | Manutenção e updates | referência |
 | [10](#10--se-algo-der-errado) | Se algo der errado | referência |
+
+---
+
+## 0 — Fase 0 — Correções Obrigatórias da Auditoria
+
+> 🔴 **FAÇA ISSO PRIMEIRO.** Sem essas correções, o produto não está pronto para vender.
+> 
+> Detalhes completos: [UPDATE.md](UPDATE.md) — Fase 0
+
+### 0.1 — Remover debug logs de produção
+
+**Por quê:** Os `console.log` vazam tokens CSRF parciais, origins, headers e nomes de arquivo nos logs do Render. Um atacante pode usar essa informação.
+
+**Arquivos para limpar:**
+
+1. `server/src/middlewares/csrf.ts` — Remover o bloco `console.log('🔒 CSRF validation:', {...})` dentro de `csrfVerifyToken`
+2. `server/src/app.ts` — Remover `console.log('🔐 Allowed origins:', ...)` e `console.log('🌐 CORS check:', ...)`
+3. `server/src/routes/upload.ts` — Remover os `console.log('🔍 Validating file:...')`, `console.log('✅ Validation result:...')`, `console.log('❌ BLOCKED:...')`, `console.log('✅ ALLOWED:...')`
+
+### 0.2 — Remover campo `debug` da resposta CSRF 403
+
+**Por quê:** A resposta `{ success: false, error: 'CSRF token missing', debug: { hasCookie, hasHeader } }` expõe informação interna.
+
+**No arquivo `server/src/middlewares/csrf.ts`**, trocar:
+```typescript
+// DE:
+return res.status(403).json({
+    success: false,
+    error: 'CSRF token missing',
+    debug: { hasCookie: !!tokenFromCookie, hasHeader: !!tokenFromHeader }
+});
+
+// PARA:
+return res.status(403).json({
+    success: false,
+    error: 'CSRF token missing'
+});
+```
+
+### 0.3 — Integrar Cloudinary para uploads
+
+**Por quê:** O Render (Free E Starter) reinicia o filesystem no redeploy. Todas as imagens do cliente **desaparecem**. Cloudinary é gratuito (25GB/mês) e persiste as imagens.
+
+**Passos:**
+1. Criar conta em https://cloudinary.com (Free)
+2. `cd server && npm install cloudinary`
+3. Adicionar env vars no `.env` e no Render:
+   - `CLOUDINARY_CLOUD_NAME`
+   - `CLOUDINARY_API_KEY`
+   - `CLOUDINARY_API_SECRET`
+4. Modificar `server/src/middlewares/upload.ts` para enviar ao Cloudinary após validação de magic bytes
+5. Modificar rotas de dishes, gallery e upload para salvar URLs do Cloudinary no banco
+6. Testar: subir imagem → verificar que URL retornada é `https://res.cloudinary.com/...`
+7. Commit e push
+
+> 💡 **Dica:** Manter a validação de magic bytes ANTES do upload para Cloudinary. Assim, arquivos maliciosos são rejeitados antes de consumir bandwidth.
 
 ---
 
@@ -404,6 +464,9 @@ Copie o resultado e cole como valor de `JWT_SECRET`.
 
 | Key | Value | Quando usar |
 |-----|-------|-------------|
+| `CLOUDINARY_CLOUD_NAME` | `seu-cloud-name` | **Obrigatório** — uploads de imagens |
+| `CLOUDINARY_API_KEY` | `123456789...` | **Obrigatório** — uploads de imagens |
+| `CLOUDINARY_API_SECRET` | `AbCdEf...` | **Obrigatório** — uploads de imagens |
 | `STRIPE_SECRET_KEY` | `sk_live_...` | Se vender templates online |
 | `STRIPE_WEBHOOK_SECRET` | `whsec_...` | Se usar Stripe |
 
@@ -778,15 +841,16 @@ E configure o cron-job.org para pingar `/ping` em vez de `/healthz`.
 
 ## 📊 Resumo de custos
 
+> Veja análise completa de custos e lucros em [UPDATE.md](UPDATE.md) e [GUIA_VENDAS_E_CUSTOMIZACAO.md](GUIA_VENDAS_E_CUSTOMIZACAO.md)
+
 | Item | Free | Produção |
 |------|------|----------|
 | Render Web Service | $0 (dorme) | $7/mês (sempre ligado) |
-| Neon PostgreSQL | $0 (0.5GB) | $19/mês (mais espaço) |
+| Neon PostgreSQL | $0 (0.5GB) | $19/mês (mais espaço — raramente necessário) |
+| Cloudinary (uploads) | $0 (25GB/mês) | $89/mês (nunca vai precisar) |
 | Domínio .com.br | — | ~R$40/ano |
-| **Total mensal** | **$0** | **~$26/mês ($7 + $19)** |
-| **Total mensal (economizando)** | **$0** | **~$7/mês (Render Starter + Neon Free)** |
-
-> Para maioria dos restaurantes, **Render Starter ($7/mês) + Neon Free ($0)** é suficiente. Neon Free aguenta até ~10.000 visitas/mês tranquilamente.
+| **Total mensal** | **$0** | **~$7/mês** (Render Starter + Neon Free + Cloudinary Free) |
+| **Cobrar do cliente** | — | **R$100-200/mês** (sua margem: ~R$60-160) |
 
 ---
 
@@ -794,6 +858,12 @@ E configure o cron-job.org para pingar `/ping` em vez de `/healthz`.
 
 Faça na ordem e marque cada item:
 
+**Fase 0 (Auditoria):**
+- [ ] Debug logs removidos de `csrf.ts`, `app.ts`, `upload.ts`
+- [ ] Campo `debug` removido da resposta CSRF 403
+- [ ] Cloudinary integrado e testado (uploads persistem no redeploy)
+
+**Setup:**
 - [ ] Etapa 1.1 — `.gitignore` na raiz criado
 - [ ] Etapa 1.2 — `uploadLimiter` aplicado em `app.ts`
 - [ ] Etapa 1.3 — Arquivos legados removidos da raiz
@@ -801,11 +871,16 @@ Faça na ordem e marque cada item:
 - [ ] Etapa 2 — Todos os 14 testes locais passaram
 - [ ] Etapa 3 — Repo no GitHub (privado)
 - [ ] Etapa 4 — Banco criado no Neon
-- [ ] Etapa 5 — Web Service criado no Render
-- [ ] Etapa 5.2 — Todas as variáveis de ambiente preenchidas
+- [ ] Etapa 5 — Web Service criado no Render (**Starter** para cliente real)
+- [ ] Etapa 5.2 — Todas as variáveis de ambiente preenchidas (incluindo Cloudinary)
 - [ ] Etapa 5.4 — Seed rodou com sucesso
 - [ ] Etapa 6 — Todos os testes de produção passaram
 - [ ] Etapa 7 — Email/WhatsApp enviado ao cliente com credenciais
+
+**Validação:**
+- [ ] Upload de imagem funciona e persiste após redeploy
+- [ ] Nenhum `console.log` de debug aparece nos logs do Render
+- [ ] CSRF 403 não retorna campo `debug`
 
 ---
 
