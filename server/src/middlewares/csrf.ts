@@ -24,7 +24,7 @@ export function csrfSetToken(req: Request, res: Response, next: NextFunction) {
     res.cookie(CSRF_COOKIE_NAME, token, {
         httpOnly: false, // Must be readable by JS for Double Submit
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        sameSite: 'lax', // 'strict' blocks same-site POST forms
         maxAge: 3600000, // 1 hour
     });
 
@@ -43,8 +43,14 @@ export function csrfVerifyToken(req: Request, res: Response, next: NextFunction)
     const tokenFromCookie = req.cookies[CSRF_COOKIE_NAME];
     const tokenFromHeader = req.headers[CSRF_HEADER_NAME] as string;
 
-    // Validate tokens exist and match
+    // Debug log in production (temporary - remove after fixing)
     if (!tokenFromCookie || !tokenFromHeader) {
+        console.error('CSRF validation failed:', {
+            hasCookie: !!tokenFromCookie,
+            hasHeader: !!tokenFromHeader,
+            origin: req.headers.origin,
+            referer: req.headers.referer,
+        });
         return res.status(403).json({
             success: false,
             error: 'CSRF token missing',
