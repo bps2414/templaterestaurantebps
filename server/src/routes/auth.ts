@@ -9,6 +9,7 @@ import { AuthenticatedRequest } from '../types';
 import { z } from 'zod';
 import prisma from '../prisma/client';
 import bcrypt from 'bcryptjs';
+import logger from '../utils/logger';
 
 const router = Router();
 
@@ -121,15 +122,25 @@ router.put('/change-password', requireAuth, async (req: AuthenticatedRequest, re
             return res.status(400).json({ success: false, error: 'A nova senha deve ser diferente da atual' });
         }
 
-        // Hash new password and update
+        // Hash new password and update (increment tokenVersion to invalidate all JWTs immediately)
         const newHash = await bcrypt.hash(data.newPassword, BCRYPT_ROUNDS);
         await prisma.adminUser.update({
             where: { id: user.id },
-            data: { passwordHash: newHash },
+            data: {
+                passwordHash: newHash,
+                tokenVersion: { increment: 1 },
+            },
         });
 
-        // Invalidate all other sessions (force re-login on other devices)
+        // Invalidate all refresh tokens (force re-login on all devices)
         await authService.logoutAll(user.id);
+
+        // Audit log (never logs the password itself)
+        logger.info('Password changed', {
+            userId: user.id,
+            email: user.email,
+            ip: req.ip,
+        });
 
         res.json({ success: true, message: 'Senha alterada com sucesso. Faça login novamente.' });
     } catch (error) {

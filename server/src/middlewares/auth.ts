@@ -3,11 +3,12 @@ import { authService } from '../services/authService';
 import { AuthenticatedRequest } from '../types';
 import { UnauthorizedError, ForbiddenError } from '../utils/errors';
 import { Role } from '@prisma/client';
+import prisma from '../prisma/client';
 
 /**
  * Middleware: Require valid JWT access token
  */
-export function requireAuth(req: AuthenticatedRequest, _res: Response, next: NextFunction) {
+export async function requireAuth(req: AuthenticatedRequest, _res: Response, next: NextFunction) {
     try {
         const authHeader = req.headers.authorization;
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -16,6 +17,17 @@ export function requireAuth(req: AuthenticatedRequest, _res: Response, next: Nex
 
         const token = authHeader.split(' ')[1];
         const payload = authService.verifyAccessToken(token);
+
+        // Verify tokenVersion — immediately invalidates JWTs after password change
+        const user = await prisma.adminUser.findUnique({
+            where: { id: payload.userId },
+            select: { tokenVersion: true },
+        });
+
+        if (!user || user.tokenVersion !== (payload.tokenVersion ?? 0)) {
+            throw new UnauthorizedError('Sessão invalidada. Faça login novamente.');
+        }
+
         req.user = payload;
         next();
     } catch (error) {

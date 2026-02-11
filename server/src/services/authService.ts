@@ -9,7 +9,7 @@ import { Role } from '@prisma/client';
 import logger from '../utils/logger';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-replace-me';
-const JWT_ACCESS_EXP = process.env.JWT_ACCESS_EXP || '2h';
+const JWT_ACCESS_EXP = process.env.JWT_ACCESS_EXP || '15m'; // Short-lived: reduces window if token is stolen
 const JWT_REFRESH_EXP = process.env.JWT_REFRESH_EXP || '30d';
 const BCRYPT_ROUNDS = 12;
 const MAX_LOGIN_ATTEMPTS = 5;
@@ -138,7 +138,7 @@ export const authService = {
         // Success: clear failed attempts
         clearFailedLogins(ip);
 
-        const tokens = await this.createSession(user.id, user.email, user.role, data.ipAddress, data.userAgent);
+        const tokens = await this.createSession(user.id, user.email, user.role, data.ipAddress, data.userAgent, user.tokenVersion);
 
         logger.info('Admin login successful', { ip, userId: user.id });
 
@@ -161,7 +161,8 @@ export const authService = {
         email: string,
         role: Role,
         ipAddress?: string,
-        userAgent?: string
+        userAgent?: string,
+        tokenVersion: number = 0
     ): Promise<TokenPair> {
         const refreshToken = generateRefreshToken();
         const refreshTokenHash = hashToken(refreshToken);
@@ -187,7 +188,7 @@ export const authService = {
             },
         });
 
-        const accessToken = generateAccessToken({ userId, email, role });
+        const accessToken = generateAccessToken({ userId, email, role, tokenVersion });
         return { accessToken, refreshToken };
     },
 
@@ -217,7 +218,8 @@ export const authService = {
             session.user.email,
             session.user.role,
             ipAddress,
-            userAgent
+            userAgent,
+            session.user.tokenVersion
         );
     },
 

@@ -30,6 +30,7 @@ model AdminUser {
   passwordHash String
   name         String
   role         Role     @default(ADMIN)
+  tokenVersion Int      @default(0) // Incremented on password change to invalidate JWTs
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
