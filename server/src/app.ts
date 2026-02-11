@@ -73,8 +73,10 @@ app.use((_req: Request, res: Response, next: NextFunction) => {
 
 // --- CORS ---
 const allowedOrigins = (process.env.CORS_ORIGINS || process.env.APP_URL || 'http://localhost:3000').split(',').map((o: string) => o.trim());
+console.log('🔐 Allowed origins:', allowedOrigins);
 app.use(cors({
     origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+        console.log('🌐 CORS check:', { origin, allowed: !origin || allowedOrigins.includes(origin) });
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
