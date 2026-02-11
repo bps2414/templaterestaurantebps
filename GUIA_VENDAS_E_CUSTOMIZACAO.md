@@ -151,41 +151,42 @@ npx prisma db seed
 ### Email/WhatsApp de Entrega
 
 ```
-Olá [Nome do Cliente],
+Olá [Nome do Cliente]! 😊
 
-Seu site já está no ar! 🎉
+Seu site está no ar! 🎉
 
-🌐 Site público:
-https://restaurante-[nome].onrender.com
+🌐 Veja aqui: https://restaurante-[nome].onrender.com
 
-🔐 Painel Administrativo:
-https://restaurante-[nome].onrender.com/admin
+---
 
-📧 Credenciais de acesso:
-Email: [email que você definiu no seed]
-Senha: [senha que você definiu no seed]
+🔐 ACESSO AO PAINEL ADMIN:
 
-⚠️ IMPORTANTE - Primeira coisa a fazer:
-1. Faça login no painel admin
-2. Clique no botão "🔑 Alterar Senha" (barra lateral)
-3. Troque para uma senha pessoal e segura
-   • Mínimo 8 caracteres
-   • Pelo menos 1 letra maiúscula, 1 minúscula e 1 número
-   • Exemplo: MinhaSenh@2026
+Link: https://restaurante-[nome].onrender.com/admin
+Email: [email que você definiu]
+Senha: [senha temporária]
 
-📋 O que você pode fazer no painel:
-✅ Adicionar, editar e remover pratos do cardápio
-✅ Organizar categorias (Entradas, Pratos Principais, Sobremesas, Bebidas)
-✅ Subir fotos dos pratos (JPG/PNG, até 2MB cada)
-✅ Gerenciar galeria de fotos
-✅ Alterar nome, endereço, telefone e WhatsApp do restaurante
-✅ Trocar sua senha de acesso
+⚠️ PRIMEIRO ACESSO:
+Assim que entrar, clique em "🔑 Alterar Senha" (no menu lateral) e troque para uma senha só sua.
 
-📞 Suporte:
-Se precisar de ajuda, pode me chamar a qualquer momento.
-Preparei um vídeo/tutorial de 10 minutos mostrando como usar o painel.
+---
 
-Vamos agendar uma call de 15 minutos para eu te mostrar tudo?
+✅ O QUE VOCÊ PODE FAZER:
+
+• Adicionar/remover pratos e preços
+• Subir fotos dos pratos (até 2MB cada)
+• Mudar telefone e WhatsApp
+• Editar endereço e horários
+• Ativar/desativar categorias
+
+Tudo pelo painel, sem precisar de programador!
+
+---
+
+📞 PRECISA DE AJUDA?
+
+Estou disponível por aqui mesmo. Preparei um vídeo rápido de 10 minutos mostrando como usar tudo.
+
+Quer agendar 15 minutos comigo para eu te mostrar ao vivo?
 
 Abraço,
 [Seu Nome]
@@ -410,21 +411,25 @@ Antes de fechar qualquer venda, garanta que completou a **Fase 0** do [UPDATE.md
 
 ### Pacotes
 
-| Pacote | O que Inclui | Preço Sugerido | Seu Custo Mensal | Lucro na Venda |
-|--------|--------------|----------------|------------------|----------------|
-| **Básico** | Setup + Render Starter + Neon Free + Cloudinary Free + Suporte 30 dias | **R$ 500** | ~R$42/mês* | ~R$458 |
-| **Profissional** | Básico + Domínio customizado + Troca de cores + Logo + Suporte 90 dias | **R$ 800** | ~R$42/mês* | ~R$758 |
-| **Premium** | Profissional + QR Code + SEO + Treinamento 1h + Suporte 180 dias | **R$ 1.400** | ~R$42/mês* | ~R$1.358 |
+| Pacote | O que o Cliente Recebe | Preço Sugerido | Seu Custo | Sua Margem |
+|--------|------------------------|----------------|-----------|------------|
+| **🥉 Básico** | • Site completo no ar<br>• Painel admin para editar tudo<br>• Upload ilimitado de fotos<br>• Suporte por 30 dias<br>• Tutorial em vídeo | **R$ 500** | ~R$42/mês | **~R$458** |
+| **🥈 Profissional** | • Tudo do Básico<br>• Seu domínio próprio (.com.br)<br>• Cores personalizadas<br>• Logo do restaurante<br>• Suporte por 90 dias | **R$ 800** | ~R$42/mês | **~R$758** |
+| **🥇 Premium** | • Tudo do Profissional<br>• QR Code para mesas<br>• Otimização para Google (SEO)<br>• Treinamento 1h ao vivo<br>• Suporte por 6 meses<br>• Prioridade em atualizações | **R$ 1.400** | ~R$42/mês | **~R$1.358** |
 
-**\*Custo por site:** Render Starter $7/mês (~R$42). Cloudinary é **compartilhado** entre todos os sites (1 conta grátis = até 15 sites).
+**💡 Dica de venda:** Recomende o **Profissional** (melhor custo-benefício). Cliente com domínio próprio parece mais sério.
 
-### Mensalidade (Opcional)
+**\*Custo:** Render Starter $7/mês (~R$42). Cloudinary é **grátis e compartilhado** entre todos os clientes (1 conta = até 15 sites).
 
-| Serviço | Preço Sugerido |
-|---------|----------------|
-| **Manutenção Básica** | R$ 50-80/mês (só manter online) |
-| **Manutenção + Atualizações** | R$ 100-150/mês (updates de pratos, fotos, etc.) |
-| **Manutenção + Suporte Prioritário** | R$ 200-300/mês (responde em até 24h) |
+### Mensalidade (Recomendado)
+
+| Plano | O que Inclui | Preço Sugerido |
+|-------|--------------|----------------|
+| **Manutenção Simples** | Site no ar 24/7 + backup semanal | **R$ 50-80/mês** |
+| **Manutenção + Updates** | Tudo acima + você atualiza fotos/pratos pelo cliente | **R$ 100-150/mês** |
+| **Suporte VIP** | Tudo acima + resposta em até 24h | **R$ 200-300/mês** |
+
+**💰 Renda recorrente:** Com 10 clientes pagando R$ 100/mês = **R$ 1.000/mês fixo**. Seu custo: ~R$ 420/mês (Render).
 
 ### Extras (One-time)
 
