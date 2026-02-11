@@ -1,0 +1,56 @@
+============================================
+FluxPay Landing Page — Migration Report / Log de Criação
+============================================
+Data: 2026-02-10
+Versão: 1.0.0
+Tipo: Criação do zero (sem migração de versão anterior)
+
+LOG DE CRIAÇÃO
+--------------
+
+[2026-02-10] Projeto inicializado
+  - Criada estrutura de pastas: raiz + assets/
+  - Nenhum framework utilizado (HTML5 + CSS3 + Vanilla JS ES6)
+
+[2026-02-10] Assets criados
+  - assets/hero.svg — Ilustração hero (dashboard flat design)
+  - assets/step1.svg — Ilustração passo 1 (cadastro)
+  - assets/step2.svg — Ilustração passo 2 (configuração)
+  - assets/step3.svg — Ilustração passo 3 (lançamento)
+  - assets/favicon.svg — Favicon SVG
+
+[2026-02-10] index.html criado
+  - HTML5 semântico com todas as seções: Header, Hero, Features, Como Funciona, Testemunhos, Preços, FAQ, Footer
+  - SEO: title, meta description, canonical, Open Graph, Twitter Card
+  - JSON-LD: Organization, WebSite, FAQPage
+  - CSS crítico inline no <head>
+  - Comentários <!-- EDITAR: ... --> em todos os pontos de personalização
+
+[2026-02-10] styles.css + styles.min.css criados
+  - Design System: variáveis CSS (cores, sombras, raios, tipografia)
+  - Mobile-first com breakpoints: 640px (sm), 1024px (md), 1280px (lg)
+  - Grid + Flexbox para layouts
+  - Animações com prefers-reduced-motion
+  - Print styles incluídos
+
+[2026-02-10] scripts.js + scripts.min.js criados
+  - Mobile menu toggle com acessibilidade (aria-expanded, Escape key)
+  - Header scroll shadow
+  - Smooth scroll para âncoras
+  - Pricing toggle (mensal/anual)
+  - FAQ accordion (aria-expanded via toggle event)
+  - Newsletter form validation (regex) + LocalStorage (lp_subscriptions)
+  - IntersectionObserver para fade-in de seções
+
+[2026-02-10] Documentação criada
+  - README.md com instruções completas
+  - accessibility_notes.txt com 5 pontos verificados
+  - migration_report.txt (este arquivo)
+
+NOTAS
+-----
+- Projeto criado 100% do zero — sem dependências de versões anteriores
+- Sem frameworks (React/Vue/Angular) ou bundlers (Webpack/Vite)
+- Pronto para deploy em GitHub Pages, Netlify ou qualquer hospedagem estática
+- Google Fonts é a única dependência externa (Inter + Roboto)
+- Imagens WebP de produção (hero-og.webp, hero.webp) devem ser geradas a partir dos SVGs

@@ -1,0 +1,19 @@
+# Server
+node_modules/
+dist/
+coverage/
+*.log
+.env
+.env.local
+assets/uploads/*
+!assets/uploads/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

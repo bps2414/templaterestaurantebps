@@ -1,0 +1,120 @@
+// ==============================================
+// Restaurant Template — Prisma Schema
+// ==============================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum Role {
+  ADMIN
+  EDITOR
+}
+
+// ============================================
+// MODELS
+// ============================================
+
+model AdminUser {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         Role     @default(ADMIN)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  sessions Session[]
+
+  @@map("admin_users")
+}
+
+model Session {
+  id               String   @id @default(uuid())
+  userId           String
+  refreshToken     String   @unique
+  refreshTokenHash String?
+  userAgent        String?
+  ipAddress        String?
+  expiresAt        DateTime
+  createdAt        DateTime @default(now())
+
+  user AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  slug      String   @unique
+  sortOrder Int      @default(0)
+  image     String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  dishes Dish[]
+
+  @@map("categories")
+}
+
+model Dish {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  description String?
+  price       Int      // centavos (ex: 3990 = R$39,90)
+  image       String?
+  featured    Boolean  @default(false)
+  active      Boolean  @default(true)
+  categoryId  String
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@map("dishes")
+}
+
+model SiteConfig {
+  key   String @id
+  value String
+
+  @@map("site_config")
+}
+
+model GalleryImage {
+  id        String   @id @default(uuid())
+  src       String
+  alt       String?
+  sortOrder Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("gallery_images")
+}
+
+model TemplatePurchase {
+  id              String   @id @default(uuid())
+  email           String
+  name            String?
+  stripeSessionId String?  @unique
+  stripePaymentId String?
+  amount          Int      // centavos
+  currency        String   @default("brl")
+  status          String   @default("pending") // pending, completed, failed
+  createdAt       DateTime @default(now())
+
+  @@map("template_purchases")
+}

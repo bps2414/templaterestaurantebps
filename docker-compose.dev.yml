@@ -1,0 +1,44 @@
+# docker-compose.dev.yml — FluxPay DEV (apenas infra)
+# Sobe PostgreSQL + Redis para desenvolvimento local sem container do server
+# Uso: docker-compose -f docker-compose.dev.yml up -d
+
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: fluxpay-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: fluxpay
+      POSTGRES_PASSWORD: fluxpay_secret
+      POSTGRES_DB: fluxpay
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata_dev:/var/lib/postgresql/data
+    healthcheck:
+      test: [ 'CMD-SHELL', 'pg_isready -U fluxpay' ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: fluxpay-redis-dev
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - redisdata_dev:/data
+    healthcheck:
+      test: [ 'CMD', 'redis-cli', 'ping' ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  pgdata_dev:
+    driver: local
+  redisdata_dev:
+    driver: local

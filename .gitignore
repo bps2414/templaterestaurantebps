@@ -1,0 +1,36 @@
+# === Ambiente ===
+.env
+.env.local
+.env.production
+
+# === Node ===
+node_modules/
+dist/
+
+# === Uploads do usuário ===
+server/assets/uploads/*
+!server/assets/uploads/.gitkeep
+
+# === OS ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === IDE ===
+.vscode/
+.idea/
+*.swp
+
+# === Logs ===
+*.log
+npm-debug.log*
+
+# === Backups (não enviar ao GitHub) ===
+backup_before_saas/
+backup_before_security_phase1/
+backup_before_security_ui/
+
+# === Testes/relatórios locais ===
+tests/
+report/
+migration_logs/

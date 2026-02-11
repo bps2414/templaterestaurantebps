@@ -1,0 +1,83 @@
+============================================
+FluxPay Landing Page — Accessibility Notes
+============================================
+Data: 2026-02-10
+Versão: 1.0.0
+
+5 Pontos de Acessibilidade Verificados
+---------------------------------------
+
+1. CONTRASTE DE CORES (AA)
+   ✅ Verificado
+   - Texto principal (#0F172A) sobre background (#F8FAFC): ratio ~15.8:1 → Passa AA e AAA
+   - Texto claro (#64748B) sobre background (#F8FAFC): ratio ~4.9:1 → Passa AA
+   - Botão primário (branco #FFF sobre #0B6EFD): ratio ~4.6:1 → Passa AA
+   - Texto do footer (#94A3B8 sobre #0F172A): ratio ~4.7:1 → Passa AA
+   - Links (#0B6EFD sobre #F8FAFC): ratio ~4.5:1 → Passa AA
+
+2. ARIA-LABELS E ARIA-EXPANDED
+   ✅ Verificado
+   - Menu mobile: aria-label="Abrir menu" / "Fechar menu", aria-expanded atualizado via JS
+   - FAQ accordion: cada <summary> tem aria-expanded dinâmico via evento toggle
+   - Toggle de preços: role="switch" com aria-checked e aria-labelledby
+   - Logo: aria-label="FluxPay — Página inicial"
+   - Redes sociais: cada <a> tem aria-label descritivo (ex: "Twitter / X", "LinkedIn")
+   - Ícones SVG decorativos: aria-hidden="true"
+   - Formulário: label oculta via sr-only, aria-describedby para mensagens de erro/sucesso
+
+3. FOCUS ORDER E FOCUS-VISIBLE
+   ✅ Verificado
+   - Todos os elementos interativos (links, botões, inputs) recebem outline visível com :focus-visible
+   - Outline: 2px solid #0B6EFD com offset de 2px
+   - Navegação por Tab segue ordem lógica do DOM: Header → Hero → Features → Steps → Testimonials → Pricing → FAQ → Footer
+   - Menu mobile: foco vai para o primeiro link ao abrir; Escape fecha e retorna foco ao botão
+   - Sem tabindex positivos que quebrem a ordem natural
+
+4. HEADINGS HIERARCHY
+   ✅ Verificado
+   - H1: usado uma única vez na Hero section ("Pagamentos simples para negócios...")
+   - H2: usado para cada seção (Features, Como Funciona, Testemunhos, Preços, FAQ)
+   - H3: usado para subtítulos dentro das seções (cards, steps, pricing cards)
+   - H4: usado no footer para títulos de colunas
+   - Sem pulos de nível (ex: H1 → H3 sem H2)
+   - Cada seção possui aria-labelledby apontando para seu heading
+
+5. IMAGENS E ALT TEXT
+   ✅ Verificado
+   - Hero image: alt="Dashboard da FluxPay mostrando gráficos de receita e métricas de pagamento"
+   - Step 1: alt="Tela de cadastro simplificado da FluxPay"
+   - Step 2: alt="Painel de configuração de produtos e pagamentos"
+   - Step 3: alt="Dashboard de acompanhamento de cobranças em tempo real"
+   - SVGs decorativos (ícones): aria-hidden="true" — não lidos por screen readers
+   - Avatares (SVG inline): aria-hidden="true" — informação contextualizada via texto (nome + cargo)
+   - Todas as imagens possuem width e height definidos para evitar layout shift
+
+Observações adicionais:
+- HTML semântico utilizado: <header>, <main>, <section>, <nav>, <footer>, <article>, <blockquote>
+- Formulário possui role="alert" e aria-live="polite" para mensagens de erro/sucesso
+- prefers-reduced-motion respeitado: animações desabilitadas para usuários que preferem menos movimento
+- Skip to content pode ser adicionado futuramente (não implementado nesta versão, mas fácil de incluir)
+
+============================================
+Atualização SaaS MVP (Sessão 2)
+============================================
+
+6. PÁGINAS DE AUTENTICAÇÃO (login.html, register.html)
+   ✅ Verificado
+   - Labels associados a inputs via for/id
+   - Mensagens de erro com role="alert"
+   - Indicadores de campo inválido via aria-invalid
+   - Autocomplete attributes (email, current-password, new-password, name)
+   - Password toggle com aria-label
+   - Validação client-side com feedback visual e textual
+   - Focus management: campos com erro recebem foco
+
+7. DASHBOARD (dashboard.html)
+   ✅ Verificado
+   - Sidebar com aria-label="Menu principal" na nav
+   - Botão mobile menu com aria-label
+   - Tabelas com headers <th> semânticos
+   - Alertas com role="alert"
+   - Links/botões com text descritivo
+   - Dashboard responsivo — sidebar colapsável em mobile
+   - Badges com texto semântico (não apenas cor)

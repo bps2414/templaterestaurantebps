@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — Painel de Controle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { theme: { extend: { colors: { brand: { 400: '#f19244', 500: '#ee7620', 600: '#d95c16' }, dark: { 700: '#242440', 800: '#1a1a2e', 900: '#0f0f1a' } } } } };
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f0f1a;
+            color: #f5f5f5;
+        }
+
+        .sidebar {
+            width: 260px;
+            min-height: 100vh;
+        }
+
+        .tab-btn {
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: rgba(238, 118, 32, 0.1);
+            color: #f19244;
+            border-right: 3px solid #ee7620;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 200;
+            padding: 12px 24px;
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast-success {
+            background: #22c55e;
+        }
+
+        .toast-error {
+            background: #ef4444;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ========== LOGIN SCREEN ========== -->
+    <div id="login-screen" class="min-h-screen flex items-center justify-center">
+        <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-md border border-white/5">
+            <div class="text-center mb-8">
+                <span class="text-4xl">🍽</span>
+                <h1 class="text-2xl font-bold text-white mt-4">Painel Admin</h1>
+                <p class="text-gray-400 mt-2">Faça login para gerenciar o site</p>
+            </div>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="text-sm text-gray-400 mb-1 block">Email</label>
+                    <input type="email" id="login-email" required
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none transition"
+                        placeholder="admin@restaurante.com">
+                </div>
+                <div>
+                    <label class="text-sm text-gray-400 mb-1 block">Senha</label>
+                    <input type="password" id="login-password" required
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none transition"
+                        placeholder="••••••">
+                </div>
+                <p id="login-error" class="text-red-400 text-sm hidden"></p>
+                <button type="submit"
+                    class="w-full bg-brand-500 hover:bg-brand-600 text-white py-3 rounded-xl font-medium transition">
+                    Entrar
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== ADMIN DASHBOARD ========== -->
+    <div id="admin-dashboard" class="hidden">
+        <div class="flex">
+            <!-- Sidebar -->
+            <aside class="sidebar bg-dark-800 border-r border-white/5 fixed h-full overflow-y-auto">
+                <div class="p-6 border-b border-white/5">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🍽</span>
+                        <div>
+                            <h2 class="text-white font-bold">Admin</h2>
+                            <p class="text-gray-500 text-xs" id="admin-email">admin@restaurante.com</p>
+                        </div>
+                    </div>
+                </div>
+                <nav class="p-4 space-y-1">
+                    <button class="tab-btn active w-full text-left px-4 py-3 rounded-lg text-sm" data-tab="dishes"
+                        onclick="switchTab('dishes')">
+                        🍝 Pratos
+                    </button>
+                    <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400"
+                        data-tab="categories" onclick="switchTab('categories')">
+                        📂 Categorias
+                    </button>
+                    <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400"
+                        data-tab="gallery" onclick="switchTab('gallery')">
+                        📸 Galeria
+                    </button>
+                    <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400"
+                        data-tab="config" onclick="switchTab('config')">
+                        ⚙️ Configurações
+                    </button>
+                </nav>
+                <div class="absolute bottom-0 w-full p-4 border-t border-white/5">
+                    <button onclick="logout()"
+                        class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:text-red-400 transition">
+                        🚪 Sair
+                    </button>
+                    <a href="/"
+                        class="block text-left px-4 py-2 rounded-lg text-xs text-gray-500 hover:text-gray-300 transition">
+                        ← Voltar ao site
+                    </a>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="ml-[260px] flex-1 p-8 min-h-screen">
+
+                <!-- TAB: DISHES -->
+                <div id="tab-dishes" class="tab-content">
+                    <div class="flex items-center justify-between mb-8">
+                        <h1 class="text-2xl font-bold text-white">Pratos</h1>
+                        <button onclick="openDishModal()"
+                            class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition">
+                            + Novo Prato
+                        </button>
+                    </div>
+                    <div class="bg-dark-800 rounded-2xl border border-white/5 overflow-hidden">
+                        <table class="w-full">
+                            <thead class="bg-dark-700/50">
+                                <tr>
+                                    <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">Prato
+                                    </th>
+                                    <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">
+                                        Categoria</th>
+                                    <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">Preço
+                                    </th>
+                                    <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">
+                                        Destaque</th>
+                                    <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">Ativo
+                                    </th>
+                                    <th class="text-right px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">
+                                        Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dishes-table" class="divide-y divide-white/5">
+                                <tr>
+                                    <td colspan="6" class="text-center py-12 text-gray-500">Carregando...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB: CATEGORIES -->
+                <div id="tab-categories" class="tab-content hidden">
+                    <div class="flex items-center justify-between mb-8">
+                        <h1 class="text-2xl font-bold text-white">Categorias</h1>
+                        <button onclick="openCategoryModal()"
+                            class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition">
+                            + Nova Categoria
+                        </button>
+                    </div>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4" id="categories-grid">
+                        <div class="text-center py-12 col-span-3 text-gray-500">Carregando...</div>
+                    </div>
+                </div>
+
+                <!-- TAB: GALLERY -->
+                <div id="tab-gallery" class="tab-content hidden">
+                    <div class="flex items-center justify-between mb-8">
+                        <h1 class="text-2xl font-bold text-white">Galeria</h1>
+                        <button onclick="openGalleryModal()"
+                            class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition">
+                            + Nova Imagem
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="gallery-admin-grid">
+                        <div class="text-center py-12 col-span-4 text-gray-500">Carregando...</div>
+                    </div>
+                </div>
+
+                <!-- TAB: CONFIG -->
+                <div id="tab-config" class="tab-content hidden">
+                    <div class="flex items-center justify-between mb-8">
+                        <h1 class="text-2xl font-bold text-white">Configurações do Site</h1>
+                        <button onclick="saveConfig()"
+                            class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition">
+                            💾 Salvar Tudo
+                        </button>
+                    </div>
+                    <div class="space-y-6" id="config-form">
+                        <div class="text-center py-12 text-gray-500">Carregando...</div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ========== DISH MODAL ========== -->
+    <div class="modal-overlay" id="dish-modal">
+        <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-lg border border-white/5 max-h-[90vh] overflow-y-auto">
+            <h2 class="text-xl font-bold text-white mb-6" id="dish-modal-title">Novo Prato</h2>
+            <form id="dish-form" class="space-y-4">
+                <input type="hidden" id="dish-id">
+                <div>
+                    <label class="text-sm text-gray-400 mb-1 block">Nome *</label>
+                    <input type="text" id="dish-name" required
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none">
+                </div>
+                <div>
+                    <label class="text-sm text-gray-400 mb-1 block">Descrição</label>
+                    <textarea id="dish-description" rows="3"
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none resize-none"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-sm text-gray-400 mb-1 block">Preço (R$) *</label>
+                        <input type="number" id="dish-price" step="0.01" required
+                            class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
+                            placeholder="39.90">
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400 mb-1 block">Categoria *</label>
+                        <select id="dish-category" required
+                            class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none">
+                            <option value="">Selecione...</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="text-sm text-gray-400 mb-1 block">Foto</label>
+                    <input type="file" id="dish-image" accept="image/*"
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white file:mr-4 file:rounded-lg file:border-0 file:bg-brand-500 file:px-4 file:py-2 file:text-sm file:text-white">
+                </div>
+                <div class="flex gap-6">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" id="dish-featured"
+                            class="w-4 h-4 rounded bg-dark-900 border-white/10 text-brand-500 focus:ring-brand-500">
+                        <span class="text-sm text-gray-300">Destaque</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" id="dish-active" checked
+                            class="w-4 h-4 rounded bg-dark-900 border-white/10 text-brand-500 focus:ring-brand-500">
+                        <span class="text-sm text-gray-300">Ativo</span>
+                    </label>
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="submit"
+                        class="flex-1 bg-brand-500 hover:bg-brand-600 text-white py-3 rounded-xl font-medium transition">Salvar</button>
+                    <button type="button" onclick="closeModal('dish-modal')"
+                        class="flex-1 bg-dark-700 hover:bg-dark-900 text-gray-300 py-3 rounded-xl font-medium transition">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== CATEGORY MODAL ========== -->
+    <div class="modal-overlay" id="category-modal">
+        <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-md border border-white/5">
+            <h2 class="text-xl font-bold text-white mb-6" id="category-modal-title">Nova Categoria</h2>
+            <form id="category-form" class="space-y-4">
+                <input type="hidden" id="category-id">
+                <div>
+                    <label class="text-sm text-gray-400 mb-1 block">Nome *</label>
+                    <input type="text" id="category-name" required
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none">
+                </div>
+                <div>
+                    <label class="text-sm text-gray-400 mb-1 block">Ordem</label>
+                    <input type="number" id="category-sort" value="0"
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none">
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="submit"
+                        class="flex-1 bg-brand-500 hover:bg-brand-600 text-white py-3 rounded-xl font-medium transition">Salvar</button>
+                    <button type="button" onclick="closeModal('category-modal')"
+                        class="flex-1 bg-dark-700 hover:bg-dark-900 text-gray-300 py-3 rounded-xl font-medium transition">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== GALLERY UPLOAD MODAL ========== -->
+    <div class="modal-overlay" id="gallery-modal">
+        <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-md border border-white/5">
+            <h2 class="text-xl font-bold text-white mb-6">Nova Imagem</h2>
+            <form id="gallery-form" class="space-y-4">
+                <div>
+                    <label class="text-sm text-gray-400 mb-1 block">Imagem *</label>
+                    <input type="file" id="gallery-image" accept="image/*" required
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white file:mr-4 file:rounded-lg file:border-0 file:bg-brand-500 file:px-4 file:py-2 file:text-sm file:text-white">
+                </div>
+                <div>
+                    <label class="text-sm text-gray-400 mb-1 block">Descrição (alt)</label>
+                    <input type="text" id="gallery-alt"
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
+                        placeholder="Descrição da imagem">
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="submit"
+                        class="flex-1 bg-brand-500 hover:bg-brand-600 text-white py-3 rounded-xl font-medium transition">Enviar</button>
+                    <button type="button" onclick="closeModal('gallery-modal')"
+                        class="flex-1 bg-dark-700 hover:bg-dark-900 text-gray-300 py-3 rounded-xl font-medium transition">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        const API = window.location.origin;
+        let token = localStorage.getItem('admin_token');
+        let csrfToken = null;
+        let categories = [];
+
+        function formatPrice(cents) {
+            return (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        // --- Fetch CSRF Token ---
+        async function fetchCsrfToken() {
+            try {
+                const res = await fetch(`${API}/api/csrf-token`, { credentials: 'include' });
+                const data = await res.json();
+                csrfToken = data.token; // ← Corrigido: o servidor retorna 'token', não 'csrfToken'
+                console.log('✅ CSRF Token obtido:', csrfToken);
+            } catch (error) {
+                console.error('❌ Erro ao obter CSRF token:', error);
+            }
+        }
+
+        // --- Auth ---
+        async function apiAuth(endpoint, options = {}) {
+            const headers = { ...(options.headers || {}) };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+            if (csrfToken) headers['X-CSRF-Token'] = csrfToken;
+            if (!(options.body instanceof FormData)) {
+                headers['Content-Type'] = 'application/json';
+            }
+            const res = await fetch(`${API}/api${endpoint}`, { ...options, headers, credentials: 'include' });
+            const json = await res.json();
+            if (res.status === 401) {
+                token = null;
+                localStorage.removeItem('admin_token');
+                showLogin();
+            }
+            return json;
+        }
+
+        function showLogin() {
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('admin-dashboard').classList.add('hidden');
+        }
+
+        function showDashboard() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('admin-dashboard').classList.remove('hidden');
+            loadDishes();
+            loadCategories();
+        }
+
+        // Login form
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const errEl = document.getElementById('login-error');
+
+            // Ensure we have CSRF token
+            if (!csrfToken) {
+                console.log('⚠️ CSRF token não carregado, buscando...');
+                await fetchCsrfToken();
+            }
+
+            console.log('📤 Enviando login com CSRF:', csrfToken);
+
+            const headers = { 'Content-Type': 'application/json' };
+            if (csrfToken) headers['X-CSRF-Token'] = csrfToken;
+
+            const res = await fetch(`${API}/api/auth/login`, {
+                method: 'POST',
+                headers,
+                credentials: 'include',
+                body: JSON.stringify({ email, password }),
+            });
+            const json = await res.json();
+
+            if (json.success) {
+                token = json.data.accessToken;
+                localStorage.setItem('admin_token', token);
+                localStorage.setItem('admin_refresh', json.data.refreshToken);
+                document.getElementById('admin-email').textContent = json.data.user.email;
+                showDashboard();
+            } else {
+                errEl.textContent = json.error || 'Erro ao fazer login';
+                errEl.classList.remove('hidden');
+            }
+        });
+
+        function logout() {
+            const refresh = localStorage.getItem('admin_refresh');
+            if (refresh) {
+                fetch(`${API}/api/auth/logout`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ refreshToken: refresh }),
+                }).catch(() => { });
+            }
+            token = null;
+            localStorage.removeItem('admin_token');
+            localStorage.removeItem('admin_refresh');
+            showLogin();
+        }
+
+        // --- Tabs ---
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('active');
+                el.classList.add('text-gray-400');
+            });
+            document.getElementById(`tab-${tab}`).classList.remove('hidden');
+            const btn = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+            btn.classList.add('active');
+            btn.classList.remove('text-gray-400');
+
+            if (tab === 'dishes') loadDishes();
+            if (tab === 'categories') loadCategories();
+            if (tab === 'gallery') loadGalleryAdmin();
+            if (tab === 'config') loadConfig();
+        }
+
+        // --- Toast ---
+        function toast(msg, type = 'success') {
+            const el = document.getElementById('toast');
+            el.textContent = msg;
+            el.className = `toast toast-${type} show`;
+            setTimeout(() => el.classList.remove('show'), 3000);
+        }
+
+        // --- Modals ---
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        // --- DISHES ---
+        async function loadDishes() {
+            const res = await apiAuth('/dishes/all');
+            if (!res.success) return;
+
+            const tbody = document.getElementById('dishes-table');
+            if (res.data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-12 text-gray-500">Nenhum prato cadastrado.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = res.data.map(d => {
+                // Se tem imagem mas não tem protocolo, adiciona o domínio da API
+                const imgSrc = d.image
+                    ? (d.image.startsWith('http') ? d.image : `${API}${d.image}`)
+                    : 'https://via.placeholder.com/40';
+
+                return `
+        <tr class="hover:bg-white/[0.02] transition">
+            <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                    <img src="${imgSrc}" class="w-10 h-10 rounded-lg object-cover" alt="" onerror="this.src='https://via.placeholder.com/40'">
+                    <span class="text-white font-medium text-sm">${d.name}</span>
+                </div>
+            </td>
+            <td class="px-6 py-4 text-gray-400 text-sm">${d.category?.name || '-'}</td>
+            <td class="px-6 py-4 text-brand-400 font-medium text-sm">${formatPrice(d.price)}</td>
+            <td class="px-6 py-4">${d.featured ? '<span class="text-yellow-400">★</span>' : '<span class="text-gray-600">-</span>'}</td>
+            <td class="px-6 py-4">${d.active ? '<span class="text-green-400 text-xs bg-green-400/10 px-2 py-1 rounded-full">Ativo</span>' : '<span class="text-gray-500 text-xs bg-gray-500/10 px-2 py-1 rounded-full">Inativo</span>'}</td>
+            <td class="px-6 py-4 text-right">
+                <button onclick='editDish(${JSON.stringify(d).replace(/'/g, "&#39;")})' class="text-brand-400 hover:text-brand-300 text-sm mr-3">Editar</button>
+                <button onclick="deleteDish('${d.id}')" class="text-red-400 hover:text-red-300 text-sm">Excluir</button>
+            </td>
+        </tr>
+    `;
+            }).join('');
+        }
+
+        function openDishModal(dish = null) {
+            document.getElementById('dish-modal-title').textContent = dish ? 'Editar Prato' : 'Novo Prato';
+            document.getElementById('dish-id').value = dish?.id || '';
+            document.getElementById('dish-name').value = dish?.name || '';
+            document.getElementById('dish-description').value = dish?.description || '';
+            document.getElementById('dish-price').value = dish ? (dish.price / 100).toFixed(2) : '';
+            document.getElementById('dish-category').value = dish?.categoryId || '';
+            document.getElementById('dish-featured').checked = dish?.featured || false;
+            document.getElementById('dish-active').checked = dish?.active !== false;
+            document.getElementById('dish-image').value = '';
+
+            // Populate category select
+            const sel = document.getElementById('dish-category');
+            sel.innerHTML = '<option value="">Selecione...</option>' + categories.map(c =>
+                `<option value="${c.id}" ${dish?.categoryId === c.id ? 'selected' : ''}>${c.name}</option>`
+            ).join('');
+
+            openModal('dish-modal');
+        }
+
+        function editDish(dish) {
+            openDishModal(dish);
+        }
+
+        document.getElementById('dish-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('dish-id').value;
+            const formData = new FormData();
+            formData.append('name', document.getElementById('dish-name').value);
+            formData.append('description', document.getElementById('dish-description').value);
+            formData.append('price', Math.round(parseFloat(document.getElementById('dish-price').value) * 100).toString());
+            formData.append('categoryId', document.getElementById('dish-category').value);
+            formData.append('featured', document.getElementById('dish-featured').checked.toString());
+            formData.append('active', document.getElementById('dish-active').checked.toString());
+
+            const file = document.getElementById('dish-image').files[0];
+            if (file) formData.append('image', file);
+
+            const endpoint = id ? `/dishes/${id}` : '/dishes';
+            const method = id ? 'PUT' : 'POST';
+
+            const res = await apiAuth(endpoint, { method, body: formData });
+            if (res.success) {
+                toast(id ? 'Prato atualizado!' : 'Prato criado!');
+                closeModal('dish-modal');
+                loadDishes();
+            } else {
+                toast(res.error || 'Erro ao salvar', 'error');
+            }
+        });
+
+        async function deleteDish(id) {
+            if (!confirm('Tem certeza que deseja excluir este prato?')) return;
+            const res = await apiAuth(`/dishes/${id}`, { method: 'DELETE' });
+            if (res.success) {
+                toast('Prato excluído!');
+                loadDishes();
+            } else {
+                toast(res.error || 'Erro ao excluir', 'error');
+            }
+        }
+
+        // --- CATEGORIES ---
+        async function loadCategories() {
+            const res = await apiAuth('/categories/all');
+            if (!res.success) return;
+            categories = res.data;
+
+            const grid = document.getElementById('categories-grid');
+            if (categories.length === 0) {
+                grid.innerHTML = '<div class="text-center py-12 col-span-3 text-gray-500">Nenhuma categoria cadastrada.</div>';
+                return;
+            }
+
+            grid.innerHTML = categories.map(c => `
+        <div class="bg-dark-800 rounded-xl p-6 border border-white/5">
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="text-white font-semibold">${c.name}</h3>
+                <span class="text-gray-500 text-xs">${c._count?.dishes || 0} pratos</span>
+            </div>
+            <p class="text-gray-500 text-xs mb-4">Ordem: ${c.sortOrder}</p>
+            <div class="flex gap-2">
+                <button onclick='editCategory(${JSON.stringify(c).replace(/'/g, "&#39;")})' class="text-brand-400 hover:text-brand-300 text-sm">Editar</button>
+                <button onclick="deleteCategory('${c.id}')" class="text-red-400 hover:text-red-300 text-sm">Excluir</button>
+            </div>
+        </div>
+    `).join('');
+        }
+
+        function openCategoryModal(cat = null) {
+            document.getElementById('category-modal-title').textContent = cat ? 'Editar Categoria' : 'Nova Categoria';
+            document.getElementById('category-id').value = cat?.id || '';
+            document.getElementById('category-name').value = cat?.name || '';
+            document.getElementById('category-sort').value = cat?.sortOrder || 0;
+            openModal('category-modal');
+        }
+
+        function editCategory(cat) { openCategoryModal(cat); }
+
+        document.getElementById('category-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('category-id').value;
+            const body = {
+                name: document.getElementById('category-name').value,
+                sortOrder: parseInt(document.getElementById('category-sort').value) || 0,
+            };
+
+            const endpoint = id ? `/categories/${id}` : '/categories';
+            const method = id ? 'PUT' : 'POST';
+
+            const res = await apiAuth(endpoint, { method, body: JSON.stringify(body) });
+            if (res.success) {
+                toast(id ? 'Categoria atualizada!' : 'Categoria criada!');
+                closeModal('category-modal');
+                loadCategories();
+            } else {
+                toast(res.error || 'Erro ao salvar', 'error');
+            }
+        });
+
+        async function deleteCategory(id) {
+            if (!confirm('Excluir categoria e todos os pratos relacionados?')) return;
+            const res = await apiAuth(`/categories/${id}`, { method: 'DELETE' });
+            if (res.success) {
+                toast('Categoria excluída!');
+                loadCategories();
+            } else {
+                toast(res.error || 'Erro ao excluir', 'error');
+            }
+        }
+
+        // --- GALLERY ---
+        async function loadGalleryAdmin() {
+            const res = await apiAuth('/gallery/all');
+            if (!res.success) return;
+
+            const grid = document.getElementById('gallery-admin-grid');
+            if (res.data.length === 0) {
+                grid.innerHTML = '<div class="text-center py-12 col-span-4 text-gray-500">Nenhuma imagem na galeria.</div>';
+                return;
+            }
+
+            grid.innerHTML = res.data.map(img => {
+                // Se tem imagem mas não tem protocolo, adiciona o domínio da API
+                const imgSrc = img.src
+                    ? (img.src.startsWith('http') ? img.src : `${API}${img.src}`)
+                    : 'https://via.placeholder.com/400';
+
+                return `
+        <div class="relative group rounded-xl overflow-hidden aspect-square border border-white/5">
+            <img src="${imgSrc}" alt="${img.alt || ''}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400'">
+            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                <button onclick="deleteGalleryImage('${img.id}')" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition">Excluir</button>
+            </div>
+        </div>
+    `;
+            }).join('');
+        }
+
+        function openGalleryModal() { openModal('gallery-modal'); }
+
+        document.getElementById('gallery-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('image', document.getElementById('gallery-image').files[0]);
+            formData.append('alt', document.getElementById('gallery-alt').value);
+
+            const res = await apiAuth('/gallery', { method: 'POST', body: formData });
+            if (res.success) {
+                toast('Imagem adicionada!');
+                closeModal('gallery-modal');
+                document.getElementById('gallery-form').reset();
+                loadGalleryAdmin();
+            } else {
+                toast(res.error || 'Erro ao enviar', 'error');
+            }
+        });
+
+        async function deleteGalleryImage(id) {
+            if (!confirm('Excluir esta imagem?')) return;
+            const res = await apiAuth(`/gallery/${id}`, { method: 'DELETE' });
+            if (res.success) {
+                toast('Imagem removida!');
+                loadGalleryAdmin();
+            } else {
+                toast(res.error || 'Erro ao excluir', 'error');
+            }
+        }
+
+        // --- CONFIG ---
+        const configLabels = {
+            restaurant_name: 'Nome do Restaurante',
+            restaurant_tagline: 'Slogan',
+            restaurant_description: 'Descrição',
+            restaurant_address: 'Endereço',
+            restaurant_phone: 'Telefone',
+            restaurant_email: 'Email',
+            whatsapp_number: 'WhatsApp (com DDI, ex: 5511999998888)',
+            whatsapp_message: 'Mensagem padrão do WhatsApp',
+            hero_title: 'Título do Hero',
+            hero_subtitle: 'Subtítulo do Hero',
+            about_title: 'Título do Sobre',
+            about_text: 'Texto do Sobre',
+            opening_hours: 'Horário de Funcionamento',
+            google_maps_embed: 'URL do Google Maps (embed)',
+            instagram_url: 'Instagram URL',
+            facebook_url: 'Facebook URL',
+            footer_text: 'Texto do Footer',
+        };
+
+        async function loadConfig() {
+            const res = await fetch(`${API}/api/config`);
+            const json = await res.json();
+            if (!json.success) return;
+
+            const form = document.getElementById('config-form');
+            form.innerHTML = Object.entries(configLabels).map(([key, label]) => {
+                const value = json.data[key] || '';
+                const isLong = ['restaurant_description', 'about_text', 'whatsapp_message', 'google_maps_embed'].includes(key);
+                return `
+            <div class="bg-dark-800 rounded-xl p-6 border border-white/5">
+                <label class="text-sm text-gray-400 mb-2 block">${label}</label>
+                ${isLong
+                        ? `<textarea data-key="${key}" rows="3" class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none resize-none">${value}</textarea>`
+                        : `<input type="text" data-key="${key}" value="${value}" class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none">`
+                    }
+            </div>
+        `;
+            }).join('');
+        }
+
+        async function saveConfig() {
+            const data = {};
+            document.querySelectorAll('#config-form [data-key]').forEach(el => {
+                data[el.dataset.key] = el.value;
+            });
+
+            const res = await apiAuth('/config', {
+                method: 'PUT',
+                body: JSON.stringify(data),
+            });
+
+            if (res.success) {
+                toast('Configurações salvas!');
+            } else {
+                toast(res.error || 'Erro ao salvar', 'error');
+            }
+        }
+
+        // --- Init ---
+        // Fetch CSRF token on page load
+        fetchCsrfToken();
+
+        if (token) {
+            // Validate token
+            apiAuth('/auth/me').then(res => {
+                if (res.success) {
+                    document.getElementById('admin-email').textContent = res.data.email;
+                    showDashboard();
+                } else {
+                    showLogin();
+                }
+            });
+        } else {
+            showLogin();
+        }
+    </script>
+</body>
+
+</html>

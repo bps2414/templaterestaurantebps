@@ -1,0 +1,71 @@
+# docker-compose.yml — Restaurant Template
+# Sobe PostgreSQL, Redis e o servidor Node.js
+# Uso: docker-compose up -d
+
+version: '3.9'
+
+services:
+  # ---- PostgreSQL ----
+  postgres:
+    image: postgres:15-alpine
+    container_name: restaurant-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: restaurant_template
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ 'CMD-SHELL', 'pg_isready -U postgres' ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ---- Redis ----
+  redis:
+    image: redis:7-alpine
+    container_name: restaurant-redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: [ 'CMD', 'redis-cli', 'ping' ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ---- Node.js Server ----
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    container_name: restaurant-server
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    env_file:
+      - server/.env
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/restaurant_template
+      REDIS_URL: redis://redis:6379
+      NODE_ENV: production
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - uploads:/app/assets/uploads
+
+volumes:
+  pgdata:
+    driver: local
+  redisdata:
+    driver: local
+  uploads:
+    driver: local

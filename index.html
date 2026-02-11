@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ========== SEO & META ========== -->
+    <!-- EDITAR: Escolha uma das 3 variações de title abaixo -->
+    <!-- Variação 1 (atual): -->
+    <title>FluxPay — Gerencie Pagamentos com Simplicidade e Agilidade</title>
+    <!-- Variação 2: FluxPay — Pagamentos Automatizados Para Negócios Modernos -->
+    <!-- Variação 3: FluxPay — A Plataforma Que Simplifica Suas Cobranças -->
+
+    <!-- EDITAR: Escolha uma das variações de meta description -->
+    <!-- Curta (atual): -->
+    <meta name="description"
+        content="FluxPay simplifica pagamentos e cobranças para negócios de todos os tamanhos. Comece grátis em minutos.">
+    <!-- Longa: FluxPay é a plataforma completa para gerenciar pagamentos, assinaturas e cobranças recorrentes. Automatize seu fluxo financeiro e foque no crescimento do seu negócio. -->
+
+    <link rel="canonical" href="https://fluxpay.com.br/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="FluxPay — Gerencie Pagamentos com Simplicidade e Agilidade">
+    <meta property="og:description"
+        content="FluxPay simplifica pagamentos e cobranças para negócios de todos os tamanhos. Comece grátis em minutos.">
+    <meta property="og:image" content="assets/hero-og.webp">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://fluxpay.com.br/">
+    <meta property="og:locale" content="pt_BR">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="FluxPay — Gerencie Pagamentos com Simplicidade e Agilidade">
+    <meta name="twitter:description"
+        content="FluxPay simplifica pagamentos e cobranças para negócios de todos os tamanhos.">
+    <meta name="twitter:image" content="assets/hero-og.webp">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Critical inline CSS -->
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: #0F172A;
+            background: #F8FAFC;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.2
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.25rem
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0
+        }
+
+        :root {
+            --primary: #0B6EFD;
+            --primary-dark: #0958cc;
+            --secondary: #0F172A;
+            --accent: #7C3AED;
+            --accent-dark: #6527c3;
+            --bg: #F8FAFC;
+            --surface: #FFFFFF;
+            --border: #E2E8F0;
+            --text: #0F172A;
+            --text-light: #64748B;
+            --success: #10B981;
+            --radius: 12px;
+            --radius-lg: 20px;
+            --shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.06)
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(248, 250, 252, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            transition: box-shadow .3s
+        }
+
+        .header.scrolled {
+            box-shadow: var(--shadow-md)
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: .938rem;
+            padding: .75rem 1.5rem;
+            border-radius: var(--radius);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all .2s ease;
+            text-decoration: none;
+            line-height: 1
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(11, 110, 253, 0.25)
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus-visible {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            box-shadow: 0 4px 12px rgba(11, 110, 253, 0.35);
+            transform: translateY(-1px)
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border-color: var(--primary)
+        }
+
+        .btn-outline:hover,
+        .btn-outline:focus-visible {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(11, 110, 253, 0.25)
+        }
+
+        *:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+            border-radius: 4px
+        }
+    </style>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="styles.min.css">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "FluxPay",
+        "url": "https://fluxpay.com.br",
+        "logo": "https://fluxpay.com.br/assets/logo.svg",
+        "description": "Plataforma de pagamentos e cobranças para negócios modernos.",
+        "sameAs": [
+          "https://twitter.com/fluxpay",
+          "https://linkedin.com/company/fluxpay",
+          "https://instagram.com/fluxpay"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "name": "FluxPay",
+        "url": "https://fluxpay.com.br",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://fluxpay.com.br/busca?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Preciso de cartão de crédito para começar?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Não! O plano Starter é 100% gratuito e você não precisa informar nenhum dado de pagamento para começar a usar a FluxPay."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Posso cancelar a qualquer momento?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sim, você pode cancelar ou trocar de plano quando quiser, sem multa e sem burocracia. Seus dados ficam salvos por 30 dias após o cancelamento."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "A FluxPay funciona com meu sistema atual?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Provavelmente sim! Temos integrações prontas com os principais ERPs, e-commerces e gateways de pagamento do mercado. Consulte nossa documentação de API para mais detalhes."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Quanto tempo leva para configurar?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A maioria dos usuários configura tudo em menos de 10 minutos. Basta criar uma conta, conectar seu meio de pagamento e pronto — já pode enviar cobranças."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Os meus dados estão seguros?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Segurança é prioridade. Usamos criptografia ponta-a-ponta, conformidade PCI DSS e servidores com redundância geográfica. Seus dados e os dos seus clientes estão sempre protegidos."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+
+    <!-- ============================== -->
+    <!-- HEADER / NAV                    -->
+    <!-- ============================== -->
+    <header class="header" role="banner">
+        <div class="container header__inner">
+            <!-- EDITAR: Logo — substitua o SVG abaixo pelo seu logo -->
+            <a href="#" class="header__logo" aria-label="FluxPay — Página inicial">
+                <svg width="140" height="36" viewBox="0 0 140 36" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true">
+                    <rect x="0" y="4" width="28" height="28" rx="8" fill="#0B6EFD" />
+                    <path d="M8 18h12M14 12v12" stroke="#fff" stroke-width="2.5" stroke-linecap="round" />
+                    <text x="36" y="26" font-family="Inter, sans-serif" font-weight="700" font-size="22"
+                        fill="#0F172A">Flux<tspan fill="#0B6EFD">Pay</tspan></text>
+                </svg>
+            </a>
+
+            <nav class="header__nav" id="main-nav" aria-label="Menu principal">
+                <ul class="header__nav-list" role="list">
+                    <li><a href="#features" class="header__nav-link">Features</a></li>
+                    <li><a href="#como-funciona" class="header__nav-link">Como Funciona</a></li>
+                    <li><a href="#precos" class="header__nav-link">Preços</a></li>
+                    <li><a href="#testemunhos" class="header__nav-link">Testemunhos</a></li>
+                    <li><a href="#faq" class="header__nav-link">FAQ</a></li>
+                    <li><a href="#contato" class="header__nav-link">Contato</a></li>
+                    <li><a href="login.html" class="header__nav-link">Login</a></li>
+                </ul>
+            </nav>
+
+            <!-- EDITAR: CTA do header — variantes de texto:
+           1. "Começar grátis" (atual)
+           2. "Testar agora"
+           3. "Criar conta free"
+      -->
+            <a href="register.html" class="btn btn-primary header__cta">Começar grátis</a>
+
+            <!-- Mobile menu button -->
+            <button class="header__menu-btn" id="menu-toggle" aria-label="Abrir menu" aria-expanded="false"
+                aria-controls="main-nav">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" aria-hidden="true">
+                    <line class="menu-line menu-line--top" x1="3" y1="6" x2="21" y2="6" />
+                    <line class="menu-line menu-line--mid" x1="3" y1="12" x2="21" y2="12" />
+                    <line class="menu-line menu-line--bot" x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main id="main-content">
+
+        <!-- ============================== -->
+        <!-- HERO                            -->
+        <!-- ============================== -->
+        <section class="hero" aria-labelledby="hero-heading">
+            <div class="container hero__inner">
+                <div class="hero__content">
+                    <!-- EDITAR: Título e subtítulo -->
+                    <h1 id="hero-heading" class="hero__title">
+                        Pagamentos <span class="text-gradient">simples</span> para negócios que crescem rápido.
+                    </h1>
+                    <p class="hero__subtitle">
+                        Automatize cobranças, acompanhe receita em tempo real e reduza inadimplência — tudo numa
+                        plataforma que você configura em minutos.
+                    </p>
+
+                    <div class="hero__actions">
+                        <!-- EDITAR: CTAs — variantes:
+                 Primário: 1. "Começar grátis" | 2. "Criar conta agora" | 3. "Testar sem compromisso"
+                 Secundário: 1. "Ver planos" | 2. "Explorar recursos" | 3. "Saiba mais"
+            -->
+                        <a href="register.html" class="btn btn-primary btn-lg">
+                            Começar grátis
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </a>
+                        <a href="#precos" class="btn btn-outline btn-lg">Ver planos</a>
+                    </div>
+
+                    <!-- Trust microcopy -->
+                    <p class="hero__trust">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"
+                            stroke-linecap="round" aria-hidden="true">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Sem cartão de crédito
+                        <span class="hero__trust-sep">|</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"
+                            stroke-linecap="round" aria-hidden="true">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Cancelamento a qualquer momento
+                    </p>
+                </div>
+
+                <div class="hero__visual">
+                    <!-- EDITAR: Substitua a ilustração hero abaixo -->
+                    <!-- Inline SVG com fallback -->
+                    <picture>
+                        <source srcset="assets/hero.webp" type="image/webp">
+                        <img src="assets/hero.svg"
+                            alt="Dashboard da FluxPay mostrando gráficos de receita e métricas de pagamento"
+                            width="1200" height="700" class="hero__img" loading="eager">
+                    </picture>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================== -->
+        <!-- FEATURES                        -->
+        <!-- ============================== -->
+        <section class="features" id="features" aria-labelledby="features-heading">
+            <div class="container">
+                <div class="section-header">
+                    <h2 id="features-heading" class="section-title">Tudo que você precisa, nada que você não precisa.
+                    </h2>
+                    <p class="section-subtitle">Ferramentas poderosas, interface limpa. Simples assim.</p>
+                </div>
+
+                <div class="features__grid">
+                    <!-- EDITAR: Cards de features — ícone, título, descrição -->
+                    <!-- Card 1 -->
+                    <article class="feature-card">
+                        <div class="feature-card__icon" aria-hidden="true">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0B6EFD"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                        </div>
+                        <h3 class="feature-card__title">Segurança de verdade</h3>
+                        <p class="feature-card__desc">Criptografia ponta-a-ponta e conformidade PCI DSS. Seus dados e os
+                            dos seus clientes protegidos 24/7.</p>
+                        <a href="#" class="feature-card__link">
+                            Saiba mais
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </a>
+                    </article>
+
+                    <!-- Card 2 -->
+                    <article class="feature-card">
+                        <div class="feature-card__icon" aria-hidden="true">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7C3AED"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                                <line x1="8" y1="21" x2="16" y2="21" />
+                                <line x1="12" y1="17" x2="12" y2="21" />
+                            </svg>
+                        </div>
+                        <h3 class="feature-card__title">Dashboard intuitivo</h3>
+                        <p class="feature-card__desc">Visualize receita, inadimplência e crescimento em tempo real.
+                            Gráficos claros, sem complexidade.</p>
+                        <a href="#" class="feature-card__link">
+                            Saiba mais
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </a>
+                    </article>
+
+                    <!-- Card 3 -->
+                    <article class="feature-card">
+                        <div class="feature-card__icon" aria-hidden="true">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10B981"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="16 18 22 12 16 6" />
+                                <polyline points="8 6 2 12 8 18" />
+                            </svg>
+                        </div>
+                        <h3 class="feature-card__title">API & Integrações</h3>
+                        <p class="feature-card__desc">Conecte com ERPs, e-commerces e gateways que você já usa.
+                            Documentação clara e SDKs prontos.</p>
+                        <a href="#" class="feature-card__link">
+                            Saiba mais
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </a>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================== -->
+        <!-- COMO FUNCIONA                   -->
+        <!-- ============================== -->
+        <section class="steps" id="como-funciona" aria-labelledby="steps-heading">
+            <div class="container">
+                <div class="section-header">
+                    <h2 id="steps-heading" class="section-title">Três passos. Sem enrolação.</h2>
+                    <p class="section-subtitle">Configure em minutos e comece a cobrar hoje mesmo.</p>
+                </div>
+
+                <div class="steps__grid">
+                    <!-- EDITAR: Passos — número, título, texto, imagem -->
+                    <!-- Passo 1 -->
+                    <div class="step">
+                        <div class="step__number" aria-hidden="true">1</div>
+                        <div class="step__content">
+                            <h3 class="step__title">Crie sua conta</h3>
+                            <p class="step__text">Cadastro rápido com e-mail ou Google. Sem burocracia, sem formulários
+                                intermináveis.</p>
+                        </div>
+                        <div class="step__visual">
+                            <img src="assets/step1.svg" alt="Tela de cadastro simplificado da FluxPay" width="400"
+                                height="300" loading="lazy">
+                        </div>
+                    </div>
+
+                    <!-- Passo 2 -->
+                    <div class="step">
+                        <div class="step__number" aria-hidden="true">2</div>
+                        <div class="step__content">
+                            <h3 class="step__title">Configure seu fluxo</h3>
+                            <p class="step__text">Conecte seu gateway de pagamento, defina preços e crie seus produtos.
+                                Tudo pelo painel.</p>
+                        </div>
+                        <div class="step__visual">
+                            <img src="assets/step2.svg" alt="Painel de configuração de produtos e pagamentos"
+                                width="400" height="300" loading="lazy">
+                        </div>
+                    </div>
+
+                    <!-- Passo 3 -->
+                    <div class="step">
+                        <div class="step__number" aria-hidden="true">3</div>
+                        <div class="step__content">
+                            <h3 class="step__title">Comece a cobrar</h3>
+                            <p class="step__text">Envie links de pagamento, ative cobranças recorrentes e acompanhe tudo
+                                em tempo real.</p>
+                        </div>
+                        <div class="step__visual">
+                            <img src="assets/step3.svg" alt="Dashboard de acompanhamento de cobranças em tempo real"
+                                width="400" height="300" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================== -->
+        <!-- TESTEMUNHOS                      -->
+        <!-- ============================== -->
+        <section class="testimonials" id="testemunhos" aria-labelledby="testimonials-heading">
+            <div class="container">
+                <div class="section-header">
+                    <h2 id="testimonials-heading" class="section-title">Quem usa, recomenda.</h2>
+                    <p class="section-subtitle">Veja o que nossos clientes falam sobre a FluxPay.</p>
+                </div>
+
+                <div class="testimonials__grid">
+                    <!-- EDITAR: Depoimentos — foto, nome, cargo, quote -->
+                    <!-- Depoimento 1 -->
+                    <blockquote class="testimonial-card">
+                        <p class="testimonial-card__quote">"A FluxPay reduziu nossa inadimplência em 40% nos primeiros 3
+                            meses. O dashboard é absurdamente claro e a equipe de suporte responde em minutos."</p>
+                        <footer class="testimonial-card__author">
+                            <!-- EDITAR: Substitua o avatar -->
+                            <div class="testimonial-card__avatar" aria-hidden="true">
+                                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                    <circle cx="24" cy="24" r="24" fill="#E0E7FF" />
+                                    <circle cx="24" cy="18" r="8" fill="#0B6EFD" opacity="0.5" />
+                                    <path d="M8 42c0-8.837 7.163-16 16-16s16 7.163 16 16" fill="#0B6EFD"
+                                        opacity="0.3" />
+                                </svg>
+                            </div>
+                            <div>
+                                <cite class="testimonial-card__name">Mariana Costa</cite>
+                                <span class="testimonial-card__role">CFO, TechBrew — SaaS</span>
+                            </div>
+                        </footer>
+                    </blockquote>
+
+                    <!-- Depoimento 2 -->
+                    <blockquote class="testimonial-card">
+                        <p class="testimonial-card__quote">"Migrei de outra plataforma e em 10 minutos já estava
+                            operando. A API é limpa, documentação exemplar. Recomendo demais."</p>
+                        <footer class="testimonial-card__author">
+                            <div class="testimonial-card__avatar" aria-hidden="true">
+                                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                    <circle cx="24" cy="24" r="24" fill="#EDE9FE" />
+                                    <circle cx="24" cy="18" r="8" fill="#7C3AED" opacity="0.5" />
+                                    <path d="M8 42c0-8.837 7.163-16 16-16s16 7.163 16 16" fill="#7C3AED"
+                                        opacity="0.3" />
+                                </svg>
+                            </div>
+                            <div>
+                                <cite class="testimonial-card__name">Rafael Mendes</cite>
+                                <span class="testimonial-card__role">CTO, NovaPag — Fintech</span>
+                            </div>
+                        </footer>
+                    </blockquote>
+
+                    <!-- Depoimento 3 -->
+                    <blockquote class="testimonial-card">
+                        <p class="testimonial-card__quote">"Usamos pra cobranças recorrentes e a taxa de sucesso de
+                            cobrança subiu pra 97%. Interface linda e zero downtime em 1 ano."</p>
+                        <footer class="testimonial-card__author">
+                            <div class="testimonial-card__avatar" aria-hidden="true">
+                                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                    <circle cx="24" cy="24" r="24" fill="#D1FAE5" />
+                                    <circle cx="24" cy="18" r="8" fill="#10B981" opacity="0.5" />
+                                    <path d="M8 42c0-8.837 7.163-16 16-16s16 7.163 16 16" fill="#10B981"
+                                        opacity="0.3" />
+                                </svg>
+                            </div>
+                            <div>
+                                <cite class="testimonial-card__name">Juliana Rocha</cite>
+                                <span class="testimonial-card__role">Head de Operações, EduPrime — EdTech</span>
+                            </div>
+                        </footer>
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================== -->
+        <!-- PREÇOS                          -->
+        <!-- ============================== -->
+        <section class="pricing" id="precos" aria-labelledby="pricing-heading">
+            <div class="container">
+                <div class="section-header">
+                    <h2 id="pricing-heading" class="section-title">Planos que cabem no seu bolso.</h2>
+                    <p class="section-subtitle">Comece de graça, escale quando quiser.</p>
+                </div>
+
+                <!-- Toggle Mensal / Anual -->
+                <div class="pricing__toggle" role="group" aria-label="Alternar entre preço mensal e anual">
+                    <span class="pricing__toggle-label" id="label-monthly">Mensal</span>
+                    <button class="pricing__toggle-switch" id="pricing-toggle" role="switch" aria-checked="false"
+                        aria-labelledby="label-monthly label-annual">
+                        <span class="pricing__toggle-knob"></span>
+                    </button>
+                    <span class="pricing__toggle-label" id="label-annual">Anual <span
+                            class="pricing__badge">−20%</span></span>
+                </div>
+
+                <div class="pricing__grid">
+                    <!-- EDITAR: Planos — nome, preço, features, CTA -->
+                    <!-- Starter -->
+                    <article class="pricing-card">
+                        <div class="pricing-card__header">
+                            <h3 class="pricing-card__name">Starter</h3>
+                            <p class="pricing-card__desc">Perfeito para testar e negócios iniciantes.</p>
+                        </div>
+                        <div class="pricing-card__price">
+                            <span class="pricing-card__amount" data-monthly="0" data-annual="0">R$ 0</span>
+                            <span class="pricing-card__period">/mês</span>
+                        </div>
+                        <ul class="pricing-card__features" role="list">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981"
+                                    stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                Até 50 cobranças/mês
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981"
+                                    stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                Dashboard básico
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981"
+                                    stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                1 usuário
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981"
+                                    stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                Suporte por email
+                            </li>
+                        </ul>
+                        <a href="register.html" class="btn btn-outline pricing-card__cta">Começar grátis</a>
+                    </article>
+
+                    <!-- Pro (Destaque) -->
+                    <article class="pricing-card pricing-card--featured">
+                        <div class="pricing-card__badge">Mais popular</div>
+                        <div class="pricing-card__header">
+                            <h3 class="pricing-card__name">Pro</h3>
+                            <p class="pricing-card__desc">Para empresas em crescimento acelerado.</p>
+                        </div>
+                        <div class="pricing-card__price">
+                            <span class="pricing-card__amount" data-monthly="97" data-annual="77">R$ 97</span>
+                            <span class="pricing-card__period">/mês</span>
+                        </div>
+                        <ul class="pricing-card__features" role="list">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981"
+                                    stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                Cobranças ilimitadas
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981"
+                                    stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                Dashboard avançado + relatórios
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981"
+                                    stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                Até 5 usuários
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981"
+                                    stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                API completa + webhooks
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981"
+                                    stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                Suporte prioritário
+                            </li>
+                        </ul>
+                        <a href="#contato" class="btn btn-primary pricing-card__cta">Assinar Pro</a>
+                    </article>
+
+                    <!-- Business -->
+                    <article class="pricing-card">
+                        <div class="pricing-card__header">
+                            <h3 class="pricing-card__name">Business</h3>
+                            <p class="pricing-card__desc">Para operações robustas e times grandes.</p>
+                        </div>
+                        <div class="pricing-card__price">
+                            <span class="pricing-card__amount" data-monthly="297" data-annual="237">R$ 297</span>
+                            <span class="pricing-card__period">/mês</span>
+                        </div>
+                        <ul class="pricing-card__features" role="list">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981"
+                                    stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                Tudo do Pro
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981"
+                                    stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                Usuários ilimitados
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981"
+                                    stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                SSO & permissões avançadas
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981"
+                                    stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                SLA 99.9% uptime
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981"
+                                    stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                Gerente de conta dedicado
+                            </li>
+                        </ul>
+                        <a href="#contato" class="btn btn-outline pricing-card__cta">Falar com vendas</a>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================== -->
+        <!-- FAQ                             -->
+        <!-- ============================== -->
+        <section class="faq" id="faq" aria-labelledby="faq-heading">
+            <div class="container">
+                <div class="section-header">
+                    <h2 id="faq-heading" class="section-title">Perguntas frequentes</h2>
+                    <p class="section-subtitle">Respondemos antes de você perguntar.</p>
+                </div>
+
+                <div class="faq__list" role="list">
+                    <!-- EDITAR: Perguntas e respostas -->
+                    <!-- FAQ 1 -->
+                    <details class="faq-item" role="listitem">
+                        <summary class="faq-item__question" aria-expanded="false">
+                            <span>Preciso de cartão de crédito para começar?</span>
+                            <svg class="faq-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </summary>
+                        <div class="faq-item__answer">
+                            <p>Não! O plano Starter é 100% gratuito e você não precisa informar nenhum dado de pagamento
+                                para começar a usar a FluxPay.</p>
+                        </div>
+                    </details>
+
+                    <!-- FAQ 2 -->
+                    <details class="faq-item" role="listitem">
+                        <summary class="faq-item__question" aria-expanded="false">
+                            <span>Posso cancelar a qualquer momento?</span>
+                            <svg class="faq-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </summary>
+                        <div class="faq-item__answer">
+                            <p>Sim, você pode cancelar ou trocar de plano quando quiser, sem multa e sem burocracia.
+                                Seus dados ficam salvos por 30 dias após o cancelamento.</p>
+                        </div>
+                    </details>
+
+                    <!-- FAQ 3 -->
+                    <details class="faq-item" role="listitem">
+                        <summary class="faq-item__question" aria-expanded="false">
+                            <span>A FluxPay funciona com meu sistema atual?</span>
+                            <svg class="faq-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </summary>
+                        <div class="faq-item__answer">
+                            <p>Provavelmente sim! Temos integrações prontas com os principais ERPs, e-commerces e
+                                gateways de pagamento do mercado. Consulte nossa documentação de API para mais detalhes.
+                            </p>
+                        </div>
+                    </details>
+
+                    <!-- FAQ 4 -->
+                    <details class="faq-item" role="listitem">
+                        <summary class="faq-item__question" aria-expanded="false">
+                            <span>Quanto tempo leva para configurar?</span>
+                            <svg class="faq-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </summary>
+                        <div class="faq-item__answer">
+                            <p>A maioria dos usuários configura tudo em menos de 10 minutos. Basta criar uma conta,
+                                conectar seu meio de pagamento e pronto — já pode enviar cobranças.</p>
+                        </div>
+                    </details>
+
+                    <!-- FAQ 5 -->
+                    <details class="faq-item" role="listitem">
+                        <summary class="faq-item__question" aria-expanded="false">
+                            <span>Os meus dados estão seguros?</span>
+                            <svg class="faq-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </summary>
+                        <div class="faq-item__answer">
+                            <p>Segurança é prioridade. Usamos criptografia ponta-a-ponta, conformidade PCI DSS e
+                                servidores com redundância geográfica. Seus dados e os dos seus clientes estão sempre
+                                protegidos.</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ============================== -->
+    <!-- FOOTER                          -->
+    <!-- ============================== -->
+    <footer class="footer" id="contato" role="contentinfo">
+        <div class="container footer__inner">
+
+            <div class="footer__brand">
+                <!-- EDITAR: Logo footer -->
+                <a href="#" class="footer__logo" aria-label="FluxPay">
+                    <svg width="120" height="32" viewBox="0 0 140 36" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true">
+                        <rect x="0" y="4" width="28" height="28" rx="8" fill="#0B6EFD" />
+                        <path d="M8 18h12M14 12v12" stroke="#fff" stroke-width="2.5" stroke-linecap="round" />
+                        <text x="36" y="26" font-family="Inter, sans-serif" font-weight="700" font-size="22"
+                            fill="#fff">Flux<tspan fill="#93C5FD">Pay</tspan></text>
+                    </svg>
+                </a>
+                <p class="footer__bio">FluxPay é a plataforma de pagamentos que simplifica cobranças para negócios de
+                    todos os tamanhos. Criada no Brasil, feita pro mundo.</p>
+            </div>
+
+            <div class="footer__links">
+                <div class="footer__col">
+                    <h4 class="footer__col-title">Produto</h4>
+                    <ul role="list">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#precos">Preços</a></li>
+                        <li><a href="#como-funciona">Como Funciona</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer__col">
+                    <h4 class="footer__col-title">Empresa</h4>
+                    <ul role="list">
+                        <li><a href="#">Sobre nós</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Carreiras</a></li>
+                        <li><a href="#">Contato</a></li>
+                    </ul>
+                </div>
+                <div class="footer__col">
+                    <h4 class="footer__col-title">Legal</h4>
+                    <ul role="list">
+                        <li><a href="#">Termos de Uso</a></li>
+                        <li><a href="#">Privacidade</a></li>
+                        <li><a href="#">Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer__newsletter">
+                <h4 class="footer__col-title">Fique por dentro</h4>
+                <p class="footer__newsletter-text">Receba novidades e dicas direto no seu email.</p>
+                <!-- EDITAR: CTA newsletter — variantes:
+             1. "Quero avisos" (atual)
+             2. "Me avisa"
+             3. "Inscrever-se"
+        -->
+                <form class="footer__form" id="newsletter-form" novalidate>
+                    <div class="footer__form-group">
+                        <label for="newsletter-email" class="sr-only">Seu melhor email</label>
+                        <input type="email" id="newsletter-email" class="footer__input" placeholder="Seu melhor email"
+                            required aria-describedby="email-error email-success">
+                        <button type="submit" class="btn btn-primary footer__submit">Quero avisos</button>
+                    </div>
+                    <p class="footer__form-error" id="email-error" role="alert" aria-live="polite" hidden></p>
+                    <p class="footer__form-success" id="email-success" role="status" aria-live="polite" hidden></p>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="footer__bottom">
+            <div class="container footer__bottom-inner">
+                <p class="footer__copy">&copy; 2026 FluxPay. Todos os direitos reservados.</p>
+                <div class="footer__social" aria-label="Redes sociais">
+                    <a href="#" aria-label="Twitter / X">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path
+                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="LinkedIn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path
+                                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="Instagram">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="scripts.min.js" defer></script>
+</body>
+
+</html>

@@ -1,0 +1,792 @@
+# 🚀 GUIA COMPLETO — Do Teste Local ao Cliente Final
+
+> **Projeto:** Restaurant Template (Express + Prisma + PostgreSQL)
+> **Última atualização:** 11/02/2026
+> **Leia na ordem. Cada passo depende do anterior.**
+
+---
+
+## 📋 ÍNDICE — Siga na ordem, sem pular
+
+| # | Etapa | Tempo estimado |
+|---|-------|----------------|
+| [1](#1--consertar-o-que-falta-antes-de-subir) | Consertar o que falta (obrigatório) | ~10 min |
+| [2](#2--testar-tudo-localmente) | Testar tudo localmente | ~15 min |
+| [3](#3--preparar-o-repositório-github) | Preparar repositório GitHub | ~10 min |
+| [4](#4--criar-banco-de-dados-neon) | Criar banco de dados (Neon) | ~5 min |
+| [5](#5--criar-web-service-render) | Criar Web Service (Render) | ~10 min |
+| [6](#6--testar-em-produção) | Testar em produção | ~10 min |
+| [7](#7--entregar-para-o-cliente) | Entregar para o cliente | ~15 min |
+| [8](#8--clonar-para-novo-cliente) | Clonar para novo cliente | ~10 min |
+| [9](#9--manutenção-e-updates) | Manutenção e updates | referência |
+| [10](#10--se-algo-der-errado) | Se algo der errado | referência |
+
+---
+
+## 1 — Consertar o que falta antes de subir
+
+Seu projeto está 90% pronto. Faltam **4 correções pequenas** que são obrigatórias antes de colocar online. São coisas de 2 minutos cada.
+
+### 1.1 — Criar `.gitignore` na raiz do projeto
+
+Hoje só existe `.gitignore` dentro de `server/`. Sem isso, se você criar um `.env` na raiz ou algum backup pesado, ele vai pro GitHub.
+
+Crie o arquivo `f:\VSCode\Landpage\.gitignore` com:
+
+```
+# === Ambiente ===
+.env
+.env.local
+.env.production
+
+# === Node ===
+node_modules/
+dist/
+
+# === Uploads do usuário ===
+server/assets/uploads/*
+!server/assets/uploads/.gitkeep
+
+# === OS ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === IDE ===
+.vscode/
+.idea/
+*.swp
+
+# === Logs ===
+*.log
+npm-debug.log*
+
+# === Backups (não enviar ao GitHub) ===
+backup_before_saas/
+backup_before_security_phase1/
+backup_before_security_ui/
+
+# === Testes/relatórios locais ===
+tests/
+report/
+migration_logs/
+```
+
+### 1.2 — Aplicar `uploadLimiter` na rota de upload
+
+O rate limiter de upload está **criado** (`rateLimit.ts`) mas nunca foi **ligado** na rota. Sem isso, alguém pode fazer spam de upload.
+
+Abra `server/src/app.ts` e troque esta linha:
+
+```typescript
+// DE:
+app.use('/api/upload', csrfVerifyToken, apiLimiter, uploadRoutes);
+
+// PARA:
+app.use('/api/upload', csrfVerifyToken, uploadLimiter, uploadRoutes);
+```
+
+E adicione `uploadLimiter` no import lá em cima:
+
+```typescript
+// DE:
+import { apiLimiter, authLimiter } from './middlewares/rateLimit';
+
+// PARA:
+import { apiLimiter, authLimiter, uploadLimiter } from './middlewares/rateLimit';
+```
+
+### 1.3 — Remover arquivos legados da raiz
+
+Na raiz do projeto existem arquivos antigos (do SaaS/FluxPay) que **não fazem parte** do template de restaurante e vão confundir:
+
+- `login.html`, `register.html`, `dashboard.html` — páginas antigas que referenciam endpoints que não existem mais
+- `scripts.js`, `scripts.min.js`, `styles.css`, `styles.min.css`, `index.html` — duplicatas antigas
+- `found_entries.json` — arquivo de debug
+
+**O que fazer:** mova todos para a pasta `backup_before_saas/` (que já existe) ou delete:
+
+```
+login.html
+register.html
+dashboard.html
+scripts.js
+scripts.min.js
+styles.css
+styles.min.css
+index.html
+found_entries.json
+```
+
+> **Dica:** NÃO delete as pastas `public/` e `server/`. O template real está lá dentro.
+
+### 1.4 — Seed: trocar senha hardcoded por variável de ambiente
+
+No arquivo `server/prisma/seed.ts`, a senha do admin está fixa como `admin123`. Isso é OK para demo, mas para cada cliente você quer poder mudar.
+
+Troque a linha:
+
+```typescript
+// DE:
+const passwordHash = await bcrypt.hash('admin123', 12);
+
+// PARA:
+const adminPassword = process.env.SEED_ADMIN_PASSWORD || 'admin123';
+const passwordHash = await bcrypt.hash(adminPassword, 12);
+```
+
+E faça o mesmo com o email:
+
+```typescript
+// DE:
+where: { email: 'admin@restaurante.com' },
+
+// PARA:
+const adminEmail = process.env.SEED_ADMIN_EMAIL || 'admin@restaurante.com';
+// ...
+where: { email: adminEmail },
+```
+
+Assim, quando for instalar para um cliente, você roda:
+
+```bash
+SEED_ADMIN_EMAIL="dono@pizzaria.com" SEED_ADMIN_PASSWORD="SenhaForte123!" npx prisma db seed
+```
+
+---
+
+## 2 — Testar tudo localmente
+
+Antes de subir para produção, teste no seu computador para garantir que tudo funciona.
+
+### 2.1 — Subir o banco de dados local
+
+**Opção A: Com Docker (recomendado)**
+
+1. **Certifique-se que o Docker Desktop está rodando:**
+   - Abra o Docker Desktop (ícone da baleia azul)
+   - Aguarde até aparecer "Docker Desktop is running" (verde)
+   - Se não tiver instalado: https://www.docker.com/products/docker-desktop
+
+2. **No terminal, na raiz do projeto:**
+
+```bash
+docker-compose up -d postgres
+```
+
+Isso sobe só o PostgreSQL local. Espere uns 10 segundos.
+
+**Erros comuns:**
+- `docker daemon is not running` → Abra o Docker Desktop e aguarde inicializar
+- `the attribute 'version' is obsolete` → Aviso, pode ignorar (não afeta funcionamento)
+
+---
+
+**Opção B: Sem Docker — Usar Neon diretamente para testes**
+
+Se não quiser instalar Docker, use o Neon (mesmo que vai usar em produção) para testar localmente:
+
+1. **Crie o projeto no Neon** (siga a [Etapa 4](#4--criar-banco-de-dados-neon))
+2. **Copie a DATABASE_URL** do Neon
+3. **Pule para a etapa 2.2** e use a URL do Neon no seu `.env` local
+
+> ⚠️ **Importante:** Se usar Neon para dev local, as migrações e seeds vão direto para o banco de produção. Recomendo criar **2 projetos no Neon**: um para `dev` e outro para `production`.
+
+### 2.2 — Configurar o `.env` do servidor
+
+Dentro de `server/`, crie (ou confirme que existe) o arquivo `.env`:
+
+```env
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/restaurant_template?schema=public"
+JWT_SECRET="qualquer-coisa-longa-para-desenvolvimento-local-123456"
+PORT=3000
+NODE_ENV="development"
+APP_URL="http://localhost:3000"
+CORS_ORIGINS="http://localhost:3000"
+```
+
+### 2.3 — Instalar, gerar, migrar, seedar e rodar
+
+```bash
+cd server
+npm ci
+npx prisma generate
+npx prisma migrate deploy
+npx prisma db seed
+npm run dev
+```
+
+Deve aparecer:
+```
+🍽  Restaurant Template server running on http://localhost:3000
+```
+
+### 2.4 — Checklist de teste local (faça todos)
+
+Abra o navegador e teste cada item. Marque ✅ quando passar:
+
+| # | Teste | Como testar | Esperado |
+|---|-------|-------------|----------|
+| 1 | Health check | Acesse `http://localhost:3000/healthz` | JSON com `"status": "ok"` |
+| 2 | Página inicial | Acesse `http://localhost:3000` | Página do restaurante com dados do seed |
+| 3 | Menu | Acesse `http://localhost:3000/menu` | Lista de pratos com preços |
+| 4 | Galeria | Acesse `http://localhost:3000/gallery` | Página de galeria |
+| 5 | Sobre | Acesse `http://localhost:3000/about` | Página sobre o restaurante |
+| 6 | Contato | Acesse `http://localhost:3000/contact` | Página de contato |
+| 7 | Login admin | Acesse `http://localhost:3000/admin`, faça login com `admin@restaurante.com` / `admin123` | Painel admin carrega |
+| 8 | Criar prato | No painel admin, crie um prato novo | Prato aparece na lista e no menu |
+| 9 | Upload imagem | No admin, suba uma imagem JPG/PNG (< 2MB) | Imagem aparece no prato |
+| 10 | Upload bloqueado | Tente subir um .exe renomeado para .jpg | Erro: upload rejeitado |
+| 11 | Carrinho | No menu, adicione itens ao carrinho | Carrinho mostra itens e total correto |
+| 12 | WhatsApp | Finalize pedido no carrinho | Abre WhatsApp com mensagem formatada |
+| 13 | XSS test | No console do navegador, cole: `localStorage.setItem('restaurant_cart', JSON.stringify([{id:'x',name:'<img src=x onerror=alert(1)>',image:'',price:1,quantity:1}])); location.reload();` | **Nenhum alert**. Nome aparece como texto, não como HTML |
+| 14 | Rate limit | Tente fazer login 11x com senha errada | Mensagem "Muitas tentativas" |
+
+Se **todos passaram** → pode ir para a próxima etapa.
+
+Se algum falhou → **pare e corrija** antes de continuar.
+
+---
+
+## 3 — Preparar o repositório GitHub
+
+### 3.1 — Confirmar que `.gitignore` está funcionando
+
+Depois de criar o `.gitignore` da raiz (etapa 1.1), verifique:
+
+```bash
+# Na raiz do projeto
+git status
+```
+
+Os arquivos `.env`, `node_modules/`, `dist/`, as pastas de backup e `report/` **NÃO devem aparecer** na lista. Se aparecerem, o `.gitignore` não está funcionando — confira o caminho.
+
+### 3.2 — Estrutura que deve ir para o GitHub
+
+```
+📦 Seu repositório deve ter:
+├── public/               ← Frontend (HTML + JS)
+│   ├── index.html
+│   ├── menu.html
+│   ├── gallery.html
+│   ├── about.html
+│   ├── contact.html
+│   ├── admin.html
+│   ├── buy.html
+│   ├── buy-success.html
+│   └── js/
+│       ├── app.js
+│       ├── cart.js
+│       ├── cartUI.js
+│       ├── orderModal.js
+│       ├── whatsappFormatter.js
+│       ├── a11y.js
+│       ├── mobile.js
+│       └── performance.js
+├── server/               ← Backend
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── Dockerfile
+│   ├── .gitignore
+│   ├── prisma/
+│   │   ├── schema.prisma
+│   │   ├── seed.ts
+│   │   └── migrations/
+│   └── src/
+│       ├── app.ts
+│       ├── index.ts
+│       ├── routes/
+│       ├── middlewares/
+│       ├── services/
+│       ├── utils/
+│       ├── prisma/
+│       └── types/
+├── .env.example          ← Exemplo de variáveis (SEM segredos)
+├── .gitignore            ← O que você criou na etapa 1.1
+├── docker-compose.yml    ← Para dev local
+├── docker-compose.dev.yml
+├── README.md
+└── preview.png
+```
+
+> **Os arquivos de report/, backup_*, migration_logs/, tests/ ficam FORA do GitHub** (o `.gitignore` cuida disso).
+
+### 3.3 — Criar repositório e fazer push
+
+```bash
+# Na raiz do projeto
+git init    # (se ainda não fez)
+git add .
+git commit -m "Template Restaurante v1.0 — pronto para produção"
+git branch -M main
+git remote add origin https://github.com/SEU-USUARIO/restaurant-template.git
+git push -u origin main
+```
+
+> **Repositório PRIVADO** — você está vendendo isso, não dê de graça.
+
+---
+
+## 4 — Criar banco de dados (Neon)
+
+### Por que Neon e não o PostgreSQL do Render?
+
+- Neon tem **plano gratuito** generoso (0.5 GB, branching)
+- É PostgreSQL puro (mesma coisa que o Prisma espera)
+- Fica **separado** do Render → se mudar de hosting, o banco continua
+
+### Passo a passo
+
+1. Acesse **https://neon.tech** → Crie conta (pode usar GitHub)
+2. **Create Project** → nome: `restaurante-saborarte` (ou nome do cliente)
+3. Região: escolha a mais próxima dos clientes (ex: `São Paulo` ou `US East`)
+4. Depois de criado, vá em **Dashboard → Connection Details**
+5. Copie a **connection string** completa. Ela parece com:
+
+```
+postgresql://neondb_owner:AbCdEf123@ep-cool-name-123456.us-east-2.aws.neon.tech/neondb?sslmode=require
+```
+
+6. **GUARDE essa string.** Você vai colar no Render na próxima etapa.
+
+> **Dica:** Para cada novo cliente, você cria um **novo projeto** no Neon. Assim cada restaurante tem seu banco isolado.
+
+---
+
+## 5 — Criar Web Service (Render)
+
+### 5.1 — Criar o serviço
+
+1. Acesse **https://dashboard.render.com** → Crie conta
+2. Clique em **New +** → **Web Service**
+3. Conecte sua conta GitHub → selecione o repositório `restaurant-template`
+4. Configure:
+
+| Campo | Valor |
+|-------|-------|
+| **Name** | `restaurante-saborarte` (ou nome do cliente) |
+| **Region** | Mesma do Neon (ex: Ohio / US East) |
+| **Branch** | `main` |
+| **Root Directory** | `server` |
+| **Runtime** | `Node` |
+| **Build Command** | `npm ci && npx prisma generate && npm run build` |
+| **Start Command** | `npx prisma migrate deploy && node dist/index.js` |
+| **Plan** | Free (para começar) ou Starter ($7/mês para produção real) |
+
+> ⚠️ **IMPORTANTE:** O **Root Directory** é `server` porque o `package.json` está dentro de `server/`. O Render precisa saber onde rodar `npm ci`.
+
+### 5.2 — Variáveis de Ambiente
+
+No serviço criado → **Environment** → **Add Environment Variable**
+
+Adicione **uma por uma**:
+
+| Key | Value | Notas |
+|-----|-------|-------|
+| `DATABASE_URL` | `postgresql://neondb_owner:...@...neon.tech/neondb?sslmode=require` | Cole a string do Neon (etapa 4) |
+| `JWT_SECRET` | *(valor aleatório — veja abaixo)* | NUNCA reutilize entre clientes |
+| `NODE_ENV` | `production` | Ativa HTTPS redirect, HSTS, etc. |
+| `APP_URL` | `https://restaurante-saborarte.onrender.com` | URL do seu serviço no Render |
+| `CORS_ORIGINS` | `https://restaurante-saborarte.onrender.com` | Mesma URL |
+| `PORT` | `3000` | Render usa isso internamente |
+
+**Como gerar o JWT_SECRET:**
+
+No seu terminal local, rode:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(64).toString('base64'))"
+```
+
+Copie o resultado e cole como valor de `JWT_SECRET`.
+
+**Variáveis opcionais** (adicione se tiver):
+
+| Key | Value | Quando usar |
+|-----|-------|-------------|
+| `STRIPE_SECRET_KEY` | `sk_live_...` | Se vender templates online |
+| `STRIPE_WEBHOOK_SECRET` | `whsec_...` | Se usar Stripe |
+
+### 5.3 — Deploy automático
+
+Depois de salvar as variáveis, clique em **Manual Deploy → Deploy latest commit**.
+
+O Render vai:
+1. Clonar o repo
+2. Entrar em `server/` (Root Directory)
+3. Rodar `npm ci && npx prisma generate && npm run build`
+4. Quando build terminar, rodar `npx prisma migrate deploy && node dist/index.js`
+
+**Acompanhe os logs em tempo real no painel.** O deploy leva 2-5 minutos.
+
+Quando aparecer `🍽 Restaurant Template server running` nos logs → está no ar!
+
+### 5.4 — Rodar o seed (popular o banco)
+
+O seed não roda automaticamente no deploy. Você precisa rodar manualmente **uma única vez**.
+
+No Render → seu serviço → **Shell** (aba no topo):
+
+```bash
+npx prisma db seed
+```
+
+Saída esperada:
+```
+🌱 Seeding database...
+✅ Admin: admin@restaurante.com (senha: admin123)
+✅ Categorias criadas
+✅ 10 pratos criados
+✅ Configurações do site criadas
+🎉 Seed concluído com sucesso!
+```
+
+> **Para clientes:** use as variáveis de ambiente para customizar:
+> ```bash
+> SEED_ADMIN_EMAIL="dono@pizzaria.com" SEED_ADMIN_PASSWORD="SenhaForte123!" npx prisma db seed
+> ```
+> (Isso só funciona depois de aplicar a correção da etapa 1.4)
+
+---
+
+## 6 — Testar em produção
+
+Substitua `SEU_APP` pelo nome do seu serviço no Render.
+
+### 6.1 — Testes rápidos via browser
+
+| Teste | URL | Esperado |
+|-------|-----|----------|
+| Health | `https://SEU_APP.onrender.com/healthz` | `{"status":"ok",...}` |
+| Home | `https://SEU_APP.onrender.com` | Página do restaurante |
+| Menu | `https://SEU_APP.onrender.com/menu` | Pratos do seed |
+| Admin | `https://SEU_APP.onrender.com/admin` | Tela de login |
+
+### 6.2 — Testes via terminal (opcional, para confirmar)
+
+```bash
+# Health check
+curl -s https://SEU_APP.onrender.com/healthz
+
+# Pegar token CSRF (necessário para login)
+curl -s -c cookies.txt https://SEU_APP.onrender.com/api/csrf-token
+
+# Ver categorias (endpoint público)
+curl -s https://SEU_APP.onrender.com/api/categories
+```
+
+### 6.3 — Teste funcional completo
+
+Repita a mesma checklist da etapa 2.4, mas usando a URL do Render em vez de localhost.
+
+### 6.4 — Verificar SSL
+
+Acesse `https://SEU_APP.onrender.com` — o cadeado 🔒 deve aparecer no navegador. O Render provisiona SSL automaticamente.
+
+---
+
+## 7 — Entregar para o cliente
+
+### 7.1 — O que o cliente recebe
+
+Envie por email/WhatsApp para o dono do restaurante:
+
+---
+
+**Assunto: Seu site está no ar! 🎉**
+
+Olá [Nome],
+
+Seu site já está funcionando:
+
+🌐 **Site público:** https://[dominio].onrender.com
+🔐 **Painel admin:** https://[dominio].onrender.com/admin
+
+**Credenciais de acesso:**
+- Email: `[email que você definiu no seed]`
+- Senha: `[senha que você definiu no seed]`
+- ⚠️ **Troque a senha no primeiro acesso**
+
+**O que você pode fazer no painel admin:**
+- Adicionar, editar e remover pratos do cardápio
+- Organizar categorias
+- Subir fotos dos pratos (JPG/PNG, até 2MB)
+- Gerenciar a galeria de fotos
+- Configurar nome, endereço, telefone e WhatsApp
+
+Agende uma call de 15 minutos comigo e eu te mostro tudo!
+
+---
+
+### 7.2 — Domínio customizado (quando o cliente tiver)
+
+1. No Render → seu serviço → **Settings → Custom Domains**
+2. Adicione `www.restaurantedocliente.com.br`
+3. O Render mostra os registros DNS (CNAME)
+4. O cliente (ou você) configura no provedor de domínio (Registro.br, GoDaddy, etc.)
+5. Propagação leva 5-60 minutos
+6. Render provisiona SSL automaticamente
+
+Depois de apontar o domínio, atualize as variáveis no Render:
+
+```
+APP_URL = https://www.restaurantedocliente.com.br
+CORS_ORIGINS = https://www.restaurantedocliente.com.br
+```
+
+---
+
+## 8 — Clonar para novo cliente
+
+### Modelo: 1 repo, N instâncias
+
+Você **não precisa** duplicar o código para cada cliente. Use o **mesmo repositório** e crie instâncias separadas:
+
+```
+                    ┌─────────────────┐
+                    │   GitHub Repo   │
+                    │  (branch main)  │
+                    └────────┬────────┘
+                             │
+              ┌──────────────┼──────────────┐
+              │              │              │
+     ┌────────▼────┐  ┌─────▼──────┐  ┌────▼────────┐
+     │   Render    │  │   Render   │  │   Render    │
+     │ Sabor&Arte  │  │  Pizzaria  │  │  Sushi Bar  │
+     │ (instância) │  │ (instância)│  │ (instância) │
+     └──────┬──────┘  └─────┬──────┘  └──────┬──────┘
+            │               │                │
+     ┌──────▼──────┐  ┌─────▼──────┐  ┌──────▼──────┐
+     │  Neon DB    │  │  Neon DB   │  │  Neon DB    │
+     │ saborarte   │  │  pizzaria  │  │  sushibar   │
+     └─────────────┘  └────────────┘  └─────────────┘
+```
+
+### Passo a passo para cada novo cliente
+
+**Tempo total: ~15 minutos**
+
+#### A) Banco de dados
+
+1. Neon → **New Project** → nome do cliente (ex: `pizzaria-napoli`)
+2. Copie a `DATABASE_URL`
+
+#### B) Web Service no Render
+
+1. Render → **New → Web Service** → mesmo repo do GitHub
+2. Configure com os mesmos valores da etapa 5.1
+3. Mude o **Name** para o do cliente
+4. **Environment variables:** cole a `DATABASE_URL` nova + gere um **novo `JWT_SECRET`**
+5. Deploy
+
+#### C) Popular o banco
+
+1. Render → Shell do novo serviço:
+```bash
+SEED_ADMIN_EMAIL="dono@pizzaria.com" SEED_ADMIN_PASSWORD="SenhaForte456!" npx prisma db seed
+```
+
+#### D) Personalizar conteúdo
+
+O cliente acessa o admin e troca:
+- Nome do restaurante
+- Endereço, telefone, WhatsApp
+- Pratos e categorias
+- Fotos
+
+(Tudo isso é feito pelo painel, sem mexer em código)
+
+#### E) Domínio (se tiver)
+
+Mesmo processo da etapa 7.2.
+
+---
+
+## 9 — Manutenção e updates
+
+### Atualizar o código (todos os clientes recebem)
+
+```bash
+# No seu computador
+cd f:\VSCode\Landpage
+# faça suas alterações
+git add .
+git commit -m "feat: nova funcionalidade X"
+git push origin main
+```
+
+O Render detecta o push e **redeploy automaticamente** em todos os serviços conectados ao mesmo repo/branch.
+
+> ⚠️ Se quiser controlar quais clientes recebem a atualização, use branches diferentes (ex: `main`, `cliente-vip`) e conecte cada serviço Render a uma branch diferente.
+
+### Backup do banco (por cliente)
+
+Se quiser fazer backup manual:
+
+```bash
+# Precisa ter psql instalado localmente
+pg_dump "postgresql://...connection-string-do-neon..." -Fc -f backup-cliente-2026-02-11.dump
+```
+
+Neon também tem backup automático no plano pago.
+
+### Ver logs de um serviço
+
+Render → serviço → **Logs** → logs em tempo real
+
+### Reiniciar um serviço
+
+Render → serviço → **Manual Deploy → Deploy latest commit**
+
+---
+
+## 10 — Se algo der errado
+
+### Erro no build do Render
+
+**Sintomas:** Build falha, serviço não sobe.
+
+**Passos:**
+1. Render → Logs → procure a linha vermelha de erro
+2. Erros comuns:
+
+| Erro | Causa | Solução |
+|------|-------|---------|
+| `Cannot find module` | Dependência faltando | Verifique se `Root Directory` é `server` |
+| `prisma generate failed` | schema.prisma ausente | Confira que `prisma/` está no repo |
+| `ECONNREFUSED` ao migrar | DATABASE_URL errada | Confira a variável no painel do Render |
+| `JWT_SECRET is required` | Variável faltando | Adicione no Environment do Render |
+
+### Erro após deploy (serviço caiu)
+
+1. Render → Shell:
+```bash
+node dist/index.js
+```
+Vai mostrar o erro exato.
+
+2. Se for `Cannot connect to database`:
+   - Vá no Neon e confira se o banco está ativo
+   - Copie novamente a connection string
+   - Atualize `DATABASE_URL` no Render
+
+### Plano Free do Render: serviço "dorme"
+
+O plano Free desliga o serviço após 15 min sem tráfego. Quando alguém acessa, leva ~30 segundos para "acordar".
+
+**Soluções:**
+- **Plano Starter** ($7/mês) → serviço fica sempre ligado (recomendado para clientes)
+- **Cron externo** → Use https://cron-job.org para pingar o serviço a cada 14 min (veja instruções detalhadas abaixo)
+
+#### Como configurar o workaround (Cron-Job.org) — Passo a passo
+
+**Tempo:** 5 minutos | **Custo:** $0 para sempre
+
+1. **Acesse https://cron-job.org** → Clique em **Sign up** (canto superior direito)
+   - Pode usar email ou login com Google/GitHub
+   - Plano Free permite até 50 cron jobs (mais que suficiente)
+
+2. **Após login**, clique em **Cronjobs** (menu lateral) → **Create cronjob**
+
+3. **Preencha o formulário:**
+
+   | Campo | Valor | Explicação |
+   |-------|-------|------------|
+   | **Title** | `Render Keep-Alive - [Nome do Cliente]` | Nome descritivo para você lembrar |
+   | **URL** | `https://SEU_APP.onrender.com/healthz` | ⚠️ Substitua `SEU_APP` pela URL real do Render |
+   | **Execution schedule** | Selecione **Every 14 minutes** | Render dorme após 15 min → pingamos 1 min antes |
+   | **Enable** | ✅ Marcado | Ativa o cron job |
+   | **Save responses** | Opcional | Se quiser ver histórico de respostas |
+
+4. **Salve** → O cron job começa imediatamente
+
+5. **Confirmação:**
+   - Volte para **Dashboard** no cron-job.org
+   - Você verá o job na lista com status **Enabled**
+   - Após alguns minutos, clique no job → aba **History**
+   - Deve aparecer requests com **Status 200** (sucesso)
+
+**Exemplo de configuração para 3 clientes:**
+
+```
+✅ Render Keep-Alive - Sabor & Arte
+   URL: https://saborarte.onrender.com/healthz
+   Every 14 minutes
+
+✅ Render Keep-Alive - Pizzaria Napoli  
+   URL: https://pizzaria-napoli.onrender.com/healthz
+   Every 14 minutes
+
+✅ Render Keep-Alive - Sushi Bar Sakura
+   URL: https://sushibar-sakura.onrender.com/healthz
+   Every 14 minutes
+```
+
+**Importante:**
+- ⚠️ Isso NÃO funciona 100% do tempo — às vezes o Render ainda dorme por updates deles
+- ✅ Mas na prática mantém o serviço acordado ~95% do tempo
+- ⚠️ **Não é profissional** para clientes pagantes — use Render Starter ($7/mês) nesses casos
+- ✅ É OK para demos, testes e primeiros clientes (enquanto valida o negócio)
+
+**Alternativa: Endpoint customizado** (opcional)
+
+Se quiser evitar que o `/healthz` apareça nos logs toda hora, crie um endpoint específico:
+
+```typescript
+// Em server/src/app.ts, adicione antes das rotas:
+app.get('/ping', (_req, res) => res.sendStatus(204)); // 204 = No Content
+```
+
+E configure o cron-job.org para pingar `/ping` em vez de `/healthz`.
+
+---
+
+## 📊 Resumo de custos
+
+| Item | Free | Produção |
+|------|------|----------|
+| Render Web Service | $0 (dorme) | $7/mês (sempre ligado) |
+| Neon PostgreSQL | $0 (0.5GB) | $19/mês (mais espaço) |
+| Domínio .com.br | — | ~R$40/ano |
+| **Total mensal** | **$0** | **~$26/mês ($7 + $19)** |
+| **Total mensal (economizando)** | **$0** | **~$7/mês (Render Starter + Neon Free)** |
+
+> Para maioria dos restaurantes, **Render Starter ($7/mês) + Neon Free ($0)** é suficiente. Neon Free aguenta até ~10.000 visitas/mês tranquilamente.
+
+---
+
+## ✅ Checklist final — Antes de entregar o primeiro cliente
+
+Faça na ordem e marque cada item:
+
+- [ ] Etapa 1.1 — `.gitignore` na raiz criado
+- [ ] Etapa 1.2 — `uploadLimiter` aplicado em `app.ts`
+- [ ] Etapa 1.3 — Arquivos legados removidos da raiz
+- [ ] Etapa 1.4 — Seed com variáveis de ambiente
+- [ ] Etapa 2 — Todos os 14 testes locais passaram
+- [ ] Etapa 3 — Repo no GitHub (privado)
+- [ ] Etapa 4 — Banco criado no Neon
+- [ ] Etapa 5 — Web Service criado no Render
+- [ ] Etapa 5.2 — Todas as variáveis de ambiente preenchidas
+- [ ] Etapa 5.4 — Seed rodou com sucesso
+- [ ] Etapa 6 — Todos os testes de produção passaram
+- [ ] Etapa 7 — Email/WhatsApp enviado ao cliente com credenciais
+
+---
+
+## 🧠 Perguntas frequentes
+
+**P: Preciso saber Docker para usar o Render?**
+R: Não. O Render usa o `package.json` diretamente. O Dockerfile é útil apenas se quiser deploy via Docker em outro lugar (VPS, AWS, etc.).
+
+**P: Posso usar o PostgreSQL do Render em vez do Neon?**
+R: Sim! Render tem PostgreSQL embutido. Mas o plano Free expira em 90 dias. Neon Free não expira. Por isso recomendo Neon.
+
+**P: E se o cliente quiser mudar as cores/layout?**
+R: Hoje o layout usa Tailwind CDN com cores fixas no HTML. Para trocar cores por cliente, seria necessário editar os HTMLs. Uma melhoria futura seria colocar as cores no banco (SiteConfig) e aplicar via CSS custom properties.
+
+**P: Quantos clientes posso ter no mesmo repositório?**
+R: Quantos quiser. Cada cliente é uma instância independente (Render + Neon), usando o mesmo código. Se um dia o código divergir muito entre clientes, aí sim crie branches separadas.
+
+**P: E se eu quiser cobrar mensalidade do cliente?**
+R: Cobre pelo menos o custo de infra ($7-26/mês) + sua margem. Muitos cobram R$50-200/mês por manutenção do site de restaurante.
