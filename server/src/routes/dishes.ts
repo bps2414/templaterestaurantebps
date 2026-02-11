@@ -2,7 +2,7 @@
 // Dish Routes — CRUD
 // ============================================
 
-import { Router, Response, NextFunction } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import prisma from '../prisma/client';
 import { requireAuth, requireAdmin } from '../middlewares/auth';
 import { AuthenticatedRequest } from '../types';
@@ -35,7 +35,7 @@ const dishSchema = z.object({
 });
 
 // GET /api/dishes — Public: list active dishes
-router.get('/', async (_req, res: Response, next: NextFunction) => {
+router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
     try {
         const dishes = await prisma.dish.findMany({
             where: { active: true },
@@ -49,7 +49,7 @@ router.get('/', async (_req, res: Response, next: NextFunction) => {
 });
 
 // GET /api/dishes/featured — Public: featured dishes
-router.get('/featured', async (_req, res: Response, next: NextFunction) => {
+router.get('/featured', async (_req: Request, res: Response, next: NextFunction) => {
     try {
         const dishes = await prisma.dish.findMany({
             where: { active: true, featured: true },
@@ -63,7 +63,7 @@ router.get('/featured', async (_req, res: Response, next: NextFunction) => {
 });
 
 // POST /api/dishes/validate-prices — Public: validate cart prices against server
-router.post('/validate-prices', async (req, res: Response, next: NextFunction) => {
+router.post('/validate-prices', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { ids } = req.body;
         if (!Array.isArray(ids) || ids.length === 0 || ids.length > 50) {

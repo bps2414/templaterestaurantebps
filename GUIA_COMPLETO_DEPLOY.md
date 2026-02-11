@@ -369,7 +369,7 @@ postgresql://neondb_owner:AbCdEf123@ep-cool-name-123456.us-east-2.aws.neon.tech/
 | **Branch** | `main` |
 | **Root Directory** | `server` |
 | **Runtime** | `Node` |
-| **Build Command** | `npm ci && npx prisma generate && npm run build` |
+| **Build Command** | `npm ci --include=dev && npx prisma generate && npm run build` |
 | **Start Command** | `npx prisma migrate deploy && node dist/index.js` |
 | **Plan** | Free (para começar) ou Starter ($7/mês para produção real) |
 
@@ -505,7 +505,11 @@ Seu site já está funcionando:
 **Credenciais de acesso:**
 - Email: `[email que você definiu no seed]`
 - Senha: `[senha que você definiu no seed]`
-- ⚠️ **Troque a senha no primeiro acesso**
+- ⚠️ **Troque a senha no primeiro acesso** — clique em "🔑 Alterar Senha" na barra lateral do painel
+
+**Requisitos da nova senha:**
+- Mínimo 8 caracteres
+- Pelo menos 1 letra maiúscula, 1 minúscula e 1 número
 
 **O que você pode fazer no painel admin:**
 - Adicionar, editar e remover pratos do cardápio

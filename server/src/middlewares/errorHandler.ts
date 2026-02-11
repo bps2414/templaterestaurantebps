@@ -3,6 +3,10 @@ import { AppError } from '../utils/errors';
 import logger from '../utils/logger';
 import multer from 'multer';
 
+interface PrismaError extends Error {
+    code?: string;
+}
+
 export function errorHandler(
     err: Error,
     _req: Request,
@@ -38,7 +42,8 @@ export function errorHandler(
     }
 
     // Prisma errors (never expose internal details)
-    if ((err as any).code === 'P2002') {
+    const prismaErr = err as PrismaError;
+    if (prismaErr.code === 'P2002') {
         res.status(409).json({
             success: false,
             error: 'Registro duplicado. Este recurso já existe.',
@@ -46,7 +51,7 @@ export function errorHandler(
         return;
     }
 
-    if ((err as any).code === 'P2025') {
+    if (prismaErr.code === 'P2025') {
         res.status(404).json({
             success: false,
             error: 'Recurso não encontrado.',
@@ -56,11 +61,11 @@ export function errorHandler(
 
     // Zod validation errors
     if (err.name === 'ZodError') {
-        const zodErr = err as any;
+        const zodErr = err as Error & { errors?: Array<{ path?: string[]; message: string }> };
         res.status(400).json({
             success: false,
             error: 'Dados inválidos',
-            details: zodErr.errors?.map((e: any) => ({
+            details: zodErr.errors?.map((e) => ({
                 field: e.path?.join('.'),
                 message: e.message,
             })),
@@ -75,7 +80,7 @@ export function errorHandler(
     }
 
     // JSON parse errors
-    if ((err as any).type === 'entity.parse.failed') {
+    if ((err as PrismaError & { type?: string }).type === 'entity.parse.failed') {
         res.status(400).json({ success: false, error: 'JSON inválido' });
         return;
     }

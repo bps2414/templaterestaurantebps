@@ -2,7 +2,7 @@
 // Gallery Routes — CRUD for gallery images
 // ============================================
 
-import { Router, Response, NextFunction } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import prisma from '../prisma/client';
 import { requireAuth, requireAdmin } from '../middlewares/auth';
 import { AuthenticatedRequest } from '../types';
@@ -14,7 +14,7 @@ import path from 'path';
 const router = Router();
 
 // GET /api/gallery — Public: list active gallery images
-router.get('/', async (_req, res: Response, next: NextFunction) => {
+router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
     try {
         const images = await prisma.galleryImage.findMany({
             where: { active: true },

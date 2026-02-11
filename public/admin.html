@@ -144,6 +144,10 @@
                     </button>
                 </nav>
                 <div class="absolute bottom-0 w-full p-4 border-t border-white/5">
+                    <button onclick="openPasswordModal()"
+                        class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:text-brand-400 transition">
+                        🔑 Alterar Senha
+                    </button>
                     <button onclick="logout()"
                         class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:text-red-400 transition">
                         🚪 Sair
@@ -344,6 +348,42 @@
                     <button type="submit"
                         class="flex-1 bg-brand-500 hover:bg-brand-600 text-white py-3 rounded-xl font-medium transition">Enviar</button>
                     <button type="button" onclick="closeModal('gallery-modal')"
+                        class="flex-1 bg-dark-700 hover:bg-dark-900 text-gray-300 py-3 rounded-xl font-medium transition">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== PASSWORD CHANGE MODAL ========== -->
+    <div class="modal-overlay" id="password-modal">
+        <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-md border border-white/5">
+            <h2 class="text-xl font-bold text-white mb-6">🔑 Alterar Senha</h2>
+            <form id="password-form" class="space-y-4">
+                <div>
+                    <label class="text-sm text-gray-400 mb-1 block">Senha Atual *</label>
+                    <input type="password" id="pw-current" required
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
+                        placeholder="••••••">
+                </div>
+                <div>
+                    <label class="text-sm text-gray-400 mb-1 block">Nova Senha *</label>
+                    <input type="password" id="pw-new" required minlength="8"
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
+                        placeholder="Mínimo 8 caracteres">
+                    <p class="text-xs text-gray-500 mt-1">Deve conter maiúscula, minúscula e número</p>
+                </div>
+                <div>
+                    <label class="text-sm text-gray-400 mb-1 block">Confirmar Nova Senha *</label>
+                    <input type="password" id="pw-confirm" required
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
+                        placeholder="••••••">
+                </div>
+                <p id="pw-error" class="text-red-400 text-sm hidden"></p>
+                <div class="flex gap-3 pt-4">
+                    <button type="submit"
+                        class="flex-1 bg-brand-500 hover:bg-brand-600 text-white py-3 rounded-xl font-medium transition">Alterar
+                        Senha</button>
+                    <button type="button" onclick="closeModal('password-modal')"
                         class="flex-1 bg-dark-700 hover:bg-dark-900 text-gray-300 py-3 rounded-xl font-medium transition">Cancelar</button>
                 </div>
             </form>
@@ -774,6 +814,63 @@
                 toast(res.error || 'Erro ao salvar', 'error');
             }
         }
+
+        // --- Password Change ---
+        function openPasswordModal() {
+            document.getElementById('pw-current').value = '';
+            document.getElementById('pw-new').value = '';
+            document.getElementById('pw-confirm').value = '';
+            document.getElementById('pw-error').classList.add('hidden');
+            document.getElementById('password-modal').classList.add('active');
+        }
+
+        document.getElementById('password-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const errEl = document.getElementById('pw-error');
+            errEl.classList.add('hidden');
+
+            const currentPassword = document.getElementById('pw-current').value;
+            const newPassword = document.getElementById('pw-new').value;
+            const confirmPassword = document.getElementById('pw-confirm').value;
+
+            if (newPassword !== confirmPassword) {
+                errEl.textContent = 'As senhas não coincidem';
+                errEl.classList.remove('hidden');
+                return;
+            }
+
+            if (newPassword.length < 8) {
+                errEl.textContent = 'Nova senha deve ter no mínimo 8 caracteres';
+                errEl.classList.remove('hidden');
+                return;
+            }
+
+            if (!/[A-Z]/.test(newPassword) || !/[a-z]/.test(newPassword) || !/[0-9]/.test(newPassword)) {
+                errEl.textContent = 'Nova senha deve conter maiúscula, minúscula e número';
+                errEl.classList.remove('hidden');
+                return;
+            }
+
+            const res = await apiAuth('/auth/change-password', {
+                method: 'PUT',
+                body: JSON.stringify({ currentPassword, newPassword }),
+            });
+
+            if (res.success) {
+                closeModal('password-modal');
+                toast('Senha alterada! Faça login novamente.');
+                // Force re-login since all sessions are invalidated
+                setTimeout(() => {
+                    token = null;
+                    localStorage.removeItem('admin_token');
+                    localStorage.removeItem('admin_refresh');
+                    showLogin();
+                }, 2000);
+            } else {
+                errEl.textContent = res.error || 'Erro ao alterar senha';
+                errEl.classList.remove('hidden');
+            }
+        });
 
         // --- Init ---
         // Fetch CSRF token on page load

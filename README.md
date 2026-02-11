@@ -368,12 +368,13 @@ Este sistema pode ser monetizado via:
 ## 📄 API Endpoints
 
 ### Auth
-| Método | Rota                  | Acesso  | Descrição            |
-|--------|----------------------|---------|----------------------|
-| POST   | `/api/auth/login`    | Público | Login admin          |
-| POST   | `/api/auth/refresh`  | Público | Renovar access token |
-| POST   | `/api/auth/logout`   | Público | Encerrar sessão      |
-| GET    | `/api/auth/me`       | Admin   | Dados do admin       |
+| Método | Rota                       | Acesso  | Descrição              |
+|--------|----------------------------|---------|------------------------|
+| POST   | `/api/auth/login`          | Público | Login admin            |
+| POST   | `/api/auth/refresh`        | Público | Renovar access token   |
+| POST   | `/api/auth/logout`         | Público | Encerrar sessão        |
+| GET    | `/api/auth/me`             | Admin   | Dados do admin         |
+| PUT    | `/api/auth/change-password`| Admin   | Alterar senha          |
 
 ### Dishes (Pratos)
 | Método | Rota                     | Acesso  | Descrição              |
@@ -422,11 +423,13 @@ O painel (`/admin`) permite ao cliente gerenciar todo o conteúdo:
 - **Categorias:** Organizar cardápio, definir ordem de exibição.
 - **Galeria:** Upload de fotos do restaurante, adicionar descrições.
 - **Configurações:** Nome, slogan, endereço, telefone, WhatsApp, horários, redes sociais, textos da home.
+- **Alterar Senha:** Botão "🔑 Alterar Senha" na sidebar. Exige senha atual + nova senha (mín. 8 chars, maiúscula, minúscula e número). Invalida todas as sessões após troca.
 
 ### Acesso
 
 - URL: `https://dominio-do-cliente.com/admin`
-- Credenciais: Definidas no `.env` inicial (alterar no primeiro acesso)
+- Credenciais: Definidas no seed com `SEED_ADMIN_EMAIL` e `SEED_ADMIN_PASSWORD`
+- ⚠️ **O cliente deve trocar a senha no primeiro acesso** pelo botão 🔑 na sidebar
 
 ---
 

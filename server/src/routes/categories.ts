@@ -2,7 +2,7 @@
 // Category Routes — CRUD
 // ============================================
 
-import { Router, Response, NextFunction } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import prisma from '../prisma/client';
 import { requireAuth, requireAdmin } from '../middlewares/auth';
 import { AuthenticatedRequest } from '../types';
@@ -29,7 +29,7 @@ const categorySchema = z.object({
 });
 
 // GET /api/categories — Public: list active categories
-router.get('/', async (_req, res: Response, next: NextFunction) => {
+router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
     try {
         const categories = await prisma.category.findMany({
             where: { active: true },

@@ -2,10 +2,11 @@
 // Upload Middleware — Multer config (hardened)
 // ============================================
 
-import multer from 'multer';
+import multer, { FileFilterCallback } from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
+import { Request } from 'express';
 import { BadRequestError } from '../utils/errors';
 
 const UPLOAD_DIR = path.join(__dirname, '../../assets/uploads');
@@ -40,7 +41,7 @@ const IMAGE_SIGNATURES: Record<string, number[][]> = {
 export function validateImageMagicBytes(filePath: string): boolean {
     try {
         const buffer = fs.readFileSync(filePath);
-        
+
         // Check each signature type
         for (const [type, signatures] of Object.entries(IMAGE_SIGNATURES)) {
             for (const signature of signatures) {
@@ -51,7 +52,7 @@ export function validateImageMagicBytes(filePath: string): boolean {
                         break;
                     }
                 }
-                
+
                 // Special case for WEBP: check "WEBP" at offset 8
                 if (match && type === 'webp') {
                     const webpMarker = [0x57, 0x45, 0x42, 0x50]; // "WEBP"
@@ -62,11 +63,11 @@ export function validateImageMagicBytes(filePath: string): boolean {
                         }
                     }
                 }
-                
+
                 if (match) return true;
             }
         }
-        
+
         return false; // No signature matched
     } catch (error) {
         return false;
@@ -74,10 +75,10 @@ export function validateImageMagicBytes(filePath: string): boolean {
 }
 
 const storage = multer.diskStorage({
-    destination: (_req, _file, cb) => {
+    destination: (_req: Request, _file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) => {
         cb(null, UPLOAD_DIR);
     },
-    filename: (_req, file, cb) => {
+    filename: (_req: Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) => {
         const ext = path.extname(file.originalname).toLowerCase();
         const uuid = uuidv4();
         cb(null, `${uuid}${ext}`);
@@ -95,7 +96,7 @@ const ALLOWED_MIMES = new Set([
 // Allowed extensions (strict whitelist)
 const ALLOWED_EXTS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif']);
 
-function fileFilter(_req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) {
+function fileFilter(_req: Request, file: Express.Multer.File, cb: FileFilterCallback) {
     // Check MIME type against strict whitelist
     if (!ALLOWED_MIMES.has(file.mimetype)) {
         cb(new BadRequestError(`Tipo de arquivo não permitido: ${file.mimetype}`));

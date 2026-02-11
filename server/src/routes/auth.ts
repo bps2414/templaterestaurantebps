@@ -8,12 +8,23 @@ import { requireAuth } from '../middlewares/auth';
 import { AuthenticatedRequest } from '../types';
 import { z } from 'zod';
 import prisma from '../prisma/client';
+import bcrypt from 'bcryptjs';
 
 const router = Router();
+
+const BCRYPT_ROUNDS = 12;
 
 const loginSchema = z.object({
     email: z.string().email('Email inválido'),
     password: z.string().min(6, 'Senha deve ter no mínimo 6 caracteres'),
+});
+
+const changePasswordSchema = z.object({
+    currentPassword: z.string().min(1, 'Senha atual é obrigatória'),
+    newPassword: z.string().min(8, 'Nova senha deve ter no mínimo 8 caracteres')
+        .regex(/[A-Z]/, 'Nova senha deve conter pelo menos uma letra maiúscula')
+        .regex(/[a-z]/, 'Nova senha deve conter pelo menos uma letra minúscula')
+        .regex(/[0-9]/, 'Nova senha deve conter pelo menos um número'),
 });
 
 // POST /api/auth/login
@@ -79,6 +90,48 @@ router.get('/me', requireAuth, async (req: AuthenticatedRequest, res: Response, 
         }
 
         res.json({ success: true, data: user });
+    } catch (error) {
+        next(error);
+    }
+});
+
+// PUT /api/auth/change-password — Change admin password (requires current password)
+router.put('/change-password', requireAuth, async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+        const data = changePasswordSchema.parse(req.body);
+
+        // Fetch current user
+        const user = await prisma.adminUser.findUnique({
+            where: { id: req.user!.userId },
+        });
+
+        if (!user) {
+            return res.status(404).json({ success: false, error: 'Usuário não encontrado' });
+        }
+
+        // Verify current password
+        const isValid = await bcrypt.compare(data.currentPassword, user.passwordHash);
+        if (!isValid) {
+            return res.status(401).json({ success: false, error: 'Senha atual incorreta' });
+        }
+
+        // Prevent reusing the same password
+        const isSame = await bcrypt.compare(data.newPassword, user.passwordHash);
+        if (isSame) {
+            return res.status(400).json({ success: false, error: 'A nova senha deve ser diferente da atual' });
+        }
+
+        // Hash new password and update
+        const newHash = await bcrypt.hash(data.newPassword, BCRYPT_ROUNDS);
+        await prisma.adminUser.update({
+            where: { id: user.id },
+            data: { passwordHash: newHash },
+        });
+
+        // Invalidate all other sessions (force re-login on other devices)
+        await authService.logoutAll(user.id);
+
+        res.json({ success: true, message: 'Senha alterada com sucesso. Faça login novamente.' });
     } catch (error) {
         next(error);
     }

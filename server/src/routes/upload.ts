@@ -19,12 +19,12 @@ router.post('/', requireAuth, requireAdmin, upload.single('image'), async (req: 
         }
 
         const filePath = path.join(UPLOAD_DIR, req.file.filename);
-        
+
         // SECURITY: Validate file content by checking magic bytes
         console.log('🔍 Validating file:', req.file.filename);
         const isValidImage = validateImageMagicBytes(filePath);
         console.log('✅ Validation result:', isValidImage);
-        
+
         if (!isValidImage) {
             console.log('❌ BLOCKED: Invalid file signature detected!');
             // Delete the uploaded file
@@ -33,13 +33,13 @@ router.post('/', requireAuth, requireAdmin, upload.single('image'), async (req: 
             } catch (unlinkError) {
                 // File might not exist, ignore
             }
-            
-            return res.status(400).json({ 
-                success: false, 
-                error: 'Arquivo inválido. Apenas imagens JPG, PNG, GIF ou WebP são permitidas.' 
+
+            return res.status(400).json({
+                success: false,
+                error: 'Arquivo inválido. Apenas imagens JPG, PNG, GIF ou WebP são permitidas.'
             });
         }
-        
+
         console.log('✅ ALLOWED: Valid image uploaded');
 
         const url = `/uploads/${req.file.filename}`;

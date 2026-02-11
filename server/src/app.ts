@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -26,7 +26,7 @@ if (process.env.NODE_ENV === 'production') {
 
 // --- Force HTTPS in production ---
 if (process.env.NODE_ENV === 'production') {
-    app.use((req, res, next) => {
+    app.use((req: Request, res: Response, next: NextFunction) => {
         if (req.headers['x-forwarded-proto'] !== 'https') {
             return res.redirect(301, `https://${req.hostname}${req.url}`);
         }
@@ -63,7 +63,7 @@ app.use(helmet({
 app.disable('x-powered-by');
 
 // --- Additional Security Headers ---
-app.use((_req, res, next) => {
+app.use((_req: Request, res: Response, next: NextFunction) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');
     res.setHeader('X-XSS-Protection', '0'); // Modern browsers use CSP instead
@@ -74,7 +74,7 @@ app.use((_req, res, next) => {
 // --- CORS ---
 const allowedOrigins = (process.env.CORS_ORIGINS || process.env.APP_URL || 'http://localhost:3000').split(',').map((o: string) => o.trim());
 app.use(cors({
-    origin: (origin, callback) => {
+    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
@@ -84,7 +84,7 @@ app.use(cors({
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
     maxAge: 600, // 10 min preflight cache
 }));
 
@@ -92,7 +92,7 @@ app.use(cors({
 app.use(cookieParser());
 
 // --- Logging (sanitized) ---
-const morganStream = { write: (msg: string) => logger.http(msg.trim()) };
+const morganStream: morgan.StreamOptions = { write: (msg: string) => logger.http(msg.trim()) };
 app.use(morgan(
     process.env.NODE_ENV === 'production'
         ? ':remote-addr :method :url :status :response-time ms'
@@ -107,7 +107,7 @@ app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
 // --- Serve uploaded images (strict: images only, no dir listing, no dotfiles) ---
-app.use('/uploads', (req, res, next) => {
+app.use('/uploads', (req: Request, res: Response, next: NextFunction) => {
     // Block path traversal
     if (req.path.includes('..') || req.path.includes('\\')) {
         return res.status(403).json({ error: 'Forbidden' });
@@ -122,7 +122,7 @@ app.use('/uploads', (req, res, next) => {
     dotfiles: 'deny',
     maxAge: '7d',
     index: false,
-    setHeaders: (res) => {
+    setHeaders: (res: Response) => {
         res.setHeader('X-Content-Type-Options', 'nosniff');
         res.setHeader('Content-Disposition', 'inline');
     },
@@ -136,7 +136,7 @@ app.use(express.static(path.join(__dirname, '../../public'), {
 }));
 
 // --- Health check ---
-app.get('/healthz', (_req, res) => {
+app.get('/healthz', (_req: Request, res: Response) => {
     res.json({
         status: 'ok',
         timestamp: new Date().toISOString(),
@@ -145,7 +145,7 @@ app.get('/healthz', (_req, res) => {
 });
 
 // --- Ping endpoint (for keep-alive services, returns 204 No Content) ---
-app.get('/ping', (_req, res) => {
+app.get('/ping', (_req: Request, res: Response) => {
     res.sendStatus(204);
 });
 
@@ -170,18 +170,18 @@ const publicDir = path.join(__dirname, '../../public');
 const pages = ['index', 'menu', 'gallery', 'about', 'contact', 'admin', 'buy', 'buy-success'];
 pages.forEach(page => {
     const route = page === 'index' ? '/' : `/${page}`;
-    app.get(route, (_req, res) => {
+    app.get(route, (_req: Request, res: Response) => {
         res.sendFile(path.join(publicDir, `${page}.html`));
     });
 });
 
 // --- 404 for API ---
-app.use('/api/*', (_req, res) => {
+app.use('/api/*', (_req: Request, res: Response) => {
     res.status(404).json({ success: false, error: 'Endpoint não encontrado' });
 });
 
 // --- 404 catch-all (non-API) ---
-app.use((_req, res) => {
+app.use((_req: Request, res: Response) => {
     res.status(404).sendFile(path.join(publicDir, 'index.html'));
 });
 

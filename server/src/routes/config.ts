@@ -2,7 +2,7 @@
 // Site Config Routes — Key/Value settings
 // ============================================
 
-import { Router, Response, NextFunction } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import prisma from '../prisma/client';
 import { requireAuth, requireAdmin } from '../middlewares/auth';
 import { AuthenticatedRequest } from '../types';
@@ -45,7 +45,7 @@ const ALLOWED_KEYS = [
 ];
 
 // GET /api/config — Public: get all config
-router.get('/', async (_req, res: Response, next: NextFunction) => {
+router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
     try {
         const configs = await prisma.siteConfig.findMany();
         const configMap: Record<string, string> = {};
