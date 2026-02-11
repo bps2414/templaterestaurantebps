@@ -16,7 +16,6 @@ import galleryRoutes from './routes/gallery';
 import configRoutes from './routes/config';
 import checkoutRoutes from './routes/checkout';
 import uploadRoutes from './routes/upload';
-import seedRoutes from './routes/seed'; // TEMPORARY - Remove after seeding
 
 const app = express();
 
@@ -164,7 +163,6 @@ app.use('/api/gallery', csrfVerifyToken, apiLimiter, galleryRoutes);
 app.use('/api/config', apiLimiter, configRoutes); // No CSRF for public config
 app.use('/api/checkout', csrfVerifyToken, apiLimiter, checkoutRoutes);
 app.use('/api/upload', csrfVerifyToken, uploadLimiter, uploadRoutes);
-app.use('/api/seed', seedRoutes); // TEMPORARY - Remove after first seed
 
 // --- Serve frontend pages ---
 const publicDir = path.join(__dirname, '../../public');

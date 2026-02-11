@@ -478,24 +478,6 @@ npx prisma db seed
 
 **Seguro?** Sim — o seed só cria dados, não apaga nada existente.
 
-#### Opção C: Endpoint temporário (alternativa)
-
-Se preferir rodar direto no Render Free, use o endpoint `/api/seed` (já incluído no código):
-
-1. **Aguarde o deploy terminar** no Render
-2. **Acesse no navegador**: `https://SEU_APP.onrender.com/api/seed`
-3. **Verá a mensagem**: `"Database seeded successfully"`
-4. **⚠️ IMPORTANTE:** Depois de rodar, **delete a rota** para segurança:
-   - Remova o arquivo `server/src/routes/seed.ts`
-   - Remova as linhas em `server/src/app.ts`:
-     ```typescript
-     import seedRoutes from './routes/seed';
-     app.use('/api/seed', seedRoutes);
-     ```
-   - Commit e push novamente
-
-> **Recomendação:** Use a Opção B (rodar localmente) — é mais segura e não requer cleanup depois.
-
 ---
 
 ## 6 — Testar em produção
