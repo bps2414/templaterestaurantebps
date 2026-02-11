@@ -7,6 +7,7 @@ import prisma from '../prisma/client';
 import { requireAuth, requireAdmin } from '../middlewares/auth';
 import { AuthenticatedRequest } from '../types';
 import { upload, validateImageMagicBytes, UPLOAD_DIR } from '../middlewares/upload';
+import cloudinaryService from '../services/cloudinaryService';
 import { z } from 'zod';
 import { NotFoundError } from '../utils/errors';
 import fs from 'fs';
@@ -129,8 +130,22 @@ router.post('/', requireAuth, requireAdmin, upload.single('image'), async (req: 
                 });
             }
         }
+
         const slug = slugify(data.name) + '-' + Date.now().toString(36);
-        const image = req.file ? `/uploads/${req.file.filename}` : null;
+        let image: string | null = null;
+
+        // Upload to Cloudinary if file provided
+        if (req.file) {
+            const filePath = path.join(UPLOAD_DIR, req.file.filename);
+            const cloudinaryUrl = await cloudinaryService.upload(filePath, 'dishes');
+            if (!cloudinaryUrl) {
+                return res.status(500).json({
+                    success: false,
+                    error: 'Erro ao fazer upload da imagem.'
+                });
+            }
+            image = cloudinaryUrl;
+        }
 
         const dish = await prisma.dish.create({
             data: { ...data, slug, image },
@@ -174,13 +189,20 @@ router.put('/:id', requireAuth, requireAdmin, upload.single('image'), async (req
                 });
             }
 
-            image = `/uploads/${req.file.filename}`;
-            // Remove old image if it exists
-            if (existing.image) {
-                const oldPath = path.join(__dirname, '../../assets', existing.image);
-                if (fs.existsSync(oldPath)) {
-                    fs.unlinkSync(oldPath);
-                }
+            // Upload new image to Cloudinary
+            const cloudinaryUrl = await cloudinaryService.upload(filePath, 'dishes');
+            if (!cloudinaryUrl) {
+                return res.status(500).json({
+                    success: false,
+                    error: 'Erro ao fazer upload da imagem.'
+                });
+            }
+
+            image = cloudinaryUrl;
+
+            // Delete old image from Cloudinary if it exists and is a Cloudinary URL
+            if (existing.image && existing.image.includes('cloudinary.com')) {
+                await cloudinaryService.delete(existing.image);
             }
         }
 
@@ -203,12 +225,9 @@ router.delete('/:id', requireAuth, requireAdmin, async (req: AuthenticatedReques
         const existing = await prisma.dish.findUnique({ where: { id } });
         if (!existing) throw new NotFoundError('Prato não encontrado');
 
-        // Remove image file
-        if (existing.image) {
-            const imgPath = path.join(__dirname, '../../assets', existing.image);
-            if (fs.existsSync(imgPath)) {
-                fs.unlinkSync(imgPath);
-            }
+        // Delete image from Cloudinary if it's a Cloudinary URL
+        if (existing.image && existing.image.includes('cloudinary.com')) {
+            await cloudinaryService.delete(existing.image);
         }
 
         await prisma.dish.delete({ where: { id } });
