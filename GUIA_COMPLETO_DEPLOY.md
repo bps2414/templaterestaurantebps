@@ -464,9 +464,10 @@ Copie o resultado e cole como valor de `JWT_SECRET`.
 
 | Key | Value | Quando usar |
 |-----|-------|-------------|
-| `CLOUDINARY_CLOUD_NAME` | `seu-cloud-name` | **Obrigatório** — uploads de imagens |
+| `CLOUDINARY_CLOUD_NAME` | `dmebhvwpo` | **Obrigatório** — uploads de imagens (pegar na dashboard Cloudinary) |
 | `CLOUDINARY_API_KEY` | `123456789...` | **Obrigatório** — uploads de imagens |
-| `CLOUDINARY_API_SECRET` | `AbCdEf...` | **Obrigatório** — uploads de imagens |
+| `CLOUDINARY_API_SECRET` | `AbCdEf...` | **Obrigatório** — uploads de imagens (clicar "Show" para revelar) |
+| `CLOUDINARY_FOLDER_PREFIX` | `restauranteteste` | **Obrigatório** — organiza uploads por site (usar nome do site) |
 | `STRIPE_SECRET_KEY` | `sk_live_...` | Se vender templates online |
 | `STRIPE_WEBHOOK_SECRET` | `whsec_...` | Se usar Stripe |
 

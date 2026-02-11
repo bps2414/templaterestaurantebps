@@ -59,7 +59,7 @@
 
 ---
 
-### Passo 3: Configurar Variáveis de Ambiente — 5 min
+### Passo 3: Configurar Variáveis de Ambiente — 8 min
 
 No serviço criado → **Environment** → **Add Environment Variable**
 
@@ -73,8 +73,28 @@ No serviço criado → **Environment** → **Add Environment Variable**
 | `APP_URL` | `https://restaurante-[nome].onrender.com` | Substitua `[nome]` pelo Name do serviço |
 | `CORS_ORIGINS` | `https://restaurante-[nome].onrender.com` | Mesmo valor de `APP_URL` |
 | `PORT` | `3000` | Fixo |
+| `CLOUDINARY_CLOUD_NAME` | `seu-cloud-name` | Ver abaixo como criar conta Cloudinary |
+| `CLOUDINARY_API_KEY` | `123456789012345` | Da dashboard do Cloudinary |
+| `CLOUDINARY_API_SECRET` | `abc123xyz...` | Da dashboard do Cloudinary |
+| `CLOUDINARY_FOLDER_PREFIX` | `restaurante-[nome]` | Organiza uploads por site (ex: `pizzarianapoli`) |
 
-**⚠️ IMPORTANTE:** Use um **JWT_SECRET diferente** para cada cliente! Nunca reutilize.
+**⚠️ IMPORTANTE:** 
+- Use um **JWT_SECRET diferente** para cada cliente! Nunca reutilize.
+- Use a **mesma conta Cloudinary** para todos os clientes (1 conta = todos os sites)
+- Mude apenas o **CLOUDINARY_FOLDER_PREFIX** para cada cliente (organiza as pastas)
+
+**Como criar conta Cloudinary (1x só, serve para todos os clientes):**
+
+1. Acesse https://cloudinary.com/users/register_free
+2. Crie conta gratuita (25 GB/mês grátis — serve ~10-15 sites pequenos)
+3. Na dashboard, copie:
+   - **Cloud Name** (ex: `dz1a2b3c4`)
+   - **API Key** (ex: `123456789012345`)
+   - **API Secret** (clique em "Reveal" para ver)
+4. Use esses 3 valores em **TODOS os clientes** (só muda o FOLDER_PREFIX)
+
+**Por que Cloudinary?**  
+→ Render deleta arquivos no redeploy. Sem Cloudinary = **fotos dos clientes somem**.
 
 6. Clique em **Save Changes** (Render vai começar o deploy automaticamente)
 
@@ -206,6 +226,8 @@ Abraço,
 |-----|------------|
 | `APP_URL` | `https://www.restaurantedocliente.com.br` |
 | `CORS_ORIGINS` | `https://www.restaurantedocliente.com.br` |
+
+**Não mexa nas variáveis do Cloudinary** (CLOUD_NAME, API_KEY, API_SECRET, FOLDER_PREFIX) — elas não mudam com domínio customizado.
 
 Render vai redeploy automaticamente (~3 min).
 
@@ -390,9 +412,11 @@ Antes de fechar qualquer venda, garanta que completou a **Fase 0** do [UPDATE.md
 
 | Pacote | O que Inclui | Preço Sugerido | Seu Custo Mensal | Lucro na Venda |
 |--------|--------------|----------------|------------------|----------------|
-| **Básico** | Setup + Render Starter + Neon Free + Cloudinary Free + Suporte 30 dias | **R$ 500** | ~R$42/mês | ~R$458 |
-| **Profissional** | Básico + Domínio customizado + Troca de cores + Logo + Suporte 90 dias | **R$ 800** | ~R$46/mês | ~R$708 |
-| **Premium** | Profissional + QR Code + SEO + Treinamento 1h + Suporte 180 dias | **R$ 1.400** | ~R$46/mês | ~R$1.308 |
+| **Básico** | Setup + Render Starter + Neon Free + Cloudinary Free + Suporte 30 dias | **R$ 500** | ~R$42/mês* | ~R$458 |
+| **Profissional** | Básico + Domínio customizado + Troca de cores + Logo + Suporte 90 dias | **R$ 800** | ~R$42/mês* | ~R$758 |
+| **Premium** | Profissional + QR Code + SEO + Treinamento 1h + Suporte 180 dias | **R$ 1.400** | ~R$42/mês* | ~R$1.358 |
+
+**\*Custo por site:** Render Starter $7/mês (~R$42). Cloudinary é **compartilhado** entre todos os sites (1 conta grátis = até 15 sites).
 
 ### Mensalidade (Opcional)
 
@@ -459,10 +483,21 @@ Antes de fechar qualquer venda, garanta que completou a **Fase 0** do [UPDATE.md
 **R:** **Ilimitados!** Cada cliente é uma instância separada (Render + Neon). Você só paga:
 - **Render:** $7/mês por cliente (ou Free se for teste)
 - **Neon:** $0 (Free até 0.5GB) ou $19/mês (Pro, raramente necessário)
+- **Cloudinary:** $0 até ~10-15 sites (plano Free com 25GB/mês)
 
 **Exemplo:** 10 clientes pagando R$ 100/mês cada = R$ 1000/mês  
-**Custo:** 10 × $7 = $70/mês (~R$ 350) + seu tempo  
+**Custo:** 10 × $7 = $70/mês (~R$ 350) + Cloudinary $0 + seu tempo  
 **Lucro líquido:** ~R$ 650/mês
+
+**Como Cloudinary organiza 10+ sites em 1 conta?**  
+Cada site tem seu `CLOUDINARY_FOLDER_PREFIX` único:
+```
+cloudinary.com/sua-conta/
+├── restaurante-joao/dishes/
+├── pizzaria-maria/dishes/
+└── bar-ze/dishes/
+```
+Mesmas credenciais (CLOUD_NAME, API_KEY, SECRET) em todos os sites.
 
 ---
 
@@ -508,13 +543,21 @@ Antes de marcar como "entregue", verifique:
 - [ ] Admin funciona (https://restaurante-xyz.onrender.com/admin)
 - [ ] Login com email/senha do seed funciona
 - [ ] Cliente consegue adicionar prato novo
-- [ ] Upload de imagem funciona
+- [ ] **Upload de imagem funciona E retorna URL do Cloudinary** (https://res.cloudinary.com/...)
+- [ ] **Imagem aparece no site público** (teste abrir a URL da foto)
+- [ ] **CLOUDINARY_FOLDER_PREFIX configurado** (fotos vão para pasta do cliente)
 - [ ] Troca de senha funciona
 - [ ] Dados do seed foram substituídos (nome, telefone, WhatsApp)
 - [ ] Domínio customizado configurado (se tiver)
 - [ ] Email de entrega enviado ao cliente
 - [ ] Tutorial/vídeo enviado (se prometeu)
 - [ ] Call de 15 min agendada para treinamento
+
+**Teste crítico de Cloudinary:**
+1. Faça upload de 1 foto pelo admin
+2. Verifique que a URL começa com `https://res.cloudinary.com/seu-cloud-name/`
+3. Abra a URL da foto diretamente no navegador (deve aparecer)
+4. **Se não funcionar:** verifique as 4 variáveis CLOUDINARY no Render
 
 ---
 
