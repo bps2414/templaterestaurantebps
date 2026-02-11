@@ -195,10 +195,12 @@ async function main() {
     }
     console.log('✅ Configurações do site criadas');
 
+    const displayPassword = process.env.SEED_ADMIN_PASSWORD ? '***' : 'admin123';
+
     console.log('\n🎉 Seed concluído com sucesso!');
     console.log('\n📋 Credenciais Admin:');
-    console.log('   Email: admin@restaurante.com');
-    console.log('   Senha: admin123');
+    console.log(`   Email: ${adminEmail}`);
+    console.log(`   Senha: ${displayPassword}`);
     console.log('   ⚠️  Altere em produção!\n');
 }
 

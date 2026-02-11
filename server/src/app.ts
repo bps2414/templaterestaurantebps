@@ -40,7 +40,7 @@ app.use(helmet({
         directives: {
             defaultSrc: ["'self'"],
             scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.tailwindcss.com", "https://js.stripe.com", "https://unpkg.com"],
-            scriptSrcAttr: process.env.NODE_ENV === 'production' ? ["'unsafe-hashes'"] : ["'unsafe-inline'"],
+            scriptSrcAttr: ["'unsafe-inline'"], // Permite onclick/oninput inline (admin panel)
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.tailwindcss.com", "https://unpkg.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com"],
             imgSrc: ["'self'", "data:", "blob:", "https:", "*"],
