@@ -425,6 +425,8 @@ Quando aparecer `🍽 Restaurant Template server running` nos logs → está no 
 
 O seed não roda automaticamente no deploy. Você precisa rodar manualmente **uma única vez**.
 
+#### Opção A: Plano Starter/Paid (com Shell)
+
 No Render → seu serviço → **Shell** (aba no topo):
 
 ```bash
@@ -443,9 +445,56 @@ Saída esperada:
 
 > **Para clientes:** use as variáveis de ambiente para customizar:
 > ```bash
-> SEED_ADMIN_EMAIL="dono@pizzaria.com" SEED_ADMIN_PASSWORD="SenhaForte123!" npx prisma db seed
+> SEED_ADMIN_EMAIL="dono@pizzaria.com" SEED_ADMIN_PASSWORD="SenhaForte456!" npx prisma db seed
 > ```
-> (Isso só funciona depois de aplicar a correção da etapa 1.4)
+
+#### Opção B: Plano Free (sem Shell) — Rodar localmente
+
+⚠️ **O plano Free do Render NÃO tem acesso à Shell.** Use este workaround:
+
+1. **No seu computador**, vá para a pasta `server/`:
+```bash
+cd F:\VSCode\Landpage\server
+```
+
+2. **Configure a DATABASE_URL do Neon** (copie do painel do Render → Environment):
+```powershell
+# PowerShell (Windows)
+$env:DATABASE_URL="postgresql://neondb_owner:ABC...@ep-...neon.tech/neondb?sslmode=require"
+$env:SEED_ADMIN_EMAIL="dono@pizzaria.com"
+$env:SEED_ADMIN_PASSWORD="SenhaForte123!"
+npx prisma db seed
+```
+
+```bash
+# Bash (Mac/Linux)
+DATABASE_URL="postgresql://..." \
+SEED_ADMIN_EMAIL="dono@pizzaria.com" \
+SEED_ADMIN_PASSWORD="SenhaForte123!" \
+npx prisma db seed
+```
+
+3. **Confirme** que apareceu `✅ 10 pratos criados`
+
+**Seguro?** Sim — o seed só cria dados, não apaga nada existente.
+
+#### Opção C: Endpoint temporário (alternativa)
+
+Se preferir rodar direto no Render Free, use o endpoint `/api/seed` (já incluído no código):
+
+1. **Aguarde o deploy terminar** no Render
+2. **Acesse no navegador**: `https://SEU_APP.onrender.com/api/seed`
+3. **Verá a mensagem**: `"Database seeded successfully"`
+4. **⚠️ IMPORTANTE:** Depois de rodar, **delete a rota** para segurança:
+   - Remova o arquivo `server/src/routes/seed.ts`
+   - Remova as linhas em `server/src/app.ts`:
+     ```typescript
+     import seedRoutes from './routes/seed';
+     app.use('/api/seed', seedRoutes);
+     ```
+   - Commit e push novamente
+
+> **Recomendação:** Use a Opção B (rodar localmente) — é mais segura e não requer cleanup depois.
 
 ---
 
