@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre — Sabor & Arte</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: { 50: '#FFFDF7', 100: '#FFF9E8', 200: '#FFF3D1' },
+                        forest: { 400: '#5B8C5A', 500: '#3D6B3D', 600: '#2D5A2D', 700: '#1E4620' },
+                        gold: { 300: '#E8C872', 400: '#D4A843', 500: '#C49A2C' },
+                        charcoal: { 800: '#2A2A2A', 900: '#1A1A1A' },
+                    }, fontFamily: { display: ['Cormorant Garamond', 'serif'], body: ['Outfit', 'sans-serif'] }
+                }
+            }
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #FFFDF7;
+            color: #2A2A2A;
+        }
+
+        .font-display {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .nav-warm {
+            backdrop-filter: blur(16px);
+            background: rgba(255, 253, 247, 0.92);
+            border-bottom: 1px solid rgba(212, 168, 67, 0.15);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            z-index: 999;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #25d366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
+            transition: transform 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+
+        .gold-line {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #D4A843, transparent);
+            margin: 0 auto;
+        }
+
+        .separator {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .separator::before,
+        .separator::after {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: #D4A843;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="nav-warm fixed top-0 w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 md:h-20">
+                <a href="/" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-forest-500 flex items-center justify-center shadow-md">
+                        <span class="text-cream-50 text-lg font-display font-bold">S</span>
+                    </div>
+                    <span class="font-display text-xl md:text-2xl font-bold text-charcoal-900" id="nav-brand">Sabor &
+                        Arte</span>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="/" class="text-charcoal-800/60 hover:text-forest-500 transition text-sm">Início</a>
+                    <a href="/menu" class="text-charcoal-800/60 hover:text-forest-500 transition text-sm">Cardápio</a>
+                    <a href="/gallery" class="text-charcoal-800/60 hover:text-forest-500 transition text-sm">Galeria</a>
+                    <a href="/about" class="text-forest-600 font-medium text-sm">Sobre</a>
+                    <a href="/contact" class="text-charcoal-800/60 hover:text-forest-500 transition text-sm">Contato</a>
+                </div>
+                <button id="menu-toggle" class="md:hidden text-charcoal-900 p-2"><svg class="w-6 h-6" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg></button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-cream-50/95 backdrop-blur border-t border-gold-400/10">
+            <div class="px-4 py-4 space-y-3">
+                <a href="/" class="block text-charcoal-800/60 py-2">Início</a>
+                <a href="/menu" class="block text-charcoal-800/60 py-2">Cardápio</a>
+                <a href="/gallery" class="block text-charcoal-800/60 py-2">Galeria</a>
+                <a href="/about" class="block text-forest-600 font-medium py-2">Sobre</a>
+                <a href="/contact" class="block text-charcoal-800/60 py-2">Contato</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="pt-32 pb-16 bg-cream-50">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="separator mb-4"><span class="text-gold-500 text-xs tracking-[0.3em] uppercase font-medium">Sobre
+                    Nós</span></div>
+            <h1 class="font-display text-4xl md:text-6xl font-bold text-charcoal-900 mb-4" id="about-title">Nossa
+                História</h1>
+            <div class="gold-line mt-4"></div>
+        </div>
+    </section>
+
+    <!-- ABOUT CONTENT -->
+    <section class="pb-20 bg-cream-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <!-- Story Section -->
+            <div class="grid md:grid-cols-2 gap-16 items-center mb-24 reveal">
+                <div class="relative">
+                    <div class="absolute -top-4 -left-4 w-full h-full border-2 border-gold-400/20 rounded-2xl"></div>
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Interior"
+                        class="rounded-2xl w-full h-[400px] object-cover relative z-10 shadow-xl">
+                </div>
+                <div>
+                    <p class="text-gold-500 text-xs tracking-[0.3em] uppercase font-medium mb-4">Nossa Jornada</p>
+                    <h2 class="font-display text-3xl font-bold text-charcoal-900 mb-6">Uma Paixão por Sabores</h2>
+                    <p class="text-charcoal-800/60 text-lg leading-relaxed mb-6" id="about-text">
+                        Fundado em 2010, o Sabor & Arte nasceu da paixão por unir ingredientes da mais alta qualidade
+                        com técnicas culinárias contemporâneas.
+                    </p>
+                    <p class="text-charcoal-800/60 text-lg leading-relaxed">
+                        Nosso chef executivo, com passagens por restaurantes estrelados na Europa, traz para cada prato
+                        uma combinação única de tradição e inovação.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Values -->
+            <div class="text-center mb-12 reveal">
+                <div class="separator mb-4"><span
+                        class="text-gold-500 text-xs tracking-[0.3em] uppercase font-medium">Nossos Valores</span></div>
+                <h2 class="font-display text-3xl md:text-4xl font-bold text-charcoal-900">O Que Nos Move</h2>
+                <div class="gold-line mt-4"></div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 mb-24">
+                <div
+                    class="reveal bg-white rounded-2xl p-8 border border-gold-400/10 text-center shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-16 h-16 rounded-full bg-forest-500/10 flex items-center justify-center mx-auto mb-5">
+                        <span class="text-3xl">🌿</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-charcoal-900 mb-3">Ingredientes Frescos</h3>
+                    <p class="text-charcoal-800/50">Selecionamos diariamente os melhores ingredientes de produtores
+                        locais e orgânicos.</p>
+                </div>
+                <div
+                    class="reveal bg-white rounded-2xl p-8 border border-gold-400/10 text-center shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-16 h-16 rounded-full bg-forest-500/10 flex items-center justify-center mx-auto mb-5">
+                        <span class="text-3xl">👨‍🍳</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-charcoal-900 mb-3">Chef Premiado</h3>
+                    <p class="text-charcoal-800/50">Nossa equipe de cozinha é liderada por chefs com experiência
+                        internacional e estrelas Michelin.</p>
+                </div>
+                <div
+                    class="reveal bg-white rounded-2xl p-8 border border-gold-400/10 text-center shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-16 h-16 rounded-full bg-forest-500/10 flex items-center justify-center mx-auto mb-5">
+                        <span class="text-3xl">❤️</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-charcoal-900 mb-3">Feito com Amor</h3>
+                    <p class="text-charcoal-800/50">Cada prato é uma obra de arte, preparada com dedicação e carinho
+                        para nossos convidados.</p>
+                </div>
+            </div>
+
+            <!-- Team -->
+            <div class="text-center mb-12 reveal">
+                <div class="separator mb-4"><span
+                        class="text-gold-500 text-xs tracking-[0.3em] uppercase font-medium">Equipe</span></div>
+                <h2 class="font-display text-3xl md:text-4xl font-bold text-charcoal-900">Nosso Time</h2>
+                <div class="gold-line mt-4"></div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-10 reveal">
+                <div class="text-center group">
+                    <div
+                        class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-5 border-3 border-gold-400/30 shadow-lg group-hover:shadow-xl transition-shadow">
+                        <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=400&q=80" alt="Chef"
+                            class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-charcoal-900">Marco Oliveira</h3>
+                    <p class="text-forest-500 text-sm font-medium">Chef Executivo</p>
+                </div>
+                <div class="text-center group">
+                    <div
+                        class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-5 border-3 border-gold-400/30 shadow-lg group-hover:shadow-xl transition-shadow">
+                        <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&q=80"
+                            alt="Sommelier" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-charcoal-900">Ana Costa</h3>
+                    <p class="text-forest-500 text-sm font-medium">Sommelier</p>
+                </div>
+                <div class="text-center group">
+                    <div
+                        class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-5 border-3 border-gold-400/30 shadow-lg group-hover:shadow-xl transition-shadow">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80" alt="Gerente"
+                            class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-charcoal-900">Ricardo Santos</h3>
+                    <p class="text-forest-500 text-sm font-medium">Gerente Geral</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-charcoal-900 py-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-white/30 text-sm" id="footer-copy">© 2026 Sabor & Arte</p>
+        </div>
+    </footer>
+
+    <!-- WHATSAPP -->
+    <a href="#" id="whatsapp-float" class="whatsapp-float" target="_blank" rel="noopener">
+        <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+        </svg>
+    </a>
+
+    <script src="/js/app.js"></script>
+    <script src="/js/cart.js"></script>
+    <script src="/js/whatsappFormatter.js"></script>
+    <script src="/js/orderModal.js"></script>
+    <script src="/js/cartUI.js"></script>
+</body>
+
+</html>
