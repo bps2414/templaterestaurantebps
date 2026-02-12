@@ -1695,21 +1695,21 @@
                                 <div>
                                     <label class="text-xs text-gray-500 block mb-1">Nome</label>
                                     <input type="text" value="${escapeAttr(m.name)}" maxlength="80"
-                                        onchange="teamMembers[${i}].name=this.value"
-                                        class="w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none">
+                                        data-team-index="${i}" data-field="name"
+                                        class="team-input w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none">
                                 </div>
                                 <div>
                                     <label class="text-xs text-gray-500 block mb-1">Cargo</label>
                                     <input type="text" value="${escapeAttr(m.role)}" maxlength="50"
-                                        onchange="teamMembers[${i}].role=this.value"
-                                        class="w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none">
+                                        data-team-index="${i}" data-field="role"
+                                        class="team-input w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none">
                                 </div>
                             </div>
                             <div>
                                 <label class="text-xs text-gray-500 block mb-1">URL da Foto (opcional - sobrescreve upload)</label>
                                 <input type="url" value="${escapeAttr(m.image || '')}" maxlength="500"
-                                    onchange="teamMembers[${i}].image=this.value; document.getElementById('team-preview-${i}').src=this.value||'${defaultAvatar}'"
-                                    class="w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none"
+                                    data-team-index="${i}" data-field="image"
+                                    class="team-input-image w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none"
                                     placeholder="https://... (deixe vazio para usar upload)">
                             </div>
                         </div>
@@ -1718,6 +1718,27 @@
                 `;
 
                 container.appendChild(card);
+
+                // Attach input handlers
+                card.querySelectorAll('.team-input').forEach(input => {
+                    input.addEventListener('change', (e) => {
+                        const idx = parseInt(e.target.dataset.teamIndex);
+                        const field = e.target.dataset.field;
+                        teamMembers[idx][field] = e.target.value;
+                    });
+                });
+
+                card.querySelectorAll('.team-input-image').forEach(input => {
+                    input.addEventListener('change', (e) => {
+                        const idx = parseInt(e.target.dataset.teamIndex);
+                        const value = e.target.value;
+                        teamMembers[idx].image = value;
+                        const preview = document.getElementById(`team-preview-${idx}`);
+                        if (preview) {
+                            preview.src = value || defaultAvatar;
+                        }
+                    });
+                });
 
                 // Attach upload handler
                 const uploadInput = document.getElementById(`team-upload-${i}`);
