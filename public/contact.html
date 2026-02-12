@@ -235,7 +235,10 @@
     <script src="/js/orderModal.js"></script>
     <script src="/js/cartUI.js"></script>
     <script>
-        function applyPageConfig(c) {
+        function applyPageConfig(c, utils) {
+            // Unpack utils or fallback to window/global
+            const setText = (utils && utils.setText) || window.setText || function () { };
+
             setText('contact-address', c.restaurant_address);
             setText('contact-phone', c.restaurant_phone);
             setText('contact-email', c.restaurant_email);

@@ -220,7 +220,7 @@
 
         // Page-specific config
         if (typeof applyPageConfig === 'function') {
-            applyPageConfig(c);
+            applyPageConfig(c, { setText, setHTML, setHref });
         }
     }
 
