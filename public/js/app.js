@@ -3,13 +3,13 @@
 // ============================================
 
 (function () {
-        // Refetch config em todas as abas abertas
-        if ('BroadcastChannel' in window) {
-            const bc = new BroadcastChannel('site-config');
-            bc.onmessage = (e) => {
-                if (e.data === 'reload') window.location.reload();
-            };
-        }
+    // Refetch config em todas as abas abertas
+    if ('BroadcastChannel' in window) {
+        const bc = new BroadcastChannel('site-config');
+        bc.onmessage = (e) => {
+            if (e.data === 'reload') window.location.reload();
+        };
+    }
     'use strict';
 
     var API = window.location.origin;
@@ -122,7 +122,8 @@
 
     async function loadConfig() {
         try {
-            const data = await api('/config');
+            // Force cache-busting by appending a timestamp
+            const data = await api(`/config?_=${Date.now()}`);
             if (data) {
                 siteConfig = validateConfig(data);
                 applyConfig();
@@ -142,7 +143,7 @@
         }
         // Toast helper global (caso não exista)
         if (!window.showToast) {
-            window.showToast = function(message, type = 'error') {
+            window.showToast = function (message, type = 'error') {
                 let toast = document.getElementById('toast');
                 if (!toast) {
                     toast = document.createElement('div');

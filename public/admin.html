@@ -1164,10 +1164,14 @@
                 markStepDone('config');
             } else {
                 toast(res.error || 'Erro ao salvar', 'error');
+                // Show error visually on all fields
+                document.querySelectorAll('#config-form [data-key]').forEach(el => {
+                    el.classList.add('border-red-500');
+                });
             }
             <div id="toast" style="display:none;position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#dc2626;color:#fff;padding:16px 32px;border-radius:8px;z-index:9999;font-size:1rem;"></div>
             // Toast helper global
-            window.showToast = function(message, type = 'error') {
+            window.showToast = function (message, type = 'error') {
                 let toast = document.getElementById('toast');
                 toast.style.background = type === 'error' ? '#dc2626' : '#16a34a';
                 toast.textContent = message;
