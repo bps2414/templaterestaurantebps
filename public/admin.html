@@ -37,6 +37,64 @@
             background: rgba(255, 255, 255, 0.03);
         }
 
+        .pro-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #000;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            vertical-align: middle;
+            margin-left: 6px;
+        }
+
+        .plan-badge-essential {
+            display: inline-block;
+            background: rgba(100, 116, 139, 0.3);
+            color: #94a3b8;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .plan-badge-professional {
+            display: inline-block;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #000;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pro-locked-overlay {
+            position: relative;
+        }
+
+        .pro-locked-overlay::after {
+            content: '🔒 Recurso do Plano Profissional';
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 15, 26, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f59e0b;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 16px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
         .modal-overlay {
             display: none;
             position: fixed;
@@ -252,6 +310,7 @@
                         <div>
                             <h2 class="text-white font-bold">Admin</h2>
                             <p class="text-gray-500 text-xs" id="admin-email">admin@restaurante.com</p>
+                            <span id="plan-badge" class="plan-badge-essential mt-1">Essencial</span>
                         </div>
                     </div>
                 </div>
@@ -274,11 +333,11 @@
                     </button>
                     <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400" data-tab="about"
                         onclick="switchTab('about')">
-                        📝 Sobre / Equipe
+                        📝 Sobre / Equipe <span class="pro-badge pro-only-badge" style="display:none;">PRO</span>
                     </button>
                     <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400"
                         data-tab="qrcode" onclick="switchTab('qrcode')">
-                        📱 QR Code
+                        📱 QR Code <span class="pro-badge pro-only-badge" style="display:none;">PRO</span>
                     </button>
                 </nav>
                 <div class="absolute bottom-0 w-full p-4 border-t border-white/5">
@@ -427,10 +486,11 @@
                     </div>
 
                     <!-- Team Members -->
-                    <div class="bg-dark-800 rounded-2xl p-6 border border-white/5">
+                    <div id="team-section-wrapper" class="bg-dark-800 rounded-2xl p-6 border border-white/5">
                         <div class="flex items-center justify-between mb-4">
-                            <h2 class="text-lg font-semibold text-white">Membros da Equipe</h2>
-                            <button onclick="addTeamMember()"
+                            <h2 class="text-lg font-semibold text-white">Membros da Equipe <span
+                                    class="pro-badge">PRO</span></h2>
+                            <button onclick="addTeamMember()" id="btn-add-team"
                                 class="bg-dark-700 hover:bg-dark-900 text-brand-400 px-4 py-2 rounded-lg text-sm font-medium transition border border-brand-500/20">
                                 + Adicionar
                             </button>
@@ -445,9 +505,10 @@
                 <!-- TAB: QR CODE -->
                 <div id="tab-qrcode" class="tab-content hidden">
                     <div class="flex items-center justify-between mb-8">
-                        <h1 class="text-2xl font-bold text-white">QR Code do Site</h1>
+                        <h1 class="text-2xl font-bold text-white">QR Code do Site <span class="pro-badge">PRO</span>
+                        </h1>
                     </div>
-                    <div class="max-w-lg mx-auto">
+                    <div id="qrcode-content-wrapper" class="max-w-lg mx-auto">
                         <div class="bg-dark-800 rounded-2xl p-8 border border-white/5 text-center">
                             <p class="text-gray-400 text-sm mb-6">Gere um QR Code que direciona para o seu site. Ideal
                                 para imprimir em cardápios, flyers, mesas e balcão.</p>
@@ -720,6 +781,9 @@
         let token = localStorage.getItem('admin_token');
         let csrfToken = null;
         let categories = [];
+        let allDishes = [];
+        let currentPlan = 'essential';
+        let planData = null;
 
         // Default placeholder images (SVG data URIs)
         const PLACEHOLDER_SM = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect fill='%231a1a2e' width='80' height='80'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='28' fill='%23444'%3E%F0%9F%8D%BD%3C/text%3E%3C/svg%3E`;
@@ -777,6 +841,68 @@
             }
         }
 
+        // --- Fetch Plan Info ---
+        async function fetchPlanInfo() {
+            try {
+                const res = await fetch(`${API}/api/plan`);
+                const json = await res.json();
+                if (json.success && json.data) {
+                    currentPlan = json.data.plan;
+                    planData = json.data;
+                    applyPlanUI();
+                }
+            } catch (error) {
+                console.error('❌ Erro ao obter info do plano:', error);
+            }
+        }
+
+        function applyPlanUI() {
+            const isPro = currentPlan === 'professional';
+
+            // Update plan badge in sidebar
+            const badge = document.getElementById('plan-badge');
+            if (badge) {
+                if (isPro) {
+                    badge.className = 'plan-badge-professional mt-1';
+                    badge.textContent = '⭐ Profissional';
+                } else {
+                    badge.className = 'plan-badge-essential mt-1';
+                    badge.textContent = 'Essencial';
+                }
+            }
+
+            // Show/hide PRO badges on tabs
+            document.querySelectorAll('.pro-only-badge').forEach(el => {
+                el.style.display = isPro ? 'none' : 'inline-block';
+            });
+
+            // Gate Team Section
+            const teamWrapper = document.getElementById('team-section-wrapper');
+            const btnAddTeam = document.getElementById('btn-add-team');
+            if (teamWrapper) {
+                if (isPro) {
+                    teamWrapper.classList.remove('pro-locked-overlay');
+                } else {
+                    teamWrapper.classList.add('pro-locked-overlay');
+                }
+            }
+            if (btnAddTeam) {
+                btnAddTeam.disabled = !isPro;
+                if (!isPro) btnAddTeam.style.opacity = '0.4';
+                else btnAddTeam.style.opacity = '1';
+            }
+
+            // Gate QR Code tab content
+            const qrWrapper = document.getElementById('qrcode-content-wrapper');
+            if (qrWrapper) {
+                if (isPro) {
+                    qrWrapper.classList.remove('pro-locked-overlay');
+                } else {
+                    qrWrapper.classList.add('pro-locked-overlay');
+                }
+            }
+        }
+
         // --- Auth ---
         async function apiAuth(endpoint, options = {}) {
             const headers = { ...(options.headers || {}) };
@@ -805,6 +931,7 @@
             document.getElementById('admin-dashboard').classList.remove('hidden');
             loadDishes();
             loadCategories();
+            fetchPlanInfo();
 
             // Show onboarding for new admins
             setTimeout(() => {
@@ -924,6 +1051,8 @@
                 return;
             }
 
+            allDishes = res.data;
+
             tbody.innerHTML = res.data.map(d => {
                 // Se tem imagem mas não tem protocolo, adiciona o domínio da API
                 const imgSrc = d.image
@@ -943,12 +1072,23 @@
             <td class="px-6 py-4">${d.featured ? '<span class="text-yellow-400">★</span>' : '<span class="text-gray-600">-</span>'}</td>
             <td class="px-6 py-4">${d.active ? '<span class="text-green-400 text-xs bg-green-400/10 px-2 py-1 rounded-full">Ativo</span>' : '<span class="text-gray-500 text-xs bg-gray-500/10 px-2 py-1 rounded-full">Inativo</span>'}</td>
             <td class="px-6 py-4 text-right">
-                <button onclick='editDish(${JSON.stringify(d).replace(/'/g, "&#39;")})' class="text-brand-400 hover:text-brand-300 text-sm mr-3">Editar</button>
-                <button onclick="deleteDish('${d.id}')" class="text-red-400 hover:text-red-300 text-sm">Excluir</button>
+                <button data-action="edit-dish" data-dish-id="${d.id}" class="text-brand-400 hover:text-brand-300 text-sm mr-3">Editar</button>
+                <button data-action="delete-dish" data-dish-id="${d.id}" class="text-red-400 hover:text-red-300 text-sm">Excluir</button>
             </td>
         </tr>
     `;
             }).join('');
+
+            // Event delegation for dish buttons
+            tbody.querySelectorAll('[data-action="edit-dish"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const dish = allDishes.find(d => String(d.id) === btn.dataset.dishId);
+                    if (dish) editDish(dish);
+                });
+            });
+            tbody.querySelectorAll('[data-action="delete-dish"]').forEach(btn => {
+                btn.addEventListener('click', () => deleteDish(btn.dataset.dishId));
+            });
         }
 
         function openDishModal(dish = null) {
@@ -1036,11 +1176,22 @@
             </div>
             <p class="text-gray-500 text-xs mb-4">Ordem: ${c.sortOrder}</p>
             <div class="flex gap-2">
-                <button onclick='editCategory(${JSON.stringify(c).replace(/'/g, "&#39;")})' class="text-brand-400 hover:text-brand-300 text-sm">Editar</button>
-                <button onclick="deleteCategory('${c.id}')" class="text-red-400 hover:text-red-300 text-sm">Excluir</button>
+                <button data-action="edit-category" data-category-id="${c.id}" class="text-brand-400 hover:text-brand-300 text-sm">Editar</button>
+                <button data-action="delete-category" data-category-id="${c.id}" class="text-red-400 hover:text-red-300 text-sm">Excluir</button>
             </div>
         </div>
     `).join('');
+
+            // Event delegation for category buttons
+            grid.querySelectorAll('[data-action="edit-category"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const cat = categories.find(c => String(c.id) === btn.dataset.categoryId);
+                    if (cat) editCategory(cat);
+                });
+            });
+            grid.querySelectorAll('[data-action="delete-category"]').forEach(btn => {
+                btn.addEventListener('click', () => deleteCategory(btn.dataset.categoryId));
+            });
         }
 
         function openCategoryModal(cat = null) {
@@ -1167,13 +1318,23 @@
             footer_text: 'Texto do Footer',
         };
 
+        // PRO-only config fields
+        const proConfigLabels = {
+            logo_url: 'URL da Logo',
+            brand_color: 'Cor da Marca (hex)',
+            favicon_url: 'URL do Favicon',
+        };
+
         async function loadConfig() {
             const res = await fetch(`${API}/api/config`);
             const json = await res.json();
             if (!json.success) return;
 
             const form = document.getElementById('config-form');
-            form.innerHTML = Object.entries(configLabels).map(([key, label]) => {
+            const isPro = currentPlan === 'professional';
+
+            // Essential config fields
+            let html = Object.entries(configLabels).map(([key, label]) => {
                 const value = json.data[key] || '';
                 const isLong = ['restaurant_description', 'about_text', 'about_text_2', 'whatsapp_message', 'google_maps_embed'].includes(key);
                 return `
@@ -1186,12 +1347,32 @@
             </div>
         `;
             }).join('');
+
+            // PRO config fields
+            html += `<div class="mt-8 mb-4"><h2 class="text-lg font-semibold text-white">Personalização Avançada <span class="pro-badge">PRO</span></h2></div>`;
+            html += Object.entries(proConfigLabels).map(([key, label]) => {
+                const value = json.data[key] || '';
+                const disabledAttr = isPro ? '' : 'disabled';
+                const opacityClass = isPro ? '' : 'opacity-50';
+                return `
+            <div class="bg-dark-800 rounded-xl p-6 border border-white/5 ${opacityClass}">
+                <label class="text-sm text-gray-400 mb-2 block">${label} <span class="pro-badge">PRO</span></label>
+                <input type="text" data-key="${key}" value="${escapeAttr(value)}" ${disabledAttr}
+                    class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
+                    ${isPro ? '' : 'placeholder="Disponível no Plano Profissional"'}>
+            </div>
+        `;
+            }).join('');
+
+            form.innerHTML = html;
         }
 
         async function saveConfig() {
             const data = {};
             let hasError = false;
             document.querySelectorAll('#config-form [data-key]').forEach(el => {
+                // Skip disabled PRO fields
+                if (el.disabled) return;
                 data[el.dataset.key] = el.value;
                 // Remove previous error styling
                 el.classList.remove('border-red-500');
@@ -1475,37 +1656,110 @@
                 container.innerHTML = '<div class="text-center py-4 text-gray-500 text-sm">Nenhum membro cadastrado. Clique em "+ Adicionar" para criar.</div>';
                 return;
             }
-            container.innerHTML = teamMembers.map((m, i) => `
-                <div class="bg-dark-700/50 rounded-xl p-4 border border-white/5">
-                    <div class="flex items-start gap-3">
-                        <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <div>
-                                <label class="text-xs text-gray-500 block mb-1">Nome</label>
-                                <input type="text" value="${escapeAttr(m.name)}" maxlength="80"
-                                    onchange="teamMembers[${i}].name=this.value"
-                                    class="w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none">
+
+            container.innerHTML = '';
+            teamMembers.forEach((m, i) => {
+                const card = document.createElement('div');
+                card.className = 'bg-dark-700/50 rounded-xl p-4 border border-white/5';
+
+                const defaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect fill='%231a1a2e' width='80' height='80'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='32' fill='%23444'%3E👤%3C/text%3E%3C/svg%3E";
+
+                card.innerHTML = `
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-brand-500/30 mb-2">
+                                <img id="team-preview-${i}" src="${escapeAttr(m.image || defaultAvatar)}" 
+                                    alt="${escapeAttr(m.name || 'Preview')}"
+                                    class="w-full h-full object-cover"
+                                    onerror="this.src='${defaultAvatar}'">
+                            </div>
+                            <input type="file" id="team-upload-${i}" accept="image/*" class="hidden">
+                            <button onclick="document.getElementById('team-upload-${i}').click()" 
+                                class="text-xs text-brand-400 hover:text-brand-300 w-full text-center">
+                                📷 Upload
+                            </button>
+                        </div>
+                        <div class="flex-1 space-y-3">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="text-xs text-gray-500 block mb-1">Nome</label>
+                                    <input type="text" value="${escapeAttr(m.name)}" maxlength="80"
+                                        onchange="teamMembers[${i}].name=this.value"
+                                        class="w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="text-xs text-gray-500 block mb-1">Cargo</label>
+                                    <input type="text" value="${escapeAttr(m.role)}" maxlength="50"
+                                        onchange="teamMembers[${i}].role=this.value"
+                                        class="w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none">
+                                </div>
                             </div>
                             <div>
-                                <label class="text-xs text-gray-500 block mb-1">Cargo</label>
-                                <input type="text" value="${escapeAttr(m.role)}" maxlength="50"
-                                    onchange="teamMembers[${i}].role=this.value"
-                                    class="w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none">
-                            </div>
-                            <div>
-                                <label class="text-xs text-gray-500 block mb-1">URL da Foto (opcional)</label>
+                                <label class="text-xs text-gray-500 block mb-1">URL da Foto (opcional - sobrescreve upload)</label>
                                 <input type="url" value="${escapeAttr(m.image || '')}" maxlength="500"
-                                    onchange="teamMembers[${i}].image=this.value"
+                                    onchange="teamMembers[${i}].image=this.value; document.getElementById('team-preview-${i}').src=this.value||'${defaultAvatar}'"
                                     class="w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none"
-                                    placeholder="https://...">
+                                    placeholder="https://... (deixe vazio para usar upload)">
                             </div>
                         </div>
-                        <button onclick="removeTeamMember(${i})" class="text-red-400 hover:text-red-300 text-sm mt-5 flex-shrink-0" title="Remover">✕</button>
+                        <button onclick="removeTeamMember(${i})" class="text-red-400 hover:text-red-300 text-sm flex-shrink-0" title="Remover">✕</button>
                     </div>
-                </div>
-            `).join('');
+                `;
+
+                container.appendChild(card);
+
+                // Attach upload handler
+                const uploadInput = document.getElementById(`team-upload-${i}`);
+                uploadInput.addEventListener('change', async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    if (!file.type.startsWith('image/')) {
+                        toast('Apenas imagens são permitidas', 'error');
+                        return;
+                    }
+
+                    if (file.size > 5 * 1024 * 1024) {
+                        toast('Imagem muito grande. Máximo 5MB', 'error');
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append('image', file);
+
+                    try {
+                        const preview = document.getElementById(`team-preview-${i}`);
+                        preview.style.opacity = '0.5';
+
+                        const res = await apiAuth('/upload', {
+                            method: 'POST',
+                            body: formData,
+                        });
+
+                        if (res.success && res.data.url) {
+                            teamMembers[${ i }].image = res.data.url;
+                            preview.src = res.data.url;
+                            preview.style.opacity = '1';
+                            toast('Foto enviada!', 'success');
+                        } else {
+                            preview.style.opacity = '1';
+                            toast(res.error || 'Erro ao enviar foto', 'error');
+                        }
+                    } catch (err) {
+                        document.getElementById(`team-preview-${i}`).style.opacity = '1';
+                        toast('Erro ao enviar foto', 'error');
+                    }
+
+                    e.target.value = '';
+                });
+            });
         }
 
         function addTeamMember() {
+            if (currentPlan !== 'professional') {
+                toast('A seção de Equipe requer o Plano Profissional.', 'error');
+                return;
+            }
             if (teamMembers.length >= 10) {
                 toast('Máximo de 10 membros atingido', 'error');
                 return;
@@ -1546,13 +1800,19 @@
             });
 
             // Save features & team via about-content endpoint
+            const aboutPayload = {
+                about_features: validFeatures,
+                about_text_2: aboutText2,
+            };
+
+            // Only send team_members on Professional plan
+            if (currentPlan === 'professional') {
+                aboutPayload.team_members = validTeam;
+            }
+
             const res = await apiAuth('/about-content', {
                 method: 'PUT',
-                body: JSON.stringify({
-                    about_features: validFeatures,
-                    team_members: validTeam,
-                    about_text_2: aboutText2,
-                }),
+                body: JSON.stringify(aboutPayload),
             });
 
             if (res.success) {
@@ -1575,6 +1835,11 @@
         let qrInstance = null;
 
         function generateQRCode() {
+            if (currentPlan !== 'professional') {
+                toast('O QR Code requer o Plano Profissional.', 'error');
+                return;
+            }
+
             const urlInput = document.getElementById('qr-url');
             let url = urlInput.value.trim();
 
@@ -1624,7 +1889,8 @@
             const canvas = document.querySelector('#qr-canvas canvas');
             if (!canvas) { toast('Gere o QR Code primeiro', 'error'); return; }
 
-            const url = document.getElementById('qr-url').value || window.location.origin;
+            const rawUrl = document.getElementById('qr-url').value || window.location.origin;
+            const url = escapeHTML(rawUrl);
             const printWindow = window.open('', '_blank');
             printWindow.document.write(`
                 <html>

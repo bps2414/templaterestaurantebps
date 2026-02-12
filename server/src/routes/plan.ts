@@ -3,7 +3,7 @@
 // ============================================
 
 import { Router, Request, Response, NextFunction } from 'express';
-import { getCurrentPlan, PRO_CONFIG_KEYS, PRO_ABOUT_KEYS } from '../middlewares/plan';
+import { getCurrentPlan } from '../middlewares/plan';
 
 const router = Router();
 

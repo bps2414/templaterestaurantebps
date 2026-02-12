@@ -254,8 +254,11 @@ export async function seedPizzaria() {
     console.log(`✅ ${dishes.length} itens do cardápio criados`);
 
     // --- Site Config ---
-    const plan = (process.env.PLAN || 'essential').toLowerCase().trim();
-    const validPlan = plan === 'professional' ? 'professional' : 'essential';
+    const rawPlan = (process.env.PLAN || 'essential').toLowerCase().trim();
+    const validPlan = rawPlan === 'professional' ? 'professional' : 'essential';
+    if (rawPlan && rawPlan !== 'essential' && rawPlan !== 'professional') {
+        console.warn(`⚠️  PLAN="${rawPlan}" não é válido. Usando "essential".`);
+    }
 
     const configs: Record<string, string> = {
         site_plan: validPlan,

@@ -150,6 +150,11 @@ router.put('/', requireAuth, requireAdmin, async (req: AuthenticatedRequest, res
             }
         });
 
+        // Filter PRO keys on Essential plan (same as GET handler)
+        if (plan !== 'professional') {
+            delete result.team_members;
+        }
+
         res.json({ success: true, data: result });
     } catch (error) {
         next(error);

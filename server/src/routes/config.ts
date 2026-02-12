@@ -8,6 +8,7 @@ import { requireAuth, requireAdmin } from '../middlewares/auth';
 import { getCurrentPlan, isProConfigKey } from '../middlewares/plan';
 import { AuthenticatedRequest } from '../types';
 import { z } from 'zod';
+import { ForbiddenError } from '../utils/errors';
 
 const router = Router();
 
@@ -71,9 +72,16 @@ const ALLOWED_KEYS = [
 // GET /api/config — Public: get all config
 router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
     try {
+        const plan = await getCurrentPlan();
         const configs = await prisma.siteConfig.findMany();
         const configMap: Record<string, string> = {};
-        configs.forEach((c: { key: string; value: string }) => { configMap[c.key] = c.value; });
+        configs.forEach((c: { key: string; value: string }) => {
+            // Hide internal keys from public response
+            if (c.key === 'site_plan') return;
+            // Hide PRO-only values on Essential plan
+            if (plan !== 'professional' && isProConfigKey(c.key)) return;
+            configMap[c.key] = c.value;
+        });
         res.json({ success: true, data: configMap });
     } catch (error) {
         next(error);
@@ -93,7 +101,7 @@ router.put('/', requireAuth, requireAdmin, async (req: AuthenticatedRequest, res
         const plan = await getCurrentPlan();
         const proKeysAttempted = Object.keys(data).filter(k => isProConfigKey(k));
         if (proKeysAttempted.length > 0 && plan !== 'professional') {
-            throw new Error(
+            throw new ForbiddenError(
                 `As chaves [${proKeysAttempted.join(', ')}] requerem o Plano Profissional.`
             );
         }

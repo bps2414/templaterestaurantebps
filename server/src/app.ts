@@ -45,7 +45,7 @@ app.use(helmet({
             scriptSrcAttr: ["'unsafe-inline'"], // Permite onclick/oninput inline (admin panel)
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.tailwindcss.com", "https://unpkg.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com"],
-            imgSrc: ["'self'", "data:", "blob:", "https:", "*"],
+            imgSrc: ["'self'", "data:", "blob:", "https://res.cloudinary.com", "https://*.unsplash.com", "https://via.placeholder.com"],
             connectSrc: ["'self'", "https://api.stripe.com"],
             frameSrc: ["'self'", "https://js.stripe.com", "https://www.google.com", "https://maps.google.com"],
             objectSrc: ["'none'"],
@@ -142,7 +142,6 @@ app.get('/healthz', (_req: Request, res: Response) => {
     res.json({
         status: 'ok',
         timestamp: new Date().toISOString(),
-        uptime: process.uptime(),
     });
 });
 
@@ -162,9 +161,11 @@ app.use('/api/auth', csrfVerifyToken, authLimiter, authRoutes);
 app.use('/api/categories', csrfVerifyToken, apiLimiter, categoryRoutes);
 app.use('/api/dishes', csrfVerifyToken, apiLimiter, dishRoutes);
 app.use('/api/gallery', csrfVerifyToken, apiLimiter, galleryRoutes);
-app.use('/api/config', apiLimiter, configRoutes); // No CSRF for public config
-app.use('/api/about-content', apiLimiter, aboutContentRoutes); // No CSRF for public GET, CSRF on PUT via middleware
+app.use('/api/config', csrfVerifyToken, apiLimiter, configRoutes);
+app.use('/api/about-content', csrfVerifyToken, apiLimiter, aboutContentRoutes);
 app.use('/api/plan', apiLimiter, planRoutes); // Public GET — no CSRF needed
+// Webhook MUST skip CSRF — Stripe has its own signature verification
+app.use('/api/checkout/webhook', apiLimiter, checkoutRoutes);
 app.use('/api/checkout', csrfVerifyToken, apiLimiter, checkoutRoutes);
 app.use('/api/upload', csrfVerifyToken, uploadLimiter, uploadRoutes);
 
