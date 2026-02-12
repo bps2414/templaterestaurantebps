@@ -12,6 +12,8 @@
         "prisma:migrate:deploy": "prisma migrate deploy",
         "prisma:seed": "ts-node prisma/seed.ts",
         "prisma:studio": "prisma studio",
+        "backup": "ts-node scripts/backup.ts",
+        "backup:restore": "ts-node scripts/backup.ts restore",
         "test": "jest --forceExit --detectOpenHandles",
         "lint": "eslint src/ --ext .ts",
         "format": "prettier --write \"src/**/*.ts\""

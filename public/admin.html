@@ -6,36 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin — Painel de Controle</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        cream: { 50: '#FFFDF7', 100: '#FFF9E8', 200: '#FFF3D1', 300: '#FFEAB8' },
-                        forest: { 400: '#5B8C5A', 500: '#3D6B3D', 600: '#2D5A2D', 700: '#1E4A1E', 800: '#153815' },
-                        gold: { 300: '#F0D78C', 400: '#E8C872', 500: '#D4A843', 600: '#B8922E' },
-                        charcoal: { 800: '#2D2D2D', 900: '#1A1A1A' }
-                    }
-                }
-            }
-        };
+        tailwind.config = { theme: { extend: { colors: { brand: { 400: '#EF4444', 500: '#DC2626', 600: '#B91C1C' }, dark: { 700: '#242440', 800: '#1a1a2e', 900: '#0f0f1a' } } } } };
     </script>
     <style>
         body {
-            font-family: 'Outfit', sans-serif;
-            background: #FFFDF7;
-            color: #2D2D2D;
-        }
-
-        .font-display {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'Inter', sans-serif;
+            background: #0f0f1a;
+            color: #f5f5f5;
         }
 
         .sidebar {
-            width: 270px;
+            width: 260px;
             min-height: 100vh;
         }
 
@@ -44,14 +27,13 @@
         }
 
         .tab-btn.active {
-            background: rgba(61, 107, 61, 0.08);
-            color: #3D6B3D;
-            border-right: 3px solid #3D6B3D;
-            font-weight: 500;
+            background: rgba(238, 118, 32, 0.1);
+            color: #f19244;
+            border-right: 3px solid #ee7620;
         }
 
         .tab-btn:hover {
-            background: rgba(61, 107, 61, 0.04);
+            background: rgba(255, 255, 255, 0.03);
         }
 
         .modal-overlay {
@@ -59,8 +41,7 @@
             position: fixed;
             inset: 0;
             z-index: 100;
-            background: rgba(0, 0, 0, 0.45);
-            backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.7);
             align-items: center;
             justify-content: center;
         }
@@ -81,7 +62,6 @@
             transform: translateY(100px);
             opacity: 0;
             transition: all 0.3s;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
         }
 
         .toast.show {
@@ -90,32 +70,11 @@
         }
 
         .toast-success {
-            background: #3D6B3D;
+            background: #22c55e;
         }
 
         .toast-error {
-            background: #c53030;
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #FFF9E8;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #D4A843;
-            border-radius: 3px;
-        }
-
-        /* Input focus ring */
-        input:focus,
-        select:focus,
-        textarea:focus {
-            box-shadow: 0 0 0 3px rgba(61, 107, 61, 0.15);
+            background: #ef4444;
         }
     </style>
 </head>
@@ -123,37 +82,29 @@
 <body>
 
     <!-- ========== LOGIN SCREEN ========== -->
-    <div id="login-screen" class="min-h-screen flex items-center justify-center bg-cream-50">
-        <!-- Decorative background -->
-        <div class="fixed inset-0 overflow-hidden pointer-events-none">
-            <div class="absolute -top-32 -right-32 w-96 h-96 bg-forest-500/5 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-gold-400/10 rounded-full blur-3xl"></div>
-        </div>
-
-        <div class="bg-white rounded-2xl p-10 w-full max-w-md border border-gold-300/30 shadow-lg relative z-10">
+    <div id="login-screen" class="min-h-screen flex items-center justify-center">
+        <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-md border border-white/5">
             <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-forest-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span class="text-3xl">🌿</span>
-                </div>
-                <h1 class="font-display text-3xl font-bold text-charcoal-900 mt-2">Painel Admin</h1>
-                <p class="text-charcoal-800/60 mt-2 text-sm">Faça login para gerenciar o site</p>
+                <span class="text-4xl">�</span>
+                <h1 class="text-2xl font-bold text-white mt-4">Painel Admin</h1>
+                <p class="text-gray-400 mt-2">Faça login para gerenciar o site</p>
             </div>
-            <form id="login-form" class="space-y-5">
+            <form id="login-form" class="space-y-4">
                 <div>
-                    <label class="text-sm text-charcoal-800/70 mb-1.5 block font-medium">Email</label>
+                    <label class="text-sm text-gray-400 mb-1 block">Email</label>
                     <input type="email" id="login-email" required
-                        class="w-full bg-cream-50 border border-gold-300/40 rounded-xl px-4 py-3 text-charcoal-900 focus:border-forest-500 focus:outline-none transition placeholder:text-charcoal-800/30"
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none transition"
                         placeholder="admin@restaurante.com">
                 </div>
                 <div>
-                    <label class="text-sm text-charcoal-800/70 mb-1.5 block font-medium">Senha</label>
+                    <label class="text-sm text-gray-400 mb-1 block">Senha</label>
                     <input type="password" id="login-password" required
-                        class="w-full bg-cream-50 border border-gold-300/40 rounded-xl px-4 py-3 text-charcoal-900 focus:border-forest-500 focus:outline-none transition placeholder:text-charcoal-800/30"
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none transition"
                         placeholder="••••••">
                 </div>
-                <p id="login-error" class="text-red-600 text-sm hidden"></p>
+                <p id="login-error" class="text-red-400 text-sm hidden"></p>
                 <button type="submit"
-                    class="w-full bg-forest-500 hover:bg-forest-600 text-white py-3.5 rounded-xl font-medium transition shadow-md hover:shadow-lg">
+                    class="w-full bg-brand-500 hover:bg-brand-600 text-white py-3 rounded-xl font-medium transition">
                     Entrar
                 </button>
             </form>
@@ -164,15 +115,13 @@
     <div id="admin-dashboard" class="hidden">
         <div class="flex">
             <!-- Sidebar -->
-            <aside class="sidebar bg-white border-r border-gold-300/20 fixed h-full overflow-y-auto shadow-sm">
-                <div class="p-6 border-b border-gold-300/20">
+            <aside class="sidebar bg-dark-800 border-r border-white/5 fixed h-full overflow-y-auto">
+                <div class="p-6 border-b border-white/5">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-forest-500/10 rounded-full flex items-center justify-center">
-                            <span class="text-xl">🌿</span>
-                        </div>
+                        <span class="text-2xl">�</span>
                         <div>
-                            <h2 class="text-charcoal-900 font-bold text-sm">Admin</h2>
-                            <p class="text-charcoal-800/50 text-xs" id="admin-email">admin@restaurante.com</p>
+                            <h2 class="text-white font-bold">Admin</h2>
+                            <p class="text-gray-500 text-xs" id="admin-email">admin@restaurante.com</p>
                         </div>
                     </div>
                 </div>
@@ -181,74 +130,76 @@
                         onclick="switchTab('dishes')">
                         🍝 Pratos
                     </button>
-                    <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-charcoal-800/60"
+                    <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400"
                         data-tab="categories" onclick="switchTab('categories')">
                         📂 Categorias
                     </button>
-                    <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-charcoal-800/60"
+                    <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400"
                         data-tab="gallery" onclick="switchTab('gallery')">
                         📸 Galeria
                     </button>
-                    <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-charcoal-800/60"
+                    <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400"
                         data-tab="config" onclick="switchTab('config')">
                         ⚙️ Configurações
                     </button>
                 </nav>
-                <div class="absolute bottom-0 w-full p-4 border-t border-gold-300/20 bg-white">
+                <div class="absolute bottom-0 w-full p-4 border-t border-white/5">
+                    <button onclick="previewSite()"
+                        class="w-full text-left px-4 py-3 rounded-lg text-sm text-brand-400 hover:bg-brand-500/10 transition font-medium">
+                        👀 Visualizar Site
+                    </button>
+                    <button onclick="showOnboarding()"
+                        class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:text-brand-400 transition">
+                        🚀 Primeiros Passos
+                    </button>
                     <button onclick="openPasswordModal()"
-                        class="w-full text-left px-4 py-3 rounded-lg text-sm text-charcoal-800/60 hover:text-forest-500 transition">
+                        class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:text-brand-400 transition">
                         🔑 Alterar Senha
                     </button>
                     <button onclick="logout()"
-                        class="w-full text-left px-4 py-3 rounded-lg text-sm text-charcoal-800/60 hover:text-red-600 transition">
+                        class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:text-red-400 transition">
                         🚪 Sair
                     </button>
                     <a href="/"
-                        class="block text-left px-4 py-2 rounded-lg text-xs text-charcoal-800/40 hover:text-forest-500 transition">
+                        class="block text-left px-4 py-2 rounded-lg text-xs text-gray-500 hover:text-gray-300 transition">
                         ← Voltar ao site
                     </a>
                 </div>
             </aside>
 
             <!-- Main Content -->
-            <main class="ml-[270px] flex-1 p-8 min-h-screen bg-cream-50">
+            <main class="ml-[260px] flex-1 p-8 min-h-screen">
 
                 <!-- TAB: DISHES -->
                 <div id="tab-dishes" class="tab-content">
                     <div class="flex items-center justify-between mb-8">
-                        <h1 class="font-display text-3xl font-bold text-charcoal-900">Pratos</h1>
+                        <h1 class="text-2xl font-bold text-white">Pratos</h1>
                         <button onclick="openDishModal()"
-                            class="bg-forest-500 hover:bg-forest-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition shadow-md">
+                            class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition">
                             + Novo Prato
                         </button>
                     </div>
-                    <div class="bg-white rounded-2xl border border-gold-300/20 overflow-hidden shadow-sm">
+                    <div class="bg-dark-800 rounded-2xl border border-white/5 overflow-hidden">
                         <table class="w-full">
-                            <thead class="bg-cream-100">
+                            <thead class="bg-dark-700/50">
                                 <tr>
-                                    <th
-                                        class="text-left px-6 py-4 text-xs text-charcoal-800/60 uppercase tracking-wider font-semibold">
-                                        Prato</th>
-                                    <th
-                                        class="text-left px-6 py-4 text-xs text-charcoal-800/60 uppercase tracking-wider font-semibold">
+                                    <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">Prato
+                                    </th>
+                                    <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">
                                         Categoria</th>
-                                    <th
-                                        class="text-left px-6 py-4 text-xs text-charcoal-800/60 uppercase tracking-wider font-semibold">
-                                        Preço</th>
-                                    <th
-                                        class="text-left px-6 py-4 text-xs text-charcoal-800/60 uppercase tracking-wider font-semibold">
+                                    <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">Preço
+                                    </th>
+                                    <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">
                                         Destaque</th>
-                                    <th
-                                        class="text-left px-6 py-4 text-xs text-charcoal-800/60 uppercase tracking-wider font-semibold">
-                                        Ativo</th>
-                                    <th
-                                        class="text-right px-6 py-4 text-xs text-charcoal-800/60 uppercase tracking-wider font-semibold">
+                                    <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">Ativo
+                                    </th>
+                                    <th class="text-right px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">
                                         Ações</th>
                                 </tr>
                             </thead>
-                            <tbody id="dishes-table" class="divide-y divide-gold-300/10">
+                            <tbody id="dishes-table" class="divide-y divide-white/5">
                                 <tr>
-                                    <td colspan="6" class="text-center py-12 text-charcoal-800/40">Carregando...</td>
+                                    <td colspan="6" class="text-center py-12 text-gray-500">Carregando...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -258,42 +209,48 @@
                 <!-- TAB: CATEGORIES -->
                 <div id="tab-categories" class="tab-content hidden">
                     <div class="flex items-center justify-between mb-8">
-                        <h1 class="font-display text-3xl font-bold text-charcoal-900">Categorias</h1>
+                        <h1 class="text-2xl font-bold text-white">Categorias</h1>
                         <button onclick="openCategoryModal()"
-                            class="bg-forest-500 hover:bg-forest-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition shadow-md">
+                            class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition">
                             + Nova Categoria
                         </button>
                     </div>
                     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4" id="categories-grid">
-                        <div class="text-center py-12 col-span-3 text-charcoal-800/40">Carregando...</div>
+                        <div class="text-center py-12 col-span-3 text-gray-500">Carregando...</div>
                     </div>
                 </div>
 
                 <!-- TAB: GALLERY -->
                 <div id="tab-gallery" class="tab-content hidden">
                     <div class="flex items-center justify-between mb-8">
-                        <h1 class="font-display text-3xl font-bold text-charcoal-900">Galeria</h1>
+                        <h1 class="text-2xl font-bold text-white">Galeria</h1>
                         <button onclick="openGalleryModal()"
-                            class="bg-forest-500 hover:bg-forest-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition shadow-md">
+                            class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition">
                             + Nova Imagem
                         </button>
                     </div>
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="gallery-admin-grid">
-                        <div class="text-center py-12 col-span-4 text-charcoal-800/40">Carregando...</div>
+                        <div class="text-center py-12 col-span-4 text-gray-500">Carregando...</div>
                     </div>
                 </div>
 
                 <!-- TAB: CONFIG -->
                 <div id="tab-config" class="tab-content hidden">
                     <div class="flex items-center justify-between mb-8">
-                        <h1 class="font-display text-3xl font-bold text-charcoal-900">Configurações do Site</h1>
-                        <button onclick="saveConfig()"
-                            class="bg-forest-500 hover:bg-forest-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition shadow-md">
-                            💾 Salvar Tudo
-                        </button>
+                        <h1 class="text-2xl font-bold text-white">Configurações do Site</h1>
+                        <div class="flex gap-3">
+                            <button onclick="previewSite()"
+                                class="bg-dark-700 hover:bg-dark-900 text-brand-400 px-5 py-2.5 rounded-xl text-sm font-medium transition border border-brand-500/20">
+                                👀 Visualizar Site
+                            </button>
+                            <button onclick="saveConfig()"
+                                class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition">
+                                💾 Salvar Tudo
+                            </button>
+                        </div>
                     </div>
                     <div class="space-y-6" id="config-form">
-                        <div class="text-center py-12 text-charcoal-800/40">Carregando...</div>
+                        <div class="text-center py-12 text-gray-500">Carregando...</div>
                     </div>
                 </div>
 
@@ -303,58 +260,57 @@
 
     <!-- ========== DISH MODAL ========== -->
     <div class="modal-overlay" id="dish-modal">
-        <div
-            class="bg-white rounded-2xl p-8 w-full max-w-lg border border-gold-300/30 max-h-[90vh] overflow-y-auto shadow-xl">
-            <h2 class="font-display text-2xl font-bold text-charcoal-900 mb-6" id="dish-modal-title">Novo Prato</h2>
+        <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-lg border border-white/5 max-h-[90vh] overflow-y-auto">
+            <h2 class="text-xl font-bold text-white mb-6" id="dish-modal-title">Novo Prato</h2>
             <form id="dish-form" class="space-y-4">
                 <input type="hidden" id="dish-id">
                 <div>
-                    <label class="text-sm text-charcoal-800/70 mb-1.5 block font-medium">Nome *</label>
+                    <label class="text-sm text-gray-400 mb-1 block">Nome *</label>
                     <input type="text" id="dish-name" required
-                        class="w-full bg-cream-50 border border-gold-300/40 rounded-xl px-4 py-3 text-charcoal-900 focus:border-forest-500 focus:outline-none transition">
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none">
                 </div>
                 <div>
-                    <label class="text-sm text-charcoal-800/70 mb-1.5 block font-medium">Descrição</label>
+                    <label class="text-sm text-gray-400 mb-1 block">Descrição</label>
                     <textarea id="dish-description" rows="3"
-                        class="w-full bg-cream-50 border border-gold-300/40 rounded-xl px-4 py-3 text-charcoal-900 focus:border-forest-500 focus:outline-none resize-none transition"></textarea>
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none resize-none"></textarea>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="text-sm text-charcoal-800/70 mb-1.5 block font-medium">Preço (R$) *</label>
+                        <label class="text-sm text-gray-400 mb-1 block">Preço (R$) *</label>
                         <input type="number" id="dish-price" step="0.01" required
-                            class="w-full bg-cream-50 border border-gold-300/40 rounded-xl px-4 py-3 text-charcoal-900 focus:border-forest-500 focus:outline-none transition"
+                            class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
                             placeholder="39.90">
                     </div>
                     <div>
-                        <label class="text-sm text-charcoal-800/70 mb-1.5 block font-medium">Categoria *</label>
+                        <label class="text-sm text-gray-400 mb-1 block">Categoria *</label>
                         <select id="dish-category" required
-                            class="w-full bg-cream-50 border border-gold-300/40 rounded-xl px-4 py-3 text-charcoal-900 focus:border-forest-500 focus:outline-none transition">
+                            class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none">
                             <option value="">Selecione...</option>
                         </select>
                     </div>
                 </div>
                 <div>
-                    <label class="text-sm text-charcoal-800/70 mb-1.5 block font-medium">Foto</label>
+                    <label class="text-sm text-gray-400 mb-1 block">Foto</label>
                     <input type="file" id="dish-image" accept="image/*"
-                        class="w-full bg-cream-50 border border-gold-300/40 rounded-xl px-4 py-3 text-charcoal-900 file:mr-4 file:rounded-lg file:border-0 file:bg-forest-500 file:px-4 file:py-2 file:text-sm file:text-white file:cursor-pointer">
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white file:mr-4 file:rounded-lg file:border-0 file:bg-brand-500 file:px-4 file:py-2 file:text-sm file:text-white">
                 </div>
                 <div class="flex gap-6">
                     <label class="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" id="dish-featured"
-                            class="w-4 h-4 rounded bg-cream-50 border-gold-300/40 text-forest-500 focus:ring-forest-500">
-                        <span class="text-sm text-charcoal-800/70">Destaque</span>
+                            class="w-4 h-4 rounded bg-dark-900 border-white/10 text-brand-500 focus:ring-brand-500">
+                        <span class="text-sm text-gray-300">Destaque</span>
                     </label>
                     <label class="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" id="dish-active" checked
-                            class="w-4 h-4 rounded bg-cream-50 border-gold-300/40 text-forest-500 focus:ring-forest-500">
-                        <span class="text-sm text-charcoal-800/70">Ativo</span>
+                            class="w-4 h-4 rounded bg-dark-900 border-white/10 text-brand-500 focus:ring-brand-500">
+                        <span class="text-sm text-gray-300">Ativo</span>
                     </label>
                 </div>
                 <div class="flex gap-3 pt-4">
                     <button type="submit"
-                        class="flex-1 bg-forest-500 hover:bg-forest-600 text-white py-3 rounded-xl font-medium transition shadow-md">Salvar</button>
+                        class="flex-1 bg-brand-500 hover:bg-brand-600 text-white py-3 rounded-xl font-medium transition">Salvar</button>
                     <button type="button" onclick="closeModal('dish-modal')"
-                        class="flex-1 bg-cream-100 hover:bg-cream-200 text-charcoal-800 py-3 rounded-xl font-medium transition border border-gold-300/20">Cancelar</button>
+                        class="flex-1 bg-dark-700 hover:bg-dark-900 text-gray-300 py-3 rounded-xl font-medium transition">Cancelar</button>
                 </div>
             </form>
         </div>
@@ -362,26 +318,25 @@
 
     <!-- ========== CATEGORY MODAL ========== -->
     <div class="modal-overlay" id="category-modal">
-        <div class="bg-white rounded-2xl p-8 w-full max-w-md border border-gold-300/30 shadow-xl">
-            <h2 class="font-display text-2xl font-bold text-charcoal-900 mb-6" id="category-modal-title">Nova Categoria
-            </h2>
+        <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-md border border-white/5">
+            <h2 class="text-xl font-bold text-white mb-6" id="category-modal-title">Nova Categoria</h2>
             <form id="category-form" class="space-y-4">
                 <input type="hidden" id="category-id">
                 <div>
-                    <label class="text-sm text-charcoal-800/70 mb-1.5 block font-medium">Nome *</label>
+                    <label class="text-sm text-gray-400 mb-1 block">Nome *</label>
                     <input type="text" id="category-name" required
-                        class="w-full bg-cream-50 border border-gold-300/40 rounded-xl px-4 py-3 text-charcoal-900 focus:border-forest-500 focus:outline-none transition">
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none">
                 </div>
                 <div>
-                    <label class="text-sm text-charcoal-800/70 mb-1.5 block font-medium">Ordem</label>
+                    <label class="text-sm text-gray-400 mb-1 block">Ordem</label>
                     <input type="number" id="category-sort" value="0"
-                        class="w-full bg-cream-50 border border-gold-300/40 rounded-xl px-4 py-3 text-charcoal-900 focus:border-forest-500 focus:outline-none transition">
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none">
                 </div>
                 <div class="flex gap-3 pt-4">
                     <button type="submit"
-                        class="flex-1 bg-forest-500 hover:bg-forest-600 text-white py-3 rounded-xl font-medium transition shadow-md">Salvar</button>
+                        class="flex-1 bg-brand-500 hover:bg-brand-600 text-white py-3 rounded-xl font-medium transition">Salvar</button>
                     <button type="button" onclick="closeModal('category-modal')"
-                        class="flex-1 bg-cream-100 hover:bg-cream-200 text-charcoal-800 py-3 rounded-xl font-medium transition border border-gold-300/20">Cancelar</button>
+                        class="flex-1 bg-dark-700 hover:bg-dark-900 text-gray-300 py-3 rounded-xl font-medium transition">Cancelar</button>
                 </div>
             </form>
         </div>
@@ -389,25 +344,25 @@
 
     <!-- ========== GALLERY UPLOAD MODAL ========== -->
     <div class="modal-overlay" id="gallery-modal">
-        <div class="bg-white rounded-2xl p-8 w-full max-w-md border border-gold-300/30 shadow-xl">
-            <h2 class="font-display text-2xl font-bold text-charcoal-900 mb-6">Nova Imagem</h2>
+        <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-md border border-white/5">
+            <h2 class="text-xl font-bold text-white mb-6">Nova Imagem</h2>
             <form id="gallery-form" class="space-y-4">
                 <div>
-                    <label class="text-sm text-charcoal-800/70 mb-1.5 block font-medium">Imagem *</label>
+                    <label class="text-sm text-gray-400 mb-1 block">Imagem *</label>
                     <input type="file" id="gallery-image" accept="image/*" required
-                        class="w-full bg-cream-50 border border-gold-300/40 rounded-xl px-4 py-3 text-charcoal-900 file:mr-4 file:rounded-lg file:border-0 file:bg-forest-500 file:px-4 file:py-2 file:text-sm file:text-white file:cursor-pointer">
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white file:mr-4 file:rounded-lg file:border-0 file:bg-brand-500 file:px-4 file:py-2 file:text-sm file:text-white">
                 </div>
                 <div>
-                    <label class="text-sm text-charcoal-800/70 mb-1.5 block font-medium">Descrição (alt)</label>
+                    <label class="text-sm text-gray-400 mb-1 block">Descrição (alt)</label>
                     <input type="text" id="gallery-alt"
-                        class="w-full bg-cream-50 border border-gold-300/40 rounded-xl px-4 py-3 text-charcoal-900 focus:border-forest-500 focus:outline-none transition"
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
                         placeholder="Descrição da imagem">
                 </div>
                 <div class="flex gap-3 pt-4">
                     <button type="submit"
-                        class="flex-1 bg-forest-500 hover:bg-forest-600 text-white py-3 rounded-xl font-medium transition shadow-md">Enviar</button>
+                        class="flex-1 bg-brand-500 hover:bg-brand-600 text-white py-3 rounded-xl font-medium transition">Enviar</button>
                     <button type="button" onclick="closeModal('gallery-modal')"
-                        class="flex-1 bg-cream-100 hover:bg-cream-200 text-charcoal-800 py-3 rounded-xl font-medium transition border border-gold-300/20">Cancelar</button>
+                        class="flex-1 bg-dark-700 hover:bg-dark-900 text-gray-300 py-3 rounded-xl font-medium transition">Cancelar</button>
                 </div>
             </form>
         </div>
@@ -415,35 +370,35 @@
 
     <!-- ========== PASSWORD CHANGE MODAL ========== -->
     <div class="modal-overlay" id="password-modal">
-        <div class="bg-white rounded-2xl p-8 w-full max-w-md border border-gold-300/30 shadow-xl">
-            <h2 class="font-display text-2xl font-bold text-charcoal-900 mb-6">🔑 Alterar Senha</h2>
+        <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-md border border-white/5">
+            <h2 class="text-xl font-bold text-white mb-6">🔑 Alterar Senha</h2>
             <form id="password-form" class="space-y-4">
                 <div>
-                    <label class="text-sm text-charcoal-800/70 mb-1.5 block font-medium">Senha Atual *</label>
+                    <label class="text-sm text-gray-400 mb-1 block">Senha Atual *</label>
                     <input type="password" id="pw-current" required
-                        class="w-full bg-cream-50 border border-gold-300/40 rounded-xl px-4 py-3 text-charcoal-900 focus:border-forest-500 focus:outline-none transition"
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
                         placeholder="••••••">
                 </div>
                 <div>
-                    <label class="text-sm text-charcoal-800/70 mb-1.5 block font-medium">Nova Senha *</label>
+                    <label class="text-sm text-gray-400 mb-1 block">Nova Senha *</label>
                     <input type="password" id="pw-new" required minlength="8"
-                        class="w-full bg-cream-50 border border-gold-300/40 rounded-xl px-4 py-3 text-charcoal-900 focus:border-forest-500 focus:outline-none transition"
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
                         placeholder="Mínimo 8 caracteres">
-                    <p class="text-xs text-charcoal-800/40 mt-1">Deve conter maiúscula, minúscula e número</p>
+                    <p class="text-xs text-gray-500 mt-1">Deve conter maiúscula, minúscula e número</p>
                 </div>
                 <div>
-                    <label class="text-sm text-charcoal-800/70 mb-1.5 block font-medium">Confirmar Nova Senha *</label>
+                    <label class="text-sm text-gray-400 mb-1 block">Confirmar Nova Senha *</label>
                     <input type="password" id="pw-confirm" required
-                        class="w-full bg-cream-50 border border-gold-300/40 rounded-xl px-4 py-3 text-charcoal-900 focus:border-forest-500 focus:outline-none transition"
+                        class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
                         placeholder="••••••">
                 </div>
-                <p id="pw-error" class="text-red-600 text-sm hidden"></p>
+                <p id="pw-error" class="text-red-400 text-sm hidden"></p>
                 <div class="flex gap-3 pt-4">
                     <button type="submit"
-                        class="flex-1 bg-forest-500 hover:bg-forest-600 text-white py-3 rounded-xl font-medium transition shadow-md">Alterar
+                        class="flex-1 bg-brand-500 hover:bg-brand-600 text-white py-3 rounded-xl font-medium transition">Alterar
                         Senha</button>
                     <button type="button" onclick="closeModal('password-modal')"
-                        class="flex-1 bg-cream-100 hover:bg-cream-200 text-charcoal-800 py-3 rounded-xl font-medium transition border border-gold-300/20">Cancelar</button>
+                        class="flex-1 bg-dark-700 hover:bg-dark-900 text-gray-300 py-3 rounded-xl font-medium transition">Cancelar</button>
                 </div>
             </form>
         </div>
@@ -451,6 +406,74 @@
 
     <!-- TOAST -->
     <div id="toast" class="toast"></div>
+
+    <!-- ========== FIRST STEPS ONBOARDING MODAL ========== -->
+    <div class="modal-overlay" id="onboarding-modal">
+        <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-lg border border-white/5 max-h-[90vh] overflow-y-auto">
+            <div class="text-center mb-6">
+                <span class="text-5xl">🚀</span>
+                <h2 class="text-2xl font-bold text-white mt-4">Primeiros Passos</h2>
+                <p class="text-gray-400 mt-2">Configure seu restaurante em 5 minutos!</p>
+            </div>
+            <div class="space-y-3" id="onboarding-checklist">
+                <div class="onboarding-step bg-dark-700/50 rounded-xl p-4 border border-white/5 flex items-start gap-4 cursor-pointer hover:bg-dark-700 transition"
+                    data-step="config" onclick="goToStep('config')">
+                    <span class="text-2xl mt-0.5" id="step-icon-config">⚙️</span>
+                    <div class="flex-1">
+                        <h3 class="text-white font-semibold text-sm">Configurar dados do restaurante</h3>
+                        <p class="text-gray-500 text-xs mt-1">Nome, endereço, telefone, WhatsApp, horários</p>
+                    </div>
+                    <span class="step-check text-gray-600" id="step-check-config">○</span>
+                </div>
+                <div class="onboarding-step bg-dark-700/50 rounded-xl p-4 border border-white/5 flex items-start gap-4 cursor-pointer hover:bg-dark-700 transition"
+                    data-step="categories" onclick="goToStep('categories')">
+                    <span class="text-2xl mt-0.5" id="step-icon-categories">📂</span>
+                    <div class="flex-1">
+                        <h3 class="text-white font-semibold text-sm">Criar categorias do cardápio</h3>
+                        <p class="text-gray-500 text-xs mt-1">Ex: Entradas, Pratos Principais, Sobremesas, Bebidas</p>
+                    </div>
+                    <span class="step-check text-gray-600" id="step-check-categories">○</span>
+                </div>
+                <div class="onboarding-step bg-dark-700/50 rounded-xl p-4 border border-white/5 flex items-start gap-4 cursor-pointer hover:bg-dark-700 transition"
+                    data-step="dishes" onclick="goToStep('dishes')">
+                    <span class="text-2xl mt-0.5" id="step-icon-dishes">🍝</span>
+                    <div class="flex-1">
+                        <h3 class="text-white font-semibold text-sm">Adicionar pratos ao cardápio</h3>
+                        <p class="text-gray-500 text-xs mt-1">Nome, descrição, preço e foto de cada prato</p>
+                    </div>
+                    <span class="step-check text-gray-600" id="step-check-dishes">○</span>
+                </div>
+                <div class="onboarding-step bg-dark-700/50 rounded-xl p-4 border border-white/5 flex items-start gap-4 cursor-pointer hover:bg-dark-700 transition"
+                    data-step="gallery" onclick="goToStep('gallery')">
+                    <span class="text-2xl mt-0.5" id="step-icon-gallery">📸</span>
+                    <div class="flex-1">
+                        <h3 class="text-white font-semibold text-sm">Enviar fotos para a galeria</h3>
+                        <p class="text-gray-500 text-xs mt-1">Fotos do ambiente, pratos e equipe</p>
+                    </div>
+                    <span class="step-check text-gray-600" id="step-check-gallery">○</span>
+                </div>
+                <div class="onboarding-step bg-dark-700/50 rounded-xl p-4 border border-white/5 flex items-start gap-4 cursor-pointer hover:bg-dark-700 transition"
+                    data-step="preview" onclick="previewSite()">
+                    <span class="text-2xl mt-0.5" id="step-icon-preview">👀</span>
+                    <div class="flex-1">
+                        <h3 class="text-white font-semibold text-sm">Visualizar o site</h3>
+                        <p class="text-gray-500 text-xs mt-1">Abra o site em nova aba e veja como ficou!</p>
+                    </div>
+                    <span class="step-check text-gray-600" id="step-check-preview">○</span>
+                </div>
+            </div>
+            <div class="flex gap-3 pt-6">
+                <button onclick="closeOnboarding()"
+                    class="flex-1 bg-brand-500 hover:bg-brand-600 text-white py-3 rounded-xl font-medium transition">
+                    Entendi, vamos lá! 💪
+                </button>
+                <button onclick="dismissOnboardingForever()"
+                    class="text-gray-500 hover:text-gray-300 text-sm px-4 transition">
+                    Não mostrar novamente
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script>
         const API = window.location.origin;
@@ -468,7 +491,6 @@
                 const res = await fetch(`${API}/api/csrf-token`, { credentials: 'include' });
                 const data = await res.json();
                 csrfToken = data.token;
-                console.log('✅ CSRF Token obtido:', csrfToken);
             } catch (error) {
                 console.error('❌ Erro ao obter CSRF token:', error);
             }
@@ -502,6 +524,13 @@
             document.getElementById('admin-dashboard').classList.remove('hidden');
             loadDishes();
             loadCategories();
+
+            // Show onboarding for new admins
+            setTimeout(() => {
+                if (shouldShowOnboarding()) {
+                    showOnboarding();
+                }
+            }, 1000);
         }
 
         // Login form
@@ -511,12 +540,10 @@
             const password = document.getElementById('login-password').value;
             const errEl = document.getElementById('login-error');
 
+            // Ensure we have CSRF token
             if (!csrfToken) {
-                console.log('⚠️ CSRF token não carregado, buscando...');
                 await fetchCsrfToken();
             }
-
-            console.log('📤 Enviando login com CSRF:', csrfToken);
 
             const headers = { 'Content-Type': 'application/json' };
             if (csrfToken) headers['X-CSRF-Token'] = csrfToken;
@@ -561,12 +588,12 @@
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(el => {
                 el.classList.remove('active');
-                el.classList.add('text-charcoal-800/60');
+                el.classList.add('text-gray-400');
             });
             document.getElementById(`tab-${tab}`).classList.remove('hidden');
             const btn = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
             btn.classList.add('active');
-            btn.classList.remove('text-charcoal-800/60');
+            btn.classList.remove('text-gray-400');
 
             if (tab === 'dishes') loadDishes();
             if (tab === 'categories') loadCategories();
@@ -593,30 +620,31 @@
 
             const tbody = document.getElementById('dishes-table');
             if (res.data.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-12 text-charcoal-800/40">Nenhum prato cadastrado.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-12 text-gray-500">Nenhum prato cadastrado.</td></tr>';
                 return;
             }
 
             tbody.innerHTML = res.data.map(d => {
+                // Se tem imagem mas não tem protocolo, adiciona o domínio da API
                 const imgSrc = d.image
                     ? (d.image.startsWith('http') ? d.image : `${API}${d.image}`)
                     : 'https://via.placeholder.com/40';
 
                 return `
-        <tr class="hover:bg-cream-100/60 transition">
+        <tr class="hover:bg-white/[0.02] transition">
             <td class="px-6 py-4">
                 <div class="flex items-center gap-3">
-                    <img src="${imgSrc}" class="w-10 h-10 rounded-lg object-cover border border-gold-300/20" alt="" onerror="this.src='https://via.placeholder.com/40'">
-                    <span class="text-charcoal-900 font-medium text-sm">${d.name}</span>
+                    <img src="${imgSrc}" class="w-10 h-10 rounded-lg object-cover" alt="" onerror="this.src='https://via.placeholder.com/40'">
+                    <span class="text-white font-medium text-sm">${d.name}</span>
                 </div>
             </td>
-            <td class="px-6 py-4 text-charcoal-800/60 text-sm">${d.category?.name || '-'}</td>
-            <td class="px-6 py-4 text-forest-500 font-semibold text-sm">${formatPrice(d.price)}</td>
-            <td class="px-6 py-4">${d.featured ? '<span class="text-gold-500">★</span>' : '<span class="text-charcoal-800/20">-</span>'}</td>
-            <td class="px-6 py-4">${d.active ? '<span class="text-forest-500 text-xs bg-forest-500/10 px-2.5 py-1 rounded-full font-medium">Ativo</span>' : '<span class="text-charcoal-800/40 text-xs bg-charcoal-800/5 px-2.5 py-1 rounded-full">Inativo</span>'}</td>
+            <td class="px-6 py-4 text-gray-400 text-sm">${d.category?.name || '-'}</td>
+            <td class="px-6 py-4 text-brand-400 font-medium text-sm">${formatPrice(d.price)}</td>
+            <td class="px-6 py-4">${d.featured ? '<span class="text-yellow-400">★</span>' : '<span class="text-gray-600">-</span>'}</td>
+            <td class="px-6 py-4">${d.active ? '<span class="text-green-400 text-xs bg-green-400/10 px-2 py-1 rounded-full">Ativo</span>' : '<span class="text-gray-500 text-xs bg-gray-500/10 px-2 py-1 rounded-full">Inativo</span>'}</td>
             <td class="px-6 py-4 text-right">
-                <button onclick='editDish(${JSON.stringify(d).replace(/'/g, "&#39;")})' class="text-forest-500 hover:text-forest-600 text-sm mr-3 font-medium">Editar</button>
-                <button onclick="deleteDish('${d.id}')" class="text-red-500 hover:text-red-600 text-sm font-medium">Excluir</button>
+                <button onclick='editDish(${JSON.stringify(d).replace(/'/g, "&#39;")})' class="text-brand-400 hover:text-brand-300 text-sm mr-3">Editar</button>
+                <button onclick="deleteDish('${d.id}')" class="text-red-400 hover:text-red-300 text-sm">Excluir</button>
             </td>
         </tr>
     `;
@@ -634,6 +662,7 @@
             document.getElementById('dish-active').checked = dish?.active !== false;
             document.getElementById('dish-image').value = '';
 
+            // Populate category select
             const sel = document.getElementById('dish-category');
             sel.innerHTML = '<option value="">Selecione...</option>' + categories.map(c =>
                 `<option value="${c.id}" ${dish?.categoryId === c.id ? 'selected' : ''}>${c.name}</option>`
@@ -668,6 +697,7 @@
                 toast(id ? 'Prato atualizado!' : 'Prato criado!');
                 closeModal('dish-modal');
                 loadDishes();
+                markStepDone('dishes');
             } else {
                 toast(res.error || 'Erro ao salvar', 'error');
             }
@@ -692,20 +722,20 @@
 
             const grid = document.getElementById('categories-grid');
             if (categories.length === 0) {
-                grid.innerHTML = '<div class="text-center py-12 col-span-3 text-charcoal-800/40">Nenhuma categoria cadastrada.</div>';
+                grid.innerHTML = '<div class="text-center py-12 col-span-3 text-gray-500">Nenhuma categoria cadastrada.</div>';
                 return;
             }
 
             grid.innerHTML = categories.map(c => `
-        <div class="bg-white rounded-xl p-6 border border-gold-300/20 shadow-sm hover:shadow-md transition">
+        <div class="bg-dark-800 rounded-xl p-6 border border-white/5">
             <div class="flex items-center justify-between mb-2">
-                <h3 class="text-charcoal-900 font-semibold">${c.name}</h3>
-                <span class="text-charcoal-800/40 text-xs bg-cream-100 px-2 py-0.5 rounded-full">${c._count?.dishes || 0} pratos</span>
+                <h3 class="text-white font-semibold">${c.name}</h3>
+                <span class="text-gray-500 text-xs">${c._count?.dishes || 0} pratos</span>
             </div>
-            <p class="text-charcoal-800/40 text-xs mb-4">Ordem: ${c.sortOrder}</p>
-            <div class="flex gap-3">
-                <button onclick='editCategory(${JSON.stringify(c).replace(/'/g, "&#39;")})' class="text-forest-500 hover:text-forest-600 text-sm font-medium">Editar</button>
-                <button onclick="deleteCategory('${c.id}')" class="text-red-500 hover:text-red-600 text-sm font-medium">Excluir</button>
+            <p class="text-gray-500 text-xs mb-4">Ordem: ${c.sortOrder}</p>
+            <div class="flex gap-2">
+                <button onclick='editCategory(${JSON.stringify(c).replace(/'/g, "&#39;")})' class="text-brand-400 hover:text-brand-300 text-sm">Editar</button>
+                <button onclick="deleteCategory('${c.id}')" class="text-red-400 hover:text-red-300 text-sm">Excluir</button>
             </div>
         </div>
     `).join('');
@@ -737,6 +767,7 @@
                 toast(id ? 'Categoria atualizada!' : 'Categoria criada!');
                 closeModal('category-modal');
                 loadCategories();
+                markStepDone('categories');
             } else {
                 toast(res.error || 'Erro ao salvar', 'error');
             }
@@ -760,20 +791,21 @@
 
             const grid = document.getElementById('gallery-admin-grid');
             if (res.data.length === 0) {
-                grid.innerHTML = '<div class="text-center py-12 col-span-4 text-charcoal-800/40">Nenhuma imagem na galeria.</div>';
+                grid.innerHTML = '<div class="text-center py-12 col-span-4 text-gray-500">Nenhuma imagem na galeria.</div>';
                 return;
             }
 
             grid.innerHTML = res.data.map(img => {
+                // Se tem imagem mas não tem protocolo, adiciona o domínio da API
                 const imgSrc = img.src
                     ? (img.src.startsWith('http') ? img.src : `${API}${img.src}`)
                     : 'https://via.placeholder.com/400';
 
                 return `
-        <div class="relative group rounded-xl overflow-hidden aspect-square border border-gold-300/20 shadow-sm">
+        <div class="relative group rounded-xl overflow-hidden aspect-square border border-white/5">
             <img src="${imgSrc}" alt="${img.alt || ''}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400'">
-            <div class="absolute inset-0 bg-charcoal-900/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                <button onclick="deleteGalleryImage('${img.id}')" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition font-medium">Excluir</button>
+            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                <button onclick="deleteGalleryImage('${img.id}')" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition">Excluir</button>
             </div>
         </div>
     `;
@@ -794,6 +826,7 @@
                 closeModal('gallery-modal');
                 document.getElementById('gallery-form').reset();
                 loadGalleryAdmin();
+                markStepDone('gallery');
             } else {
                 toast(res.error || 'Erro ao enviar', 'error');
             }
@@ -841,11 +874,11 @@
                 const value = json.data[key] || '';
                 const isLong = ['restaurant_description', 'about_text', 'whatsapp_message', 'google_maps_embed'].includes(key);
                 return `
-            <div class="bg-white rounded-xl p-6 border border-gold-300/20 shadow-sm">
-                <label class="text-sm text-charcoal-800/70 mb-2 block font-medium">${label}</label>
+            <div class="bg-dark-800 rounded-xl p-6 border border-white/5">
+                <label class="text-sm text-gray-400 mb-2 block">${label}</label>
                 ${isLong
-                        ? `<textarea data-key="${key}" rows="3" class="w-full bg-cream-50 border border-gold-300/40 rounded-xl px-4 py-3 text-charcoal-900 focus:border-forest-500 focus:outline-none resize-none transition">${value}</textarea>`
-                        : `<input type="text" data-key="${key}" value="${value}" class="w-full bg-cream-50 border border-gold-300/40 rounded-xl px-4 py-3 text-charcoal-900 focus:border-forest-500 focus:outline-none transition">`
+                        ? `<textarea data-key="${key}" rows="3" class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none resize-none">${value}</textarea>`
+                        : `<input type="text" data-key="${key}" value="${value}" class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none">`
                     }
             </div>
         `;
@@ -854,9 +887,27 @@
 
         async function saveConfig() {
             const data = {};
+            let hasError = false;
             document.querySelectorAll('#config-form [data-key]').forEach(el => {
                 data[el.dataset.key] = el.value;
+                // Remove previous error styling
+                el.classList.remove('border-red-500');
             });
+
+            // Validate WhatsApp number before sending
+            if (data.whatsapp_number) {
+                const cleaned = data.whatsapp_number.replace(/\D/g, '');
+                if (cleaned.length > 0 && (cleaned.length < 12 || cleaned.length > 15)) {
+                    const whatsappInput = document.querySelector('[data-key="whatsapp_number"]');
+                    if (whatsappInput) {
+                        whatsappInput.classList.add('border-red-500');
+                        whatsappInput.focus();
+                    }
+                    toast('WhatsApp inválido! Use formato: 5511999998888 (DDI + DDD + número)', 'error');
+                    return;
+                }
+                data.whatsapp_number = cleaned;
+            }
 
             const res = await apiAuth('/config', {
                 method: 'PUT',
@@ -865,6 +916,7 @@
 
             if (res.success) {
                 toast('Configurações salvas!');
+                markStepDone('config');
             } else {
                 toast(res.error || 'Erro ao salvar', 'error');
             }
@@ -914,6 +966,7 @@
             if (res.success) {
                 closeModal('password-modal');
                 toast('Senha alterada! Faça login novamente.');
+                // Force re-login since all sessions are invalidated
                 setTimeout(() => {
                     token = null;
                     localStorage.removeItem('admin_token');
@@ -926,10 +979,112 @@
             }
         });
 
+        // --- Preview Site ---
+        function previewSite() {
+            window.open('/', '_blank');
+            markStepDone('preview');
+        }
+
+        // --- Onboarding (First Steps) ---
+        function showOnboarding() {
+            updateOnboardingChecks();
+            openModal('onboarding-modal');
+        }
+
+        function closeOnboarding() {
+            closeModal('onboarding-modal');
+        }
+
+        function dismissOnboardingForever() {
+            localStorage.setItem('onboarding_dismissed', 'true');
+            closeModal('onboarding-modal');
+        }
+
+        function goToStep(step) {
+            closeModal('onboarding-modal');
+            if (step === 'preview') {
+                previewSite();
+                return;
+            }
+            switchTab(step);
+        }
+
+        function markStepDone(step) {
+            const completed = JSON.parse(localStorage.getItem('onboarding_completed') || '[]');
+            if (!completed.includes(step)) {
+                completed.push(step);
+                localStorage.setItem('onboarding_completed', JSON.stringify(completed));
+            }
+            updateOnboardingChecks();
+        }
+
+        async function updateOnboardingChecks() {
+            const completed = JSON.parse(localStorage.getItem('onboarding_completed') || '[]');
+
+            // Auto-detect completed steps from existing data
+            try {
+                // Check if config has data
+                const configRes = await fetch(`${API}/api/config`);
+                const configJson = await configRes.json();
+                if (configJson.success && configJson.data) {
+                    if (configJson.data.restaurant_name && configJson.data.whatsapp_number) {
+                        if (!completed.includes('config')) completed.push('config');
+                    }
+                }
+
+                // Check if categories exist
+                if (categories.length > 0) {
+                    if (!completed.includes('categories')) completed.push('categories');
+                }
+
+                // Check dishes via the table
+                const dishesTable = document.getElementById('dishes-table');
+                if (dishesTable && dishesTable.children.length > 0 && !dishesTable.innerHTML.includes('Nenhum prato') && !dishesTable.innerHTML.includes('Carregando')) {
+                    if (!completed.includes('dishes')) completed.push('dishes');
+                }
+
+                // Check gallery
+                const galleryGrid = document.getElementById('gallery-admin-grid');
+                if (galleryGrid && !galleryGrid.innerHTML.includes('Nenhuma imagem') && !galleryGrid.innerHTML.includes('Carregando')) {
+                    if (!completed.includes('gallery')) completed.push('gallery');
+                }
+
+                localStorage.setItem('onboarding_completed', JSON.stringify(completed));
+            } catch (e) {
+                // Ignore errors in auto-detection
+            }
+
+            // Update UI
+            const steps = ['config', 'categories', 'dishes', 'gallery', 'preview'];
+            steps.forEach(step => {
+                const check = document.getElementById(`step-check-${step}`);
+                if (check) {
+                    if (completed.includes(step)) {
+                        check.textContent = '✅';
+                        check.classList.remove('text-gray-600');
+                        check.classList.add('text-green-400');
+                    } else {
+                        check.textContent = '○';
+                        check.classList.remove('text-green-400');
+                        check.classList.add('text-gray-600');
+                    }
+                }
+            });
+        }
+
+        function shouldShowOnboarding() {
+            if (localStorage.getItem('onboarding_dismissed') === 'true') return false;
+            const completed = JSON.parse(localStorage.getItem('onboarding_completed') || '[]');
+            // Show if not all steps are completed
+            return completed.length < 5;
+        }
+
         // --- Init ---
+        // Fetch CSRF token on page load
         fetchCsrfToken();
 
         if (token) {
+            // Validate token
             apiAuth('/auth/me').then(res => {
                 if (res.success) {
                     document.getElementById('admin-email').textContent = res.data.email;
