@@ -4,28 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galeria — Sabor & Arte</title>
+    <title>Galeria — Forno & Massa</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <script>
-        tailwind.config = { theme: { extend: { colors: { brand: { 400: '#f19244', 500: '#ee7620', 600: '#d95c16' }, dark: { 800: '#1a1a2e', 900: '#0f0f1a' } }, fontFamily: { display: ['Playfair Display', 'serif'], body: ['Inter', 'sans-serif'] } } } };
+        tailwind.config = { theme: { extend: { colors: { brand: { 400: '#e86f3a', 500: '#C1440E', 600: '#a33a0c' }, olive: { 400: '#6B9F42', 500: '#5B7A3A' }, dark: { 800: '#1a1612', 900: '#0D0A07' } }, fontFamily: { display: ['Lora', 'serif'], body: ['Inter', 'sans-serif'] } } } };
     </script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: #0f0f1a;
+            background: #0D0A07;
             color: #f5f5f5;
         }
 
         .font-display {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Lora', serif;
         }
 
         .nav-glass {
             backdrop-filter: blur(12px);
-            background: rgba(15, 15, 26, 0.8);
+            background: rgba(13, 10, 7, 0.85);
         }
 
         .whatsapp-float {
@@ -120,9 +120,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 md:h-20">
                 <a href="/" class="flex items-center gap-3">
-                    <span class="text-2xl">🍽</span>
-                    <span class="font-display text-xl md:text-2xl font-bold text-white" id="nav-brand">Sabor &
-                        Arte</span>
+                    <span class="text-2xl">�</span>
+                    <span class="font-display text-xl md:text-2xl font-bold text-white" id="nav-brand">Forno &
+                        Massa</span>
                 </a>
                 <div class="hidden md:flex items-center gap-8">
                     <a href="/" class="text-gray-300 hover:text-brand-400 transition text-sm">Início</a>
@@ -153,9 +153,9 @@
     <section class="pt-32 pb-16 bg-dark-900">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Galeria</p>
-            <h1 class="font-display text-4xl md:text-6xl font-bold text-white mb-4">Nossos Momentos</h1>
-            <p class="text-gray-400 text-lg max-w-2xl mx-auto">Cada imagem conta a história do nosso cuidado com cada
-                detalhe.</p>
+            <h1 class="font-display text-4xl md:text-6xl font-bold text-white mb-4">Nossas Pizzas</h1>
+            <p class="text-gray-400 text-lg max-w-2xl mx-auto">Cada foto mostra o carinho e a qualidade das nossas
+                pizzas artesanais.</p>
         </div>
     </section>
 
@@ -183,7 +183,7 @@
     <!-- FOOTER -->
     <footer class="bg-dark-900 border-t border-white/5 py-12">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-gray-600 text-sm" id="footer-copy">© 2026 Sabor & Arte</p>
+            <p class="text-gray-600 text-sm" id="footer-copy">© 2026 Forno & Massa</p>
         </div>
     </footer>
 
@@ -206,14 +206,14 @@
 
         // Fallback images when no gallery images from API
         const fallbackImages = [
-            { src: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80', alt: 'Ambiente do restaurante' },
-            { src: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80', alt: 'Prato gourmet' },
-            { src: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80', alt: 'Bar do restaurante' },
-            { src: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80', alt: 'Salada fresca' },
+            { src: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&q=80', alt: 'Pizza margherita' },
             { src: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80', alt: 'Pizza artesanal' },
-            { src: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=600&q=80', alt: 'Sobremesa' },
-            { src: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&q=80', alt: 'Prato de peixe' },
-            { src: 'https://images.unsplash.com/photo-1551218808-94e220e084d2?w=600&q=80', alt: 'Cozinha' },
+            { src: 'https://images.unsplash.com/photo-1579751626657-72bc17010498?w=600&q=80', alt: 'Forno a lenha' },
+            { src: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600&q=80', alt: 'Pizza pepperoni' },
+            { src: 'https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=600&q=80', alt: 'Massa sendo aberta' },
+            { src: 'https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=600&q=80', alt: 'Pizza quatro queijos' },
+            { src: 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=600&q=80', alt: 'Pizza calabresa' },
+            { src: 'https://images.unsplash.com/photo-1590947132387-155cc02f3212?w=600&q=80', alt: 'Ingredientes frescos' },
         ];
 
         async function loadGallery() {

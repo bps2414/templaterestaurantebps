@@ -4,24 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sabor & Arte — Restaurante</title>
+    <title>Forno & Massa — Pizzaria Artesanal</title>
     <meta name="description"
-        content="Gastronomia contemporânea que encanta os sentidos. Ingredientes frescos e técnicas refinadas.">
+        content="Pizzas artesanais assadas no forno a lenha. Massa fresca, ingredientes selecionados e tradição italiana.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        brand: { 50: '#fef7ee', 100: '#fdecd7', 200: '#fad5ae', 300: '#f6b77a', 400: '#f19244', 500: '#ee7620', 600: '#d95c16', 700: '#b44314', 800: '#8f3618', 900: '#7a2f16' },
-                        dark: { 800: '#1a1a2e', 900: '#0f0f1a' },
+                        brand: { 50: '#fef3ee', 100: '#fde2d4', 200: '#f9c1a8', 300: '#f49a72', 400: '#e86f3a', 500: '#C1440E', 600: '#a33a0c', 700: '#85300a', 800: '#6b2708', 900: '#5a2108' },
+                        olive: { 300: '#8DB36A', 400: '#6B9F42', 500: '#5B7A3A' },
+                        dark: { 800: '#1a1612', 900: '#0D0A07' },
                     },
                     fontFamily: {
-                        display: ['Playfair Display', 'serif'],
+                        display: ['Lora', 'serif'],
                         body: ['Inter', 'sans-serif'],
                     },
                 },
@@ -37,12 +38,12 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: #0f0f1a;
+            background: #0D0A07;
             color: #f5f5f5;
         }
 
         .font-display {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Lora', serif;
         }
 
         /* Scroll reveal */
@@ -108,7 +109,7 @@
 
         .btn-glow:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(238, 118, 32, 0.4);
+            box-shadow: 0 8px 25px rgba(193, 68, 14, 0.4);
         }
 
         /* WhatsApp button */
@@ -136,7 +137,7 @@
         /* Nav */
         .nav-glass {
             backdrop-filter: blur(12px);
-            background: rgba(15, 15, 26, 0.8);
+            background: rgba(13, 10, 7, 0.85);
         }
 
         /* Cards */
@@ -165,9 +166,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 md:h-20">
                 <a href="/" class="flex items-center gap-3">
-                    <span class="text-2xl">🍽</span>
-                    <span class="font-display text-xl md:text-2xl font-bold text-white" id="nav-brand">Sabor &
-                        Arte</span>
+                    <span class="text-2xl">�</span>
+                    <span class="font-display text-xl md:text-2xl font-bold text-white" id="nav-brand">Forno &
+                        Massa</span>
                 </a>
                 <!-- Desktop nav -->
                 <div class="hidden md:flex items-center gap-8">
@@ -178,7 +179,7 @@
                     <a href="/contact" class="text-gray-300 hover:text-brand-400 transition text-sm">Contato</a>
                     <a href="#reserva"
                         class="btn-glow bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-full text-sm font-medium">
-                        Reservar Mesa
+                        🍕 Peça Agora
                     </a>
                 </div>
                 <!-- Mobile toggle -->
@@ -199,8 +200,9 @@
                 <a href="/about" class="block text-gray-300 hover:text-brand-400 py-2">Sobre</a>
                 <a href="/contact" class="block text-gray-300 hover:text-brand-400 py-2">Contato</a>
                 <a href="#reserva"
-                    class="block btn-glow bg-brand-500 text-white text-center px-5 py-2.5 rounded-full font-medium">Reservar
-                    Mesa</a>
+                    class="block btn-glow bg-brand-500 text-white text-center px-5 py-2.5 rounded-full font-medium">🍕
+                    Peça
+                    Agora</a>
             </div>
         </div>
     </nav>
@@ -209,29 +211,29 @@
     <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
         <!-- Background -->
         <div class="absolute inset-0 hero-bg"
-            style="background-image:url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&q=80');">
+            style="background-image:url('https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1920&q=80');">
             <div class="absolute inset-0 bg-gradient-to-b from-dark-900/70 via-dark-900/50 to-dark-900"></div>
         </div>
         <!-- Content -->
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
             <p class="text-brand-400 font-medium tracking-[0.3em] uppercase text-sm mb-6 animate-fade-in-up">Bem-vindo
-                ao</p>
+                à</p>
             <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 animate-fade-in-up delay-100"
                 id="hero-title">
-                Uma experiência<br>gastronômica <span class="text-brand-400">única</span>
+                Pizza artesanal<br>direto do <span class="text-brand-400">forno a lenha</span>
             </h1>
             <p class="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto mb-10 animate-fade-in-up delay-200"
                 id="hero-subtitle">
-                Ingredientes frescos, técnicas refinadas e sabores que contam histórias.
+                Massa fresca, molho da casa e ingredientes selecionados. A verdadeira pizza italiana.
             </p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-300">
                 <a href="/menu"
                     class="btn-glow bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-full text-lg font-medium">
-                    Ver Cardápio
+                    🍕 Ver Cardápio
                 </a>
                 <a href="#reserva"
                     class="border border-white/20 hover:border-brand-400 text-white hover:text-brand-400 px-8 py-4 rounded-full text-lg font-medium transition-all">
-                    Reservar Mesa
+                    Peça pelo WhatsApp
                 </a>
             </div>
         </div>
@@ -248,7 +250,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 reveal">
                 <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Destaques</p>
-                <h2 class="font-display text-3xl md:text-5xl font-bold text-white">Nossos Pratos Especiais</h2>
+                <h2 class="font-display text-3xl md:text-5xl font-bold text-white">As Mais Pedidas</h2>
             </div>
             <div class="grid md:grid-cols-3 gap-8" id="featured-dishes">
                 <!-- Filled dynamically -->
@@ -262,7 +264,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 reveal">
                 <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Cardápio</p>
-                <h2 class="font-display text-3xl md:text-5xl font-bold text-white">Explore Nossas Categorias</h2>
+                <h2 class="font-display text-3xl md:text-5xl font-bold text-white">Monte Sua Pizza</h2>
             </div>
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" id="category-cards">
                 <div class="text-center py-20 col-span-4 text-gray-500">Carregando categorias...</div>
@@ -277,9 +279,10 @@
                 <div class="reveal">
                     <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Sobre Nós</p>
                     <h2 class="font-display text-3xl md:text-5xl font-bold text-white mb-6" id="about-title">Nossa
-                        História</h2>
+                        Tradição</h2>
                     <p class="text-gray-400 text-lg leading-relaxed mb-8" id="about-text">
-                        Há mais de 15 anos trazendo o melhor da culinária contemporânea...
+                        Desde 2008, levamos a autêntica pizza italiana à sua mesa. Forno a lenha, massa artesanal e
+                        muito amor.
                     </p>
                     <a href="/about"
                         class="btn-glow inline-block bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-full font-medium">
@@ -288,8 +291,8 @@
                 </div>
                 <div class="reveal">
                     <div class="relative rounded-2xl overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80"
-                            alt="Interior do restaurante" class="w-full h-[400px] object-cover rounded-2xl">
+                        <img src="https://images.unsplash.com/photo-1579751626657-72bc17010498?w=800&q=80"
+                            alt="Forno a lenha" class="w-full h-[400px] object-cover rounded-2xl">
                         <div class="absolute inset-0 bg-gradient-to-t from-dark-900/50 to-transparent rounded-2xl">
                         </div>
                     </div>
@@ -304,8 +307,8 @@
             <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Horários</p>
             <h2 class="font-display text-3xl md:text-4xl font-bold text-white mb-8">Horário de Funcionamento</h2>
             <div class="bg-dark-900/60 backdrop-blur rounded-2xl p-8 md:p-12 border border-white/5">
-                <p class="text-gray-300 text-lg" id="opening-hours">Seg-Qui: 11h30–15h / 18h30–23h | Sex-Sáb: 11h30–00h
-                    | Dom: 11h30–16h</p>
+                <p class="text-gray-300 text-lg" id="opening-hours">Ter-Dom: 18h–23h | Sex-Sáb: 18h–00h | Seg: Fechado
+                </p>
                 <div class="mt-8">
                     <a href="#" id="whatsapp-cta"
                         class="btn-glow inline-flex items-center gap-2 bg-[#25d366] hover:bg-[#1da851] text-white px-8 py-4 rounded-full text-lg font-medium">
@@ -326,10 +329,10 @@
             <div class="grid md:grid-cols-4 gap-12">
                 <div>
                     <div class="flex items-center gap-2 mb-4">
-                        <span class="text-2xl">🍽</span>
-                        <span class="font-display text-xl font-bold text-white" id="footer-brand">Sabor & Arte</span>
+                        <span class="text-2xl">�</span>
+                        <span class="font-display text-xl font-bold text-white" id="footer-brand">Forno & Massa</span>
                     </div>
-                    <p class="text-gray-500 text-sm" id="footer-tagline">Gastronomia que encanta os sentidos</p>
+                    <p class="text-gray-500 text-sm" id="footer-tagline">A verdadeira pizza artesanal</p>
                 </div>
                 <div>
                     <h4 class="text-white font-semibold mb-4">Navegação</h4>
@@ -344,9 +347,9 @@
                 <div>
                     <h4 class="text-white font-semibold mb-4">Contato</h4>
                     <ul class="space-y-2 text-sm text-gray-400">
-                        <li id="footer-address">Rua das Flores, 123 — Centro</li>
-                        <li id="footer-phone">(11) 99999-8888</li>
-                        <li id="footer-email">contato@saborarte.com.br</li>
+                        <li id="footer-address">Rua Itália, 88 — Centro</li>
+                        <li id="footer-phone">(11) 99999-5555</li>
+                        <li id="footer-email">contato@fornoEmassa.com.br</li>
                     </ul>
                 </div>
                 <div>
@@ -370,7 +373,8 @@
                 </div>
             </div>
             <div class="border-t border-white/5 mt-12 pt-8 text-center">
-                <p class="text-gray-600 text-sm" id="footer-copy">© 2026 Sabor & Arte. Todos os direitos reservados.</p>
+                <p class="text-gray-600 text-sm" id="footer-copy">© 2026 Forno & Massa. Todos os direitos reservados.
+                </p>
             </div>
         </div>
     </footer>
