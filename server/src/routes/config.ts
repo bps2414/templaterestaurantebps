@@ -5,6 +5,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import prisma from '../prisma/client';
 import { requireAuth, requireAdmin } from '../middlewares/auth';
+import { getCurrentPlan, isProConfigKey } from '../middlewares/plan';
 import { AuthenticatedRequest } from '../types';
 import { z } from 'zod';
 
@@ -61,6 +62,10 @@ const ALLOWED_KEYS = [
     'instagram_url',
     'facebook_url',
     'footer_text',
+    // PRO-only keys (gated in PUT handler)
+    'logo_url',
+    'brand_color',
+    'favicon_url',
 ];
 
 // GET /api/config — Public: get all config
@@ -83,6 +88,15 @@ router.put('/', requireAuth, requireAdmin, async (req: AuthenticatedRequest, res
             z.string().max(2000)
         );
         const data = schema.parse(req.body);
+
+        // Check plan for PRO-only keys
+        const plan = await getCurrentPlan();
+        const proKeysAttempted = Object.keys(data).filter(k => isProConfigKey(k));
+        if (proKeysAttempted.length > 0 && plan !== 'professional') {
+            throw new Error(
+                `As chaves [${proKeysAttempted.join(', ')}] requerem o Plano Profissional.`
+            );
+        }
 
         const updates = Object.entries(data).map(([key, value]) => {
             if (!ALLOWED_KEYS.includes(key)) {

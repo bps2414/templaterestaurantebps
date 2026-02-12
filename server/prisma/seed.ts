@@ -1,7 +1,7 @@
 // ============================================
 // Seed Router — escolhe seed por SEED_TYPE
 // Tipos: restaurante (default) | hamburgueria | pizzaria
-// Uso: SEED_TYPE=hamburgueria npx prisma db seed
+// Uso: SEED_TYPE=hamburgueria PLAN=professional npx prisma db seed
 // ============================================
 
 import { PrismaClient } from '@prisma/client';
@@ -170,7 +170,14 @@ async function seedRestaurante() {
     console.log(`✅ ${dishes.length} pratos criados`);
 
     // --- Site Config ---
+    const plan = (process.env.PLAN || 'essential').toLowerCase().trim();
+    if (plan !== 'essential' && plan !== 'professional') {
+        console.warn(`⚠️  PLAN="${plan}" inválido. Usando "essential".`);
+    }
+    const validPlan = plan === 'professional' ? 'professional' : 'essential';
+
     const configs: Record<string, string> = {
+        site_plan: validPlan,
         restaurant_name: 'Sabor & Arte',
         restaurant_tagline: 'Gastronomia que encanta os sentidos',
         restaurant_description: 'Há mais de 15 anos trazendo o melhor da culinária contemporânea, unindo ingredientes frescos e técnicas refinadas para criar experiências gastronômicas inesquecíveis.',
@@ -212,7 +219,8 @@ async function seedRestaurante() {
 
     const displayPassword = process.env.SEED_ADMIN_PASSWORD ? '***' : 'admin123';
 
-    console.log('\n�  Seed RESTAURANTE concluído!');
+    console.log('\n🎉  Seed RESTAURANTE concluído!');
+    console.log(`\n📦 Plano: ${validPlan.toUpperCase()}`);
     console.log('\n📋 Credenciais Admin:');
     console.log(`   Email: ${adminEmail}`);
     console.log(`   Senha: ${displayPassword}`);

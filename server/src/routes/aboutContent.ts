@@ -6,6 +6,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import prisma from '../prisma/client';
 import { requireAuth, requireAdmin } from '../middlewares/auth';
+import { getCurrentPlan } from '../middlewares/plan';
 import { AuthenticatedRequest } from '../types';
 import { z } from 'zod';
 
@@ -47,6 +48,7 @@ const ABOUT_KEYS = ['about_features', 'team_members', 'about_text_2'];
 // GET /api/about-content — Public: get about features & team members
 router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
     try {
+        const plan = await getCurrentPlan();
         const configs = await prisma.siteConfig.findMany({
             where: { key: { in: ABOUT_KEYS } },
         });
@@ -60,6 +62,11 @@ router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
             }
         });
 
+        // Hide team_members on Essential plan
+        if (plan !== 'professional') {
+            delete result.team_members;
+        }
+
         res.json({ success: true, data: result });
     } catch (error) {
         next(error);
@@ -70,6 +77,15 @@ router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
 router.put('/', requireAuth, requireAdmin, async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
         const data = aboutContentSchema.parse(req.body);
+        const plan = await getCurrentPlan();
+
+        // Block team_members updates on Essential plan
+        if (data.team_members !== undefined && plan !== 'professional') {
+            return res.status(403).json({
+                success: false,
+                error: 'A seção de Equipe requer o Plano Profissional.',
+            });
+        }
 
         const updates: Promise<unknown>[] = [];
 

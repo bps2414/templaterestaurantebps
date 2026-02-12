@@ -236,7 +236,11 @@ export async function seedHamburgueria() {
     console.log(`✅ ${dishes.length} itens do cardápio criados`);
 
     // --- Site Config ---
+    const plan = (process.env.PLAN || 'essential').toLowerCase().trim();
+    const validPlan = plan === 'professional' ? 'professional' : 'essential';
+
     const configs: Record<string, string> = {
+        site_plan: validPlan,
         restaurant_name: 'Burger House',
         restaurant_tagline: 'Os melhores burgers da cidade',
         restaurant_description: 'Hambúrgueres artesanais feitos com ingredientes selecionados. Blend exclusivo, pão artesanal e molhos da casa. Do smash ao costela, cada burger é uma explosão de sabor.',
@@ -277,6 +281,7 @@ export async function seedHamburgueria() {
 
     const displayPassword = process.env.SEED_ADMIN_PASSWORD ? '***' : 'admin123';
     console.log('\n🍔 Seed HAMBURGUERIA concluído!');
+    console.log(`\n📦 Plano: ${validPlan.toUpperCase()}`);
     console.log('\n📋 Credenciais Admin:');
     console.log(`   Email: ${adminEmail}`);
     console.log(`   Senha: ${displayPassword}`);

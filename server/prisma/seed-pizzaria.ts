@@ -254,7 +254,11 @@ export async function seedPizzaria() {
     console.log(`✅ ${dishes.length} itens do cardápio criados`);
 
     // --- Site Config ---
+    const plan = (process.env.PLAN || 'essential').toLowerCase().trim();
+    const validPlan = plan === 'professional' ? 'professional' : 'essential';
+
     const configs: Record<string, string> = {
+        site_plan: validPlan,
         restaurant_name: 'Pizza Forno & Massa',
         restaurant_tagline: 'Pizza artesanal de verdade',
         restaurant_description: 'Massa fermentada por 72 horas, molho de tomates italianos e ingredientes selecionados. Cada pizza é assada no forno a lenha, com amor e tradição.',
@@ -295,6 +299,7 @@ export async function seedPizzaria() {
 
     const displayPassword = process.env.SEED_ADMIN_PASSWORD ? '***' : 'admin123';
     console.log('\n🍕 Seed PIZZARIA concluído!');
+    console.log(`\n📦 Plano: ${validPlan.toUpperCase()}`);
     console.log('\n📋 Credenciais Admin:');
     console.log(`   Email: ${adminEmail}`);
     console.log(`   Senha: ${displayPassword}`);

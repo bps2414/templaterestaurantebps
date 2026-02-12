@@ -17,6 +17,7 @@ import configRoutes from './routes/config';
 import aboutContentRoutes from './routes/aboutContent';
 import checkoutRoutes from './routes/checkout';
 import uploadRoutes from './routes/upload';
+import planRoutes from './routes/plan';
 
 const app = express();
 
@@ -163,6 +164,7 @@ app.use('/api/dishes', csrfVerifyToken, apiLimiter, dishRoutes);
 app.use('/api/gallery', csrfVerifyToken, apiLimiter, galleryRoutes);
 app.use('/api/config', apiLimiter, configRoutes); // No CSRF for public config
 app.use('/api/about-content', apiLimiter, aboutContentRoutes); // No CSRF for public GET, CSRF on PUT via middleware
+app.use('/api/plan', apiLimiter, planRoutes); // Public GET — no CSRF needed
 app.use('/api/checkout', csrfVerifyToken, apiLimiter, checkoutRoutes);
 app.use('/api/upload', csrfVerifyToken, uploadLimiter, uploadRoutes);
 
