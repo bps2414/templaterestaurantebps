@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin — Painel de Controle</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -1262,11 +1263,17 @@
         <div class="relative group rounded-xl overflow-hidden aspect-square border border-white/5">
             <img src="${escapeAttr(imgSrc)}" alt="${escapeAttr(img.alt || '')}" class="w-full h-full object-cover" onerror="this.src=PLACEHOLDER_LG">
             <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                <button onclick="deleteGalleryImage('${escapeAttr(img.id)}')" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition">Excluir</button>
+                <button data-action="delete-gallery" data-gallery-id="${escapeAttr(img.id)}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition">Excluir</button>
             </div>
         </div>
     `;
             }).join('');
+
+            // Event delegation for gallery buttons
+            const delGalleryButtons = grid.querySelectorAll('[data-action="delete-gallery"]');
+            delGalleryButtons.forEach(btn => {
+                btn.addEventListener('click', () => deleteGalleryImage(btn.dataset.galleryId));
+            });
         }
 
         function openGalleryModal() { openModal('gallery-modal'); }

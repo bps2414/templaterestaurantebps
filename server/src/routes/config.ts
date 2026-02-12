@@ -8,7 +8,7 @@ import { requireAuth, requireAdmin } from '../middlewares/auth';
 import { getCurrentPlan, isProConfigKey } from '../middlewares/plan';
 import { AuthenticatedRequest } from '../types';
 import { z } from 'zod';
-import { ForbiddenError } from '../utils/errors';
+import { ForbiddenError, BadRequestError } from '../utils/errors';
 
 const router = Router();
 
@@ -108,14 +108,14 @@ router.put('/', requireAuth, requireAdmin, async (req: AuthenticatedRequest, res
 
         const updates = Object.entries(data).map(([key, value]) => {
             if (!ALLOWED_KEYS.includes(key)) {
-                throw new Error(`Chave "${key}" não é permitida`);
+                throw new BadRequestError(`Chave "${key}" não é permitida`);
             }
 
             // Validate WhatsApp number format
             if (key === 'whatsapp_number') {
                 const whatsappResult = validateWhatsApp(value);
                 if (!whatsappResult.valid) {
-                    throw new Error(whatsappResult.error);
+                    throw new BadRequestError(whatsappResult.error);
                 }
                 // Use cleaned (digits only) version
                 const sanitized = whatsappResult.cleaned;
