@@ -140,6 +140,49 @@
     function applyConfig() {
         const c = siteConfig;
 
+        // --- Dynamic page title & meta ---
+        const pageName = document.querySelector('meta[name="page-name"]')?.content || '';
+        const siteName = c.restaurant_name || 'Restaurante';
+        const siteDesc = c.restaurant_description || c.restaurant_tagline || '';
+
+        if (pageName) {
+            document.title = `${pageName} — ${siteName}`;
+        } else if (c.restaurant_name) {
+            // Homepage: keep full title
+            document.title = `${siteName} — ${c.restaurant_tagline || 'Restaurante'}`;
+        }
+
+        // Update meta description
+        let metaDesc = document.querySelector('meta[name="description"]');
+        if (!metaDesc) {
+            metaDesc = document.createElement('meta');
+            metaDesc.name = 'description';
+            document.head.appendChild(metaDesc);
+        }
+        metaDesc.content = siteDesc;
+
+        // --- Open Graph tags ---
+        const ogTags = {
+            'og:title': document.title,
+            'og:description': siteDesc,
+            'og:type': 'website',
+            'og:site_name': siteName,
+            'og:url': window.location.href,
+            'og:image': c.hero_image || c.about_image || '',
+            'og:locale': 'pt_BR',
+        };
+
+        Object.entries(ogTags).forEach(([prop, content]) => {
+            if (!content) return;
+            let meta = document.querySelector(`meta[property="${prop}"]`);
+            if (!meta) {
+                meta = document.createElement('meta');
+                meta.setAttribute('property', prop);
+                document.head.appendChild(meta);
+            }
+            meta.content = content;
+        });
+
         // Nav brand
         setText('nav-brand', c.restaurant_name);
         setText('footer-brand', c.restaurant_name);
