@@ -1769,7 +1769,7 @@
                         });
 
                         if (res.success && res.data.url) {
-                            teamMembers[${ i }].image = res.data.url;
+                            teamMembers[${i}].image = res.data.url;
                             preview.src = res.data.url;
                             preview.style.opacity = '1';
                             toast('Foto enviada!', 'success');
