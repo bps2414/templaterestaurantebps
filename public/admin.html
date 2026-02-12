@@ -838,6 +838,16 @@
             setTimeout(() => el.classList.remove('show'), 3000);
         }
 
+        function escapeHTML(value) {
+            const div = document.createElement('div');
+            div.textContent = value ?? '';
+            return div.innerHTML;
+        }
+
+        function escapeAttr(value) {
+            return escapeHTML(value).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
         // --- Modals ---
         function openModal(id) { document.getElementById(id).classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
@@ -863,11 +873,11 @@
         <tr class="hover:bg-white/[0.02] transition">
             <td class="px-6 py-4">
                 <div class="flex items-center gap-3">
-                    <img src="${imgSrc}" class="w-10 h-10 rounded-lg object-cover" alt="" onerror="this.src=PLACEHOLDER_SM">
-                    <span class="text-white font-medium text-sm">${d.name}</span>
+                    <img src="${escapeAttr(imgSrc)}" class="w-10 h-10 rounded-lg object-cover" alt="${escapeAttr(d.name || '')}" onerror="this.src=PLACEHOLDER_SM">
+                    <span class="text-white font-medium text-sm">${escapeHTML(d.name || '')}</span>
                 </div>
             </td>
-            <td class="px-6 py-4 text-gray-400 text-sm">${d.category?.name || '-'}</td>
+            <td class="px-6 py-4 text-gray-400 text-sm">${escapeHTML(d.category?.name || '-')}</td>
             <td class="px-6 py-4 text-brand-400 font-medium text-sm">${formatPrice(d.price)}</td>
             <td class="px-6 py-4">${d.featured ? '<span class="text-yellow-400">★</span>' : '<span class="text-gray-600">-</span>'}</td>
             <td class="px-6 py-4">${d.active ? '<span class="text-green-400 text-xs bg-green-400/10 px-2 py-1 rounded-full">Ativo</span>' : '<span class="text-gray-500 text-xs bg-gray-500/10 px-2 py-1 rounded-full">Inativo</span>'}</td>
@@ -894,7 +904,7 @@
             // Populate category select
             const sel = document.getElementById('dish-category');
             sel.innerHTML = '<option value="">Selecione...</option>' + categories.map(c =>
-                `<option value="${c.id}" ${dish?.categoryId === c.id ? 'selected' : ''}>${c.name}</option>`
+                `<option value="${escapeAttr(c.id)}" ${dish?.categoryId === c.id ? 'selected' : ''}>${escapeHTML(c.name || '')}</option>`
             ).join('');
 
             openModal('dish-modal');
@@ -960,7 +970,7 @@
             grid.innerHTML = categories.map(c => `
         <div class="bg-dark-800 rounded-xl p-6 border border-white/5">
             <div class="flex items-center justify-between mb-2">
-                <h3 class="text-white font-semibold">${c.name}</h3>
+                <h3 class="text-white font-semibold">${escapeHTML(c.name || '')}</h3>
                 <span class="text-gray-500 text-xs">${c._count?.dishes || 0} pratos</span>
             </div>
             <p class="text-gray-500 text-xs mb-4">Ordem: ${c.sortOrder}</p>
@@ -1034,9 +1044,9 @@
 
                 return `
         <div class="relative group rounded-xl overflow-hidden aspect-square border border-white/5">
-            <img src="${imgSrc}" alt="${img.alt || ''}" class="w-full h-full object-cover" onerror="this.src=PLACEHOLDER_LG">
+            <img src="${escapeAttr(imgSrc)}" alt="${escapeAttr(img.alt || '')}" class="w-full h-full object-cover" onerror="this.src=PLACEHOLDER_LG">
             <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                <button onclick="deleteGalleryImage('${img.id}')" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition">Excluir</button>
+                <button onclick="deleteGalleryImage('${escapeAttr(img.id)}')" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition">Excluir</button>
             </div>
         </div>
     `;
@@ -1108,8 +1118,8 @@
             <div class="bg-dark-800 rounded-xl p-6 border border-white/5">
                 <label class="text-sm text-gray-400 mb-2 block">${label}</label>
                 ${isLong
-                        ? `<textarea data-key="${key}" rows="3" class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none resize-none">${value}</textarea>`
-                        : `<input type="text" data-key="${key}" value="${value}" class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none">`
+                        ? `<textarea data-key="${key}" rows="3" class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none resize-none">${escapeHTML(value)}</textarea>`
+                        : `<input type="text" data-key="${key}" value="${escapeAttr(value)}" class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none">`
                     }
             </div>
         `;

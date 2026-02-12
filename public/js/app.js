@@ -193,7 +193,7 @@
         setText('footer-email', c.restaurant_email);
 
         // Hero
-        setText('hero-title-text', c.hero_title);
+        setText('hero-title', c.hero_title);
         setText('hero-subtitle', c.hero_subtitle);
 
         // About
@@ -234,6 +234,16 @@
         if (el && url) el.href = url;
     }
 
+    function escapeHTML(value) {
+        const div = document.createElement('div');
+        div.textContent = value ?? '';
+        return div.innerHTML;
+    }
+
+    function escapeAttr(value) {
+        return escapeHTML(value).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
     // --- Featured dishes (homepage) ---
     async function loadFeaturedDishes() {
         const container = document.getElementById('featured-dishes');
@@ -248,26 +258,26 @@
         container.innerHTML = dishes.slice(0, 3).map(dish => `
         <div class="card-hover reveal bg-white rounded-2xl overflow-hidden border border-gold-400/10 group shadow-sm hover:shadow-lg transition-shadow">
             <div class="relative h-64 overflow-hidden">
-                <img src="${dish.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80'}"
-                     alt="${dish.name}"
+                <img src="${escapeAttr(dish.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80')}"
+                     alt="${escapeAttr(dish.name)}"
                      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                 <div class="absolute inset-0 bg-gradient-to-t from-charcoal-900/60 to-transparent"></div>
                 <span class="absolute top-4 right-4 bg-forest-500 text-white text-xs font-bold px-3 py-1 rounded-full">Destaque</span>
             </div>
             <div class="p-6 flex flex-col">
-                <span class="text-forest-400 text-xs font-medium uppercase tracking-wider">${dish.category?.name || ''}</span>
-                <h3 class="font-display text-xl font-bold text-charcoal-900 mt-1 mb-2">${dish.name}</h3>
-                <p class="text-charcoal-800/60 text-sm mb-4 line-clamp-2 flex-1">${dish.description || ''}</p>
+                <span class="text-forest-400 text-xs font-medium uppercase tracking-wider">${escapeHTML(dish.category?.name || '')}</span>
+                <h3 class="font-display text-xl font-bold text-charcoal-900 mt-1 mb-2">${escapeHTML(dish.name)}</h3>
+                <p class="text-charcoal-800/60 text-sm mb-4 line-clamp-2 flex-1">${escapeHTML(dish.description || '')}</p>
                 <div class="space-y-3">
                     <div class="flex items-center justify-between">
                         <span class="text-forest-500 font-bold text-xl">${formatPrice(dish.price)}</span>
                     </div>
                     <div class="grid grid-cols-2 gap-2">
-                        <button data-action="quick" data-id="${dish.id}" data-name="${dish.name}" data-image="${dish.image || ''}" data-price="${dish.price}" class="order-btn text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-2.5 rounded-lg transition flex items-center justify-center gap-1 font-medium">
+                        <button data-action="quick" data-id="${dish.id}" data-name="${escapeAttr(dish.name)}" data-image="${escapeAttr(dish.image || '')}" data-price="${dish.price}" class="order-btn text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-2.5 rounded-lg transition flex items-center justify-center gap-1 font-medium">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
                             Pedir Agora
                         </button>
-                        <button data-action="cart" data-id="${dish.id}" data-name="${dish.name}" data-image="${dish.image || ''}" data-price="${dish.price}" class="order-btn text-xs bg-forest-500 hover:bg-forest-600 text-white px-3 py-2.5 rounded-lg transition flex items-center justify-center gap-1 font-medium">
+                        <button data-action="cart" data-id="${dish.id}" data-name="${escapeAttr(dish.name)}" data-image="${escapeAttr(dish.image || '')}" data-price="${dish.price}" class="order-btn text-xs bg-forest-500 hover:bg-forest-600 text-white px-3 py-2.5 rounded-lg transition flex items-center justify-center gap-1 font-medium">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                             Adicionar
                         </button>
