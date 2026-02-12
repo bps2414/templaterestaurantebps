@@ -108,6 +108,8 @@ Value: restaurante-[nome]   ← MUDA para cada cliente (organiza pastas)
 
 ## 🌱 POPULAR BANCO (SEED)
 
+**Tipo do negócio:** [ ] Restaurante  [ ] Hamburgueria  [ ] Pizzaria
+
 **Rode no PowerShell local:**
 
 ```powershell
@@ -116,6 +118,7 @@ cd F:\VSCode\Landpage\server
 $env:DATABASE_URL="[Cole DATABASE_URL do Neon]"
 $env:SEED_ADMIN_EMAIL="dono@restaurante.com"
 $env:SEED_ADMIN_PASSWORD="SenhaForte123!"
+$env:SEED_TYPE="hamburgueria"   # restaurante | hamburgueria | pizzaria
 
 npx prisma db seed
 ```
