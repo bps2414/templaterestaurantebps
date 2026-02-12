@@ -1,0 +1,168 @@
+{
+    "generated_at": "2026-02-12",
+    "total_bugs": 18,
+    "bugs": [
+        {
+            "id": "BUG-001",
+            "severity": "CRITICAL",
+            "file": "server/src/middlewares/csrf.ts",
+            "line": 55,
+            "description": "timingSafeEqual throws RangeError when buffers have different lengths (DoS vector)",
+            "snippet_current": "if (!crypto.timingSafeEqual(Buffer.from(tokenFromCookie), Buffer.from(tokenFromHeader))) {",
+            "patch": "Add length check before comparison:\n\nconst cookieBuf = Buffer.from(tokenFromCookie);\nconst headerBuf = Buffer.from(tokenFromHeader);\nif (cookieBuf.length !== headerBuf.length || !crypto.timingSafeEqual(cookieBuf, headerBuf)) {\n    return res.status(403).json({ success: false, error: 'Invalid CSRF token' });\n}"
+        },
+        {
+            "id": "BUG-002",
+            "severity": "CRITICAL",
+            "file": "server/src/services/authService.ts",
+            "line": "182-186",
+            "description": "Refresh token stored in plain text in DB and queried directly (findUnique by plain token). If DB leaks, all sessions are compromised.",
+            "snippet_current": "const session = await prisma.session.findUnique({ where: { refreshToken: currentRefreshToken } });",
+            "patch": "1. Hash the incoming token: const hash = hashToken(currentRefreshToken);\n2. Query by hash: findUnique({ where: { refreshTokenHash: hash } })\n3. Remove @unique from refreshToken column\n4. Make refreshTokenHash @unique\n5. Run migration"
+        },
+        {
+            "id": "BUG-003",
+            "severity": "HIGH",
+            "file": "server/src/routes/dishes.ts",
+            "line": "131-138",
+            "description": "Temp file not deleted when Cloudinary upload fails (returns null). Disk-fill DoS over time.",
+            "snippet_current": "if (!cloudinaryUrl) {\n    return res.status(500).json({ success: false, error: 'Erro ao fazer upload' });\n}",
+            "patch": "if (!cloudinaryUrl) {\n    try { fs.unlinkSync(filePath); } catch {}\n    return res.status(500).json({ success: false, error: 'Erro ao fazer upload' });\n}"
+        },
+        {
+            "id": "BUG-004",
+            "severity": "HIGH",
+            "file": "server/src/routes/dishes.ts",
+            "line": "~140",
+            "description": "Temp file not deleted after SUCCESSFUL Cloudinary upload. Every upload leaves permanent copy on server disk.",
+            "snippet_current": "image = cloudinaryUrl;",
+            "patch": "image = cloudinaryUrl;\ntry { fs.unlinkSync(filePath); } catch {}"
+        },
+        {
+            "id": "BUG-005",
+            "severity": "HIGH",
+            "file": "server/src/routes/config.ts",
+            "line": "14-22",
+            "description": "Regex-based XSS sanitizer is bypassable. Examples: <img src=x onerror=alert(1)> (unquoted handler), <svg/onload=alert(1)>, nested <scr<script>ipt>",
+            "snippet_current": "function sanitizeValue(value: string): string {\n    return value\n        .replace(/<script[^>]*>[\\s\\S]*?<\\/script>/gi, '')\n        .replace(/on\\w+\\s*=\\s*[\"'][^\"']*[\"']/gi, '')\n        ...",
+            "patch": "Install sanitize-html:\nnpm install sanitize-html @types/sanitize-html\n\nimport sanitizeHtml from 'sanitize-html';\nfunction sanitizeValue(value: string): string {\n    return sanitizeHtml(value, { allowedTags: [], allowedAttributes: {} }).trim();\n}"
+        },
+        {
+            "id": "BUG-006",
+            "severity": "HIGH",
+            "file": "server/src/routes/aboutContent.ts",
+            "line": "35-43",
+            "description": "Same bypassable regex XSS sanitizer (duplicated from config.ts)",
+            "snippet_current": "Same regex pattern as config.ts",
+            "patch": "Same fix: use sanitize-html library. Extract to shared util."
+        },
+        {
+            "id": "BUG-007",
+            "severity": "HIGH",
+            "file": "public/admin.html",
+            "line": "~apiAuth function",
+            "description": "apiAuth() has no try/catch around fetch() — network errors cause unhandled promise rejections, crashing the calling function silently",
+            "snippet_current": "async function apiAuth(url, options = {}) {\n    const res = await fetch(url, { ... });\n    return res.json();\n}",
+            "patch": "Wrap in try/catch:\nasync function apiAuth(url, options = {}) {\n    try {\n        const res = await fetch(url, { ... });\n        if (!res.ok) { throw new Error(`HTTP ${res.status}`); }\n        return await res.json();\n    } catch (err) {\n        showToast('Erro de conexão. Verifique sua internet.', 'error');\n        throw err;\n    }\n}"
+        },
+        {
+            "id": "BUG-008",
+            "severity": "HIGH",
+            "file": "public/admin.html",
+            "line": "~loadDishes function",
+            "description": "editDish uses JSON.stringify in onclick attribute — breaks on special characters (quotes, backslashes, Unicode)",
+            "snippet_current": "onclick='editDish(${JSON.stringify(d).replace(/'/g, \"&#39;\")})' ",
+            "patch": "Use event delegation or data attributes:\n<button data-dish-id=\"${d.id}\" class=\"edit-dish-btn\">Editar</button>\n\nThen: document.addEventListener('click', e => {\n    if (e.target.closest('.edit-dish-btn')) {\n        const id = e.target.closest('.edit-dish-btn').dataset.dishId;\n        editDish(dishes.find(d => d.id === id));\n    }\n});"
+        },
+        {
+            "id": "BUG-009",
+            "severity": "MEDIUM",
+            "file": "server/src/routes/auth.ts",
+            "line": "63-73",
+            "description": "Logout endpoint does not require authentication. Anyone with a refresh token can invalidate sessions.",
+            "snippet_current": "router.post('/logout', async (req, res, next) => {",
+            "patch": "Add requireAuth middleware:\nrouter.post('/logout', requireAuth, async (req: AuthenticatedRequest, res, next) => {"
+        },
+        {
+            "id": "BUG-010",
+            "severity": "MEDIUM",
+            "file": "server/src/routes/auth.ts",
+            "line": 21,
+            "description": "Login schema allows 6-char passwords while change-password enforces 8+. Old weak passwords remain valid forever.",
+            "snippet_current": "password: z.string().min(6, 'Senha deve ter no mínimo 6 caracteres')",
+            "patch": "password: z.string().min(8, 'Senha deve ter no mínimo 8 caracteres')"
+        },
+        {
+            "id": "BUG-011",
+            "severity": "MEDIUM",
+            "file": "public/gallery.html",
+            "line": "lightbox div",
+            "description": "Lightbox missing role='dialog', aria-modal='true'. No focus trap — Tab key focuses elements behind overlay. prevImage/nextImage crash on empty gallery (modulo by zero).",
+            "snippet_current": "<div id=\"lightbox\" class=\"fixed inset-0 ... hidden\">",
+            "patch": "<div id=\"lightbox\" role=\"dialog\" aria-modal=\"true\" aria-label=\"Visualizador de imagens\" class=\"fixed inset-0 ... hidden\">\n\nAlso add: if (galleryImages.length === 0) return; in prevImage/nextImage"
+        },
+        {
+            "id": "BUG-012",
+            "severity": "MEDIUM",
+            "file": "public/js/cart.js",
+            "line": "verifyPrices function",
+            "description": "verifyPrices silently allows checkout on network error — stale/wrong prices could be sent to WhatsApp",
+            "snippet_current": "catch(err) { console.error('Price verify failed', err); return true; }",
+            "patch": "On network error, show warning toast and let user decide:\ncatch(err) {\n    console.error('Price verify failed', err);\n    // Show warning but don't block\n    if (typeof showToast === 'function') showToast('Não foi possível verificar preços atuais', 'warning');\n    return true;\n}"
+        },
+        {
+            "id": "BUG-013",
+            "severity": "MEDIUM",
+            "file": "public/js/orderModal.js",
+            "line": "~initOrderModal",
+            "description": "Duplicate fetchConfig call — config is already loaded in app.js but orderModal fetches it again",
+            "snippet_current": "const configRes = await fetch('/api/config');",
+            "patch": "Use window._siteConfig from app.js instead of duplicate fetch:\nconst config = window._siteConfig || await fetch('/api/config').then(r=>r.json()).then(d=>d.data);"
+        },
+        {
+            "id": "BUG-014",
+            "severity": "MEDIUM",
+            "file": "server/src/utils/validators.ts",
+            "line": "1-30",
+            "description": "Shared Zod validators are never imported — dead code. Auth route defines its own inline schemas.",
+            "snippet_current": "export const passwordSchema = z.string().min(8)...",
+            "patch": "Either import these in auth.ts route or delete the file to avoid confusion."
+        },
+        {
+            "id": "BUG-015",
+            "severity": "MEDIUM",
+            "file": "public/admin.html",
+            "line": "printQRCode function",
+            "description": "printQRCode uses document.write() which blocks parser and can cause issues in some browsers",
+            "snippet_current": "win.document.write('<html>...' + img.outerHTML + '...</html>');",
+            "patch": "Use a print-specific approach:\nconst printFrame = document.createElement('iframe');\nprintFrame.style.display = 'none';\ndocument.body.appendChild(printFrame);\nprintFrame.contentDocument.write(...);\nprintFrame.contentWindow.print();\ndocument.body.removeChild(printFrame);"
+        },
+        {
+            "id": "BUG-016",
+            "severity": "LOW",
+            "file": "public/js/performance.js",
+            "line": "~line 5",
+            "description": "Uses deprecated performance.timing API — should use PerformanceNavigationTiming",
+            "snippet_current": "var timing = performance.timing;",
+            "patch": "const [nav] = performance.getEntriesByType('navigation');\nif (nav) { /* use nav.domContentLoadedEventEnd, etc. */ }"
+        },
+        {
+            "id": "BUG-017",
+            "severity": "LOW",
+            "file": "public/js/mobile.js",
+            "line": "~double-tap section",
+            "description": "Double-tap prevention on all buttons/links is a mobile anti-pattern that violates user expectations",
+            "snippet_current": "// Prevents double-tap zoom on buttons/links",
+            "patch": "Remove double-tap prevention entirely, or limit to submit buttons only."
+        },
+        {
+            "id": "BUG-018",
+            "severity": "LOW",
+            "file": "server/src/utils/errors.ts",
+            "line": "slugify function",
+            "description": "slugify() and escapeHTML() are duplicated in errors.ts, categories.ts, and dishes.ts",
+            "snippet_current": "export function slugify(text: string): string { ... }",
+            "patch": "Import from utils/errors.ts in routes instead of redefining."
+        }
+    ]
+}

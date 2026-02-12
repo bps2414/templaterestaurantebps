@@ -1,0 +1,260 @@
+{
+    "generated_at": "2026-02-12",
+    "total_hardcoded_items": 38,
+    "items": [
+        {
+            "id": "HC-001",
+            "severity": "CRITICAL",
+            "file": "index.html (ROOT)",
+            "description": "Root index.html is FluxPay payment SaaS landing page — completely wrong project",
+            "current_value": "FluxPay — Solução Completa de Pagamentos",
+            "fix": "DELETE or move to backup_fluxpay/. This file is NOT the restaurant template."
+        },
+        {
+            "id": "HC-002",
+            "severity": "CRITICAL",
+            "file": "scripts.js, scripts.min.js, styles.css, styles.min.css (ROOT)",
+            "description": "Root JS/CSS files belong to FluxPay — orphan code from another project",
+            "current_value": "FluxPay Landing Page scripts/styles",
+            "fix": "DELETE all 4 files or move to backup_fluxpay/"
+        },
+        {
+            "id": "HC-003",
+            "severity": "CRITICAL",
+            "file": "public/index.html",
+            "line": "~5",
+            "description": "HTML <title> hardcoded as 'Sabor & Arte'",
+            "current_value": "<title>Sabor &amp; Arte — Restaurante</title>",
+            "fix": "Use generic title that JS overrides: <title>Restaurante</title> or inject from config"
+        },
+        {
+            "id": "HC-004",
+            "severity": "CRITICAL",
+            "file": "public/index.html",
+            "line": "meta og:title",
+            "description": "Open Graph title hardcoded",
+            "current_value": "<meta property=\"og:title\" content=\"Sabor & Arte — Restaurante\" />",
+            "fix": "Use generic or blank — JS injects from config"
+        },
+        {
+            "id": "HC-005",
+            "severity": "CRITICAL",
+            "file": "public/index.html",
+            "line": "hero section",
+            "description": "Hero background image hardcoded as Unsplash URL",
+            "current_value": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&q=80",
+            "fix": "Move to SiteConfig key 'hero_image' (already exists — ensure HTML references it via JS)"
+        },
+        {
+            "id": "HC-006",
+            "severity": "CRITICAL",
+            "file": "public/index.html",
+            "line": "about section",
+            "description": "About image hardcoded as Unsplash URL",
+            "current_value": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80",
+            "fix": "Load from config key 'about_image'"
+        },
+        {
+            "id": "HC-007",
+            "severity": "CRITICAL",
+            "file": "public/index.html",
+            "line": "about section",
+            "description": "About text hardcoded in Portuguese",
+            "current_value": "Há mais de 15 anos trazendo o melhor da culinária contemporânea...",
+            "fix": "Load from config key 'about_text'"
+        },
+        {
+            "id": "HC-008",
+            "severity": "CRITICAL",
+            "file": "public/index.html",
+            "line": "navbar",
+            "description": "Brand name '🍽 Sabor & Arte' hardcoded in navbar",
+            "current_value": "🍽 <span class=\"text-brand-400\">Sabor</span> & Arte",
+            "fix": "Replace with JS: loadConfig().then(c => navBrand.textContent = c.restaurant_name)"
+        },
+        {
+            "id": "HC-009",
+            "severity": "CRITICAL",
+            "file": "public/index.html",
+            "line": "footer",
+            "description": "Footer brand + tagline hardcoded",
+            "current_value": "🍽 Sabor & Arte / Gastronomia que encanta os sentidos",
+            "fix": "Load from config (restaurant_name + restaurant_tagline)"
+        },
+        {
+            "id": "HC-010",
+            "severity": "CRITICAL",
+            "file": "ALL public/*.html",
+            "description": "<title> tag in every page hardcoded as 'Sabor & Arte'",
+            "current_value": "Sabor & Arte — Cardápio | Sobre | Galeria | Contato",
+            "fix": "Generic titles or JS override from config"
+        },
+        {
+            "id": "HC-011",
+            "severity": "CRITICAL",
+            "file": "public/buy-success.html",
+            "line": "~89-90",
+            "description": "Default admin credentials exposed in plain HTML",
+            "current_value": "Email: admin@restaurante.com / Senha: admin123",
+            "fix": "Remove credentials or make dynamic from purchase response"
+        },
+        {
+            "id": "HC-012",
+            "severity": "CRITICAL",
+            "file": "public/buy.html",
+            "line": "multiple",
+            "description": "Hardcoded price 'R$ 297,00' and brand 'RestauranteTemplate'",
+            "current_value": "Comprar por R$ 297,00",
+            "fix": "Fetch price from /api/checkout/price or config"
+        },
+        {
+            "id": "HC-013",
+            "severity": "CRITICAL",
+            "file": "public/contact.html",
+            "line": "Maps iframe",
+            "description": "Google Maps iframe hardcoded with São Paulo coordinates",
+            "current_value": "https://www.google.com/maps/embed?pb=... (São Paulo center)",
+            "fix": "Load from config key 'google_maps_embed' as URL only, build iframe in JS"
+        },
+        {
+            "id": "HC-014",
+            "severity": "CRITICAL",
+            "file": "config_full.json",
+            "description": "Contains unprofessional test data committed to repo",
+            "current_value": "restaurant_description: 'Farmo mt aura', hero_title: 'AQUI SO SIGMA ENTRA', restaurant_email: 'minhapika'",
+            "fix": "Delete file or replace with professional demo data"
+        },
+        {
+            "id": "HC-015",
+            "severity": "HIGH",
+            "file": "public/index.html",
+            "line": "footer",
+            "description": "Footer contact info with placeholder data",
+            "current_value": "Endereço da Loja / (00) 00000-0000 / contato@email.com",
+            "fix": "Already loaded from config by JS — but shows placeholders on slow connections (FOUC)"
+        },
+        {
+            "id": "HC-016",
+            "severity": "HIGH",
+            "file": "public/index.html",
+            "line": "footer",
+            "description": "Copyright year and brand hardcoded",
+            "current_value": "© 2026 Restaurante. Todos os direitos reservados.",
+            "fix": "JS: `© ${new Date().getFullYear()} ${config.restaurant_name}`"
+        },
+        {
+            "id": "HC-017",
+            "severity": "HIGH",
+            "file": "public/js/app.js",
+            "line": "fallback image",
+            "description": "Fallback dish image is hardcoded Unsplash URL",
+            "current_value": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80",
+            "fix": "Use a local placeholder SVG or config-based fallback"
+        },
+        {
+            "id": "HC-018",
+            "severity": "HIGH",
+            "file": "public/menu.html",
+            "line": "renderDishes function",
+            "description": "Fallback dish image same Unsplash URL",
+            "current_value": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80",
+            "fix": "Same fix as HC-017"
+        },
+        {
+            "id": "HC-019",
+            "severity": "HIGH",
+            "file": "server/prisma/seed.ts",
+            "description": "Default restaurant name, address, phone, email hardcoded in seed",
+            "current_value": "Sabor & Arte, Rua das Flores 123, (11) 99999-8888, contato@saborarte.com",
+            "fix": "OK for seed/demo data — but warn user to change via admin"
+        },
+        {
+            "id": "HC-020",
+            "severity": "HIGH",
+            "file": "server/prisma/seed.ts",
+            "description": "Default admin password is weak 'admin123'",
+            "current_value": "password: process.env.SEED_ADMIN_PASSWORD || 'admin123'",
+            "fix": "Add warning in seed output: 'IMPORTANT: Change admin password after first login!'"
+        },
+        {
+            "id": "HC-021",
+            "severity": "MEDIUM",
+            "file": "public/js/whatsappFormatter.js",
+            "line": "~line 5",
+            "description": "Country code hardcoded as Brazil (+55)",
+            "current_value": "var DEFAULT_COUNTRY_CODE = '55';",
+            "fix": "Load from config or make configurable in admin panel"
+        },
+        {
+            "id": "HC-022",
+            "severity": "MEDIUM",
+            "file": "server/src/routes/checkout.ts",
+            "description": "Template price hardcoded as 29700 (R$297)",
+            "current_value": "unit_amount: Number(process.env.STRIPE_TEMPLATE_PRICE) || 29700",
+            "fix": "OK — uses env var with sensible default. Document in .env.example"
+        },
+        {
+            "id": "HC-023",
+            "severity": "MEDIUM",
+            "file": "server/src/app.ts",
+            "description": "Sitemap pages hardcoded",
+            "current_value": "['/', '/menu', '/gallery', '/about', '/contact']",
+            "fix": "OK for now — pages are static template structure. Could be made dynamic later."
+        },
+        {
+            "id": "HC-024",
+            "severity": "MEDIUM",
+            "file": "public/about.html",
+            "description": "About image Unsplash URL in HTML",
+            "current_value": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800",
+            "fix": "Already loaded from config by about-content API — but static fallback in HTML shows on slow load"
+        },
+        {
+            "id": "HC-025",
+            "severity": "MEDIUM",
+            "file": "docker-compose.yml",
+            "description": "PostgreSQL password hardcoded as 'postgres'",
+            "current_value": "POSTGRES_PASSWORD: postgres",
+            "fix": "Use env var: POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}"
+        },
+        {
+            "id": "HC-026",
+            "severity": "MEDIUM",
+            "file": ".env.example (root)",
+            "description": ".env.example references FluxPay entities",
+            "current_value": "ADMIN_EMAIL=admin@fluxpay.com.br, header says 'FluxPay SaaS'",
+            "fix": "Replace with restaurant template values"
+        },
+        {
+            "id": "HC-027",
+            "severity": "LOW",
+            "file": "public/admin.html",
+            "description": "Login placeholder email",
+            "current_value": "placeholder=\"admin@restaurante.com\"",
+            "fix": "OK — it's a helpful hint in the admin login form"
+        },
+        {
+            "id": "HC-028",
+            "severity": "LOW",
+            "file": "public/js/orderModal.js",
+            "description": "Placeholder customer name and phone",
+            "current_value": "'João Silva' / '(11) 99999-9999'",
+            "fix": "OK — standard form placeholders for Brazilian users"
+        },
+        {
+            "id": "HC-029",
+            "severity": "LOW",
+            "file": "server/src/services/authService.ts",
+            "description": "JWT dev fallback secret",
+            "current_value": "JWT_SECRET || 'dev-secret-replace-me'",
+            "fix": "OK — production guard exists. But guard only in authService, not at startup."
+        }
+    ],
+    "summary": {
+        "CRITICAL": 14,
+        "HIGH": 6,
+        "MEDIUM": 6,
+        "LOW": 3,
+        "most_urgent": "HC-001/HC-002: Remove FluxPay orphan files from root"
+    }
+}

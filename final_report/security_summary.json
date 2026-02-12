@@ -1,0 +1,246 @@
+{
+    "generated_at": "2026-02-12",
+    "overall_risk": "MEDIUM-HIGH",
+    "total_findings": 19,
+    "findings": [
+        {
+            "id": "SEC-001",
+            "severity": "CRITICAL",
+            "category": "CSRF",
+            "file": "server/src/middlewares/csrf.ts",
+            "line": 55,
+            "title": "timingSafeEqual DoS — buffer length mismatch crashes server",
+            "description": "crypto.timingSafeEqual throws RangeError if buffers have different lengths. An attacker can send a 1-byte CSRF header to crash the server (unhandled exception = process exit).",
+            "impact": "Server crash (DoS). Every authenticated endpoint is affected.",
+            "patch": {
+                "before": "if (!crypto.timingSafeEqual(Buffer.from(tokenFromCookie), Buffer.from(tokenFromHeader))) {",
+                "after": "const cookieBuf = Buffer.from(tokenFromCookie);\nconst headerBuf = Buffer.from(tokenFromHeader);\nif (cookieBuf.length !== headerBuf.length || !crypto.timingSafeEqual(cookieBuf, headerBuf)) {"
+            }
+        },
+        {
+            "id": "SEC-002",
+            "severity": "CRITICAL",
+            "category": "Auth",
+            "file": "server/src/services/authService.ts + server/prisma/schema.prisma",
+            "line": "182 / schema line 47",
+            "title": "Refresh token stored and queried in plain text",
+            "description": "Session model stores refreshToken as plain text (@unique) AND refreshTokenHash. Token lookup uses the plain text column. If database is compromised, all active sessions can be hijacked.",
+            "impact": "Full session takeover on DB breach. Violates OWASP token storage best practices.",
+            "patch": {
+                "steps": [
+                    "1. Make refreshTokenHash @unique in schema",
+                    "2. Remove @unique from refreshToken (or remove column)",
+                    "3. In refreshTokens(): hash incoming token, query by refreshTokenHash",
+                    "4. Run prisma migrate dev",
+                    "5. Invalidate all existing sessions (delete all from sessions table)"
+                ]
+            }
+        },
+        {
+            "id": "SEC-003",
+            "severity": "HIGH",
+            "category": "XSS",
+            "file": "server/src/routes/config.ts",
+            "line": "14-22",
+            "title": "Regex-based XSS sanitizer bypassable",
+            "description": "The sanitizeValue() regex strips <script>, quoted on-handlers, javascript:, vbscript:, <iframe>. Bypasses: <img src=x onerror=alert(1)> (unquoted handler), <svg/onload=alert(1)>, nested tags, data: URIs.",
+            "impact": "Stored XSS via admin config — affects ALL public pages that render config values.",
+            "patch": {
+                "install": "npm install sanitize-html @types/sanitize-html",
+                "code": "import sanitizeHtml from 'sanitize-html';\nfunction sanitizeValue(value: string): string {\n    return sanitizeHtml(value, { allowedTags: [], allowedAttributes: {} }).trim();\n}"
+            }
+        },
+        {
+            "id": "SEC-004",
+            "severity": "HIGH",
+            "category": "XSS",
+            "file": "server/src/routes/aboutContent.ts",
+            "line": "35-43",
+            "title": "Same bypassable regex XSS sanitizer (duplicate)",
+            "description": "Identical sanitizeValue() function duplicated from config.ts. Same bypass vectors apply to about features and team member names/roles.",
+            "impact": "Stored XSS in About page.",
+            "patch": "Same fix as SEC-003. Extract sanitizeValue to shared utility."
+        },
+        {
+            "id": "SEC-005",
+            "severity": "HIGH",
+            "category": "XSS",
+            "file": "server/src/routes/config.ts",
+            "line": 58,
+            "title": "google_maps_embed key allows arbitrary HTML storage",
+            "description": "The 'google_maps_embed' config key passes through regex sanitizer which strips <iframe> — meaning legitimate embeds are stripped. But other HTML (SVG, img with handlers) can pass through.",
+            "impact": "Stored XSS on contact page if this value is injected via innerHTML.",
+            "patch": "Validate as URL only (must match https://www.google.com/maps/embed*). Have frontend build the <iframe> tag from the validated URL."
+        },
+        {
+            "id": "SEC-006",
+            "severity": "HIGH",
+            "category": "Auth",
+            "file": "server/src/routes/auth.ts",
+            "line": 21,
+            "title": "Login accepts 6-char passwords, change-password requires 8+",
+            "description": "Inconsistent password requirements. Accounts created with weak 6-char passwords remain valid forever since login schema doesn't enforce the stricter policy.",
+            "impact": "Brute force easier on legacy accounts.",
+            "patch": "Change login schema: password: z.string().min(8)"
+        },
+        {
+            "id": "SEC-007",
+            "severity": "HIGH",
+            "category": "Auth",
+            "file": "server/src/services/authService.ts",
+            "line": 11,
+            "title": "JWT fallback secret 'dev-secret-replace-me' usable in staging",
+            "description": "Production guard exits process if NODE_ENV=production and no JWT_SECRET. But staging/test environments sharing production data could use the weak default.",
+            "impact": "Token forgery in non-production environments with real data.",
+            "patch": "Require JWT_SECRET in all environments except NODE_ENV=development."
+        },
+        {
+            "id": "SEC-008",
+            "severity": "MEDIUM",
+            "category": "Auth",
+            "file": "server/src/routes/auth.ts",
+            "line": "63-73",
+            "title": "Logout endpoint unauthenticated",
+            "description": "POST /auth/logout accepts any refresh token without verifying the requester's identity. Combined with SEC-002, allows mass session invalidation.",
+            "impact": "DoS via mass logout if tokens are exposed.",
+            "patch": "Add requireAuth middleware to logout route."
+        },
+        {
+            "id": "SEC-009",
+            "severity": "MEDIUM",
+            "category": "Rate Limiting",
+            "file": "server/src/middlewares/rateLimiter.ts + server/src/services/authService.ts",
+            "line": "all",
+            "title": "In-memory rate limiting and brute-force protection",
+            "description": "Both rate limiter (express-rate-limit) and brute-force tracker (Map) use in-memory storage. Resets on server restart. Doesn't work across multiple instances.",
+            "impact": "Brute force protection ineffective in multi-instance or after restarts.",
+            "patch": "Use Redis store (redis is already in docker-compose):\nnpm install rate-limit-redis\n\nimport RedisStore from 'rate-limit-redis';\nconst store = new RedisStore({ sendCommand: (...args) => redisClient.sendCommand(args) });"
+        },
+        {
+            "id": "SEC-010",
+            "severity": "MEDIUM",
+            "category": "File Upload",
+            "file": "server/src/routes/dishes.ts",
+            "line": "131-140, 177-183",
+            "title": "Temp files not cleaned up on Cloudinary failure or success",
+            "description": "When Cloudinary upload returns null (failure), the temp file in /assets/uploads/ is not deleted. Also, successful uploads leave the temp file on disk permanently.",
+            "impact": "Disk space exhaustion over time (slow DoS).",
+            "patch": "Add fs.unlinkSync(filePath) after Cloudinary upload (both success and failure paths)."
+        },
+        {
+            "id": "SEC-011",
+            "severity": "MEDIUM",
+            "category": "Docker",
+            "file": "docker-compose.yml",
+            "line": "ports",
+            "title": "PostgreSQL and Redis ports exposed to all interfaces (0.0.0.0)",
+            "description": "Both 5432 and 6379 are mapped to 0.0.0.0, accessible from any network. Redis has no authentication.",
+            "impact": "Unauthorized database/cache access from any machine on the network.",
+            "patch": "Bind to localhost: '127.0.0.1:5432:5432' or remove ports entirely (server connects via Docker network)."
+        },
+        {
+            "id": "SEC-012",
+            "severity": "MEDIUM",
+            "category": "Docker",
+            "file": "docker-compose.yml",
+            "line": "redis service",
+            "title": "Redis running without authentication (requirepass)",
+            "description": "Redis is accessible without any password. Any process on the host can connect and execute commands.",
+            "impact": "Cache poisoning, data exfiltration, RCE via Redis EVAL.",
+            "patch": "Add: command: redis-server --requirepass ${REDIS_PASSWORD:-redispass}\nAnd add REDIS_URL with password to server environment."
+        },
+        {
+            "id": "SEC-013",
+            "severity": "MEDIUM",
+            "category": "CSP",
+            "file": "server/src/app.ts",
+            "line": "Helmet config",
+            "title": "CSP allows unsafe-inline and unsafe-eval",
+            "description": "Content Security Policy includes 'unsafe-inline' and 'unsafe-eval' in script-src. This weakens XSS protection significantly.",
+            "impact": "Inline scripts and eval() allowed — reduces XSS mitigation from CSP.",
+            "patch": "For production: use nonce-based CSP. For MVP: document the limitation."
+        },
+        {
+            "id": "SEC-014",
+            "severity": "MEDIUM",
+            "category": "Infrastructure",
+            "file": "server/Dockerfile",
+            "line": "COPY stage",
+            "title": ".dockerignore in wrong directory — all files sent to Docker daemon",
+            "description": "Build context is project root (.) but .dockerignore is in server/. Docker only reads .dockerignore from build context root. Result: node_modules, .env, backups, FluxPay files all sent to daemon.",
+            "impact": "Bloated Docker image, secrets potentially in build cache.",
+            "patch": "Move/copy .dockerignore to project root."
+        },
+        {
+            "id": "SEC-015",
+            "severity": "MEDIUM",
+            "category": "Credentials",
+            "file": "public/buy-success.html",
+            "line": "89-90",
+            "title": "Default admin credentials exposed in public HTML",
+            "description": "The post-purchase page shows admin@restaurante.com and password admin123 in plain HTML visible to anyone.",
+            "impact": "Anyone who guesses the URL can see default credentials.",
+            "patch": "Remove credentials from HTML. Send via email after purchase, or show only to authenticated buyer."
+        },
+        {
+            "id": "SEC-016",
+            "severity": "MEDIUM",
+            "category": "Credentials",
+            "file": "docker-compose.yml",
+            "line": "environment",
+            "title": "Database credentials hardcoded in compose file",
+            "description": "POSTGRES_PASSWORD: postgres in plain text. Users who don't change this run with default credentials in production.",
+            "impact": "Default credentials on production database.",
+            "patch": "Use env_file or env vars: POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}"
+        },
+        {
+            "id": "SEC-017",
+            "severity": "LOW",
+            "category": "Headers",
+            "file": "server/src/middlewares/csrf.ts",
+            "line": "cookie config",
+            "title": "CSRF cookie has httpOnly: false",
+            "description": "The CSRF cookie is intentionally accessible to JavaScript (double-submit pattern requires it). This is by design but worth documenting.",
+            "impact": "None — this is the correct behavior for double-submit CSRF.",
+            "patch": "No fix needed. Document the design decision."
+        },
+        {
+            "id": "SEC-018",
+            "severity": "LOW",
+            "category": "Upload",
+            "file": "server/src/middlewares/upload.ts",
+            "line": "86-93",
+            "title": "MIME type check relies on client-sent Content-Type header",
+            "description": "The initial MIME filter can be bypassed by spoofing Content-Type. However, magic byte validation in the route handler catches this.",
+            "impact": "None — defense in depth is present. Magic bytes are the real guard.",
+            "patch": "No fix needed. The triple-check (MIME + extension + magic bytes) is solid."
+        },
+        {
+            "id": "SEC-019",
+            "severity": "LOW",
+            "category": "Schema",
+            "file": "server/prisma/schema.prisma",
+            "line": "Session model",
+            "title": "Missing @@index([userId]) on Session model",
+            "description": "Session queries by userId (findMany, deleteMany) are full table scans without an index.",
+            "impact": "Performance degradation with many sessions. Not a security risk directly.",
+            "patch": "Add @@index([userId]) to Session model."
+        }
+    ],
+    "risk_matrix": {
+        "CRITICAL": 2,
+        "HIGH": 5,
+        "MEDIUM": 8,
+        "LOW": 4,
+        "blockers_for_production": [
+            "SEC-001: CSRF DoS — server crashes on malformed token",
+            "SEC-002: Plain text refresh tokens in database"
+        ],
+        "must_fix_before_clients": [
+            "SEC-003/SEC-004: Replace regex XSS sanitizer with sanitize-html",
+            "SEC-005: Validate google_maps_embed as URL",
+            "SEC-006: Enforce 8-char minimum on login",
+            "SEC-011: Bind DB/Redis ports to localhost"
+        ]
+    }
+}

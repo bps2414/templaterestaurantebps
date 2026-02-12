@@ -1,0 +1,308 @@
+{
+    "generated_at": "2026-02-12",
+    "total_files_audited": 57,
+    "categories": {
+        "server_core": [
+            {
+                "path": "server/src/app.ts",
+                "purpose": "Express app setup (Helmet, CORS, CSRF, rate limiters, routes, sitemap)",
+                "notes": "CSP uses unsafe-inline/unsafe-eval for admin; sitemap pages hardcoded"
+            },
+            {
+                "path": "server/src/index.ts",
+                "purpose": "Server entry point, port binding, Cloudinary validation",
+                "notes": "Clean"
+            },
+            {
+                "path": "server/src/prisma/client.ts",
+                "purpose": "Singleton Prisma client with global caching",
+                "notes": "Clean"
+            },
+            {
+                "path": "server/src/types/index.ts",
+                "purpose": "TypeScript interfaces (JWT, auth, API response, pagination)",
+                "notes": "Clean"
+            }
+        ],
+        "server_middlewares": [
+            {
+                "path": "server/src/middlewares/auth.ts",
+                "purpose": "JWT auth + role-based access, tokenVersion validation",
+                "notes": "✅ Solid implementation"
+            },
+            {
+                "path": "server/src/middlewares/csrf.ts",
+                "purpose": "Double-submit cookie CSRF with timingSafeEqual",
+                "notes": "🔴 BUG: timingSafeEqual throws on buffer length mismatch (DoS)"
+            },
+            {
+                "path": "server/src/middlewares/errorHandler.ts",
+                "purpose": "Centralized error handler (Prisma, Zod, Multer, CORS)",
+                "notes": "✅ Never exposes stack in production"
+            },
+            {
+                "path": "server/src/middlewares/rateLimiter.ts",
+                "purpose": "Rate limiters: API 100/15m, auth 10/15m, upload 30/hr",
+                "notes": "⚠️ In-memory store, won't work multi-instance"
+            },
+            {
+                "path": "server/src/middlewares/upload.ts",
+                "purpose": "Multer config + magic byte validation + MIME/ext whitelist",
+                "notes": "✅ Strong triple-check validation"
+            },
+            {
+                "path": "server/src/middlewares/validate.ts",
+                "purpose": "Generic Zod validation middleware factory",
+                "notes": "Clean"
+            }
+        ],
+        "server_routes": [
+            {
+                "path": "server/src/routes/auth.ts",
+                "purpose": "Login, refresh, logout, /me, change-password",
+                "notes": "⚠️ Login allows 6-char password; logout unauthenticated"
+            },
+            {
+                "path": "server/src/routes/categories.ts",
+                "purpose": "CRUD categories (public GET, admin mutations)",
+                "notes": "⚠️ Duplicated slugify function"
+            },
+            {
+                "path": "server/src/routes/dishes.ts",
+                "purpose": "CRUD dishes + /verify-prices endpoint",
+                "notes": "🔴 Temp file not cleaned up on Cloudinary failure/success"
+            },
+            {
+                "path": "server/src/routes/gallery.ts",
+                "purpose": "CRUD gallery images with Cloudinary upload",
+                "notes": "Clean"
+            },
+            {
+                "path": "server/src/routes/config.ts",
+                "purpose": "Key-value site config (public GET, admin PUT)",
+                "notes": "🔴 Regex XSS sanitizer bypassable"
+            },
+            {
+                "path": "server/src/routes/aboutContent.ts",
+                "purpose": "About features & team members as JSON in SiteConfig",
+                "notes": "Same regex XSS sanitizer concern"
+            },
+            {
+                "path": "server/src/routes/checkout.ts",
+                "purpose": "Stripe checkout + webhook for template purchases",
+                "notes": "✅ Webhook signature verified; hardcoded price 29700"
+            },
+            {
+                "path": "server/src/routes/upload.ts",
+                "purpose": "Direct image upload endpoint (admin only)",
+                "notes": "✅ Auth + magic bytes"
+            }
+        ],
+        "server_services": [
+            {
+                "path": "server/src/services/authService.ts",
+                "purpose": "JWT generation, refresh rotation, brute-force protection, sessions",
+                "notes": "🔴 Refresh token stored+queried in plain text; in-memory brute-force"
+            },
+            {
+                "path": "server/src/services/cloudinaryService.ts",
+                "purpose": "Cloudinary upload (auto-resize 1200x1200) and delete",
+                "notes": "✅ Deletes temp files"
+            }
+        ],
+        "server_utils": [
+            {
+                "path": "server/src/utils/errors.ts",
+                "purpose": "Custom error classes (AppError, 400-429) + slugify + escapeHTML",
+                "notes": "⚠️ slugify/escapeHTML duplicated in routes"
+            },
+            {
+                "path": "server/src/utils/logger.ts",
+                "purpose": "Winston structured logger (JSON prod, colorized dev)",
+                "notes": "Clean"
+            },
+            {
+                "path": "server/src/utils/validators.ts",
+                "purpose": "Shared Zod schemas for password, email, WhatsApp",
+                "notes": "⚠️ Never imported — dead code"
+            }
+        ],
+        "prisma": [
+            {
+                "path": "server/prisma/schema.prisma",
+                "purpose": "Models: AdminUser, Session, Category, Dish, SiteConfig, GalleryImage, TemplatePurchase",
+                "notes": "🔴 Session.refreshToken stored plain text @unique; missing @@index([userId])"
+            },
+            {
+                "path": "server/prisma/seed.ts",
+                "purpose": "Seed router (restaurante/hamburgueria/pizzaria by SEED_TYPE)",
+                "notes": "Hardcoded 'Sabor & Arte', admin123 password"
+            },
+            {
+                "path": "server/prisma/seed-hamburgueria.ts",
+                "purpose": "Hamburgueria demo seed",
+                "notes": "Hardcoded 'Burger House', admin123"
+            },
+            {
+                "path": "server/prisma/seed-pizzaria.ts",
+                "purpose": "Pizzaria demo seed",
+                "notes": "Hardcoded 'Pizza Forno & Massa', admin123"
+            }
+        ],
+        "public_html": [
+            {
+                "path": "public/index.html",
+                "purpose": "Homepage (hero, featured dishes, categories, about, hours, footer)",
+                "notes": "🔴 Hardcoded 'Sabor & Arte' in <title>, Unsplash hero/about images, placeholder address/phone/email"
+            },
+            {
+                "path": "public/menu.html",
+                "purpose": "Menu page (category tabs + dish grid + add-to-cart)",
+                "notes": "Hardcoded title, fallback Unsplash image"
+            },
+            {
+                "path": "public/about.html",
+                "purpose": "About page (story, features, team — dynamic)",
+                "notes": "Hardcoded title, Unsplash about image"
+            },
+            {
+                "path": "public/gallery.html",
+                "purpose": "Photo gallery with lightbox",
+                "notes": "Hardcoded title; lightbox lacks ARIA/focus trap"
+            },
+            {
+                "path": "public/contact.html",
+                "purpose": "Contact page (address, phone, Maps, WhatsApp CTA)",
+                "notes": "🔴 Hardcoded Google Maps iframe with São Paulo coords; placeholder data"
+            },
+            {
+                "path": "public/admin.html",
+                "purpose": "Full admin SPA (1756 lines) — login, CRUD, config, about/team, QR",
+                "notes": "⚠️ apiAuth() missing try/catch; editDish uses JSON.stringify in onclick"
+            },
+            {
+                "path": "public/buy.html",
+                "purpose": "Template purchase page with Stripe checkout",
+                "notes": "Hardcoded price R$297, brand name"
+            },
+            {
+                "path": "public/buy-success.html",
+                "purpose": "Post-purchase instructions",
+                "notes": "🔴 Exposes default credentials admin@restaurante.com / admin123"
+            }
+        ],
+        "public_js": [
+            {
+                "path": "public/js/app.js",
+                "purpose": "Core frontend (API wrapper, CSRF, config loading, dynamic SEO)",
+                "notes": "setHeroTitle uses innerHTML (escaped); fallback Unsplash image"
+            },
+            {
+                "path": "public/js/cart.js",
+                "purpose": "Shopping cart (localStorage, validation, undo, quota)",
+                "notes": "⚠️ verifyPrices silently allows checkout on network error"
+            },
+            {
+                "path": "public/js/cartUI.js",
+                "purpose": "Cart floating button + sidebar UI",
+                "notes": "⚠️ No focus trap on cart sidebar"
+            },
+            {
+                "path": "public/js/orderModal.js",
+                "purpose": "Order modal with customer form + WhatsApp redirect",
+                "notes": "✅ Focus trap implemented; duplicate fetchConfig call"
+            },
+            {
+                "path": "public/js/whatsappFormatter.js",
+                "purpose": "Format cart/quick orders for WhatsApp messages",
+                "notes": "DEFAULT_COUNTRY_CODE = '55' hardcoded"
+            },
+            {
+                "path": "public/js/mobile.js",
+                "purpose": "Mobile optimizations (viewport height, input scroll, zoom)",
+                "notes": "⚠️ Double-tap prevention is anti-pattern"
+            },
+            {
+                "path": "public/js/performance.js",
+                "purpose": "Performance metrics (page load, FID approximation)",
+                "notes": "⚠️ Uses deprecated performance.timing API"
+            },
+            {
+                "path": "public/js/a11y.js",
+                "purpose": "Accessibility (ARIA live region announcer)",
+                "notes": "✅ Well implemented"
+            }
+        ],
+        "deploy_infra": [
+            {
+                "path": "docker-compose.yml",
+                "purpose": "Production compose: PostgreSQL 15, Redis 7, Node.js server",
+                "notes": "🔴 DB/Redis ports exposed to 0.0.0.0; hardcoded passwords; no server healthcheck"
+            },
+            {
+                "path": "docker-compose.dev.yml",
+                "purpose": "Dev compose: PostgreSQL + Redis only",
+                "notes": "Same port exposure and password issues"
+            },
+            {
+                "path": "server/Dockerfile",
+                "purpose": "Multi-stage build (node:18-alpine, non-root user)",
+                "notes": "⚠️ Copies devDependencies to prod; no HEALTHCHECK; source maps included"
+            },
+            {
+                "path": "server/package.json",
+                "purpose": "Dependencies and scripts",
+                "notes": "⚠️ Missing jest devDependency; backup script needs ts-node in prod"
+            }
+        ],
+        "root_orphans_fluxpay": [
+            {
+                "path": "index.html",
+                "purpose": "⚠️ FluxPay payment SaaS landing page — NOT restaurant template",
+                "notes": "WRONG PROJECT. Should be deleted or moved to backup"
+            },
+            {
+                "path": "scripts.js",
+                "purpose": "⚠️ FluxPay landing page JS",
+                "notes": "WRONG PROJECT"
+            },
+            {
+                "path": "scripts.min.js",
+                "purpose": "⚠️ FluxPay minified JS",
+                "notes": "WRONG PROJECT"
+            },
+            {
+                "path": "styles.css",
+                "purpose": "⚠️ FluxPay landing page CSS",
+                "notes": "WRONG PROJECT"
+            },
+            {
+                "path": "styles.min.css",
+                "purpose": "⚠️ FluxPay minified CSS",
+                "notes": "WRONG PROJECT"
+            }
+        ],
+        "config_and_docs": [
+            {
+                "path": "config_full.json",
+                "purpose": "Full config dump/snapshot",
+                "notes": "⚠️ Contains joke/test data ('Farmo mt aura', 'minhapika')"
+            },
+            {
+                "path": "README.md",
+                "purpose": "Project documentation + API reference + deploy guide",
+                "notes": "Says PG 14 but uses 15; references 'app' service instead of 'server'"
+            },
+            {
+                "path": "GUIA_COMPLETO_DEPLOY.md",
+                "purpose": "Comprehensive deploy guide (904 lines)",
+                "notes": "✅ Thorough"
+            },
+            {
+                "path": "PLANOS_COMERCIAIS.md",
+                "purpose": "Commercial plans documentation",
+                "notes": "Clean"
+            }
+        ]
+    }
+}
