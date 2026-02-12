@@ -1,7 +1,8 @@
 # 🚀 Guia de Vendas e Customização — Template Restaurante
 
 > **Para:** Você que vai vender templates para restaurantes  
-> **Atualização:** Fevereiro 2026
+> **Atualização:** 11/02/2026  
+> **Auditoria:** Ver [UPDATE.md](UPDATE.md) para relatório completo de auditoria técnica + comercial
 
 ---
 
@@ -12,6 +13,8 @@
 3. [Customização do Frontend](#3--customização-do-frontend)
 4. [Preços Sugeridos](#4--preços-sugeridos)
 5. [FAQ de Vendas](#5--faq-de-vendas)
+6. [Riscos e Limitações Conhecidas](#6--riscos-e-limitações-conhecidas)
+7. [Roadmap de Melhorias](#7--roadmap-de-melhorias)
 
 ---
 
@@ -56,7 +59,7 @@
 
 ---
 
-### Passo 3: Configurar Variáveis de Ambiente — 5 min
+### Passo 3: Configurar Variáveis de Ambiente — 8 min
 
 No serviço criado → **Environment** → **Add Environment Variable**
 
@@ -70,8 +73,28 @@ No serviço criado → **Environment** → **Add Environment Variable**
 | `APP_URL` | `https://restaurante-[nome].onrender.com` | Substitua `[nome]` pelo Name do serviço |
 | `CORS_ORIGINS` | `https://restaurante-[nome].onrender.com` | Mesmo valor de `APP_URL` |
 | `PORT` | `3000` | Fixo |
+| `CLOUDINARY_CLOUD_NAME` | `seu-cloud-name` | Ver abaixo como criar conta Cloudinary |
+| `CLOUDINARY_API_KEY` | `123456789012345` | Da dashboard do Cloudinary |
+| `CLOUDINARY_API_SECRET` | `abc123xyz...` | Da dashboard do Cloudinary |
+| `CLOUDINARY_FOLDER_PREFIX` | `restaurante-[nome]` | Organiza uploads por site (ex: `pizzarianapoli`) |
 
-**⚠️ IMPORTANTE:** Use um **JWT_SECRET diferente** para cada cliente! Nunca reutilize.
+**⚠️ IMPORTANTE:** 
+- Use um **JWT_SECRET diferente** para cada cliente! Nunca reutilize.
+- Use a **mesma conta Cloudinary** para todos os clientes (1 conta = todos os sites)
+- Mude apenas o **CLOUDINARY_FOLDER_PREFIX** para cada cliente (organiza as pastas)
+
+**Como criar conta Cloudinary (1x só, serve para todos os clientes):**
+
+1. Acesse https://cloudinary.com/users/register_free
+2. Crie conta gratuita (25 GB/mês grátis — serve ~10-15 sites pequenos)
+3. Na dashboard, copie:
+   - **Cloud Name** (ex: `dz1a2b3c4`)
+   - **API Key** (ex: `123456789012345`)
+   - **API Secret** (clique em "Reveal" para ver)
+4. Use esses 3 valores em **TODOS os clientes** (só muda o FOLDER_PREFIX)
+
+**Por que Cloudinary?**  
+→ Render deleta arquivos no redeploy. Sem Cloudinary = **fotos dos clientes somem**.
 
 6. Clique em **Save Changes** (Render vai começar o deploy automaticamente)
 
@@ -128,41 +151,42 @@ npx prisma db seed
 ### Email/WhatsApp de Entrega
 
 ```
-Olá [Nome do Cliente],
+Olá [Nome do Cliente]! 😊
 
-Seu site já está no ar! 🎉
+Seu site está no ar! 🎉
 
-🌐 Site público:
-https://restaurante-[nome].onrender.com
+🌐 Veja aqui: https://restaurante-[nome].onrender.com
 
-🔐 Painel Administrativo:
-https://restaurante-[nome].onrender.com/admin
+---
 
-📧 Credenciais de acesso:
-Email: [email que você definiu no seed]
-Senha: [senha que você definiu no seed]
+🔐 ACESSO AO PAINEL ADMIN:
 
-⚠️ IMPORTANTE - Primeira coisa a fazer:
-1. Faça login no painel admin
-2. Clique no botão "🔑 Alterar Senha" (barra lateral)
-3. Troque para uma senha pessoal e segura
-   • Mínimo 8 caracteres
-   • Pelo menos 1 letra maiúscula, 1 minúscula e 1 número
-   • Exemplo: MinhaSenh@2026
+Link: https://restaurante-[nome].onrender.com/admin
+Email: [email que você definiu]
+Senha: [senha temporária]
 
-📋 O que você pode fazer no painel:
-✅ Adicionar, editar e remover pratos do cardápio
-✅ Organizar categorias (Entradas, Pratos Principais, Sobremesas, Bebidas)
-✅ Subir fotos dos pratos (JPG/PNG, até 2MB cada)
-✅ Gerenciar galeria de fotos
-✅ Alterar nome, endereço, telefone e WhatsApp do restaurante
-✅ Trocar sua senha de acesso
+⚠️ PRIMEIRO ACESSO:
+Assim que entrar, clique em "🔑 Alterar Senha" (no menu lateral) e troque para uma senha só sua.
 
-📞 Suporte:
-Se precisar de ajuda, pode me chamar a qualquer momento.
-Preparei um vídeo/tutorial de 10 minutos mostrando como usar o painel.
+---
 
-Vamos agendar uma call de 15 minutos para eu te mostrar tudo?
+✅ O QUE VOCÊ PODE FAZER:
+
+• Adicionar/remover pratos e preços
+• Subir fotos dos pratos (até 2MB cada)
+• Mudar telefone e WhatsApp
+• Editar endereço e horários
+• Ativar/desativar categorias
+
+Tudo pelo painel, sem precisar de programador!
+
+---
+
+📞 PRECISA DE AJUDA?
+
+Estou disponível por aqui mesmo. Preparei um vídeo rápido de 10 minutos mostrando como usar tudo.
+
+Quer agendar 15 minutos comigo para eu te mostrar ao vivo?
 
 Abraço,
 [Seu Nome]
@@ -203,6 +227,8 @@ Abraço,
 |-----|------------|
 | `APP_URL` | `https://www.restaurantedocliente.com.br` |
 | `CORS_ORIGINS` | `https://www.restaurantedocliente.com.br` |
+
+**Não mexa nas variáveis do Cloudinary** (CLOUD_NAME, API_KEY, API_SECRET, FOLDER_PREFIX) — elas não mudam com domínio customizado.
 
 Render vai redeploy automaticamente (~3 min).
 
@@ -374,21 +400,36 @@ Render vai redeploy automaticamente (~3 min).
 
 ## 4 — Preços Sugeridos
 
+### ⚠️ Antes de Vender — Checklist Obrigatório
+
+Antes de fechar qualquer venda, garanta que completou a **Fase 0** do [UPDATE.md](UPDATE.md):
+
+- [ ] Removeu todos os `console.log` de debug (csrf.ts, app.ts, upload.ts)
+- [ ] Removeu campo `debug` da resposta 403 do CSRF
+- [ ] Integrou Cloudinary para uploads (imagens somem sem isso!)
+- [ ] Testou deploy completo com Cloudinary funcionando
+
 ### Pacotes
 
-| Pacote | O que Inclui | Preço Sugerido |
-|--------|--------------|----------------|
-| **Básico** | Setup inicial + Render Free + Neon Free + Suporte 30 dias | **R$ 300-500** |
-| **Profissional** | Setup + Render Starter ($7/mês) + Domínio customizado + Suporte 90 dias | **R$ 600-900** |
-| **Premium** | Setup + Render Starter + Domínio + Customização de cores/logo + Suporte 180 dias | **R$ 1200-1800** |
+| Pacote | O que o Cliente Recebe | Preço Sugerido | Seu Custo | Sua Margem |
+|--------|------------------------|----------------|-----------|------------|
+| **🥉 Básico** | • Site completo no ar<br>• Painel admin para editar tudo<br>• Upload ilimitado de fotos<br>• Suporte por 30 dias<br>• Tutorial em vídeo | **R$ 500** | ~R$42/mês | **~R$458** |
+| **🥈 Profissional** | • Tudo do Básico<br>• Seu domínio próprio (.com.br)<br>• Cores personalizadas<br>• Logo do restaurante<br>• Suporte por 90 dias | **R$ 800** | ~R$42/mês | **~R$758** |
+| **🥇 Premium** | • Tudo do Profissional<br>• QR Code para mesas<br>• Otimização para Google (SEO)<br>• Treinamento 1h ao vivo<br>• Suporte por 6 meses<br>• Prioridade em atualizações | **R$ 1.400** | ~R$42/mês | **~R$1.358** |
 
-### Mensalidade (Opcional)
+**💡 Dica de venda:** Recomende o **Profissional** (melhor custo-benefício). Cliente com domínio próprio parece mais sério.
 
-| Serviço | Preço Sugerido |
-|---------|----------------|
-| **Manutenção Básica** | R$ 50-80/mês (só manter online) |
-| **Manutenção + Atualizações** | R$ 100-150/mês (updates de pratos, fotos, etc.) |
-| **Manutenção + Suporte Prioritário** | R$ 200-300/mês (responde em até 24h) |
+**\*Custo:** Render Starter $7/mês (~R$42). Cloudinary é **grátis e compartilhado** entre todos os clientes (1 conta = até 15 sites).
+
+### Mensalidade (Recomendado)
+
+| Plano | O que Inclui | Preço Sugerido |
+|-------|--------------|----------------|
+| **Manutenção Simples** | Site no ar 24/7 + backup semanal | **R$ 50-80/mês** |
+| **Manutenção + Updates** | Tudo acima + você atualiza fotos/pratos pelo cliente | **R$ 100-150/mês** |
+| **Suporte VIP** | Tudo acima + resposta em até 24h | **R$ 200-300/mês** |
+
+**💰 Renda recorrente:** Com 10 clientes pagando R$ 100/mês = **R$ 1.000/mês fixo**. Seu custo: ~R$ 420/mês (Render).
 
 ### Extras (One-time)
 
@@ -447,10 +488,21 @@ Render vai redeploy automaticamente (~3 min).
 **R:** **Ilimitados!** Cada cliente é uma instância separada (Render + Neon). Você só paga:
 - **Render:** $7/mês por cliente (ou Free se for teste)
 - **Neon:** $0 (Free até 0.5GB) ou $19/mês (Pro, raramente necessário)
+- **Cloudinary:** $0 até ~10-15 sites (plano Free com 25GB/mês)
 
 **Exemplo:** 10 clientes pagando R$ 100/mês cada = R$ 1000/mês  
-**Custo:** 10 × $7 = $70/mês (~R$ 350) + seu tempo  
+**Custo:** 10 × $7 = $70/mês (~R$ 350) + Cloudinary $0 + seu tempo  
 **Lucro líquido:** ~R$ 650/mês
+
+**Como Cloudinary organiza 10+ sites em 1 conta?**  
+Cada site tem seu `CLOUDINARY_FOLDER_PREFIX` único:
+```
+cloudinary.com/sua-conta/
+├── restaurante-joao/dishes/
+├── pizzaria-maria/dishes/
+└── bar-ze/dishes/
+```
+Mesmas credenciais (CLOUD_NAME, API_KEY, SECRET) em todos os sites.
 
 ---
 
@@ -496,13 +548,21 @@ Antes de marcar como "entregue", verifique:
 - [ ] Admin funciona (https://restaurante-xyz.onrender.com/admin)
 - [ ] Login com email/senha do seed funciona
 - [ ] Cliente consegue adicionar prato novo
-- [ ] Upload de imagem funciona
+- [ ] **Upload de imagem funciona E retorna URL do Cloudinary** (https://res.cloudinary.com/...)
+- [ ] **Imagem aparece no site público** (teste abrir a URL da foto)
+- [ ] **CLOUDINARY_FOLDER_PREFIX configurado** (fotos vão para pasta do cliente)
 - [ ] Troca de senha funciona
 - [ ] Dados do seed foram substituídos (nome, telefone, WhatsApp)
 - [ ] Domínio customizado configurado (se tiver)
 - [ ] Email de entrega enviado ao cliente
 - [ ] Tutorial/vídeo enviado (se prometeu)
 - [ ] Call de 15 min agendada para treinamento
+
+**Teste crítico de Cloudinary:**
+1. Faça upload de 1 foto pelo admin
+2. Verifique que a URL começa com `https://res.cloudinary.com/seu-cloud-name/`
+3. Abra a URL da foto diretamente no navegador (deve aparecer)
+4. **Se não funcionar:** verifique as 4 variáveis CLOUDINARY no Render
 
 ---
 
@@ -515,3 +575,69 @@ Antes de marcar como "entregue", verifique:
 5. **Cobre mensalidade** para garantir renda recorrente
 
 **Boa sorte nas vendas! 🚀**
+
+---
+
+## 6 — Riscos e Limitações Conhecidas
+
+> ⚠️ Leia antes de vender. Saiba o que pode dar errado e como resolver.
+
+### Riscos Técnicos
+
+| Risco | Probabilidade | O que acontece | Como resolver |
+|---|---|---|---|
+| **Imagens somem no redeploy** | 🔴 100% (sem Cloudinary) | Cliente perde todas as fotos do cardápio/galeria | Integrar Cloudinary (Fase 0 — **obrigatório**) |
+| **Render Free dorme** | 🔴 ALTA | Site leva 30s para abrir | Usar Render Starter ($7/mês) para clientes reais |
+| **Neon Free cai** | 🟢 BAIXA | Raro, mas possível | Backup pg_dump mensal |
+| **Dependências desatualizadas** | 🟡 MÉDIA a longo prazo | Vulnerabilidades futuras | `npm audit` + update a cada 3-6 meses |
+
+### Riscos Comerciais
+
+| Risco | O que acontece | Como resolver |
+|---|---|---|
+| **Cliente quer Pix** | 80% do BR paga com Pix — seu sistema não aceita nativamente | Pedido via WhatsApp contorna ("me manda o Pix"). Integração Pix na Fase 3. |
+| **Cliente quer app** | "Quero baixar no celular" | PWA resolve parcialmente (Fase 3). Fale "funciona como app" |
+| **Cliente para de pagar** | Você paga a infra e ele usa de graça | Cobre mensalidade obrigatória. Sem pagamento = derrubar no Render |
+| **Cliente quer mudar cores sozinho** | Precisa de você hoje | Seletor de tema no admin (Fase 3) resolve |
+
+### O que NÃO prometer ao cliente
+
+- ❌ "Seu site aparece em primeiro no Google" (SEO leva meses)
+- ❌ "Aceita pagamento online" (sem Pix nativo ainda)
+- ❌ "O site nunca sai do ar" (Render Free dorme; Starter tem 99.9% uptime)
+- ❌ "Você pode mudar tudo sozinho" (cores/layout precisam de dev)
+
+### O que PODE prometer
+
+- ✅ "Você edita cardápio, preços, fotos e WhatsApp sozinho pelo painel"
+- ✅ "O site é profissional e funciona no celular"
+- ✅ "Suporte técnico incluso por X dias"
+- ✅ "Domínio próprio configurado" (se incluir no pacote)
+
+---
+
+## 7 — Roadmap de Melhorias
+
+> Veja o plano completo com detalhes técnicos em [UPDATE.md](UPDATE.md)
+
+### Resumo das Fases
+
+| Fase | Quando | O que | Impacto em Vendas |
+|---|---|---|---|
+| **0 — Correções** | **AGORA** (antes da 1ª venda) | Debug logs, Cloudinary, CSRF fix | Obrigatório — sem isso não vende |
+| **1 — UX Rápido** | Semana 1-2 | Máscara preço, placeholder WA, SEO, admin mobile | Site mais profissional |
+| **2 — Valor** | Semana 3-6 | QR Code, preview config, contador visitas, maps | Justifica pacote Premium |
+| **3 — Diferencial** | Mês 2-3 | Seletor tema, PWA, avaliações, Pix, dashboard | Compete com iFood/cardápio digital |
+| **4 — Escala** | Mês 3+ | Multi-tenant, auto-provisioning, CI/CD, testes | Gerenciar 50+ clientes sem estresse |
+
+### O que fazer AGORA vs DEPOIS
+
+**AGORA (Fase 0 — 3 horas):**
+1. Remover debug logs
+2. Integrar Cloudinary
+3. Testar e commitar
+
+**Após 1ª venda (com dinheiro no bolso):**
+1. Admin responsivo (dono edita pelo celular)
+2. SEO (meta tags, sitemap)
+3. QR Code (vende mais pacotes Premium)

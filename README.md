@@ -4,6 +4,16 @@
 
 > ⚠️ **Este projeto é de uso interno** e não deve ser distribuído como template público sem adaptação contratual.
 
+### 📊 Status da Auditoria (11/02/2026)
+
+| Critério | Nota |
+|---|---|
+| Técnica | **7.5/10** |
+| Comercial | **7/10** |
+| Vendabilidade | **7/10** (sobe para 8.5 após Fase 0) |
+
+> Ver [UPDATE.md](UPDATE.md) para auditoria completa e plano de melhorias em 5 fases.
+
 ---
 
 ## 📌 Visão Geral
@@ -172,10 +182,11 @@ Este sistema implementa **hardening profissional** baseado em auditoria completa
 #### Autenticação
 - ✅ **Brute Force Protection:** 5 tentativas → bloqueio de 15 minutos por IP
 - ✅ **Timing Attack Prevention:** Bcrypt dummy hash quando usuário não existe
-- ✅ **Refresh Token Hashing:** SHA-256 no banco (não o token cru)
+- ⚠️ **Refresh Token:** Hash SHA-256 existe no banco mas busca ainda usa token plain-text (melhoria planejada — Fase 4)
 - ✅ **Limite de Sessões:** Máximo 5 sessões ativas por usuário
 - ✅ **JWT_SECRET Validation:** Servidor não inicia em produção com secret padrão
 - ✅ **Session Cleanup:** Limpeza automática de sessões expiradas (cron 1h)
+- ✅ **Token Version:** Invalidation imediata de todos os JWTs após troca de senha
 
 #### HTTP & Headers
 - ✅ **Helmet Hardened:** CSP, HSTS (1 ano + preload), frameAncestors, Permissions-Policy
@@ -192,9 +203,11 @@ Este sistema implementa **hardening profissional** baseado em auditoria completa
 #### Upload & Arquivos
 - ✅ **MIME Whitelist:** Set estrito (`image/jpeg`, `image/png`, `image/webp`, `image/gif`)
 - ✅ **Extension Whitelist:** Validação dupla (MIME + extensão)
+- ✅ **Magic Bytes Validation:** Verifica assinatura do arquivo (impede .exe renomeado para .jpg)
 - ✅ **Path Traversal Blocked:** Rejeita `..`, `\\`, caracteres null em `/uploads`
 - ✅ **Filename Sanitization:** UUID + extensão, sem caracteres especiais
 - ✅ **Tamanho Limitado:** 2MB por arquivo, 1 arquivo + 10 campos por request
+- ⚠️ **Storage:** Filesystem local (efemero no Render) — **migrar para Cloudinary antes de produção** (ver [UPDATE.md](UPDATE.md) Fase 0)
 
 #### Input Validation
 - ✅ **Zod Validation:** Todas as rotas de escrita validam tipos e tamanhos
@@ -511,6 +524,9 @@ Acesso local:
 | `STRIPE_SECRET_KEY`     | Chave Stripe (opcional)                  | `sk_live_...`                 |
 | `STRIPE_WEBHOOK_SECRET` | Secret do webhook Stripe (opcional)      | `whsec_...`                   |
 | `TEMPLATE_PRICE_CENTS`  | Preço em centavos (opcional, para venda) | `29700`                       |
+| `CLOUDINARY_CLOUD_NAME` | Cloud name do Cloudinary (**obrigatório**)| `meu-cloud`                   |
+| `CLOUDINARY_API_KEY`    | API key do Cloudinary (**obrigatório**)   | `123456789`                   |
+| `CLOUDINARY_API_SECRET` | API secret do Cloudinary (**obrigatório**)| `AbCdEf...`                   |
 
 ---
 
@@ -533,6 +549,17 @@ Para questões técnicas durante o setup de novo cliente:
 - **Sempre gerar** `JWT_SECRET` único por cliente
 - **Sempre trocar** credenciais admin padrão no primeiro acesso
 - **Sempre configurar** HTTPS antes de colocar no ar
+- **Sempre completar** a Fase 0 do [UPDATE.md](UPDATE.md) antes da primeira venda
+
+---
+
+## 📚 Documentação Complementar
+
+| Documento | Descrição |
+|---|---|
+| [UPDATE.md](UPDATE.md) | Auditoria completa (técnica + comercial) + plano de melhorias em 5 fases |
+| [GUIA_VENDAS_E_CUSTOMIZACAO.md](GUIA_VENDAS_E_CUSTOMIZACAO.md) | Como vender, preços, customização, FAQ de vendas, riscos |
+| [GUIA_COMPLETO_DEPLOY.md](GUIA_COMPLETO_DEPLOY.md) | Deploy passo a passo: local → produção → cliente |
 
 ---
 

@@ -1,14 +1,18 @@
 // ============================================
-// Seed — Restaurante exemplo completo
+// Seed Router — escolhe seed por SEED_TYPE
+// Tipos: restaurante (default) | hamburgueria | pizzaria
+// Uso: SEED_TYPE=hamburgueria npx prisma db seed
 // ============================================
 
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { seedHamburgueria } from './seed-hamburgueria';
+import { seedPizzaria } from './seed-pizzaria';
 
 const prisma = new PrismaClient();
 
-async function main() {
-    console.log('🌱 Seeding database...\n');
+async function seedRestaurante() {
+    console.log('🍽  Seeding database — RESTAURANTE...\n');
 
     // --- Admin user ---
     const adminEmail = process.env.SEED_ADMIN_EMAIL || 'admin@restaurante.com';
@@ -197,11 +201,31 @@ async function main() {
 
     const displayPassword = process.env.SEED_ADMIN_PASSWORD ? '***' : 'admin123';
 
-    console.log('\n🎉 Seed concluído com sucesso!');
+    console.log('\n�  Seed RESTAURANTE concluído!');
     console.log('\n📋 Credenciais Admin:');
     console.log(`   Email: ${adminEmail}`);
     console.log(`   Senha: ${displayPassword}`);
     console.log('   ⚠️  Altere em produção!\n');
+}
+
+// ── Router: escolhe qual seed rodar ──
+async function main() {
+    const seedType = (process.env.SEED_TYPE || 'restaurante').toLowerCase().trim();
+
+    console.log(`🌱 SEED_TYPE = "${seedType}"\n`);
+
+    switch (seedType) {
+        case 'hamburgueria':
+            await seedHamburgueria();
+            break;
+        case 'pizzaria':
+            await seedPizzaria();
+            break;
+        case 'restaurante':
+        default:
+            await seedRestaurante();
+            break;
+    }
 }
 
 main()

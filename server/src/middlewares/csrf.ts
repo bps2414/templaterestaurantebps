@@ -43,25 +43,10 @@ export function csrfVerifyToken(req: Request, res: Response, next: NextFunction)
     const tokenFromCookie = req.cookies[CSRF_COOKIE_NAME];
     const tokenFromHeader = req.headers[CSRF_HEADER_NAME] as string;
 
-    // Debug log in production (temporary - remove after fixing)
-    console.log('🔒 CSRF validation:', {
-        method: req.method,
-        path: req.path,
-        hasCookie: !!tokenFromCookie,
-        hasHeader: !!tokenFromHeader,
-        cookieValue: tokenFromCookie?.substring(0, 10) + '...',
-        headerValue: tokenFromHeader?.substring(0, 10) + '...',
-        allCookies: Object.keys(req.cookies),
-        allHeaders: Object.keys(req.headers).filter(h => h.toLowerCase().includes('csrf') || h.toLowerCase().includes('token')),
-        origin: req.headers.origin,
-        referer: req.headers.referer,
-    });
-    
     if (!tokenFromCookie || !tokenFromHeader) {
         return res.status(403).json({
             success: false,
-            error: 'CSRF token missing',
-            debug: { hasCookie: !!tokenFromCookie, hasHeader: !!tokenFromHeader }
+            error: 'CSRF token missing'
         });
     }
 

@@ -8,6 +8,7 @@ import { requireAuth, requireAdmin } from '../middlewares/auth';
 import { AuthenticatedRequest } from '../types';
 import { upload, validateImageMagicBytes, UPLOAD_DIR } from '../middlewares/upload';
 import { NotFoundError } from '../utils/errors';
+import cloudinaryService from '../services/cloudinaryService';
 import fs from 'fs';
 import path from 'path';
 
@@ -59,12 +60,14 @@ router.post('/', requireAuth, requireAdmin, upload.single('image'), async (req: 
             });
         }
 
-        const src = `/uploads/${req.file.filename}`;
+        // Upload to Cloudinary
+        const cloudinaryUrl = await cloudinaryService.upload(filePath, 'gallery');
+
         const alt = req.body.alt || '';
         const sortOrder = req.body.sortOrder ? parseInt(req.body.sortOrder, 10) : 0;
 
         const image = await prisma.galleryImage.create({
-            data: { src, alt, sortOrder },
+            data: { src: cloudinaryUrl, alt, sortOrder },
         });
 
         res.status(201).json({ success: true, data: image });
@@ -103,12 +106,9 @@ router.delete('/:id', requireAuth, requireAdmin, async (req: AuthenticatedReques
         const existing = await prisma.galleryImage.findUnique({ where: { id } });
         if (!existing) throw new NotFoundError('Imagem não encontrada');
 
-        // Remove file
-        if (existing.src) {
-            const filePath = path.join(__dirname, '../../assets', existing.src);
-            if (fs.existsSync(filePath)) {
-                fs.unlinkSync(filePath);
-            }
+        // Remove from Cloudinary if it's a Cloudinary URL
+        if (existing.src && existing.src.includes('cloudinary.com')) {
+            await cloudinaryService.delete(existing.src);
         }
 
         await prisma.galleryImage.delete({ where: { id } });

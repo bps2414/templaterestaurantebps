@@ -6,6 +6,7 @@ import { Router, Response, NextFunction } from 'express';
 import { requireAuth, requireAdmin } from '../middlewares/auth';
 import { AuthenticatedRequest } from '../types';
 import { upload, validateImageMagicBytes, UPLOAD_DIR } from '../middlewares/upload';
+import cloudinaryService from '../services/cloudinaryService';
 import fs from 'fs';
 import path from 'path';
 
@@ -21,12 +22,9 @@ router.post('/', requireAuth, requireAdmin, upload.single('image'), async (req: 
         const filePath = path.join(UPLOAD_DIR, req.file.filename);
 
         // SECURITY: Validate file content by checking magic bytes
-        console.log('🔍 Validating file:', req.file.filename);
         const isValidImage = validateImageMagicBytes(filePath);
-        console.log('✅ Validation result:', isValidImage);
 
         if (!isValidImage) {
-            console.log('❌ BLOCKED: Invalid file signature detected!');
             // Delete the uploaded file
             try {
                 fs.unlinkSync(filePath);
@@ -40,13 +38,20 @@ router.post('/', requireAuth, requireAdmin, upload.single('image'), async (req: 
             });
         }
 
-        console.log('✅ ALLOWED: Valid image uploaded');
+        // Upload to Cloudinary
+        const cloudinaryUrl = await cloudinaryService.upload(filePath, 'uploads');
 
-        const url = `/uploads/${req.file.filename}`;
+        if (!cloudinaryUrl) {
+            return res.status(500).json({
+                success: false,
+                error: 'Erro ao fazer upload da imagem. Tente novamente.'
+            });
+        }
+
         res.status(201).json({
             success: true,
             data: {
-                url,
+                url: cloudinaryUrl,
                 filename: req.file.filename,
                 size: req.file.size,
                 mimetype: req.file.mimetype,
