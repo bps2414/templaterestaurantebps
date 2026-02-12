@@ -224,10 +224,12 @@
         }
     }
 
+
     function setText(id, text) {
         const el = document.getElementById(id);
         if (el && text) el.textContent = text;
     }
+    window.setText = setText;
 
     function setHref(id, url) {
         const el = document.getElementById(id);
