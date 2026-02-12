@@ -459,5 +459,8 @@
     window.addToCartFromHome = addToCartFromHome;
     window.api = api;
     window.formatPrice = formatPrice;
+    window.setText = setText;
+    window.setHTML = setHTML;
+    window.setHref = setHref;
 
 })(); // end IIFE
