@@ -21,6 +21,24 @@ function sanitizeValue(value: string): string {
         .trim();
 }
 
+// Validate WhatsApp number format (DDI + DDD + number, e.g. 5511999998888)
+function validateWhatsApp(value: string): { valid: boolean; cleaned: string; error?: string } {
+    const cleaned = value.replace(/\D/g, '');
+    if (cleaned.length === 0) {
+        return { valid: true, cleaned: '' }; // allow empty (optional)
+    }
+    if (cleaned.length < 12 || cleaned.length > 15) {
+        return { valid: false, cleaned, error: 'WhatsApp deve ter entre 12 e 15 dígitos (DDI + DDD + número). Ex: 5511999998888' };
+    }
+    if (!cleaned.startsWith('55')) {
+        // Accept international numbers too, but warn for BR
+        if (cleaned.length < 10) {
+            return { valid: false, cleaned, error: 'Número de WhatsApp muito curto. Use formato internacional: 5511999998888' };
+        }
+    }
+    return { valid: true, cleaned };
+}
+
 // Default config keys (whitelist)
 const ALLOWED_KEYS = [
     'restaurant_name',
@@ -69,6 +87,22 @@ router.put('/', requireAuth, requireAdmin, async (req: AuthenticatedRequest, res
             if (!ALLOWED_KEYS.includes(key)) {
                 throw new Error(`Chave "${key}" não é permitida`);
             }
+
+            // Validate WhatsApp number format
+            if (key === 'whatsapp_number') {
+                const whatsappResult = validateWhatsApp(value);
+                if (!whatsappResult.valid) {
+                    throw new Error(whatsappResult.error);
+                }
+                // Use cleaned (digits only) version
+                const sanitized = whatsappResult.cleaned;
+                return prisma.siteConfig.upsert({
+                    where: { key },
+                    update: { value: sanitized },
+                    create: { key, value: sanitized },
+                });
+            }
+
             const sanitized = sanitizeValue(value);
             return prisma.siteConfig.upsert({
                 where: { key },

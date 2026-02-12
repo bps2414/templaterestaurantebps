@@ -144,6 +144,14 @@
                     </button>
                 </nav>
                 <div class="absolute bottom-0 w-full p-4 border-t border-white/5">
+                    <button onclick="previewSite()"
+                        class="w-full text-left px-4 py-3 rounded-lg text-sm text-brand-400 hover:bg-brand-500/10 transition font-medium">
+                        👀 Visualizar Site
+                    </button>
+                    <button onclick="showOnboarding()"
+                        class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:text-brand-400 transition">
+                        🚀 Primeiros Passos
+                    </button>
                     <button onclick="openPasswordModal()"
                         class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:text-brand-400 transition">
                         🔑 Alterar Senha
@@ -230,10 +238,16 @@
                 <div id="tab-config" class="tab-content hidden">
                     <div class="flex items-center justify-between mb-8">
                         <h1 class="text-2xl font-bold text-white">Configurações do Site</h1>
-                        <button onclick="saveConfig()"
-                            class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition">
-                            💾 Salvar Tudo
-                        </button>
+                        <div class="flex gap-3">
+                            <button onclick="previewSite()"
+                                class="bg-dark-700 hover:bg-dark-900 text-brand-400 px-5 py-2.5 rounded-xl text-sm font-medium transition border border-brand-500/20">
+                                👀 Visualizar Site
+                            </button>
+                            <button onclick="saveConfig()"
+                                class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition">
+                                💾 Salvar Tudo
+                            </button>
+                        </div>
                     </div>
                     <div class="space-y-6" id="config-form">
                         <div class="text-center py-12 text-gray-500">Carregando...</div>
@@ -393,6 +407,67 @@
     <!-- TOAST -->
     <div id="toast" class="toast"></div>
 
+    <!-- ========== FIRST STEPS ONBOARDING MODAL ========== -->
+    <div class="modal-overlay" id="onboarding-modal">
+        <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-lg border border-white/5 max-h-[90vh] overflow-y-auto">
+            <div class="text-center mb-6">
+                <span class="text-5xl">🚀</span>
+                <h2 class="text-2xl font-bold text-white mt-4">Primeiros Passos</h2>
+                <p class="text-gray-400 mt-2">Configure seu restaurante em 5 minutos!</p>
+            </div>
+            <div class="space-y-3" id="onboarding-checklist">
+                <div class="onboarding-step bg-dark-700/50 rounded-xl p-4 border border-white/5 flex items-start gap-4 cursor-pointer hover:bg-dark-700 transition" data-step="config" onclick="goToStep('config')">
+                    <span class="text-2xl mt-0.5" id="step-icon-config">⚙️</span>
+                    <div class="flex-1">
+                        <h3 class="text-white font-semibold text-sm">Configurar dados do restaurante</h3>
+                        <p class="text-gray-500 text-xs mt-1">Nome, endereço, telefone, WhatsApp, horários</p>
+                    </div>
+                    <span class="step-check text-gray-600" id="step-check-config">○</span>
+                </div>
+                <div class="onboarding-step bg-dark-700/50 rounded-xl p-4 border border-white/5 flex items-start gap-4 cursor-pointer hover:bg-dark-700 transition" data-step="categories" onclick="goToStep('categories')">
+                    <span class="text-2xl mt-0.5" id="step-icon-categories">📂</span>
+                    <div class="flex-1">
+                        <h3 class="text-white font-semibold text-sm">Criar categorias do cardápio</h3>
+                        <p class="text-gray-500 text-xs mt-1">Ex: Entradas, Pratos Principais, Sobremesas, Bebidas</p>
+                    </div>
+                    <span class="step-check text-gray-600" id="step-check-categories">○</span>
+                </div>
+                <div class="onboarding-step bg-dark-700/50 rounded-xl p-4 border border-white/5 flex items-start gap-4 cursor-pointer hover:bg-dark-700 transition" data-step="dishes" onclick="goToStep('dishes')">
+                    <span class="text-2xl mt-0.5" id="step-icon-dishes">🍝</span>
+                    <div class="flex-1">
+                        <h3 class="text-white font-semibold text-sm">Adicionar pratos ao cardápio</h3>
+                        <p class="text-gray-500 text-xs mt-1">Nome, descrição, preço e foto de cada prato</p>
+                    </div>
+                    <span class="step-check text-gray-600" id="step-check-dishes">○</span>
+                </div>
+                <div class="onboarding-step bg-dark-700/50 rounded-xl p-4 border border-white/5 flex items-start gap-4 cursor-pointer hover:bg-dark-700 transition" data-step="gallery" onclick="goToStep('gallery')">
+                    <span class="text-2xl mt-0.5" id="step-icon-gallery">📸</span>
+                    <div class="flex-1">
+                        <h3 class="text-white font-semibold text-sm">Enviar fotos para a galeria</h3>
+                        <p class="text-gray-500 text-xs mt-1">Fotos do ambiente, pratos e equipe</p>
+                    </div>
+                    <span class="step-check text-gray-600" id="step-check-gallery">○</span>
+                </div>
+                <div class="onboarding-step bg-dark-700/50 rounded-xl p-4 border border-white/5 flex items-start gap-4 cursor-pointer hover:bg-dark-700 transition" data-step="preview" onclick="previewSite()">
+                    <span class="text-2xl mt-0.5" id="step-icon-preview">👀</span>
+                    <div class="flex-1">
+                        <h3 class="text-white font-semibold text-sm">Visualizar o site</h3>
+                        <p class="text-gray-500 text-xs mt-1">Abra o site em nova aba e veja como ficou!</p>
+                    </div>
+                    <span class="step-check text-gray-600" id="step-check-preview">○</span>
+                </div>
+            </div>
+            <div class="flex gap-3 pt-6">
+                <button onclick="closeOnboarding()" class="flex-1 bg-brand-500 hover:bg-brand-600 text-white py-3 rounded-xl font-medium transition">
+                    Entendi, vamos lá! 💪
+                </button>
+                <button onclick="dismissOnboardingForever()" class="text-gray-500 hover:text-gray-300 text-sm px-4 transition">
+                    Não mostrar novamente
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const API = window.location.origin;
         let token = localStorage.getItem('admin_token');
@@ -408,8 +483,7 @@
             try {
                 const res = await fetch(`${API}/api/csrf-token`, { credentials: 'include' });
                 const data = await res.json();
-                csrfToken = data.token; // ← Corrigido: o servidor retorna 'token', não 'csrfToken'
-                console.log('✅ CSRF Token obtido:', csrfToken);
+                csrfToken = data.token;
             } catch (error) {
                 console.error('❌ Erro ao obter CSRF token:', error);
             }
@@ -443,6 +517,13 @@
             document.getElementById('admin-dashboard').classList.remove('hidden');
             loadDishes();
             loadCategories();
+
+            // Show onboarding for new admins
+            setTimeout(() => {
+                if (shouldShowOnboarding()) {
+                    showOnboarding();
+                }
+            }, 1000);
         }
 
         // Login form
@@ -454,11 +535,8 @@
 
             // Ensure we have CSRF token
             if (!csrfToken) {
-                console.log('⚠️ CSRF token não carregado, buscando...');
                 await fetchCsrfToken();
             }
-
-            console.log('📤 Enviando login com CSRF:', csrfToken);
 
             const headers = { 'Content-Type': 'application/json' };
             if (csrfToken) headers['X-CSRF-Token'] = csrfToken;
@@ -612,6 +690,7 @@
                 toast(id ? 'Prato atualizado!' : 'Prato criado!');
                 closeModal('dish-modal');
                 loadDishes();
+                markStepDone('dishes');
             } else {
                 toast(res.error || 'Erro ao salvar', 'error');
             }
@@ -681,6 +760,7 @@
                 toast(id ? 'Categoria atualizada!' : 'Categoria criada!');
                 closeModal('category-modal');
                 loadCategories();
+                markStepDone('categories');
             } else {
                 toast(res.error || 'Erro ao salvar', 'error');
             }
@@ -739,6 +819,7 @@
                 closeModal('gallery-modal');
                 document.getElementById('gallery-form').reset();
                 loadGalleryAdmin();
+                markStepDone('gallery');
             } else {
                 toast(res.error || 'Erro ao enviar', 'error');
             }
@@ -799,9 +880,27 @@
 
         async function saveConfig() {
             const data = {};
+            let hasError = false;
             document.querySelectorAll('#config-form [data-key]').forEach(el => {
                 data[el.dataset.key] = el.value;
+                // Remove previous error styling
+                el.classList.remove('border-red-500');
             });
+
+            // Validate WhatsApp number before sending
+            if (data.whatsapp_number) {
+                const cleaned = data.whatsapp_number.replace(/\D/g, '');
+                if (cleaned.length > 0 && (cleaned.length < 12 || cleaned.length > 15)) {
+                    const whatsappInput = document.querySelector('[data-key="whatsapp_number"]');
+                    if (whatsappInput) {
+                        whatsappInput.classList.add('border-red-500');
+                        whatsappInput.focus();
+                    }
+                    toast('WhatsApp inválido! Use formato: 5511999998888 (DDI + DDD + número)', 'error');
+                    return;
+                }
+                data.whatsapp_number = cleaned;
+            }
 
             const res = await apiAuth('/config', {
                 method: 'PUT',
@@ -810,6 +909,7 @@
 
             if (res.success) {
                 toast('Configurações salvas!');
+                markStepDone('config');
             } else {
                 toast(res.error || 'Erro ao salvar', 'error');
             }
@@ -871,6 +971,106 @@
                 errEl.classList.remove('hidden');
             }
         });
+
+        // --- Preview Site ---
+        function previewSite() {
+            window.open('/', '_blank');
+            markStepDone('preview');
+        }
+
+        // --- Onboarding (First Steps) ---
+        function showOnboarding() {
+            updateOnboardingChecks();
+            openModal('onboarding-modal');
+        }
+
+        function closeOnboarding() {
+            closeModal('onboarding-modal');
+        }
+
+        function dismissOnboardingForever() {
+            localStorage.setItem('onboarding_dismissed', 'true');
+            closeModal('onboarding-modal');
+        }
+
+        function goToStep(step) {
+            closeModal('onboarding-modal');
+            if (step === 'preview') {
+                previewSite();
+                return;
+            }
+            switchTab(step);
+        }
+
+        function markStepDone(step) {
+            const completed = JSON.parse(localStorage.getItem('onboarding_completed') || '[]');
+            if (!completed.includes(step)) {
+                completed.push(step);
+                localStorage.setItem('onboarding_completed', JSON.stringify(completed));
+            }
+            updateOnboardingChecks();
+        }
+
+        async function updateOnboardingChecks() {
+            const completed = JSON.parse(localStorage.getItem('onboarding_completed') || '[]');
+
+            // Auto-detect completed steps from existing data
+            try {
+                // Check if config has data
+                const configRes = await fetch(`${API}/api/config`);
+                const configJson = await configRes.json();
+                if (configJson.success && configJson.data) {
+                    if (configJson.data.restaurant_name && configJson.data.whatsapp_number) {
+                        if (!completed.includes('config')) completed.push('config');
+                    }
+                }
+
+                // Check if categories exist
+                if (categories.length > 0) {
+                    if (!completed.includes('categories')) completed.push('categories');
+                }
+
+                // Check dishes via the table
+                const dishesTable = document.getElementById('dishes-table');
+                if (dishesTable && dishesTable.children.length > 0 && !dishesTable.innerHTML.includes('Nenhum prato') && !dishesTable.innerHTML.includes('Carregando')) {
+                    if (!completed.includes('dishes')) completed.push('dishes');
+                }
+
+                // Check gallery
+                const galleryGrid = document.getElementById('gallery-admin-grid');
+                if (galleryGrid && !galleryGrid.innerHTML.includes('Nenhuma imagem') && !galleryGrid.innerHTML.includes('Carregando')) {
+                    if (!completed.includes('gallery')) completed.push('gallery');
+                }
+
+                localStorage.setItem('onboarding_completed', JSON.stringify(completed));
+            } catch (e) {
+                // Ignore errors in auto-detection
+            }
+
+            // Update UI
+            const steps = ['config', 'categories', 'dishes', 'gallery', 'preview'];
+            steps.forEach(step => {
+                const check = document.getElementById(`step-check-${step}`);
+                if (check) {
+                    if (completed.includes(step)) {
+                        check.textContent = '✅';
+                        check.classList.remove('text-gray-600');
+                        check.classList.add('text-green-400');
+                    } else {
+                        check.textContent = '○';
+                        check.classList.remove('text-green-400');
+                        check.classList.add('text-gray-600');
+                    }
+                }
+            });
+        }
+
+        function shouldShowOnboarding() {
+            if (localStorage.getItem('onboarding_dismissed') === 'true') return false;
+            const completed = JSON.parse(localStorage.getItem('onboarding_completed') || '[]');
+            // Show if not all steps are completed
+            return completed.length < 5;
+        }
 
         // --- Init ---
         // Fetch CSRF token on page load
