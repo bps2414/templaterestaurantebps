@@ -193,8 +193,8 @@
         setText('footer-email', c.restaurant_email);
 
         // Hero
-        setText('hero-title', c.hero_title);
-        setText('hero-subtitle', c.hero_subtitle);
+        setHTML('hero-title', c.hero_title);
+        setHTML('hero-subtitle', c.hero_subtitle);
 
         // About
         setText('about-title', c.about_title);
@@ -227,6 +227,13 @@
     function setText(id, text) {
         const el = document.getElementById(id);
         if (el && text) el.textContent = text;
+    }
+
+    function setHTML(id, html) {
+        const el = document.getElementById(id);
+        if (el && html) el.innerHTML = html;
+        // Fallback: if html is empty but original had content, we might want to keep it? 
+        // No, config should override.
     }
 
     function setHref(id, url) {
