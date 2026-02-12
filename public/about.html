@@ -118,68 +118,25 @@
                 <div>
                     <h2 class="font-display text-3xl font-bold text-white mb-6">Uma Paixão por Sabores</h2>
                     <p class="text-gray-400 text-lg leading-relaxed mb-6" id="about-text">
-                        Fundado em 2010, o Sabor & Arte nasceu da paixão por unir ingredientes da mais alta qualidade
-                        com técnicas culinárias contemporâneas.
+                        Carregando...
                     </p>
-                    <p class="text-gray-400 text-lg leading-relaxed">
-                        Nosso chef executivo, com passagens por restaurantes estrelados na Europa, traz para cada prato
-                        uma combinação única de tradição e inovação.
+                    <p class="text-gray-400 text-lg leading-relaxed" id="about-text-2">
                     </p>
                 </div>
             </div>
 
-            <!-- Values -->
-            <div class="grid md:grid-cols-3 gap-8 mb-20">
-                <div class="reveal bg-dark-800/60 rounded-2xl p-8 border border-white/5 text-center">
-                    <div class="text-4xl mb-4">🌿</div>
-                    <h3 class="font-display text-xl font-bold text-white mb-3">Ingredientes Frescos</h3>
-                    <p class="text-gray-400">Selecionamos diariamente os melhores ingredientes de produtores locais e
-                        orgânicos.</p>
-                </div>
-                <div class="reveal bg-dark-800/60 rounded-2xl p-8 border border-white/5 text-center">
-                    <div class="text-4xl mb-4">👨‍🍳</div>
-                    <h3 class="font-display text-xl font-bold text-white mb-3">Chef Premiado</h3>
-                    <p class="text-gray-400">Nossa equipe de cozinha é liderada por chefs com experiência internacional
-                        e estrelas Michelin.</p>
-                </div>
-                <div class="reveal bg-dark-800/60 rounded-2xl p-8 border border-white/5 text-center">
-                    <div class="text-4xl mb-4">❤️</div>
-                    <h3 class="font-display text-xl font-bold text-white mb-3">Feito com Amor</h3>
-                    <p class="text-gray-400">Cada prato é uma obra de arte, preparada com dedicação e carinho para
-                        nossos convidados.</p>
-                </div>
+            <!-- Values (dynamic) -->
+            <div class="grid md:grid-cols-3 gap-8 mb-20" id="about-features">
+                <div class="text-center py-12 col-span-3 text-gray-500">Carregando...</div>
             </div>
 
-            <!-- Team -->
+            <!-- Team (dynamic) -->
             <div class="text-center mb-12 reveal">
                 <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Equipe</p>
                 <h2 class="font-display text-3xl md:text-4xl font-bold text-white">Nosso Time</h2>
             </div>
-            <div class="grid md:grid-cols-3 gap-8 reveal">
-                <div class="text-center">
-                    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-4 border-2 border-brand-500/30">
-                        <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=400&q=80" alt="Chef"
-                            class="w-full h-full object-cover">
-                    </div>
-                    <h3 class="font-display text-lg font-bold text-white">Marco Oliveira</h3>
-                    <p class="text-brand-400 text-sm">Chef Executivo</p>
-                </div>
-                <div class="text-center">
-                    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-4 border-2 border-brand-500/30">
-                        <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&q=80"
-                            alt="Sommelier" class="w-full h-full object-cover">
-                    </div>
-                    <h3 class="font-display text-lg font-bold text-white">Ana Costa</h3>
-                    <p class="text-brand-400 text-sm">Sommelier</p>
-                </div>
-                <div class="text-center">
-                    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-4 border-2 border-brand-500/30">
-                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80" alt="Gerente"
-                            class="w-full h-full object-cover">
-                    </div>
-                    <h3 class="font-display text-lg font-bold text-white">Ricardo Santos</h3>
-                    <p class="text-brand-400 text-sm">Gerente Geral</p>
-                </div>
+            <div class="grid md:grid-cols-3 gap-8 reveal" id="team-members">
+                <div class="text-center py-12 col-span-3 text-gray-500">Carregando...</div>
             </div>
         </div>
     </section>
@@ -204,6 +161,73 @@
     <script src="/js/whatsappFormatter.js"></script>
     <script src="/js/orderModal.js"></script>
     <script src="/js/cartUI.js"></script>
+    <script>
+        function escapeHTMLAbout(value) {
+            const div = document.createElement('div');
+            div.textContent = value ?? '';
+            return div.innerHTML;
+        }
+        function escapeAttrAbout(value) {
+            return escapeHTMLAbout(value).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
+        // Called by app.js applyConfig() for page-specific config
+        function applyPageConfig(c) {
+            // about_text_2 from main config
+            setText('about-text-2', c.about_text_2 || '');
+        }
+
+        async function loadAboutContent() {
+            try {
+                const res = await fetch(`${window.location.origin}/api/about-content`);
+                const json = await res.json();
+                if (!json.success) return;
+                const data = json.data;
+
+                // Render features
+                const featuresContainer = document.getElementById('about-features');
+                if (featuresContainer && data.about_features && data.about_features.length > 0) {
+                    featuresContainer.innerHTML = data.about_features.map(f => `
+                        <div class="reveal bg-dark-800/60 rounded-2xl p-8 border border-white/5 text-center">
+                            <div class="text-4xl mb-4">${escapeHTMLAbout(f.icon)}</div>
+                            <h3 class="font-display text-xl font-bold text-white mb-3">${escapeHTMLAbout(f.title)}</h3>
+                            <p class="text-gray-400">${escapeHTMLAbout(f.description)}</p>
+                        </div>
+                    `).join('');
+                } else if (featuresContainer) {
+                    featuresContainer.innerHTML = '';
+                }
+
+                // Render team members
+                const teamContainer = document.getElementById('team-members');
+                if (teamContainer && data.team_members && data.team_members.length > 0) {
+                    const defaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Crect fill='%231a1a2e' width='160' height='160'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='48' fill='%23444'%3E%F0%9F%91%A4%3C/text%3E%3C/svg%3E";
+                    teamContainer.innerHTML = data.team_members.map(m => `
+                        <div class="text-center">
+                            <div class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-4 border-2 border-brand-500/30">
+                                <img src="${escapeAttrAbout(m.image || defaultAvatar)}" alt="${escapeAttrAbout(m.name)}"
+                                    class="w-full h-full object-cover"
+                                    onerror="this.src='${defaultAvatar}'">
+                            </div>
+                            <h3 class="font-display text-lg font-bold text-white">${escapeHTMLAbout(m.name)}</h3>
+                            <p class="text-brand-400 text-sm">${escapeHTMLAbout(m.role)}</p>
+                        </div>
+                    `).join('');
+                } else if (teamContainer) {
+                    teamContainer.innerHTML = '';
+                }
+
+                // Re-init scroll reveal for dynamically inserted elements
+                if (typeof initReveal === 'function') {
+                    setTimeout(initReveal, 100);
+                }
+            } catch (e) {
+                console.error('Error loading about content:', e);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadAboutContent);
+    </script>
 </body>
 
 </html>

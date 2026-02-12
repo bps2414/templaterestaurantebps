@@ -14,6 +14,7 @@ import categoryRoutes from './routes/categories';
 import dishRoutes from './routes/dishes';
 import galleryRoutes from './routes/gallery';
 import configRoutes from './routes/config';
+import aboutContentRoutes from './routes/aboutContent';
 import checkoutRoutes from './routes/checkout';
 import uploadRoutes from './routes/upload';
 
@@ -161,6 +162,7 @@ app.use('/api/categories', csrfVerifyToken, apiLimiter, categoryRoutes);
 app.use('/api/dishes', csrfVerifyToken, apiLimiter, dishRoutes);
 app.use('/api/gallery', csrfVerifyToken, apiLimiter, galleryRoutes);
 app.use('/api/config', apiLimiter, configRoutes); // No CSRF for public config
+app.use('/api/about-content', apiLimiter, aboutContentRoutes); // No CSRF for public GET, CSRF on PUT via middleware
 app.use('/api/checkout', csrfVerifyToken, apiLimiter, checkoutRoutes);
 app.use('/api/upload', csrfVerifyToken, uploadLimiter, uploadRoutes);
 

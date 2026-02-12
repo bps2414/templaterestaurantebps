@@ -224,7 +224,7 @@
         setText('footer-email', c.restaurant_email);
 
         // Hero
-        setText('hero-title', c.hero_title);
+        setHeroTitle('hero-title', c.hero_title);
         setText('hero-subtitle', c.hero_subtitle);
 
         // About
@@ -234,16 +234,20 @@
         // Opening hours
         setText('opening-hours', c.opening_hours);
 
-        // WhatsApp
-        const waNum = c.whatsapp_number || '5511999998888';
-        const waMsg = encodeURIComponent(c.whatsapp_message || 'Olá, gostaria de fazer uma reserva!');
-        const waUrl = `https://wa.me/${waNum}?text=${waMsg}`;
-
+        // WhatsApp — only show buttons if a valid number is configured
+        const waNum = c.whatsapp_number ? c.whatsapp_number.replace(/\D/g, '') : '';
         const waFloat = document.getElementById('whatsapp-float');
-        if (waFloat) waFloat.href = waUrl;
-
         const waCta = document.getElementById('whatsapp-cta');
-        if (waCta) waCta.href = waUrl;
+
+        if (waNum && waNum.length >= 10) {
+            const waMsg = encodeURIComponent(c.whatsapp_message || 'Olá, gostaria de fazer uma reserva!');
+            const waUrl = `https://wa.me/${waNum}?text=${waMsg}`;
+            if (waFloat) { waFloat.href = waUrl; waFloat.style.display = ''; }
+            if (waCta) { waCta.href = waUrl; waCta.style.display = ''; }
+        } else {
+            if (waFloat) waFloat.style.display = 'none';
+            if (waCta) waCta.style.display = 'none';
+        }
 
         // Social links
         setHref('link-instagram', c.instagram_url);
@@ -260,6 +264,42 @@
         const el = document.getElementById(id);
         if (el && text) el.textContent = text;
     };
+
+    function setHeroTitle(id, text) {
+        const el = document.getElementById(id);
+        if (!el || !text) return;
+
+        // Sanitize the input text first to prevent XSS
+        const safeText = escapeHTML(text);
+
+        // Procura por um <span> colorido existente no HTML original
+        const existingSpan = el.querySelector('span.text-brand-400');
+
+        if (existingSpan) {
+            // Extrai a palavra destacada original
+            const highlightedWord = existingSpan.textContent.trim();
+            const safeHighlight = escapeHTML(highlightedWord);
+
+            // Verifica se a palavra destacada existe no novo texto
+            if (safeText.includes(safeHighlight)) {
+                // Mantém a palavra destacada no novo texto
+                const newHTML = safeText.replace(
+                    safeHighlight,
+                    `<span class="text-brand-400">${safeHighlight}</span>`
+                );
+                el.innerHTML = newHTML;
+            } else {
+                // Se a palavra não existe mais, tenta destacar a última palavra
+                const words = safeText.trim().split(/\s+/);
+                const lastWord = words[words.length - 1];
+                const beforeLastWord = words.slice(0, -1).join(' ');
+                el.innerHTML = `${beforeLastWord} <span class="text-brand-400">${lastWord}</span>`;
+            }
+        } else {
+            // Se não existe span, apenas atualiza o texto normalmente
+            el.textContent = text;
+        }
+    }
 
     function setHref(id, url) {
         const el = document.getElementById(id);
@@ -363,7 +403,11 @@
 
     // --- Order via WhatsApp (legacy, kept for compatibility) ---
     function orderWhatsApp(dishName) {
-        const waNum = siteConfig.whatsapp_number || '5511999998888';
+        const waNum = siteConfig.whatsapp_number ? siteConfig.whatsapp_number.replace(/\D/g, '') : '';
+        if (!waNum || waNum.length < 10) {
+            showToast('WhatsApp não configurado. Entre em contato por telefone.', 'error');
+            return;
+        }
         const msg = encodeURIComponent(`Olá, vi o site e gostaria de pedir ${dishName}`);
         window.open(`https://wa.me/${waNum}?text=${msg}`, '_blank');
     }
@@ -484,5 +528,7 @@
     window.addToCartFromHome = addToCartFromHome;
     window.api = api;
     window.formatPrice = formatPrice;
+    window.initReveal = initReveal;
+    window.showToast = window.showToast || function () { };
 
 })(); // end IIFE

@@ -267,6 +267,16 @@ export async function seedPizzaria() {
         hero_subtitle: 'Massa fermentada 72h, molho artesanal e ingredientes premium. Peça a sua!',
         about_title: 'Nossa Tradição',
         about_text: 'A Pizza Forno & Massa nasceu do sonho de trazer a verdadeira pizza artesanal para o bairro. Nossa massa é fermentada naturalmente por 72 horas, o molho é feito com tomates selecionados e cada pizza é assada no forno a lenha a 400°C. Tradição italiana com sabor brasileiro.',
+        about_text_2: 'Tradição italiana com ingredientes brasileiros selecionados, em cada fatia.',
+        about_features: JSON.stringify([
+            { icon: '🔥', title: 'Forno a Lenha', description: 'Cada pizza é assada a 400°C no forno a lenha, garantindo borda crocante e interior macio.' },
+            { icon: '🍅', title: 'Molho Artesanal', description: 'Molho feito com tomates italianos San Marzano, ervas frescas e azeite extra virgem.' },
+            { icon: '⏰', title: 'Massa 72h', description: 'Massa fermentada naturalmente por 72 horas para máximo sabor e digestibilidade.' },
+        ]),
+        team_members: JSON.stringify([
+            { name: 'Giovanni Rossi', role: 'Pizzaiolo Chefe', image: '' },
+            { name: 'Maria Fernanda', role: 'Confeiteira', image: '' },
+        ]),
         opening_hours: 'Ter-Dom: 18h–23h30 | Sex-Sáb: 18h–00h | Seg: Fechado',
         google_maps_embed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.1976670254753!2d-46.65529378502211!3d-23.56517098468082!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDMzJzU0LjYiUyA0NsKwMzknMTEuMSJX!5e0!3m2!1spt-BR!2sbr!4v1234567890',
         instagram_url: 'https://instagram.com/fornoemassa',

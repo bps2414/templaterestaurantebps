@@ -249,6 +249,16 @@ export async function seedHamburgueria() {
         hero_subtitle: 'Blend exclusivo, pão artesanal e molhos da casa. Peça pelo WhatsApp!',
         about_title: 'Nossa História',
         about_text: 'A Burger House nasceu da paixão por hambúrgueres de verdade. Nosso blend é preparado diariamente com cortes selecionados, o pão é artesanal e os molhos são receita da casa. Cada burger é feito na hora, na brasa, do jeito que tem que ser.',
+        about_text_2: 'Cada ingrediente é selecionado a dedo para garantir a melhor experiência em cada mordida.',
+        about_features: JSON.stringify([
+            { icon: '🔥', title: 'Na Brasa', description: 'Todos os burgers são grelhados na brasa, garantindo sabor defumado e suculência.' },
+            { icon: '🥩', title: 'Blend Exclusivo', description: 'Nosso blend combina cortes nobres para o equilíbrio perfeito de sabor e textura.' },
+            { icon: '🍞', title: 'Pão Artesanal', description: 'Pão brioche feito na casa, macio por dentro e crocante por fora.' },
+        ]),
+        team_members: JSON.stringify([
+            { name: 'Carlos Lima', role: 'Pitmaster', image: '' },
+            { name: 'Juliana Reis', role: 'Chef de Cozinha', image: '' },
+        ]),
         opening_hours: 'Ter-Dom: 18h–23h | Sex-Sáb: 18h–00h | Seg: Fechado',
         google_maps_embed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.1976670254753!2d-46.65529378502211!3d-23.56517098468082!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDMzJzU0LjYiUyA0NsKwMzknMTEuMSJX!5e0!3m2!1spt-BR!2sbr!4v1234567890',
         instagram_url: 'https://instagram.com/burgerhouse',

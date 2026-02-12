@@ -272,6 +272,10 @@
                         data-tab="config" onclick="switchTab('config')">
                         ⚙️ Configurações
                     </button>
+                    <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400" data-tab="about"
+                        onclick="switchTab('about')">
+                        📝 Sobre / Equipe
+                    </button>
                     <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400"
                         data-tab="qrcode" onclick="switchTab('qrcode')">
                         📱 QR Code
@@ -385,6 +389,56 @@
                     </div>
                     <div class="space-y-6" id="config-form">
                         <div class="text-center py-12 text-gray-500">Carregando...</div>
+                    </div>
+                </div>
+
+                <!-- TAB: ABOUT / TEAM -->
+                <div id="tab-about" class="tab-content hidden">
+                    <div class="flex items-center justify-between mb-8">
+                        <h1 class="text-2xl font-bold text-white">Sobre / Equipe</h1>
+                        <button onclick="saveAboutContent()"
+                            class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition">
+                            💾 Salvar Tudo
+                        </button>
+                    </div>
+
+                    <!-- About Text 2 -->
+                    <div class="bg-dark-800 rounded-xl p-6 border border-white/5 mb-8">
+                        <label class="text-sm text-gray-400 mb-2 block">Segundo parágrafo do Sobre</label>
+                        <textarea id="about-text-2-input" rows="3"
+                            class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none resize-none"
+                            placeholder="Segundo parágrafo da seção Sobre (opcional)"></textarea>
+                    </div>
+
+                    <!-- Features / Values -->
+                    <div class="bg-dark-800 rounded-2xl p-6 border border-white/5 mb-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-semibold text-white">Valores / Diferenciais</h2>
+                            <button onclick="addFeature()"
+                                class="bg-dark-700 hover:bg-dark-900 text-brand-400 px-4 py-2 rounded-lg text-sm font-medium transition border border-brand-500/20">
+                                + Adicionar
+                            </button>
+                        </div>
+                        <p class="text-gray-500 text-xs mb-4">Máximo 6 itens. Cada item aparece como card na página
+                            Sobre.</p>
+                        <div id="features-list" class="space-y-4">
+                            <div class="text-center py-8 text-gray-500">Carregando...</div>
+                        </div>
+                    </div>
+
+                    <!-- Team Members -->
+                    <div class="bg-dark-800 rounded-2xl p-6 border border-white/5">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-semibold text-white">Membros da Equipe</h2>
+                            <button onclick="addTeamMember()"
+                                class="bg-dark-700 hover:bg-dark-900 text-brand-400 px-4 py-2 rounded-lg text-sm font-medium transition border border-brand-500/20">
+                                + Adicionar
+                            </button>
+                        </div>
+                        <p class="text-gray-500 text-xs mb-4">Máximo 10 membros. Exibidos na página Sobre.</p>
+                        <div id="team-list" class="space-y-4">
+                            <div class="text-center py-8 text-gray-500">Carregando...</div>
+                        </div>
                     </div>
                 </div>
 
@@ -714,6 +768,12 @@
                 csrfToken = data.token;
             } catch (error) {
                 console.error('❌ Erro ao obter CSRF token:', error);
+                // Show feedback after page is ready
+                setTimeout(() => {
+                    if (typeof toast === 'function') {
+                        toast('Erro de segurança (CSRF). Recarregue a página.', 'error');
+                    }
+                }, 1000);
             }
         }
 
@@ -827,6 +887,7 @@
             if (tab === 'categories') loadCategories();
             if (tab === 'gallery') loadGalleryAdmin();
             if (tab === 'config') loadConfig();
+            if (tab === 'about') loadAboutAdmin();
             if (tab === 'qrcode') initQRCodeTab();
         }
 
@@ -1097,7 +1158,8 @@
             hero_title: 'Título do Hero',
             hero_subtitle: 'Subtítulo do Hero',
             about_title: 'Título do Sobre',
-            about_text: 'Texto do Sobre',
+            about_text: 'Texto do Sobre (1º parágrafo)',
+            about_text_2: 'Texto do Sobre (2º parágrafo)',
             opening_hours: 'Horário de Funcionamento',
             google_maps_embed: 'URL do Google Maps (embed)',
             instagram_url: 'Instagram URL',
@@ -1113,7 +1175,7 @@
             const form = document.getElementById('config-form');
             form.innerHTML = Object.entries(configLabels).map(([key, label]) => {
                 const value = json.data[key] || '';
-                const isLong = ['restaurant_description', 'about_text', 'whatsapp_message', 'google_maps_embed'].includes(key);
+                const isLong = ['restaurant_description', 'about_text', 'about_text_2', 'whatsapp_message', 'google_maps_embed'].includes(key);
                 return `
             <div class="bg-dark-800 rounded-xl p-6 border border-white/5">
                 <label class="text-sm text-gray-400 mb-2 block">${label}</label>
@@ -1157,6 +1219,8 @@
 
             if (res.success) {
                 toast('Configurações salvas!');
+                // Reload config form to reflect any server-side sanitization
+                loadConfig();
                 // Refetch config em todas as abas abertas
                 if ('BroadcastChannel' in window) {
                     new BroadcastChannel('site-config').postMessage('reload');
@@ -1169,15 +1233,6 @@
                     el.classList.add('border-red-500');
                 });
             }
-            <div id="toast" style="display:none;position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#dc2626;color:#fff;padding:16px 32px;border-radius:8px;z-index:9999;font-size:1rem;"></div>
-            // Toast helper global
-            window.showToast = function (message, type = 'error') {
-                let toast = document.getElementById('toast');
-                toast.style.background = type === 'error' ? '#dc2626' : '#16a34a';
-                toast.textContent = message;
-                toast.style.display = 'block';
-                setTimeout(() => { toast.style.display = 'none'; }, 3500);
-            };
         }
 
         // --- Password Change ---
@@ -1335,6 +1390,185 @@
             const completed = JSON.parse(localStorage.getItem('onboarding_completed') || '[]');
             // Show if not all steps are completed
             return completed.length < 5;
+        }
+
+        // --- ABOUT / TEAM ADMIN ---
+        let aboutFeatures = [];
+        let teamMembers = [];
+
+        async function loadAboutAdmin() {
+            try {
+                // Load about_text_2 from config
+                const configRes = await fetch(`${API}/api/config`);
+                const configJson = await configRes.json();
+                if (configJson.success && configJson.data) {
+                    document.getElementById('about-text-2-input').value = configJson.data.about_text_2 || '';
+                }
+
+                // Load features & team
+                const res = await apiAuth('/about-content');
+                if (!res.success) return;
+                const data = res.data;
+
+                aboutFeatures = data.about_features || [];
+                teamMembers = data.team_members || [];
+
+                renderFeaturesList();
+                renderTeamList();
+            } catch (e) {
+                console.error('Error loading about admin:', e);
+            }
+        }
+
+        function renderFeaturesList() {
+            const container = document.getElementById('features-list');
+            if (aboutFeatures.length === 0) {
+                container.innerHTML = '<div class="text-center py-4 text-gray-500 text-sm">Nenhum valor cadastrado. Clique em "+ Adicionar" para criar.</div>';
+                return;
+            }
+            container.innerHTML = aboutFeatures.map((f, i) => `
+                <div class="bg-dark-700/50 rounded-xl p-4 border border-white/5">
+                    <div class="flex items-start gap-3">
+                        <div class="flex-shrink-0">
+                            <label class="text-xs text-gray-500 block mb-1">Ícone</label>
+                            <input type="text" value="${escapeAttr(f.icon)}" maxlength="4"
+                                onchange="aboutFeatures[${i}].icon=this.value"
+                                class="w-16 bg-dark-900 border border-white/10 rounded-lg px-2 py-2 text-white text-center text-xl focus:border-brand-400 focus:outline-none">
+                        </div>
+                        <div class="flex-1 space-y-2">
+                            <div>
+                                <label class="text-xs text-gray-500 block mb-1">Título</label>
+                                <input type="text" value="${escapeAttr(f.title)}" maxlength="60"
+                                    onchange="aboutFeatures[${i}].title=this.value"
+                                    class="w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-500 block mb-1">Descrição</label>
+                                <textarea rows="2" maxlength="400"
+                                    onchange="aboutFeatures[${i}].description=this.value"
+                                    class="w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none resize-none">${escapeHTML(f.description)}</textarea>
+                            </div>
+                        </div>
+                        <button onclick="removeFeature(${i})" class="text-red-400 hover:text-red-300 text-sm mt-5 flex-shrink-0" title="Remover">✕</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addFeature() {
+            if (aboutFeatures.length >= 6) {
+                toast('Máximo de 6 valores atingido', 'error');
+                return;
+            }
+            aboutFeatures.push({ icon: '⭐', title: '', description: '' });
+            renderFeaturesList();
+        }
+
+        function removeFeature(index) {
+            aboutFeatures.splice(index, 1);
+            renderFeaturesList();
+        }
+
+        function renderTeamList() {
+            const container = document.getElementById('team-list');
+            if (teamMembers.length === 0) {
+                container.innerHTML = '<div class="text-center py-4 text-gray-500 text-sm">Nenhum membro cadastrado. Clique em "+ Adicionar" para criar.</div>';
+                return;
+            }
+            container.innerHTML = teamMembers.map((m, i) => `
+                <div class="bg-dark-700/50 rounded-xl p-4 border border-white/5">
+                    <div class="flex items-start gap-3">
+                        <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div>
+                                <label class="text-xs text-gray-500 block mb-1">Nome</label>
+                                <input type="text" value="${escapeAttr(m.name)}" maxlength="80"
+                                    onchange="teamMembers[${i}].name=this.value"
+                                    class="w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-500 block mb-1">Cargo</label>
+                                <input type="text" value="${escapeAttr(m.role)}" maxlength="50"
+                                    onchange="teamMembers[${i}].role=this.value"
+                                    class="w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-500 block mb-1">URL da Foto (opcional)</label>
+                                <input type="url" value="${escapeAttr(m.image || '')}" maxlength="500"
+                                    onchange="teamMembers[${i}].image=this.value"
+                                    class="w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none"
+                                    placeholder="https://...">
+                            </div>
+                        </div>
+                        <button onclick="removeTeamMember(${i})" class="text-red-400 hover:text-red-300 text-sm mt-5 flex-shrink-0" title="Remover">✕</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addTeamMember() {
+            if (teamMembers.length >= 10) {
+                toast('Máximo de 10 membros atingido', 'error');
+                return;
+            }
+            teamMembers.push({ name: '', role: '', image: '' });
+            renderTeamList();
+        }
+
+        function removeTeamMember(index) {
+            teamMembers.splice(index, 1);
+            renderTeamList();
+        }
+
+        async function saveAboutContent() {
+            // Validate features
+            const validFeatures = aboutFeatures.filter(f => f.title && f.title.trim());
+            for (const f of validFeatures) {
+                if (!f.title.trim()) {
+                    toast('Preencha o título de todos os valores', 'error');
+                    return;
+                }
+            }
+
+            // Validate team
+            const validTeam = teamMembers.filter(m => m.name && m.name.trim());
+            for (const m of validTeam) {
+                if (!m.name.trim() || !m.role.trim()) {
+                    toast('Preencha nome e cargo de todos os membros', 'error');
+                    return;
+                }
+            }
+
+            // Save about_text_2 via config endpoint
+            const aboutText2 = document.getElementById('about-text-2-input').value;
+            const configRes = await apiAuth('/config', {
+                method: 'PUT',
+                body: JSON.stringify({ about_text_2: aboutText2 }),
+            });
+
+            // Save features & team via about-content endpoint
+            const res = await apiAuth('/about-content', {
+                method: 'PUT',
+                body: JSON.stringify({
+                    about_features: validFeatures,
+                    team_members: validTeam,
+                    about_text_2: aboutText2,
+                }),
+            });
+
+            if (res.success) {
+                toast('Sobre / Equipe salvo com sucesso!');
+                // Refresh data from server
+                aboutFeatures = res.data.about_features || [];
+                teamMembers = res.data.team_members || [];
+                renderFeaturesList();
+                renderTeamList();
+                // Notify other tabs
+                if ('BroadcastChannel' in window) {
+                    new BroadcastChannel('site-config').postMessage('reload');
+                }
+            } else {
+                toast(res.error || 'Erro ao salvar', 'error');
+            }
         }
 
         // --- QR Code Generator ---

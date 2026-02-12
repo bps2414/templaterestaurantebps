@@ -54,6 +54,7 @@ const ALLOWED_KEYS = [
     'hero_image',
     'about_title',
     'about_text',
+    'about_text_2',
     'about_image',
     'opening_hours',
     'google_maps_embed',
