@@ -3,6 +3,13 @@
 // ============================================
 
 (function () {
+        // Refetch config em todas as abas abertas
+        if ('BroadcastChannel' in window) {
+            const bc = new BroadcastChannel('site-config');
+            bc.onmessage = (e) => {
+                if (e.data === 'reload') window.location.reload();
+            };
+        }
     'use strict';
 
     var API = window.location.origin;
@@ -120,8 +127,7 @@
                 siteConfig = validateConfig(data);
                 applyConfig();
             } else {
-                // Graceful degradation: use defaults
-                console.warn('Failed to load config, using defaults');
+                showToast('Erro ao carregar configurações.', 'error');
                 siteConfig = {
                     restaurant_name: 'Restaurant',
                     restaurant_tagline: 'Delivery de qualidade',
@@ -131,9 +137,33 @@
                 applyConfig();
             }
         } catch (e) {
-            console.error('Config load error:', e);
-            // Continue with minimal defaults
+            showToast('Erro ao carregar configurações.', 'error');
             siteConfig = { restaurant_name: 'Restaurant' };
+        }
+        // Toast helper global (caso não exista)
+        if (!window.showToast) {
+            window.showToast = function(message, type = 'error') {
+                let toast = document.getElementById('toast');
+                if (!toast) {
+                    toast = document.createElement('div');
+                    toast.id = 'toast';
+                    toast.style.position = 'fixed';
+                    toast.style.bottom = '32px';
+                    toast.style.left = '50%';
+                    toast.style.transform = 'translateX(-50%)';
+                    toast.style.background = type === 'error' ? '#dc2626' : '#16a34a';
+                    toast.style.color = '#fff';
+                    toast.style.padding = '16px 32px';
+                    toast.style.borderRadius = '8px';
+                    toast.style.zIndex = 9999;
+                    toast.style.fontSize = '1rem';
+                    document.body.appendChild(toast);
+                }
+                toast.textContent = message;
+                toast.style.background = type === 'error' ? '#dc2626' : '#16a34a';
+                toast.style.display = 'block';
+                setTimeout(() => { toast.style.display = 'none'; }, 3500);
+            };
         }
     }
 

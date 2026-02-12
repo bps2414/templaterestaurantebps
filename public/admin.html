@@ -1157,10 +1157,23 @@
 
             if (res.success) {
                 toast('Configurações salvas!');
+                // Refetch config em todas as abas abertas
+                if ('BroadcastChannel' in window) {
+                    new BroadcastChannel('site-config').postMessage('reload');
+                }
                 markStepDone('config');
             } else {
                 toast(res.error || 'Erro ao salvar', 'error');
             }
+            <div id="toast" style="display:none;position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#dc2626;color:#fff;padding:16px 32px;border-radius:8px;z-index:9999;font-size:1rem;"></div>
+            // Toast helper global
+            window.showToast = function(message, type = 'error') {
+                let toast = document.getElementById('toast');
+                toast.style.background = type === 'error' ? '#dc2626' : '#16a34a';
+                toast.textContent = message;
+                toast.style.display = 'block';
+                setTimeout(() => { toast.style.display = 'none'; }, 3500);
+            };
         }
 
         // --- Password Change ---
