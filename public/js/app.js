@@ -115,7 +115,8 @@
 
     async function loadConfig() {
         try {
-            const data = await api('/config');
+            // Cache busting para garantir config atualizado
+            const data = await api(`/config?_=${Date.now()}`);
             if (data) {
                 siteConfig = validateConfig(data);
                 applyConfig();

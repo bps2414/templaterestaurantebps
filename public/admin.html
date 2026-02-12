@@ -1160,6 +1160,10 @@
                 markStepDone('config');
             } else {
                 toast(res.error || 'Erro ao salvar', 'error');
+                // Destacar campos em vermelho se erro
+                document.querySelectorAll('#config-form [data-key]').forEach(el => {
+                    el.classList.add('border-red-500');
+                });
             }
         }
 
