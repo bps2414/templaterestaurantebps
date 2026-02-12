@@ -218,6 +218,36 @@
             meta.content = content;
         });
 
+        // --- Brand color (PRO) ---
+        if (c.brand_color && /^#[0-9A-Fa-f]{6}$/.test(c.brand_color)) {
+            applyBrandColor(c.brand_color);
+        }
+
+        // --- Logo (PRO) ---
+        if (c.logo_url) {
+            applyLogo(c.logo_url);
+        }
+
+        // --- Favicon (PRO) ---
+        if (c.favicon_url) {
+            applyFavicon(c.favicon_url);
+        }
+
+        // --- Hero image ---
+        if (c.hero_image) {
+            const heroBg = document.querySelector('.hero-bg');
+            if (heroBg) heroBg.style.backgroundImage = `url('${c.hero_image}')`;
+        }
+
+        // --- About image ---
+        if (c.about_image) {
+            const aboutImg = document.getElementById('about-image') || document.querySelector('.about-img');
+            if (aboutImg) {
+                aboutImg.src = c.about_image;
+                aboutImg.style.display = '';
+            }
+        }
+
         // Nav brand
         setText('nav-brand', c.restaurant_name);
         setText('footer-brand', c.restaurant_name);
@@ -263,6 +293,122 @@
         }
     }
 
+    // --- Apply brand color dynamically ---
+    function applyBrandColor(hex) {
+        // Generate shades from hex
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+
+        // Create lighter/darker variants
+        const lighten = (r, g, b, pct) => {
+            return [
+                Math.min(255, Math.round(r + (255 - r) * pct)),
+                Math.min(255, Math.round(g + (255 - g) * pct)),
+                Math.min(255, Math.round(b + (255 - b) * pct))
+            ];
+        };
+        const darken = (r, g, b, pct) => {
+            return [
+                Math.round(r * (1 - pct)),
+                Math.round(g * (1 - pct)),
+                Math.round(b * (1 - pct))
+            ];
+        };
+        const toHex = (rgb) => '#' + rgb.map(c => c.toString(16).padStart(2, '0')).join('');
+
+        const shades = {
+            300: toHex(lighten(r, g, b, 0.4)),
+            400: toHex(lighten(r, g, b, 0.15)),
+            500: hex,
+            600: toHex(darken(r, g, b, 0.15)),
+            700: toHex(darken(r, g, b, 0.3)),
+        };
+
+        // Inject CSS variables for brand color
+        let styleEl = document.getElementById('brand-color-override');
+        if (!styleEl) {
+            styleEl = document.createElement('style');
+            styleEl.id = 'brand-color-override';
+            document.head.appendChild(styleEl);
+        }
+
+        // Override Tailwind brand classes with CSS
+        styleEl.textContent = `
+            .text-brand-300 { color: ${shades[300]} !important; }
+            .text-brand-400 { color: ${shades[400]} !important; }
+            .text-brand-500 { color: ${shades[500]} !important; }
+            .text-brand-600 { color: ${shades[600]} !important; }
+            .bg-brand-400 { background-color: ${shades[400]} !important; }
+            .bg-brand-500 { background-color: ${shades[500]} !important; }
+            .bg-brand-600 { background-color: ${shades[600]} !important; }
+            .hover\\:bg-brand-600:hover { background-color: ${shades[600]} !important; }
+            .hover\\:text-brand-400:hover { color: ${shades[400]} !important; }
+            .border-brand-400 { border-color: ${shades[400]} !important; }
+            .hover\\:border-brand-400:hover { border-color: ${shades[400]} !important; }
+            .focus\\:border-brand-400:focus { border-color: ${shades[400]} !important; }
+            .ring-brand-400 { --tw-ring-color: ${shades[400]}; }
+            /* Fire/gold variants for template-b */
+            .text-fire-400 { color: ${shades[400]} !important; }
+            .text-fire-500 { color: ${shades[500]} !important; }
+            .bg-fire-500 { background-color: ${shades[500]} !important; }
+            .bg-fire-600 { background-color: ${shades[600]} !important; }
+            .hover\\:bg-fire-600:hover { background-color: ${shades[600]} !important; }
+            .text-gold-400 { color: ${shades[400]} !important; }
+            .text-gold-500 { color: ${shades[500]} !important; }
+            /* Forest/green variants for template2 */
+            .text-forest-500 { color: ${shades[500]} !important; }
+            .bg-forest-500 { background-color: ${shades[500]} !important; }
+            .hover\\:bg-forest-600:hover { background-color: ${shades[600]} !important; }
+            /* Button glow effect */
+            .btn-glow:hover { box-shadow: 0 8px 25px ${hex}66 !important; }
+        `;
+    }
+
+    // --- Apply logo dynamically ---
+    function applyLogo(url) {
+        // Replace emoji icon with actual logo image
+        const navBrand = document.getElementById('nav-brand');
+        if (navBrand) {
+            const logoContainer = navBrand.previousElementSibling;
+            if (logoContainer) {
+                // Replace emoji container or span with img
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = 'Logo';
+                img.className = 'w-10 h-10 rounded-full object-cover';
+                img.onerror = function () { this.style.display = 'none'; };
+                logoContainer.replaceWith(img);
+            }
+        }
+        // Footer logo
+        const footerBrand = document.getElementById('footer-brand');
+        if (footerBrand) {
+            const footerLogoContainer = footerBrand.previousElementSibling;
+            if (footerLogoContainer && (footerLogoContainer.tagName === 'SPAN' || footerLogoContainer.tagName === 'DIV')) {
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = 'Logo';
+                img.className = 'w-10 h-10 rounded-full object-cover';
+                img.onerror = function () { this.style.display = 'none'; };
+                footerLogoContainer.replaceWith(img);
+            }
+        }
+    }
+
+    // --- Apply favicon dynamically ---
+    function applyFavicon(url) {
+        let link = document.querySelector('link[rel="icon"]');
+        if (link) {
+            link.href = url;
+            // Update type based on URL
+            if (url.endsWith('.png')) link.type = 'image/png';
+            else if (url.endsWith('.ico')) link.type = 'image/x-icon';
+            else if (url.endsWith('.svg')) link.type = 'image/svg+xml';
+            else link.type = 'image/png'; // default for uploaded images
+        }
+    }
+
 
     window.setText = function setText(id, text) {
         const el = document.getElementById(id);
@@ -276,8 +422,10 @@
         // Sanitize the input text first to prevent XSS
         const safeText = escapeHTML(text);
 
-        // Procura por um <span> colorido existente no HTML original
-        const existingSpan = el.querySelector('span.text-brand-400');
+        // Find any highlighted span (supports all templates: brand-400, gold-400, fire-500, forest-500...)
+        const existingSpan = el.querySelector('span[class*="text-brand-"], span[class*="text-gold-"], span[class*="text-fire-"], span[class*="text-forest-"]');
+        // Determine which CSS class to use for the highlighted word
+        const highlightClass = existingSpan ? existingSpan.className : 'text-brand-400';
 
         if (existingSpan) {
             // Extrai a palavra destacada original
@@ -289,7 +437,7 @@
                 // Mantém a palavra destacada no novo texto
                 const newHTML = safeText.replace(
                     safeHighlight,
-                    `<span class="text-brand-400">${safeHighlight}</span>`
+                    `<span class="${highlightClass}">${safeHighlight}</span>`
                 );
                 el.innerHTML = newHTML;
             } else {
@@ -297,41 +445,47 @@
                 const words = safeText.trim().split(/\s+/);
                 const lastWord = words[words.length - 1];
                 const beforeLastWord = words.slice(0, -1).join(' ');
-                el.innerHTML = `${beforeLastWord} <span class="text-brand-400">${lastWord}</span>`;
+                el.innerHTML = `${beforeLastWord} <span class="${highlightClass}">${lastWord}</span>`;
             }
         } else {
-            // Se não existe span, apenas atualiza o texto normalmente
-            el.textContent = text;
-        }
-    }
-
-    function setHref(id, url) {
-        const el = document.getElementById(id);
-        if (el && url) el.href = url;
-    }
-
-    function escapeHTML(value) {
-        const div = document.createElement('div');
-        div.textContent = value ?? '';
-        return div.innerHTML;
-    }
-
-    function escapeAttr(value) {
-        return escapeHTML(value).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-    }
-
-    // --- Featured dishes (homepage) ---
-    async function loadFeaturedDishes() {
-        const container = document.getElementById('featured-dishes');
-        if (!container) return;
-
-        const dishes = await api('/dishes/featured');
-        if (!dishes || dishes.length === 0) {
-            container.innerHTML = '<p class="text-center col-span-3 text-gray-500 py-12">Nenhum destaque disponível.</p>';
-            return;
+            // No existing span — auto-highlight last word with brand color
+            const words = safeText.trim().split(/\s+/);
+            if (words.length > 1) {
+                const lastWord = words[words.length - 1];
+                const beforeLastWord = words.slice(0, -1).join(' ');
+                el.innerHTML = `${beforeLastWord} <span class="text-brand-400">${lastWord}</span>`;
+            } else {
+                el.textContent = text;
+            }
         }
 
-        container.innerHTML = dishes.slice(0, 3).map(dish => `
+        function setHref(id, url) {
+            const el = document.getElementById(id);
+            if (el && url) el.href = url;
+        }
+
+        function escapeHTML(value) {
+            const div = document.createElement('div');
+            div.textContent = value ?? '';
+            return div.innerHTML;
+        }
+
+        function escapeAttr(value) {
+            return escapeHTML(value).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
+        // --- Featured dishes (homepage) ---
+        async function loadFeaturedDishes() {
+            const container = document.getElementById('featured-dishes');
+            if (!container) return;
+
+            const dishes = await api('/dishes/featured');
+            if (!dishes || dishes.length === 0) {
+                container.innerHTML = '<p class="text-center col-span-3 text-gray-500 py-12">Nenhum destaque disponível.</p>';
+                return;
+            }
+
+            container.innerHTML = dishes.slice(0, 3).map(dish => `
         <div class="card-hover reveal bg-dark-800/60 rounded-2xl overflow-hidden border border-white/5 group">
             <div class="relative h-64 overflow-hidden">
                 <img src="${escapeAttr(dish.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80')}"
@@ -363,176 +517,176 @@
         </div >
                 `).join('');
 
-        initReveal();
-    }
-
-    // --- Category cards (homepage) ---
-    async function loadCategoryCards() {
-        const container = document.getElementById('category-cards');
-        if (!container) return;
-
-        const categories = await api('/categories');
-        if (!categories || categories.length === 0) {
-            container.innerHTML = '<p class="text-center col-span-4 text-gray-500 py-12">Nenhuma categoria disponível.</p>';
-            return;
+            initReveal();
         }
 
-        var icons = ['🥗', '🥩', '🍰', '🍷', '🍝', '🐟', '🥘', '🍕'];
-        container.textContent = '';
-        categories.forEach(function (cat, i) {
-            var link = document.createElement('a');
-            link.href = '/menu#' + (cat.slug || '');
-            link.className = 'card-hover reveal bg-dark-800/60 rounded-2xl p-8 text-center border border-white/5 group';
+        // --- Category cards (homepage) ---
+        async function loadCategoryCards() {
+            const container = document.getElementById('category-cards');
+            if (!container) return;
 
-            var iconDiv = document.createElement('div');
-            iconDiv.className = 'text-5xl mb-4';
-            iconDiv.textContent = icons[i % icons.length];
-            link.appendChild(iconDiv);
+            const categories = await api('/categories');
+            if (!categories || categories.length === 0) {
+                container.innerHTML = '<p class="text-center col-span-4 text-gray-500 py-12">Nenhuma categoria disponível.</p>';
+                return;
+            }
 
-            var nameH3 = document.createElement('h3');
-            nameH3.className = 'font-display text-lg font-bold text-white group-hover:text-brand-400 transition';
-            nameH3.textContent = cat.name;
-            link.appendChild(nameH3);
+            var icons = ['🥗', '🥩', '🍰', '🍷', '🍝', '🐟', '🥘', '🍕'];
+            container.textContent = '';
+            categories.forEach(function (cat, i) {
+                var link = document.createElement('a');
+                link.href = '/menu#' + (cat.slug || '');
+                link.className = 'card-hover reveal bg-dark-800/60 rounded-2xl p-8 text-center border border-white/5 group';
 
-            var countP = document.createElement('p');
-            countP.className = 'text-gray-500 text-sm mt-2';
-            countP.textContent = (cat.dishes ? cat.dishes.length : 0) + ' itens';
-            link.appendChild(countP);
+                var iconDiv = document.createElement('div');
+                iconDiv.className = 'text-5xl mb-4';
+                iconDiv.textContent = icons[i % icons.length];
+                link.appendChild(iconDiv);
 
-            container.appendChild(link);
+                var nameH3 = document.createElement('h3');
+                nameH3.className = 'font-display text-lg font-bold text-white group-hover:text-brand-400 transition';
+                nameH3.textContent = cat.name;
+                link.appendChild(nameH3);
+
+                var countP = document.createElement('p');
+                countP.className = 'text-gray-500 text-sm mt-2';
+                countP.textContent = (cat.dishes ? cat.dishes.length : 0) + ' itens';
+                link.appendChild(countP);
+
+                container.appendChild(link);
+            });
+
+            initReveal();
+        }
+
+        // --- Order via WhatsApp (legacy, kept for compatibility) ---
+        function orderWhatsApp(dishName) {
+            const waNum = siteConfig.whatsapp_number ? siteConfig.whatsapp_number.replace(/\D/g, '') : '';
+            if (!waNum || waNum.length < 10) {
+                showToast('WhatsApp não configurado. Entre em contato por telefone.', 'error');
+                return;
+            }
+            const msg = encodeURIComponent(`Olá, vi o site e gostaria de pedir ${dishName}`);
+            window.open(`https://wa.me/${waNum}?text=${msg}`, '_blank');
+        }
+
+        // --- Quick Order (new system) ---
+        function quickOrderFromHome(id, name, image, price) {
+            const dish = { id, name, image, price };
+            if (window.orderModal) {
+                window.orderModal.openQuickOrder(dish);
+            } else {
+                // Fallback to legacy method
+                orderWhatsApp(name);
+            }
+        }
+
+        // --- Add to Cart (new system) ---
+        function addToCartFromHome(id, name, image, price) {
+            const dish = { id, name, image, price };
+            if (window.cart) {
+                window.cart.add(dish);
+
+                showAddToCartToast();
+            }
+        }
+
+        function showAddToCartToast() {
+            var toast = document.createElement('div');
+            toast.className = 'fixed top-24 right-4 z-[9999] bg-green-600 text-white px-6 py-4 rounded-xl shadow-2xl font-medium transform transition-all flex items-center gap-3';
+
+            var icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            icon.setAttribute('class', 'w-6 h-6');
+            icon.setAttribute('fill', 'none');
+            icon.setAttribute('stroke', 'currentColor');
+            icon.setAttribute('viewBox', '0 0 24 24');
+            var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('stroke-linecap', 'round');
+            path.setAttribute('stroke-linejoin', 'round');
+            path.setAttribute('stroke-width', '2');
+            path.setAttribute('d', 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z');
+            icon.appendChild(path);
+            toast.appendChild(icon);
+
+            var textDiv = document.createElement('div');
+            var title = document.createElement('div');
+            title.className = 'font-bold';
+            title.textContent = 'Adicionado ao carrinho!';
+            var subtitle = document.createElement('div');
+            subtitle.className = 'text-sm text-green-100';
+            subtitle.textContent = 'Clique no botão laranja no canto inferior direito';
+            textDiv.appendChild(title);
+            textDiv.appendChild(subtitle);
+            toast.appendChild(textDiv);
+
+            document.body.appendChild(toast);
+            setTimeout(function () {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-20px)';
+                setTimeout(function () { toast.remove(); }, 300);
+            }, 3500);
+        }
+
+        // --- Scroll Reveal ---
+        function initReveal() {
+            const reveals = document.querySelectorAll('.reveal:not(.visible)');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            reveals.forEach(el => observer.observe(el));
+        }
+
+        // --- Mobile menu toggle ---
+        function initMobileMenu() {
+            const toggle = document.getElementById('menu-toggle');
+            const menu = document.getElementById('mobile-menu');
+            if (toggle && menu) {
+                toggle.addEventListener('click', () => {
+                    menu.classList.toggle('hidden');
+                });
+            }
+        }
+
+        // --- Event delegation for order buttons ---
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.order-btn');
+            if (!btn) return;
+
+            const action = btn.dataset.action;
+            const id = btn.dataset.id;
+            const name = btn.dataset.name;
+            const image = btn.dataset.image;
+            const price = Number(btn.dataset.price);
+
+            if (action === 'quick') {
+                quickOrderFromHome(id, name, image, price);
+            } else if (action === 'cart') {
+                addToCartFromHome(id, name, image, price);
+            }
         });
 
-        initReveal();
-    }
+        // --- Init ---
+        document.addEventListener('DOMContentLoaded', function () {
+            getCsrfToken(); // Fetch and cache CSRF token
+            loadConfig();
+            loadFeaturedDishes();
+            loadCategoryCards();
+            initReveal();
+            initMobileMenu();
+        });
 
-    // --- Order via WhatsApp (legacy, kept for compatibility) ---
-    function orderWhatsApp(dishName) {
-        const waNum = siteConfig.whatsapp_number ? siteConfig.whatsapp_number.replace(/\D/g, '') : '';
-        if (!waNum || waNum.length < 10) {
-            showToast('WhatsApp não configurado. Entre em contato por telefone.', 'error');
-            return;
-        }
-        const msg = encodeURIComponent(`Olá, vi o site e gostaria de pedir ${dishName}`);
-        window.open(`https://wa.me/${waNum}?text=${msg}`, '_blank');
-    }
+        // Expose only needed functions globally (for event delegation & menu.html)
+        window.quickOrderFromHome = quickOrderFromHome;
+        window.addToCartFromHome = addToCartFromHome;
+        window.api = api;
+        window.formatPrice = formatPrice;
+        window.initReveal = initReveal;
+        window.showToast = window.showToast || function () { };
 
-    // --- Quick Order (new system) ---
-    function quickOrderFromHome(id, name, image, price) {
-        const dish = { id, name, image, price };
-        if (window.orderModal) {
-            window.orderModal.openQuickOrder(dish);
-        } else {
-            // Fallback to legacy method
-            orderWhatsApp(name);
-        }
-    }
-
-    // --- Add to Cart (new system) ---
-    function addToCartFromHome(id, name, image, price) {
-        const dish = { id, name, image, price };
-        if (window.cart) {
-            window.cart.add(dish);
-
-            showAddToCartToast();
-        }
-    }
-
-    function showAddToCartToast() {
-        var toast = document.createElement('div');
-        toast.className = 'fixed top-24 right-4 z-[9999] bg-green-600 text-white px-6 py-4 rounded-xl shadow-2xl font-medium transform transition-all flex items-center gap-3';
-
-        var icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        icon.setAttribute('class', 'w-6 h-6');
-        icon.setAttribute('fill', 'none');
-        icon.setAttribute('stroke', 'currentColor');
-        icon.setAttribute('viewBox', '0 0 24 24');
-        var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.setAttribute('stroke-linecap', 'round');
-        path.setAttribute('stroke-linejoin', 'round');
-        path.setAttribute('stroke-width', '2');
-        path.setAttribute('d', 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z');
-        icon.appendChild(path);
-        toast.appendChild(icon);
-
-        var textDiv = document.createElement('div');
-        var title = document.createElement('div');
-        title.className = 'font-bold';
-        title.textContent = 'Adicionado ao carrinho!';
-        var subtitle = document.createElement('div');
-        subtitle.className = 'text-sm text-green-100';
-        subtitle.textContent = 'Clique no botão laranja no canto inferior direito';
-        textDiv.appendChild(title);
-        textDiv.appendChild(subtitle);
-        toast.appendChild(textDiv);
-
-        document.body.appendChild(toast);
-        setTimeout(function () {
-            toast.style.opacity = '0';
-            toast.style.transform = 'translateY(-20px)';
-            setTimeout(function () { toast.remove(); }, 300);
-        }, 3500);
-    }
-
-    // --- Scroll Reveal ---
-    function initReveal() {
-        const reveals = document.querySelectorAll('.reveal:not(.visible)');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-
-        reveals.forEach(el => observer.observe(el));
-    }
-
-    // --- Mobile menu toggle ---
-    function initMobileMenu() {
-        const toggle = document.getElementById('menu-toggle');
-        const menu = document.getElementById('mobile-menu');
-        if (toggle && menu) {
-            toggle.addEventListener('click', () => {
-                menu.classList.toggle('hidden');
-            });
-        }
-    }
-
-    // --- Event delegation for order buttons ---
-    document.addEventListener('click', (e) => {
-        const btn = e.target.closest('.order-btn');
-        if (!btn) return;
-
-        const action = btn.dataset.action;
-        const id = btn.dataset.id;
-        const name = btn.dataset.name;
-        const image = btn.dataset.image;
-        const price = Number(btn.dataset.price);
-
-        if (action === 'quick') {
-            quickOrderFromHome(id, name, image, price);
-        } else if (action === 'cart') {
-            addToCartFromHome(id, name, image, price);
-        }
-    });
-
-    // --- Init ---
-    document.addEventListener('DOMContentLoaded', function () {
-        getCsrfToken(); // Fetch and cache CSRF token
-        loadConfig();
-        loadFeaturedDishes();
-        loadCategoryCards();
-        initReveal();
-        initMobileMenu();
-    });
-
-    // Expose only needed functions globally (for event delegation & menu.html)
-    window.quickOrderFromHome = quickOrderFromHome;
-    window.addToCartFromHome = addToCartFromHome;
-    window.api = api;
-    window.formatPrice = formatPrice;
-    window.initReveal = initReveal;
-    window.showToast = window.showToast || function () { };
-
-})(); // end IIFE
+    }) (); // end IIFE

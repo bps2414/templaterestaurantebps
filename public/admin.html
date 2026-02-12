@@ -1328,13 +1328,15 @@
             instagram_url: 'Instagram URL',
             facebook_url: 'Facebook URL',
             footer_text: 'Texto do Footer',
+            hero_image: 'Imagem de Fundo do Hero',
+            about_image: 'Imagem da Seção Sobre',
         };
 
         // PRO-only config fields
         const proConfigLabels = {
-            logo_url: 'URL da Logo',
+            logo_url: 'Logo do Restaurante',
             brand_color: 'Cor da Marca (hex)',
-            favicon_url: 'URL do Favicon',
+            favicon_url: 'Favicon do Site',
         };
 
         async function loadConfig() {
@@ -1349,6 +1351,25 @@
             let html = Object.entries(configLabels).map(([key, label]) => {
                 const value = json.data[key] || '';
                 const isLong = ['restaurant_description', 'about_text', 'about_text_2', 'whatsapp_message', 'google_maps_embed'].includes(key);
+                const isImageField = ['hero_image', 'about_image'].includes(key);
+
+                if (isImageField) {
+                    // Image upload field with preview
+                    return `
+            <div class="bg-dark-800 rounded-xl p-6 border border-white/5">
+                <label class="text-sm text-gray-400 mb-2 block">${label}</label>
+                <div class="flex items-center gap-4 mb-3">
+                    ${value ? `<img src="${escapeAttr(value)}" class="w-20 h-14 rounded-lg object-cover border border-white/10" onerror="this.style.display='none'">` : ''}
+                    <input type="file" data-upload-key="${key}" accept="image/png,image/jpeg,image/webp"
+                        class="text-sm text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-brand-500 file:text-white file:font-medium file:cursor-pointer hover:file:bg-brand-600">
+                </div>
+                <input type="text" data-key="${key}" value="${escapeAttr(value)}"
+                    class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white text-xs focus:border-brand-400 focus:outline-none"
+                    placeholder="URL preenchida automaticamente ao fazer upload">
+            </div>
+        `;
+                }
+
                 return `
             <div class="bg-dark-800 rounded-xl p-6 border border-white/5">
                 <label class="text-sm text-gray-400 mb-2 block">${label}</label>
@@ -1366,7 +1387,44 @@
                 const value = json.data[key] || '';
                 const disabledAttr = isPro ? '' : 'disabled';
                 const opacityClass = isPro ? '' : 'opacity-50';
-                return `
+                const isImageField = ['logo_url', 'favicon_url'].includes(key);
+                const isColorField = key === 'brand_color';
+
+                if (isImageField) {
+                    // Image upload field with preview
+                    const previewSize = key === 'favicon_url' ? 'w-8 h-8' : 'w-16 h-16';
+                    return `
+            <div class="bg-dark-800 rounded-xl p-6 border border-white/5 ${opacityClass}">
+                <label class="text-sm text-gray-400 mb-2 block">${label} <span class="pro-badge">PRO</span></label>
+                <div class="flex items-center gap-4 mb-3">
+                    ${value ? `<img src="${escapeAttr(value)}" class="${previewSize} rounded-lg object-cover border border-white/10" onerror="this.style.display='none'">` : ''}
+                    <input type="file" data-upload-key="${key}" accept="image/png,image/jpeg,image/svg+xml,image/webp,image/x-icon" ${disabledAttr}
+                        class="text-sm text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-brand-500 file:text-white file:font-medium file:cursor-pointer hover:file:bg-brand-600">
+                </div>
+                <input type="text" data-key="${key}" value="${escapeAttr(value)}" ${disabledAttr}
+                    class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white text-xs focus:border-brand-400 focus:outline-none"
+                    placeholder="${isPro ? 'URL preenchida automaticamente ao fazer upload' : 'Disponível no Plano Profissional'}">
+            </div>
+        `;
+                } else if (isColorField) {
+                    // Color picker field
+                    return `
+            <div class="bg-dark-800 rounded-xl p-6 border border-white/5 ${opacityClass}">
+                <label class="text-sm text-gray-400 mb-2 block">${label} <span class="pro-badge">PRO</span></label>
+                <div class="flex items-center gap-4">
+                    <input type="color" data-color-key="${key}" value="${value || '#ee7620'}" ${disabledAttr}
+                        class="w-12 h-12 rounded-lg cursor-pointer border border-white/10 bg-transparent"
+                        oninput="this.nextElementSibling.value = this.value">
+                    <input type="text" data-key="${key}" value="${escapeAttr(value)}" ${disabledAttr}
+                        class="flex-1 bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none font-mono"
+                        placeholder="${isPro ? '#FF0000' : 'Disponível no Plano Profissional'}"
+                        oninput="this.previousElementSibling.value = this.value">
+                    ${value ? `<div class="w-8 h-8 rounded-full border border-white/20" style="background:${escapeAttr(value)}"></div>` : ''}
+                </div>
+            </div>
+        `;
+                } else {
+                    return `
             <div class="bg-dark-800 rounded-xl p-6 border border-white/5 ${opacityClass}">
                 <label class="text-sm text-gray-400 mb-2 block">${label} <span class="pro-badge">PRO</span></label>
                 <input type="text" data-key="${key}" value="${escapeAttr(value)}" ${disabledAttr}
@@ -1374,9 +1432,46 @@
                     ${isPro ? '' : 'placeholder="Disponível no Plano Profissional"'}>
             </div>
         `;
+                }
             }).join('');
 
             form.innerHTML = html;
+
+            // Attach upload handlers for image fields
+            document.querySelectorAll('#config-form [data-upload-key]').forEach(fileInput => {
+                fileInput.addEventListener('change', async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    const key = fileInput.dataset.uploadKey;
+                    const formData = new FormData();
+                    formData.append('image', file);
+                    toast('Enviando imagem...');
+                    try {
+                        const res = await apiAuth('/upload', { method: 'POST', body: formData });
+                        if (res.success && res.data?.url) {
+                            // Set the URL input value
+                            const urlInput = document.querySelector(`[data-key="${key}"]`);
+                            if (urlInput) urlInput.value = res.data.url;
+                            // Update preview
+                            const preview = fileInput.parentElement.querySelector('img');
+                            if (preview) {
+                                preview.src = res.data.url;
+                                preview.style.display = '';
+                            } else {
+                                const img = document.createElement('img');
+                                img.src = res.data.url;
+                                img.className = key === 'favicon_url' ? 'w-8 h-8 rounded-lg object-cover border border-white/10' : 'w-16 h-16 rounded-lg object-cover border border-white/10';
+                                fileInput.parentElement.prepend(img);
+                            }
+                            toast('Imagem enviada! Clique "Salvar" para aplicar.', 'success');
+                        } else {
+                            toast(res.error || 'Erro ao enviar imagem', 'error');
+                        }
+                    } catch (err) {
+                        toast('Erro ao enviar imagem', 'error');
+                    }
+                });
+            });
         }
 
         async function saveConfig() {

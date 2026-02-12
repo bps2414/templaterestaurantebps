@@ -157,27 +157,24 @@
             background-attachment: fixed;
         }
 
-        /* Loading skeleton - prevent FOUC */
-        body:not(.config-loaded) [data-config] {
-            color: transparent;
-            background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
-            background-size: 200% 100%;
-            animation: skeleton-loading 1.5s ease-in-out infinite;
-            border-radius: 4px;
-            min-width: 100px;
-            display: inline-block;
+        /* FOUC prevention — hide configurable text until JS populates it */
+        body:not(.config-loaded) #nav-brand,
+        body:not(.config-loaded) #footer-brand,
+        body:not(.config-loaded) #hero-title,
+        body:not(.config-loaded) #hero-subtitle,
+        body:not(.config-loaded) #footer-tagline,
+        body:not(.config-loaded) #footer-copy {
+            visibility: hidden;
         }
-
-        @keyframes skeleton-loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+        body.config-loaded #nav-brand,
+        body.config-loaded #footer-brand,
+        body.config-loaded #hero-title,
+        body.config-loaded #hero-subtitle,
+        body.config-loaded #footer-tagline,
+        body.config-loaded #footer-copy {
+            animation: configFadeIn 0.3s ease;
         }
-
-        body.config-loaded [data-config] {
-            animation: fade-in 0.3s ease;
-        }
-
-        @keyframes fade-in {
+        @keyframes configFadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
