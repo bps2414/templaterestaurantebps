@@ -4,21 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galeria — Sabor & Arte</title>
+    <title>Galeria — Burger House</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        cream: { 50: '#FFFDF7', 100: '#FFF9E8', 200: '#FFF3D1' },
-                        forest: { 400: '#5B8C5A', 500: '#3D6B3D', 600: '#2D5A2D', 700: '#1E4620' },
-                        gold: { 300: '#E8C872', 400: '#D4A843', 500: '#C49A2C' },
-                        charcoal: { 800: '#2A2A2A', 900: '#1A1A1A' },
-                    }, fontFamily: { display: ['Cormorant Garamond', 'serif'], body: ['Outfit', 'sans-serif'] }
+                        cream: { 50: '#FFF8F0', 100: '#FFF0E0', 200: '#FFE4C9' },
+                        fire: { 400: '#EF4444', 500: '#DC2626', 600: '#B91C1C', 700: '#991B1B' },
+                        gold: { 300: '#FCD34D', 400: '#FBBF24', 500: '#F59E0B' },
+                        charcoal: { 800: '#1F1F1F', 900: '#111111' },
+                    }, fontFamily: { display: ['Barlow Condensed', 'sans-serif'], body: ['Outfit', 'sans-serif'] }
                 }
             }
         };
@@ -26,18 +26,19 @@
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background: #FFFDF7;
-            color: #2A2A2A;
+            background: #FFF8F0;
+            color: #1F1F1F;
         }
 
         .font-display {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'Barlow Condensed', sans-serif;
+            text-transform: uppercase;
         }
 
         .nav-warm {
             backdrop-filter: blur(16px);
-            background: rgba(255, 253, 247, 0.92);
-            border-bottom: 1px solid rgba(212, 168, 67, 0.15);
+            background: rgba(17, 17, 17, 0.95);
+            border-bottom: 1px solid rgba(251, 191, 36, 0.2);
         }
 
         .whatsapp-float {
@@ -123,10 +124,11 @@
         }
 
         .gold-line {
-            width: 60px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #D4A843, transparent);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #DC2626, #FBBF24, transparent);
             margin: 0 auto;
+            border-radius: 2px;
         }
 
         .separator {
@@ -140,8 +142,8 @@
         .separator::after {
             content: '';
             width: 40px;
-            height: 1px;
-            background: #D4A843;
+            height: 2px;
+            background: #FBBF24;
         }
     </style>
 </head>
@@ -153,33 +155,33 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 md:h-20">
                 <a href="/" class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-forest-500 flex items-center justify-center shadow-md">
-                        <span class="text-cream-50 text-lg font-display font-bold">S</span>
+                    <div class="w-10 h-10 rounded-full bg-fire-500 flex items-center justify-center shadow-md">
+                        <span class="text-cream-50 text-lg">🍔</span>
                     </div>
-                    <span class="font-display text-xl md:text-2xl font-bold text-charcoal-900" id="nav-brand">Sabor &
-                        Arte</span>
+                    <span class="font-display text-xl md:text-2xl font-bold text-white" id="nav-brand">Burger
+                        House</span>
                 </a>
                 <div class="hidden md:flex items-center gap-8">
-                    <a href="/" class="text-charcoal-800/60 hover:text-forest-500 transition text-sm">Início</a>
-                    <a href="/menu" class="text-charcoal-800/60 hover:text-forest-500 transition text-sm">Cardápio</a>
-                    <a href="/gallery" class="text-forest-600 font-medium text-sm">Galeria</a>
-                    <a href="/about" class="text-charcoal-800/60 hover:text-forest-500 transition text-sm">Sobre</a>
-                    <a href="/contact" class="text-charcoal-800/60 hover:text-forest-500 transition text-sm">Contato</a>
+                    <a href="/" class="text-white/60 hover:text-gold-400 transition text-sm">Início</a>
+                    <a href="/menu" class="text-white/60 hover:text-gold-400 transition text-sm">Cardápio</a>
+                    <a href="/gallery" class="text-gold-400 font-medium text-sm">Galeria</a>
+                    <a href="/about" class="text-white/60 hover:text-gold-400 transition text-sm">Sobre</a>
+                    <a href="/contact" class="text-white/60 hover:text-gold-400 transition text-sm">Contato</a>
                 </div>
-                <button id="menu-toggle" class="md:hidden text-charcoal-900 p-2"><svg class="w-6 h-6" fill="none"
+                <button id="menu-toggle" class="md:hidden text-white p-2"><svg class="w-6 h-6" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 6h16M4 12h16M4 18h16" />
                     </svg></button>
             </div>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden bg-cream-50/95 backdrop-blur border-t border-gold-400/10">
+        <div id="mobile-menu" class="hidden md:hidden bg-charcoal-900/95 backdrop-blur border-t border-gold-400/20">
             <div class="px-4 py-4 space-y-3">
-                <a href="/" class="block text-charcoal-800/60 py-2">Início</a>
-                <a href="/menu" class="block text-charcoal-800/60 py-2">Cardápio</a>
-                <a href="/gallery" class="block text-forest-600 font-medium py-2">Galeria</a>
-                <a href="/about" class="block text-charcoal-800/60 py-2">Sobre</a>
-                <a href="/contact" class="block text-charcoal-800/60 py-2">Contato</a>
+                <a href="/" class="block text-white/60 py-2">Início</a>
+                <a href="/menu" class="block text-white/60 py-2">Cardápio</a>
+                <a href="/gallery" class="block text-gold-400 font-medium py-2">Galeria</a>
+                <a href="/about" class="block text-white/60 py-2">Sobre</a>
+                <a href="/contact" class="block text-white/60 py-2">Contato</a>
             </div>
         </div>
     </nav>
@@ -188,10 +190,9 @@
     <section class="pt-32 pb-16 bg-cream-50">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <div class="separator mb-4"><span
-                    class="text-gold-500 text-xs tracking-[0.3em] uppercase font-medium">Galeria</span></div>
-            <h1 class="font-display text-4xl md:text-6xl font-bold text-charcoal-900 mb-4">Nossos Momentos</h1>
-            <p class="text-charcoal-800/50 text-lg max-w-2xl mx-auto">Cada imagem conta a história do nosso cuidado com
-                cada detalhe.</p>
+                    class="text-fire-500 text-xs tracking-[0.3em] uppercase font-medium">Galeria</span></div>
+            <h1 class="font-display text-4xl md:text-6xl font-extrabold text-charcoal-900 mb-4">Nossos Burgers</h1>
+            <p class="text-charcoal-800/50 text-lg max-w-2xl mx-auto">Cada foto mostra o cuidado e a qualidade dos nossos hambúrgueres.</p>
             <div class="gold-line mt-6"></div>
         </div>
     </section>
@@ -220,7 +221,7 @@
     <!-- FOOTER -->
     <footer class="bg-charcoal-900 py-12">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-white/30 text-sm" id="footer-copy">© 2026 Sabor & Arte</p>
+            <p class="text-white/30 text-sm" id="footer-copy">© 2026 Burger House</p>
         </div>
     </footer>
 
@@ -242,14 +243,14 @@
         let currentIndex = 0;
 
         const fallbackImages = [
-            { src: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80', alt: 'Ambiente do restaurante' },
-            { src: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80', alt: 'Prato gourmet' },
-            { src: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80', alt: 'Bar do restaurante' },
-            { src: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80', alt: 'Salada fresca' },
-            { src: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80', alt: 'Pizza artesanal' },
-            { src: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=600&q=80', alt: 'Sobremesa' },
-            { src: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&q=80', alt: 'Prato de peixe' },
-            { src: 'https://images.unsplash.com/photo-1551218808-94e220e084d2?w=600&q=80', alt: 'Cozinha' },
+            { src: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80', alt: 'Hambúrguer artesanal' },
+            { src: 'https://images.unsplash.com/photo-1550547660-d9450f859349?w=600&q=80', alt: 'Cheeseburger duplo' },
+            { src: 'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=600&q=80', alt: 'Burger gourmet' },
+            { src: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=600&q=80', alt: 'Batata frita crocante' },
+            { src: 'https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=600&q=80', alt: 'Smash burger' },
+            { src: 'https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=600&q=80', alt: 'Onion rings' },
+            { src: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=600&q=80', alt: 'X-Bacon' },
+            { src: 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=600&q=80', alt: 'Burger com cheddar' },
         ];
 
         async function loadGallery() {
