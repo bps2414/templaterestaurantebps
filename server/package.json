@@ -12,6 +12,7 @@
         "prisma:migrate:deploy": "prisma migrate deploy",
         "prisma:seed": "ts-node prisma/seed.ts",
         "prisma:studio": "prisma studio",
+        "change-plan": "ts-node scripts/change-plan.ts",
         "backup": "ts-node scripts/backup.ts",
         "backup:restore": "ts-node scripts/backup.ts restore",
         "test": "jest --forceExit --detectOpenHandles",

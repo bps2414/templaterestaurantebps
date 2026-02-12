@@ -1080,13 +1080,15 @@
             }).join('');
 
             // Event delegation for dish buttons
-            tbody.querySelectorAll('[data-action="edit-dish"]').forEach(btn => {
+            const editButtons = tbody.querySelectorAll('[data-action="edit-dish"]');
+            editButtons.forEach(btn => {
                 btn.addEventListener('click', () => {
                     const dish = allDishes.find(d => String(d.id) === btn.dataset.dishId);
                     if (dish) editDish(dish);
                 });
             });
-            tbody.querySelectorAll('[data-action="delete-dish"]').forEach(btn => {
+            const deleteButtons = tbody.querySelectorAll('[data-action="delete-dish"]');
+            deleteButtons.forEach(btn => {
                 btn.addEventListener('click', () => deleteDish(btn.dataset.dishId));
             });
         }
@@ -1183,13 +1185,15 @@
     `).join('');
 
             // Event delegation for category buttons
-            grid.querySelectorAll('[data-action="edit-category"]').forEach(btn => {
+            const editCatButtons = grid.querySelectorAll('[data-action="edit-category"]');
+            editCatButtons.forEach(btn => {
                 btn.addEventListener('click', () => {
                     const cat = categories.find(c => String(c.id) === btn.dataset.categoryId);
                     if (cat) editCategory(cat);
                 });
             });
-            grid.querySelectorAll('[data-action="delete-category"]').forEach(btn => {
+            const deleteCatButtons = grid.querySelectorAll('[data-action="delete-category"]');
+            deleteCatButtons.forEach(btn => {
                 btn.addEventListener('click', () => deleteCategory(btn.dataset.categoryId));
             });
         }
