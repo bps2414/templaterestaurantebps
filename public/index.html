@@ -4,27 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Burger House — Hambúrgueres Artesanais</title>
+    <title>Sabor & Arte — Restaurante</title>
     <meta name="description"
-        content="Os melhores hambúrgueres artesanais da cidade. Blend exclusivo, pão artesanal e molhos da casa.">
+        content="Gastronomia contemporânea que encanta os sentidos. Ingredientes frescos e técnicas refinadas.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
-        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        cream: { 50: '#FFF8F0', 100: '#FFF0E0', 200: '#FFE4C9', 300: '#FFD5A8' },
-                        fire: { 400: '#EF4444', 500: '#DC2626', 600: '#B91C1C', 700: '#991B1B', 800: '#7F1D1D' },
-                        gold: { 300: '#FCD34D', 400: '#FBBF24', 500: '#F59E0B', 600: '#D97706' },
-                        charcoal: { 800: '#1F1F1F', 900: '#111111' },
+                        brand: { 50: '#fef7ee', 100: '#fdecd7', 200: '#fad5ae', 300: '#f6b77a', 400: '#f19244', 500: '#ee7620', 600: '#d95c16', 700: '#b44314', 800: '#8f3618', 900: '#7a2f16' },
+                        dark: { 800: '#1a1a2e', 900: '#0f0f1a' },
                     },
                     fontFamily: {
-                        display: ['Barlow Condensed', 'sans-serif'],
-                        body: ['Outfit', 'sans-serif'],
+                        display: ['Playfair Display', 'serif'],
+                        body: ['Inter', 'sans-serif'],
                     },
                 },
             },
@@ -38,16 +36,16 @@
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background: #FFF8F0;
-            color: #1F1F1F;
+            font-family: 'Inter', sans-serif;
+            background: #0f0f1a;
+            color: #f5f5f5;
         }
 
         .font-display {
-            font-family: 'Barlow Condensed', sans-serif;
-            text-transform: uppercase;
+            font-family: 'Playfair Display', serif;
         }
 
+        /* Scroll reveal */
         .reveal {
             opacity: 0;
             transform: translateY(40px);
@@ -59,6 +57,7 @@
             transform: translateY(0);
         }
 
+        /* Fade in */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -87,6 +86,7 @@
             animation-delay: .3s;
         }
 
+        /* Hover glow */
         .btn-glow {
             position: relative;
             overflow: hidden;
@@ -97,7 +97,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.15), transparent);
             transform: translateX(-100%);
             transition: transform 0.5s;
         }
@@ -108,9 +108,10 @@
 
         .btn-glow:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+            box-shadow: 0 8px 25px rgba(238, 118, 32, 0.4);
         }
 
+        /* WhatsApp button */
         .whatsapp-float {
             position: fixed;
             bottom: 24px;
@@ -132,68 +133,27 @@
             box-shadow: 0 6px 30px rgba(37, 211, 102, 0.7);
         }
 
-        .nav-warm {
-            backdrop-filter: blur(16px);
-            background: rgba(17, 17, 17, 0.95);
-            border-bottom: 1px solid rgba(251, 191, 36, 0.2);
+        /* Nav */
+        .nav-glass {
+            backdrop-filter: blur(12px);
+            background: rgba(15, 15, 26, 0.8);
         }
 
+        /* Cards */
         .card-hover {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .card-hover:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(220, 38, 38, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
+        /* Hero parallax */
         .hero-bg {
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-        }
-
-        .wave-divider {
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 100%;
-            overflow: hidden;
-            line-height: 0;
-        }
-
-        .wave-divider svg {
-            position: relative;
-            display: block;
-            width: calc(100% + 1.3px);
-            height: 80px;
-        }
-
-        .leaf-pattern {
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='8' fill='%23DC2626' opacity='0.02'/%3E%3C/svg%3E");
-        }
-
-        .gold-line {
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #DC2626, #FBBF24, transparent);
-            margin: 0 auto;
-            border-radius: 2px;
-        }
-
-        .separator {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            justify-content: center;
-        }
-
-        .separator::before,
-        .separator::after {
-            content: '';
-            width: 40px;
-            height: 2px;
-            background: #FBBF24;
         }
     </style>
 </head>
@@ -201,27 +161,27 @@
 <body>
 
     <!-- ========== NAVBAR ========== -->
-    <nav class="nav-warm fixed top-0 w-full z-50">
+    <nav class="nav-glass fixed top-0 w-full z-50 border-b border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 md:h-20">
                 <a href="/" class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-fire-500 flex items-center justify-center shadow-md">
-                        <span class="text-cream-50 text-lg">🍔</span>
-                    </div>
-                    <span class="font-display text-xl md:text-2xl font-bold text-white" id="nav-brand">Burger
-                        House</span>
+                    <span class="text-2xl">🍽</span>
+                    <span class="font-display text-xl md:text-2xl font-bold text-white" id="nav-brand">Sabor &
+                        Arte</span>
                 </a>
+                <!-- Desktop nav -->
                 <div class="hidden md:flex items-center gap-8">
-                    <a href="/" class="text-gold-400 font-medium text-sm">Início</a>
-                    <a href="/menu" class="text-white/60 hover:text-gold-400 transition text-sm">Cardápio</a>
-                    <a href="/gallery" class="text-white/60 hover:text-gold-400 transition text-sm">Galeria</a>
-                    <a href="/about" class="text-white/60 hover:text-gold-400 transition text-sm">Sobre</a>
-                    <a href="/contact" class="text-white/60 hover:text-gold-400 transition text-sm">Contato</a>
-                    <a href="#pedir"
-                        class="btn-glow bg-fire-500 hover:bg-fire-600 text-white px-5 py-2.5 rounded-full text-sm font-medium">🔥
-                        Peça
-                        Agora</a>
+                    <a href="/" class="text-brand-400 font-medium text-sm">Início</a>
+                    <a href="/menu" class="text-gray-300 hover:text-brand-400 transition text-sm">Cardápio</a>
+                    <a href="/gallery" class="text-gray-300 hover:text-brand-400 transition text-sm">Galeria</a>
+                    <a href="/about" class="text-gray-300 hover:text-brand-400 transition text-sm">Sobre</a>
+                    <a href="/contact" class="text-gray-300 hover:text-brand-400 transition text-sm">Contato</a>
+                    <a href="#reserva"
+                        class="btn-glow bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-full text-sm font-medium">
+                        Reservar Mesa
+                    </a>
                 </div>
+                <!-- Mobile toggle -->
                 <button id="menu-toggle" class="md:hidden text-white p-2" aria-label="Menu">
                     <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -230,172 +190,107 @@
                 </button>
             </div>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden bg-charcoal-900/95 backdrop-blur border-t border-gold-400/20">
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-dark-900/95 backdrop-blur border-t border-white/5">
             <div class="px-4 py-4 space-y-3">
-                <a href="/" class="block text-gold-400 font-medium py-2">Início</a>
-                <a href="/menu" class="block text-white/60 hover:text-gold-400 py-2">Cardápio</a>
-                <a href="/gallery" class="block text-white/60 hover:text-gold-400 py-2">Galeria</a>
-                <a href="/about" class="block text-white/60 hover:text-gold-400 py-2">Sobre</a>
-                <a href="/contact" class="block text-white/60 hover:text-gold-400 py-2">Contato</a>
-                <a href="#pedir"
-                    class="block btn-glow bg-fire-500 text-white text-center px-5 py-2.5 rounded-full font-medium">🔥
-                    Peça
-                    Agora</a>
+                <a href="/" class="block text-brand-400 font-medium py-2">Início</a>
+                <a href="/menu" class="block text-gray-300 hover:text-brand-400 py-2">Cardápio</a>
+                <a href="/gallery" class="block text-gray-300 hover:text-brand-400 py-2">Galeria</a>
+                <a href="/about" class="block text-gray-300 hover:text-brand-400 py-2">Sobre</a>
+                <a href="/contact" class="block text-gray-300 hover:text-brand-400 py-2">Contato</a>
+                <a href="#reserva"
+                    class="block btn-glow bg-brand-500 text-white text-center px-5 py-2.5 rounded-full font-medium">Reservar
+                    Mesa</a>
             </div>
         </div>
     </nav>
 
     <!-- ========== HERO ========== -->
     <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <!-- Background -->
         <div class="absolute inset-0 hero-bg"
-            style="background-image:url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1920&q=80');">
-            <div class="absolute inset-0 bg-gradient-to-b from-charcoal-900/70 via-charcoal-900/50 to-cream-50"></div>
+            style="background-image:url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&q=80');">
+            <div class="absolute inset-0 bg-gradient-to-b from-dark-900/70 via-dark-900/50 to-dark-900"></div>
         </div>
+        <!-- Content -->
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
-            <div class="separator mb-6 animate-fade-in-up">
-                <span class="text-gold-400 text-sm tracking-[0.4em] uppercase font-medium">Bem-vindo à</span>
-            </div>
-            <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-extrabold text-white mb-6 animate-fade-in-up delay-100 leading-tight"
+            <p class="text-brand-400 font-medium tracking-[0.3em] uppercase text-sm mb-6 animate-fade-in-up">Bem-vindo
+                ao</p>
+            <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 animate-fade-in-up delay-100"
                 id="hero-title">
-                Hambúrgueres<br>artesanais <span class="text-gold-400">na brasa</span>
+                Uma experiência<br>gastronômica <span class="text-brand-400">única</span>
             </h1>
-            <p class="text-cream-100 text-lg md:text-xl max-w-2xl mx-auto mb-10 animate-fade-in-up delay-200 font-light"
+            <p class="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto mb-10 animate-fade-in-up delay-200"
                 id="hero-subtitle">
-                Blend exclusivo, pão artesanal e molhos da casa. Peça pelo WhatsApp!
+                Ingredientes frescos, técnicas refinadas e sabores que contam histórias.
             </p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-300">
                 <a href="/menu"
-                    class="btn-glow bg-fire-500 hover:bg-fire-600 text-white px-8 py-4 rounded-full text-lg font-bold shadow-lg">🍔
-                    Ver Cardápio</a>
-                <a href="#pedir"
-                    class="border-2 border-gold-400/60 hover:border-gold-400 text-white hover:text-gold-400 px-8 py-4 rounded-full text-lg font-medium transition-all backdrop-blur-sm">🔥
-                    Peça
-                    Agora</a>
+                    class="btn-glow bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-full text-lg font-medium">
+                    Ver Cardápio
+                </a>
+                <a href="#reserva"
+                    class="border border-white/20 hover:border-brand-400 text-white hover:text-brand-400 px-8 py-4 rounded-full text-lg font-medium transition-all">
+                    Reservar Mesa
+                </a>
             </div>
         </div>
-        <div class="wave-divider">
-            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-                <path d="M0,60 C300,120 900,0 1200,60 L1200,120 L0,120 Z" fill="#FFF8F0"></path>
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+            <svg class="w-6 h-6 text-white/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
             </svg>
         </div>
     </section>
 
     <!-- ========== DESTAQUES ========== -->
-    <section class="py-20 md:py-28 bg-cream-50 leaf-pattern">
+    <section class="py-20 md:py-28 bg-dark-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 reveal">
-                <div class="separator mb-4"><span
-                        class="text-fire-500 text-xs tracking-[0.3em] uppercase font-medium">Destaques</span></div>
-                <h2 class="font-display text-3xl md:text-5xl font-extrabold text-charcoal-900">Os Mais Pedidos</h2>
-                <div class="gold-line mt-4"></div>
+                <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Destaques</p>
+                <h2 class="font-display text-3xl md:text-5xl font-bold text-white">Nossos Pratos Especiais</h2>
             </div>
             <div class="grid md:grid-cols-3 gap-8" id="featured-dishes">
-                <div class="text-center py-20 col-span-3 text-charcoal-800/40">Carregando destaques...</div>
+                <!-- Filled dynamically -->
+                <div class="text-center py-20 col-span-3 text-gray-500">Carregando destaques...</div>
             </div>
         </div>
     </section>
 
     <!-- ========== CATEGORIES ========== -->
-    <section class="py-20 md:py-28 bg-charcoal-900 relative overflow-hidden">
-        <div class="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-fire-600/20"></div>
-        <div class="absolute -bottom-10 -left-10 w-40 h-40 rounded-full bg-gold-400/10"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section class="py-20 md:py-28 bg-dark-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 reveal">
-                <div class="separator mb-4"><span
-                        class="text-gold-400 text-xs tracking-[0.3em] uppercase font-medium">Cardápio</span></div>
-                <h2 class="font-display text-3xl md:text-5xl font-extrabold text-white">Monte Seu Pedido</h2>
-                <div class="gold-line mt-4"></div>
+                <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Cardápio</p>
+                <h2 class="font-display text-3xl md:text-5xl font-bold text-white">Explore Nossas Categorias</h2>
             </div>
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" id="category-cards">
-                <div class="text-center py-20 col-span-4 text-white/40">Carregando categorias...</div>
+                <div class="text-center py-20 col-span-4 text-gray-500">Carregando categorias...</div>
             </div>
         </div>
     </section>
 
     <!-- ========== ABOUT PREVIEW ========== -->
-    <section class="py-20 md:py-28 bg-cream-50">
+    <section class="py-20 md:py-28 bg-dark-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-2 gap-16 items-center">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div class="reveal">
-                    <p class="text-fire-500 text-xs tracking-[0.3em] uppercase font-medium mb-4">Sobre Nós</p>
-                    <h2 class="font-display text-3xl md:text-5xl font-extrabold text-charcoal-900 mb-6"
-                        id="about-title">
-                        Nossa História</h2>
-                    <p class="text-charcoal-800/60 text-lg leading-relaxed mb-8" id="about-text">Nascemos da paixão por
-                        hambúrgueres de verdade. Blend preparado diariamente, pão artesanal e molhos receita da casa.
-                        Cada burger é feito na hora, na brasa.</p>
+                    <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Sobre Nós</p>
+                    <h2 class="font-display text-3xl md:text-5xl font-bold text-white mb-6" id="about-title">Nossa
+                        História</h2>
+                    <p class="text-gray-400 text-lg leading-relaxed mb-8" id="about-text">
+                        Há mais de 15 anos trazendo o melhor da culinária contemporânea...
+                    </p>
                     <a href="/about"
-                        class="btn-glow inline-flex items-center gap-2 bg-fire-500 hover:bg-fire-600 text-white px-6 py-3 rounded-full font-medium">
-                        Saiba Mais <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
+                        class="btn-glow inline-block bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-full font-medium">
+                        Saiba Mais →
                     </a>
                 </div>
                 <div class="reveal">
-                    <div class="relative">
-                        <div class="absolute -top-4 -left-4 w-full h-full border-2 border-fire-500/30 rounded-2xl">
-                        </div>
-                        <img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=800&q=80"
-                            alt="Hambúrguer artesanal na brasa"
-                            class="w-full h-[400px] object-cover rounded-2xl relative z-10 shadow-xl">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== TESTIMONIALS ========== -->
-    <section class="py-20 bg-cream-100/50">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 reveal">
-                <div class="separator mb-4"><span
-                        class="text-fire-500 text-xs tracking-[0.3em] uppercase font-medium">Avaliações</span></div>
-                <h2 class="font-display text-3xl md:text-5xl font-extrabold text-charcoal-900">O Que Dizem Nossos
-                    Clientes
-                </h2>
-                <div class="gold-line mt-4"></div>
-            </div>
-            <div class="grid md:grid-cols-3 gap-8 reveal">
-                <div
-                    class="bg-white rounded-2xl p-8 shadow-sm border border-gold-400/10 hover:shadow-lg transition-shadow">
-                    <div class="flex gap-1 text-gold-400 mb-4">★★★★★</div>
-                    <p class="text-charcoal-800/60 italic leading-relaxed mb-6">"Melhor smash burger que já comi! Carne
-                        suculenta, queijo derretendo... voltarei toda semana!"</p>
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-fire-500/10 flex items-center justify-center"><span
-                                class="text-fire-600 font-display font-bold">M</span></div>
-                        <div>
-                            <p class="text-charcoal-900 font-semibold text-sm">Maria Silva</p>
-                            <p class="text-charcoal-800/40 text-xs">Cliente frequente</p>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="bg-white rounded-2xl p-8 shadow-sm border border-gold-400/10 hover:shadow-lg transition-shadow">
-                    <div class="flex gap-1 text-gold-400 mb-4">★★★★★</div>
-                    <p class="text-charcoal-800/60 italic leading-relaxed mb-6">"O combo smash é absurdo! Onion rings
-                        crocantes e milkshake de Ovomaltine. Melhor da cidade!"</p>
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-fire-500/10 flex items-center justify-center"><span
-                                class="text-fire-600 font-display font-bold">J</span></div>
-                        <div>
-                            <p class="text-charcoal-900 font-semibold text-sm">João Pereira</p>
-                            <p class="text-charcoal-800/40 text-xs">Via Google Reviews</p>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="bg-white rounded-2xl p-8 shadow-sm border border-gold-400/10 hover:shadow-lg transition-shadow">
-                    <div class="flex gap-1 text-gold-400 mb-4">★★★★★</div>
-                    <p class="text-charcoal-800/60 italic leading-relaxed mb-6">"Pedi pelo WhatsApp e chegou rapidinho.
-                        O X-Bacon é sensacional, o bacon crocante é outro nível!"</p>
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-fire-500/10 flex items-center justify-center"><span
-                                class="text-fire-600 font-display font-bold">A</span></div>
-                        <div>
-                            <p class="text-charcoal-900 font-semibold text-sm">Ana Costa</p>
-                            <p class="text-charcoal-800/40 text-xs">Via Instagram</p>
+                    <div class="relative rounded-2xl overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80"
+                            alt="Interior do restaurante" class="w-full h-[400px] object-cover rounded-2xl">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark-900/50 to-transparent rounded-2xl">
                         </div>
                     </div>
                 </div>
@@ -404,74 +299,69 @@
     </section>
 
     <!-- ========== OPENING HOURS ========== -->
-    <section class="py-20 bg-charcoal-900 relative overflow-hidden" id="pedir">
-        <div class="absolute inset-0 opacity-10"
-            style="background-image:url('https://images.unsplash.com/photo-1550966871-3ed3cdb51f3a?w=1200&q=40');background-size:cover;background-position:center;">
-        </div>
-        <div class="max-w-4xl mx-auto px-4 text-center reveal relative z-10">
-            <div class="separator mb-4"><span
-                    class="text-gold-400 text-xs tracking-[0.3em] uppercase font-medium">Horários</span></div>
-            <h2 class="font-display text-3xl md:text-4xl font-extrabold text-white mb-8">Horário de Funcionamento</h2>
-            <div class="bg-white/5 backdrop-blur-md rounded-2xl p-8 md:p-12 border border-fire-500/20">
-                <p class="text-white/80 text-lg mb-8" id="opening-hours">Segunda: Fechado | Ter — Qui: 18h–23h | Sex —
-                    Dom: 18h–00h</p>
-                <a href="#" id="whatsapp-cta"
-                    class="btn-glow inline-flex items-center gap-2 bg-[#25d366] hover:bg-[#1da851] text-white px-8 py-4 rounded-full text-lg font-medium shadow-lg">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                    </svg>
-                    Falar pelo WhatsApp
-                </a>
+    <section class="py-20 bg-dark-800/50" id="reserva">
+        <div class="max-w-4xl mx-auto px-4 text-center reveal">
+            <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Horários</p>
+            <h2 class="font-display text-3xl md:text-4xl font-bold text-white mb-8">Horário de Funcionamento</h2>
+            <div class="bg-dark-900/60 backdrop-blur rounded-2xl p-8 md:p-12 border border-white/5">
+                <p class="text-gray-300 text-lg" id="opening-hours">Seg-Qui: 11h30–15h / 18h30–23h | Sex-Sáb: 11h30–00h
+                    | Dom: 11h30–16h</p>
+                <div class="mt-8">
+                    <a href="#" id="whatsapp-cta"
+                        class="btn-glow inline-flex items-center gap-2 bg-[#25d366] hover:bg-[#1da851] text-white px-8 py-4 rounded-full text-lg font-medium">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                        </svg>
+                        Falar pelo WhatsApp
+                    </a>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- ========== FOOTER ========== -->
-    <footer class="bg-charcoal-900 py-16">
+    <footer class="bg-dark-900 border-t border-white/5 py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-4 gap-12">
                 <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 rounded-full bg-fire-500 flex items-center justify-center"><span
-                                class="text-cream-50 text-lg">🍔</span></div>
-                        <span class="font-display text-xl font-bold text-white" id="footer-brand">Burger House</span>
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-2xl">🍽</span>
+                        <span class="font-display text-xl font-bold text-white" id="footer-brand">Sabor & Arte</span>
                     </div>
-                    <p class="text-white/40 text-sm" id="footer-tagline">Os melhores burgers da cidade</p>
+                    <p class="text-gray-500 text-sm" id="footer-tagline">Gastronomia que encanta os sentidos</p>
                 </div>
                 <div>
-                    <h4 class="text-gold-400 font-semibold mb-4 text-sm tracking-wider uppercase">Navegação</h4>
+                    <h4 class="text-white font-semibold mb-4">Navegação</h4>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="/" class="text-white/50 hover:text-gold-400 transition">Início</a></li>
-                        <li><a href="/menu" class="text-white/50 hover:text-gold-400 transition">Cardápio</a></li>
-                        <li><a href="/gallery" class="text-white/50 hover:text-gold-400 transition">Galeria</a></li>
-                        <li><a href="/about" class="text-white/50 hover:text-gold-400 transition">Sobre</a></li>
-                        <li><a href="/contact" class="text-white/50 hover:text-gold-400 transition">Contato</a></li>
+                        <li><a href="/" class="text-gray-400 hover:text-brand-400 transition">Início</a></li>
+                        <li><a href="/menu" class="text-gray-400 hover:text-brand-400 transition">Cardápio</a></li>
+                        <li><a href="/gallery" class="text-gray-400 hover:text-brand-400 transition">Galeria</a></li>
+                        <li><a href="/about" class="text-gray-400 hover:text-brand-400 transition">Sobre</a></li>
+                        <li><a href="/contact" class="text-gray-400 hover:text-brand-400 transition">Contato</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-gold-400 font-semibold mb-4 text-sm tracking-wider uppercase">Contato</h4>
-                    <ul class="space-y-2 text-sm text-white/50">
+                    <h4 class="text-white font-semibold mb-4">Contato</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
                         <li id="footer-address">Endereço da Loja</li>
                         <li id="footer-phone">(00) 00000-0000</li>
                         <li id="footer-email">contato@email.com</li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-gold-400 font-semibold mb-4 text-sm tracking-wider uppercase">Redes Sociais</h4>
-                    <div class="flex gap-3">
-                        <a href="#" id="link-instagram"
-                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:bg-fire-500 hover:text-white transition"
+                    <h4 class="text-white font-semibold mb-4">Redes Sociais</h4>
+                    <div class="flex gap-4">
+                        <a href="#" id="link-instagram" class="text-gray-400 hover:text-brand-400 transition"
                             aria-label="Instagram">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
                             </svg>
                         </a>
-                        <a href="#" id="link-facebook"
-                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:bg-fire-500 hover:text-white transition"
+                        <a href="#" id="link-facebook" class="text-gray-400 hover:text-brand-400 transition"
                             aria-label="Facebook">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                             </svg>
@@ -480,7 +370,7 @@
                 </div>
             </div>
             <div class="border-t border-white/5 mt-12 pt-8 text-center">
-                <p class="text-white/30 text-sm" id="footer-copy">© 2026 Restaurante. Todos os direitos reservados.</p>
+                <p class="text-gray-600 text-sm" id="footer-copy">© 2026 Restaurante. Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>

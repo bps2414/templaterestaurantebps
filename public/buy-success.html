@@ -7,31 +7,20 @@
     <title>Compra Realizada! — Template Premium Restaurante</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        cream: { 50: '#FFFDF7', 100: '#FFF9E8' },
-                        forest: { 400: '#5B8C5A', 500: '#3D6B3D', 600: '#2D5A2D', 700: '#1E4620' },
-                        gold: { 300: '#E8C872', 400: '#D4A843', 500: '#C49A2C' },
-                        charcoal: { 800: '#2A2A2A', 900: '#1A1A1A' },
-                    }
-                }
-            }
-        };
+        tailwind.config = { theme: { extend: { colors: { brand: { 400: '#f19244', 500: '#ee7620', 600: '#d95c16' }, dark: { 700: '#242440', 800: '#1a1a2e', 900: '#0f0f1a' } } } } };
     </script>
     <style>
         body {
-            font-family: 'Outfit', sans-serif;
-            background: #FFFDF7;
-            color: #2A2A2A;
+            font-family: 'Inter', sans-serif;
+            background: #0f0f1a;
+            color: #f5f5f5;
         }
 
-        .font-display {
-            font-family: 'Cormorant Garamond', serif;
+        .font-serif {
+            font-family: 'Playfair Display', serif;
         }
 
         @keyframes checkmark {
@@ -83,7 +72,7 @@
             left: -12px;
             width: 32px;
             height: 32px;
-            background: #3D6B3D;
+            background: #ee7620;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -98,13 +87,11 @@
 <body>
 
     <!-- Nav -->
-    <nav class="fixed top-0 w-full z-50 bg-cream-50/90 backdrop-blur-md border-b border-gold-400/10">
+    <nav class="fixed top-0 w-full z-50 bg-dark-900/80 backdrop-blur-md border-b border-white/5">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <a href="/" class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-full bg-forest-500 flex items-center justify-center">
-                    <span class="text-cream-50 text-sm font-display font-bold">S</span>
-                </div>
-                <span class="text-charcoal-900 font-bold text-lg font-display">RestauranteTemplate</span>
+                <span class="text-2xl">🍽</span>
+                <span class="text-white font-bold text-lg">RestauranteTemplate</span>
             </a>
         </div>
     </nav>
@@ -113,61 +100,127 @@
     <section class="pt-32 pb-12 px-6 text-center">
         <div class="max-w-3xl mx-auto">
             <div
-                class="w-20 h-20 rounded-full bg-forest-500 flex items-center justify-center mx-auto mb-6 check-anim shadow-lg">
-                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                class="w-24 h-24 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-8 check-anim">
+                <svg class="w-12 h-12 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
                 </svg>
             </div>
-            <h1 class="font-display text-4xl md:text-5xl text-charcoal-900 font-bold mb-4 fade-up"
-                style="animation-delay:0.3s">Compra Realizada com Sucesso!</h1>
-            <p class="text-charcoal-800/50 text-lg fade-up" style="animation-delay:0.5s">Obrigado pela sua compra! Siga
-                os passos abaixo para começar.</p>
+            <h1 class="font-serif text-4xl md:text-5xl text-white font-bold mb-4 fade-up">
+                Compra Realizada com Sucesso! 🎉
+            </h1>
+            <p class="text-gray-400 text-lg max-w-xl mx-auto fade-up" style="animation-delay:0.1s">
+                Obrigado pela sua compra! Siga os passos abaixo para colocar seu site de restaurante no ar.
+            </p>
         </div>
     </section>
 
     <!-- Steps -->
-    <section class="py-16 px-6">
-        <div class="max-w-4xl mx-auto">
-            <div class="grid md:grid-cols-3 gap-8" style="counter-reset: steps;">
-                <div class="step-card bg-white rounded-2xl p-6 border border-gold-400/10 shadow-sm fade-up"
-                    style="animation-delay:0.7s">
-                    <h3 class="font-bold text-charcoal-900 mb-2 mt-2">Baixe o código</h3>
-                    <p class="text-charcoal-800/50 text-sm">Faça o download do template completo com todos os arquivos.
+    <section class="py-16 px-6" style="counter-reset: steps;">
+        <div class="max-w-3xl mx-auto space-y-8">
+
+            <div class="step-card bg-dark-800 rounded-2xl p-8 border border-white/5 ml-4 fade-up"
+                style="animation-delay:0.2s">
+                <h3 class="text-white font-semibold text-lg mb-3">Clone o Repositório</h3>
+                <p class="text-gray-400 text-sm mb-4">Faça uma cópia do projeto para sua máquina local.</p>
+                <div class="bg-dark-900 rounded-xl p-4 font-mono text-sm text-brand-400 overflow-x-auto">
+                    git clone &lt;url-do-repositorio&gt; meu-restaurante<br>
+                    cd meu-restaurante
+                </div>
+            </div>
+
+            <div class="step-card bg-dark-800 rounded-2xl p-8 border border-white/5 ml-4 fade-up"
+                style="animation-delay:0.3s">
+                <h3 class="text-white font-semibold text-lg mb-3">Configure o Ambiente</h3>
+                <p class="text-gray-400 text-sm mb-4">Copie o arquivo de exemplo e preencha as variáveis:</p>
+                <div class="bg-dark-900 rounded-xl p-4 font-mono text-sm text-brand-400 overflow-x-auto">
+                    cp .env.example .env
+                </div>
+                <p class="text-gray-500 text-xs mt-3">Preencha DATABASE_URL, JWT_SECRET e WHATSAPP no arquivo .env</p>
+            </div>
+
+            <div class="step-card bg-dark-800 rounded-2xl p-8 border border-white/5 ml-4 fade-up"
+                style="animation-delay:0.4s">
+                <h3 class="text-white font-semibold text-lg mb-3">Instale e Rode</h3>
+                <p class="text-gray-400 text-sm mb-4">Instale as dependências e inicie o servidor:</p>
+                <div class="bg-dark-900 rounded-xl p-4 font-mono text-sm text-brand-400 overflow-x-auto">
+                    cd server<br>
+                    npm install<br>
+                    npx prisma migrate dev --name init<br>
+                    npx prisma db seed<br>
+                    npm run dev
+                </div>
+            </div>
+
+            <div class="step-card bg-dark-800 rounded-2xl p-8 border border-white/5 ml-4 fade-up"
+                style="animation-delay:0.5s">
+                <h3 class="text-white font-semibold text-lg mb-3">Acesse o Painel Admin</h3>
+                <p class="text-gray-400 text-sm mb-4">Faça login no painel para customizar seu restaurante:</p>
+                <div class="bg-dark-900 rounded-xl p-4 text-sm space-y-2">
+                    <p class="text-gray-300">🌐 Site: <span class="text-brand-400">http://localhost:3000</span></p>
+                    <p class="text-gray-300">🔐 Admin: <span class="text-brand-400">http://localhost:3000/admin</span>
                     </p>
+                    <p class="text-gray-300">📧 Email: <span class="text-brand-400">admin@restaurante.com</span></p>
+                    <p class="text-gray-300">🔑 Senha: <span class="text-brand-400">admin123</span></p>
                 </div>
-                <div class="step-card bg-white rounded-2xl p-6 border border-gold-400/10 shadow-sm fade-up"
-                    style="animation-delay:0.9s">
-                    <h3 class="font-bold text-charcoal-900 mb-2 mt-2">Configure</h3>
-                    <p class="text-charcoal-800/50 text-sm">Personalize cores, textos e fotos pelo painel
-                        administrativo.</p>
+                <p class="text-yellow-400/70 text-xs mt-3">⚠️ Troque a senha padrão imediatamente após o primeiro login.
+                </p>
+            </div>
+
+            <div class="step-card bg-dark-800 rounded-2xl p-8 border border-white/5 ml-4 fade-up"
+                style="animation-delay:0.6s">
+                <h3 class="text-white font-semibold text-lg mb-3">Personalize Tudo</h3>
+                <p class="text-gray-400 text-sm mb-2">No painel admin você pode:</p>
+                <ul class="text-gray-400 text-sm space-y-2 ml-4">
+                    <li>✅ Adicionar/editar pratos com fotos e preços</li>
+                    <li>✅ Criar categorias para o cardápio</li>
+                    <li>✅ Enviar fotos para a galeria</li>
+                    <li>✅ Alterar nome, slogan, horários, endereço</li>
+                    <li>✅ Configurar número do WhatsApp</li>
+                    <li>✅ Alterar links das redes sociais</li>
+                </ul>
+            </div>
+
+            <div class="step-card bg-dark-800 rounded-2xl p-8 border border-white/5 ml-4 fade-up"
+                style="animation-delay:0.7s">
+                <h3 class="text-white font-semibold text-lg mb-3">Deploy (Opcional)</h3>
+                <p class="text-gray-400 text-sm mb-4">Use Docker para publicar em qualquer servidor:</p>
+                <div class="bg-dark-900 rounded-xl p-4 font-mono text-sm text-brand-400 overflow-x-auto">
+                    docker compose up -d
                 </div>
-                <div class="step-card bg-white rounded-2xl p-6 border border-gold-400/10 shadow-sm fade-up"
-                    style="animation-delay:1.1s">
-                    <h3 class="font-bold text-charcoal-900 mb-2 mt-2">Publique</h3>
-                    <p class="text-charcoal-800/50 text-sm">Use Docker ou qualquer servidor para colocar online.</p>
-                </div>
+                <p class="text-gray-500 text-xs mt-3">Funciona com Railway, Render, DigitalOcean, AWS, ou qualquer VPS.
+                </p>
             </div>
         </div>
     </section>
 
-    <!-- Download Section -->
-    <section class="py-12 px-6">
+    <!-- Support -->
+    <section class="py-16 px-6 bg-dark-800/30">
         <div class="max-w-2xl mx-auto text-center">
-            <div class="bg-white rounded-2xl p-8 border border-gold-400/10 shadow-sm">
-                <h2 class="font-display text-2xl font-bold text-charcoal-900 mb-4">Acesso ao Template</h2>
-                <p class="text-charcoal-800/50 mb-6">Verifique seu email para instruções completas de acesso e suporte.
-                </p>
+            <h2 class="font-serif text-2xl text-white font-bold mb-4">Precisa de Ajuda?</h2>
+            <p class="text-gray-400 mb-8">
+                Confira a documentação completa no README do projeto ou entre em contato conosco.
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center">
                 <a href="/"
-                    class="inline-block bg-forest-500 hover:bg-forest-600 text-white px-8 py-3 rounded-xl font-medium transition shadow-md">Voltar
-                    ao Início</a>
+                    class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-xl font-medium transition">
+                    ← Voltar ao Site
+                </a>
+                <a href="/admin"
+                    class="bg-dark-700 hover:bg-dark-900 text-white px-6 py-3 rounded-xl font-medium transition border border-white/10">
+                    Acessar Admin →
+                </a>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-charcoal-900 py-8 text-center mt-12">
-        <p class="text-white/30 text-sm">© 2026 RestauranteTemplate. Todos os direitos reservados.</p>
+    <footer class="border-t border-white/5 py-8 px-6 text-center text-gray-500 text-sm">
+        <p>© <span id="footer-year"></span> RestauranteTemplate. Todos os direitos reservados.</p>
     </footer>
+
+    <script>
+        document.getElementById('footer-year').textContent = new Date().getFullYear();
+    </script>
 </body>
 
 </html>

@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cardápio — Burger House</title>
+    <title>Cardápio — Sabor & Arte</title>
     <meta name="page-name" content="Cardápio">
     <script src="https://cdn.tailwindcss.com"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <script>
-        tailwind.config = { theme: { extend: { colors: { brand: { 50: '#fef2f2', 100: '#fee2e2', 200: '#fecaca', 300: '#fca5a5', 400: '#f87171', 500: '#DC2626', 600: '#b91c1c', 700: '#991b1b', 800: '#7f1d1d', 900: '#651d1d' }, dark: { 800: '#1a1a2e', 900: '#0f0f1a' } }, fontFamily: { display: ['Barlow Condensed', 'sans-serif'], body: ['Inter', 'sans-serif'] } } } };
+        tailwind.config = { theme: { extend: { colors: { brand: { 50: '#fef7ee', 100: '#fdecd7', 200: '#fad5ae', 300: '#f6b77a', 400: '#f19244', 500: '#ee7620', 600: '#d95c16', 700: '#b44314', 800: '#8f3618', 900: '#7a2f16' }, dark: { 800: '#1a1a2e', 900: '#0f0f1a' } }, fontFamily: { display: ['Playfair Display', 'serif'], body: ['Inter', 'sans-serif'] } } } };
     </script>
     <style>
         body {
@@ -21,7 +21,7 @@
         }
 
         .font-display {
-            font-family: 'Barlow Condensed', sans-serif;
+            font-family: 'Playfair Display', serif;
         }
 
         .reveal {
@@ -43,7 +43,7 @@
 
         .btn-glow:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+            box-shadow: 0 8px 25px rgba(238, 118, 32, 0.4);
         }
 
         .card-hover {
@@ -86,8 +86,8 @@
         }
 
         .category-tab.active {
-            color: #DC2626;
-            border-color: #DC2626;
+            color: #ee7620;
+            border-color: #ee7620;
         }
     </style>
 </head>
@@ -99,9 +99,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 md:h-20">
                 <a href="/" class="flex items-center gap-3">
-                    <span class="text-2xl">�</span>
-                    <span class="font-display text-xl md:text-2xl font-bold text-white" id="nav-brand">Burger
-                        House</span>
+                    <span class="text-2xl">🍽</span>
+                    <span class="font-display text-xl md:text-2xl font-bold text-white" id="nav-brand">Sabor &
+                        Arte</span>
                 </a>
                 <div class="hidden md:flex items-center gap-8">
                     <a href="/" class="text-gray-300 hover:text-brand-400 transition text-sm">Início</a>
@@ -159,7 +159,7 @@
     <!-- FOOTER -->
     <footer class="bg-dark-900 border-t border-white/5 py-12">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-gray-600 text-sm" id="footer-copy">© 2026 Burger House</p>
+            <p class="text-gray-600 text-sm" id="footer-copy">© 2026 Sabor & Arte</p>
         </div>
     </footer>
 
