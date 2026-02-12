@@ -193,7 +193,7 @@
         setText('footer-email', c.restaurant_email);
 
         // Hero
-        setText('hero-title-text', c.hero_title);
+        setText('hero-title', c.hero_title);
         setText('hero-subtitle', c.hero_subtitle);
 
         // About
