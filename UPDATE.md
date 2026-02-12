@@ -1,9 +1,9 @@
 # 🔎 UPDATE — Auditoria Final + Plano de Melhorias
 
 > **Data:** 11/02/2026  
-> **Última atualização:** 12/02/2026  
-> **Versão:** 2.0  
-> **Status:** ✅ Pronto para a primeira venda
+> **Última atualização:** 13/02/2026  
+> **Versão:** 3.0  
+> **Status:** ✅ Pronto para a primeira venda — Fase 1 concluída
 
 ---
 
@@ -30,9 +30,9 @@
 
 | Critério | Nota | Justificativa |
 |---|---|---|
-| **Técnica** | **8.5/10** | Backend bem estruturado, segurança acima da média, Winston logging, Cloudinary integrado, backup script, zero debug leaks. |
-| **Comercial** | **7.5/10** | Vendável para restaurante pequeno BR. Onboarding guiado, preview ao vivo, WhatsApp validado. Faltam QR Code e SEO para nota 9. |
-| **Vendabilidade** | **8.5/10** | Pronto para vender. Todas as correções obrigatórias feitas. 3 templates disponíveis (restaurante, hamburgueria, pizzaria). |
+| **Técnica** | **9.0/10** | Backend bem estruturado, segurança acima da média, Winston logging, Cloudinary integrado, backup script, zero debug leaks, SEO dinâmico, sitemap/robots.txt. |
+| **Comercial** | **8.5/10** | Vendável para restaurante pequeno BR. Onboarding guiado, preview ao vivo, WhatsApp validado, QR Code generator, meta tags OG dinâmicas, admin responsivo. |
+| **Vendabilidade** | **9.0/10** | Pronto para vender. Todas as correções obrigatórias feitas. 3 templates disponíveis (restaurante, hamburgueria, pizzaria). UX polido com máscara de preço e placeholders bonitos. |
 
 ---
 
@@ -246,39 +246,39 @@
 
 ---
 
-### FASE 1 — Melhorias Rápidas (Primeiras 2 semanas após 1ª venda)
+### FASE 1 — Melhorias Rápidas ✅ CONCLUÍDA
 
-> ⏱️ Estimativa total: **5-8 horas**
+> ⏱️ **Concluída em 13/02/2026**
 > 🎯 Objetivo: Resolver os problemas de UX mais evidentes
 
-| # | Tarefa | Esforço | Impacto |
+| # | Tarefa | Status | Detalhes |
 |---|---|---|---|
-| 1.1 | Máscara de preço no input (R$ XX,XX) no admin | 30 min | Evita erros de preço |
-| 1.2 | ~~Placeholder de WhatsApp melhor~~ | ✅ | ~~Feito na Fase 0~~ |
-| 1.3 | Imagem padrão bonita quando não há foto (em vez de via.placeholder.com) | 1h | Site não parece quebrado |
-| 1.4 | ~~Limpar `validators.ts`~~ | ✅ | ~~Feito na Fase 0~~ |
-| 1.5 | Limpar `docker-compose.dev.yml` (trocar "fluxpay" por nomes corretos) | 10 min | Profissionalismo |
-| 1.6 | Limpar `Dockerfile` (paths frágeis de cópia de frontend) | 20 min | Build mais robusto |
-| 1.7 | Meta tags dinâmicas (title, description, OG) baseadas no SiteConfig | 1-2h | SEO básico |
-| 1.8 | Gerar `sitemap.xml` e `robots.txt` dinâmicos | 1h | Google indexa o site |
-| 1.9 | Admin responsivo — menu hamburger para mobile | 2-3h | Dono edita pelo celular |
+| 1.1 | ~~Máscara de preço no input (R$ XX,XX)~~ | ✅ | Input mask automático, aceita só números, formata em BRL |
+| 1.2 | ~~Placeholder de WhatsApp melhor~~ | ✅ | Feito na Fase 0 |
+| 1.3 | ~~Imagem padrão bonita (substituir via.placeholder.com)~~ | ✅ | SVG data URIs elegantes com emoji |
+| 1.4 | ~~Limpar `validators.ts`~~ | ✅ | Feito na Fase 0 |
+| 1.5 | ~~Limpar `docker-compose.dev.yml`~~ | ✅ | Removido todas refs "fluxpay" |
+| 1.6 | ~~Limpar `Dockerfile`~~ | ✅ | Paths corrigidos, user "fluxpay" → "appuser" |
+| 1.7 | ~~Meta tags dinâmicas (title, description, OG)~~ | ✅ | Injetadas via JS a partir do SiteConfig |
+| 1.8 | ~~`sitemap.xml` + `robots.txt` dinâmicos~~ | ✅ | Rotas no Express, gerados automaticamente |
+| 1.9 | ~~Admin responsivo — menu hamburger mobile~~ | ✅ | Sidebar com overlay, header fixo mobile |
 
 ---
 
-### FASE 2 — Valor Agregado (Semanas 3-6)
+### FASE 2 — Valor Agregado (Parcialmente concluída)
 
-> ⏱️ Estimativa total: **10-15 horas**
+> ⏱️ Estimativa restante: **~8 horas**
 > 🎯 Objetivo: Funcionalidades que vendem mais pacotes (Profissional/Premium)
 
-| # | Tarefa | Esforço | Impacto Comercial |
+| # | Tarefa | Status | Impacto Comercial |
 |---|---|---|---|
-| 2.1 | **Gerador de QR Code** no admin (link do cardápio digital) | 2h | +30% valor percebido — "QR Code para mesa" |
-| 2.2 | ~~**Preview ao vivo** na aba Configurações~~ | ✅ | ~~Feito na Fase 0~~ |
-| 2.3 | **Contador de visitas simples** (pageviews por dia, gráfico básico) | 3-4h | "X pessoas viram seu cardápio essa semana" |
-| 2.4 | **Link "Powered by [SuaMarca]"** no footer do site | 30 min | Marketing passivo grátis em cada site |
-| 2.5 | **Horários de funcionamento** visível no site (não só no admin) | 1h | Cliente pergunta isso |
-| 2.6 | **Google Maps embed** funcional na página de contato | 1h | Dá credibilidade |
-| 2.7 | **Botão "Ver no Mapa"** no footer/contato | 30 min | UX melhor para quem busca endereço |
+| 2.1 | ~~**Gerador de QR Code** no admin~~ | ✅ | Download PNG, imprimir, tab dedicada no admin |
+| 2.2 | ~~**Preview ao vivo** na aba Configurações~~ | ✅ | Feito na Fase 0 |
+| 2.3 | **Contador de visitas simples** (pageviews por dia) | ⏳ | "X pessoas viram seu cardápio essa semana" |
+| 2.4 | **Link "Powered by [SuaMarca]"** no footer | ⏳ | Marketing passivo grátis |
+| 2.5 | ~~**Horários de funcionamento**~~ | ✅ | Já existia no site (configurável pelo admin) |
+| 2.6 | **Google Maps embed** funcional | ⏳ | Dá credibilidade |
+| 2.7 | **Botão "Ver no Mapa"** | ⏳ | UX melhor |
 
 ---
 
@@ -322,17 +322,17 @@
 ```
 📅 TIMELINE
 
-AGORA (Fase 0)          Semana 1-2 (Fase 1)     Semana 3-6 (Fase 2)      Mês 2-3 (Fase 3)        Mês 3+ (Fase 4)
+CONCLUÍDO (Fase 0)      CONCLUÍDO (Fase 1)      Em progresso (Fase 2)    Futuro (Fase 3)         Futuro (Fase 4)
 ━━━━━━━━━━━━━━━━━       ━━━━━━━━━━━━━━━━━        ━━━━━━━━━━━━━━━━━        ━━━━━━━━━━━━━━━━━       ━━━━━━━━━━━━━━━━━
-🔴 Debug logs           🟡 Máscara preço         🟢 QR Code               🔵 Seletor de tema      ⚪ Multi-tenant
-🔴 CSRF debug info      🟡 Placeholder WA        🟢 Preview config        🔵 PWA                  ⚪ Auto-provision
-🔴 Cloudinary           🟡 Imagem padrão         🟢 Contador visitas      🔵 Avaliações           ⚪ Testes auto
-                        🟡 Limpar validators     🟢 Powered by            🔵 Pix                  ⚪ CI/CD
-                        🟡 Meta tags/SEO         🟢 Maps embed            🔵 Dashboard métricas   ⚪ Redis
-                        🟡 Admin responsivo                                                       ⚪ Monitoramento
+✅ Debug logs           ✅ Máscara preço          ✅ QR Code               🔵 Seletor de tema      ⚪ Multi-tenant
+✅ CSRF debug info      ✅ Placeholder WA         ✅ Preview config        🔵 PWA                  ⚪ Auto-provision
+✅ Cloudinary           ✅ Imagem padrão          🟢 Contador visitas      🔵 Avaliações           ⚪ Testes auto
+✅ Winston logger       ✅ Limpar validators      🟢 Powered by            🔵 Pix                  ⚪ CI/CD
+✅ WhatsApp valid.      ✅ Meta tags/SEO          🟢 Maps embed            🔵 Dashboard métricas   ⚪ Redis
+✅ Onboarding           ✅ Sitemap/robots                                                         ⚪ Monitoramento
+✅ Backup script        ✅ Admin responsivo
 
-🔴 = Obrigatório        🟡 = Importante          🟢 = Valor agregado      🔵 = Diferencial        ⚪ = Escala
-    (3-4h)                  (5-8h)                   (10-15h)                 (20-30h)               (contínuo)
+✅ = Concluído          🟢 = Próximo             🔵 = Diferencial         ⚪ = Escala
 ```
 
 ---
@@ -341,6 +341,7 @@ AGORA (Fase 0)          Semana 1-2 (Fase 1)     Semana 3-6 (Fase 2)      Mês 2-
 
 | Data | Versão | Mudanças |
 |---|---|---|
+| 13/02/2026 | 3.0 | **Fase 1 100% concluída + QR Code (Fase 2.1).** Máscara de preço R$ XX,XX, placeholders SVG elegantes, docker-compose/Dockerfile limpos, meta tags OG dinâmicas, sitemap.xml + robots.txt, admin responsivo com hamburger menu, gerador de QR Code no admin (download PNG + print). Templates B e C atualizados. |
 | 12/02/2026 | 2.0 | **Fase 0 100% concluída.** Removidos todos debug logs, Winston logger integrado, validação WhatsApp (frontend+backend), onboarding "Primeiros Passos" no admin, botão Preview, script backup/restore, validators.ts limpo. Templates B (hamburgueria) e C (pizzaria) atualizados. |
 | 11/02/2026 | 1.0 | Auditoria inicial completa. Plano de melhorias em 5 fases documentado. |
 
@@ -354,4 +355,4 @@ AGORA (Fase 0)          Semana 1-2 (Fase 1)     Semana 3-6 (Fase 2)      Mês 2-
 
 ---
 
-> **Próximo passo:** ✅ Fase 0 concluída! Execute a **Fase 1** (melhorias rápidas) ou **faça a primeira venda agora**.
+> **Próximo passo:** ✅ Fases 0 e 1 concluídas + QR Code! Execute a **Fase 2** (restante) ou **faça a primeira venda agora**.
