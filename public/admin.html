@@ -915,6 +915,7 @@
             const res = await fetch(`${API}/api${endpoint}`, { ...options, headers, credentials: 'include' });
             const json = await res.json();
             if (res.status === 401) {
+                // Token expired - silently redirect to login (no console spam)
                 token = null;
                 localStorage.removeItem('admin_token');
                 showLogin();
@@ -1967,7 +1968,7 @@
         initPriceMask();
 
         if (token) {
-            // Validate token
+            // Validate token (silently, no error logs if expired)
             apiAuth('/auth/me').then(res => {
                 if (res.success) {
                     document.getElementById('admin-email').textContent = res.data.email;
@@ -1975,6 +1976,9 @@
                 } else {
                     showLogin();
                 }
+            }).catch(() => {
+                // Token validation failed (e.g., network error)
+                showLogin();
             });
         } else {
             showLogin();

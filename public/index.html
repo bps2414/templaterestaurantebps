@@ -156,6 +156,31 @@
             background-position: center;
             background-attachment: fixed;
         }
+
+        /* Loading skeleton - prevent FOUC */
+        body:not(.config-loaded) [data-config] {
+            color: transparent;
+            background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s ease-in-out infinite;
+            border-radius: 4px;
+            min-width: 100px;
+            display: inline-block;
+        }
+
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        body.config-loaded [data-config] {
+            animation: fade-in 0.3s ease;
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
 </head>
 
@@ -167,8 +192,7 @@
             <div class="flex items-center justify-between h-16 md:h-20">
                 <a href="/" class="flex items-center gap-3">
                     <span class="text-2xl">🍽</span>
-                    <span class="font-display text-xl md:text-2xl font-bold text-white" id="nav-brand">Sabor &
-                        Arte</span>
+                    <span class="font-display text-xl md:text-2xl font-bold text-white" id="nav-brand" data-config></span>
                 </a>
                 <!-- Desktop nav -->
                 <div class="hidden md:flex items-center gap-8">
@@ -327,7 +351,7 @@
                 <div>
                     <div class="flex items-center gap-2 mb-4">
                         <span class="text-2xl">🍽</span>
-                        <span class="font-display text-xl font-bold text-white" id="footer-brand">Sabor & Arte</span>
+                        <span class="font-display text-xl font-bold text-white" id="footer-brand" data-config></span>
                     </div>
                     <p class="text-gray-500 text-sm" id="footer-tagline">Gastronomia que encanta os sentidos</p>
                 </div>

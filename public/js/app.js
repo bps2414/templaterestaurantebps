@@ -127,6 +127,8 @@
             if (data) {
                 siteConfig = validateConfig(data);
                 applyConfig();
+                // Mark config as loaded to trigger fade-in
+                document.body.classList.add('config-loaded');
             } else {
                 showToast('Erro ao carregar configurações.', 'error');
                 siteConfig = {
@@ -136,10 +138,12 @@
                     hero_subtitle: 'Peça agora pelo WhatsApp',
                 };
                 applyConfig();
+                document.body.classList.add('config-loaded');
             }
         } catch (e) {
             showToast('Erro ao carregar configurações.', 'error');
             siteConfig = { restaurant_name: 'Restaurant' };
+            document.body.classList.add('config-loaded');
         }
         // Toast helper global (caso não exista)
         if (!window.showToast) {
