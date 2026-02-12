@@ -5,17 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cardápio — Forno & Massa</title>
+    <meta name="page-name" content="Cardápio">
     <script src="https://cdn.tailwindcss.com"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <script>
-        tailwind.config = { theme: { extend: { colors: { brand: { 50: '#fef3ee', 100: '#fde2d4', 200: '#f9c1a8', 300: '#f49a72', 400: '#e86f3a', 500: '#C1440E', 600: '#a33a0c', 700: '#85300a', 800: '#6b2708', 900: '#5a2108' }, olive: { 400: '#6B9F42', 500: '#5B7A3A' }, dark: { 800: '#1a1612', 900: '#0D0A07' } }, fontFamily: { display: ['Lora', 'serif'], body: ['Inter', 'sans-serif'] } } } };
+        tailwind.config = { theme: { extend: { colors: { brand: { 50: '#fdf5f0', 100: '#fbe8dc', 200: '#f7cdb5', 300: '#f2aa85', 400: '#E77C5A', 500: '#C1440E', 600: '#A33A0C', 700: '#85300A', 800: '#6B2708', 900: '#571F07' }, dark: { 800: '#1a1a2e', 900: '#0f0f1a' } }, fontFamily: { display: ['Lora', 'serif'], body: ['Inter', 'sans-serif'] } } } };
     </script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: #0D0A07;
+            background: #0f0f1a;
             color: #f5f5f5;
         }
 
@@ -42,7 +43,7 @@
 
         .btn-glow:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(193, 68, 14, 0.4);
+            box-shadow: 0 8px 25px rgba(238, 118, 32, 0.4);
         }
 
         .card-hover {
@@ -56,7 +57,7 @@
 
         .nav-glass {
             backdrop-filter: blur(12px);
-            background: rgba(13, 10, 7, 0.85);
+            background: rgba(15, 15, 26, 0.8);
         }
 
         .whatsapp-float {
@@ -132,8 +133,8 @@
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Cardápio</p>
             <h1 class="font-display text-4xl md:text-6xl font-bold text-white mb-4">Nosso Cardápio</h1>
-            <p class="text-gray-400 text-lg max-w-2xl mx-auto">Pizzas artesanais, massas frescas e acompanhamentos
-                feitos com ingredientes selecionados.</p>
+            <p class="text-gray-400 text-lg max-w-2xl mx-auto">Cada prato é preparado com ingredientes selecionados e
+                dedicação artesanal.</p>
         </div>
     </section>
 
@@ -242,7 +243,7 @@
             ${dishes.map(dish => `
                 <div class="card-hover reveal visible bg-dark-800/60 rounded-xl overflow-hidden border border-white/5 flex flex-col">
                     <div class="relative h-48 overflow-hidden">
-                        <img src="${dish.image || 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80'}"
+                        <img src="${dish.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80'}"
                              alt="${dish.name}" class="w-full h-full object-cover">
                         ${dish.featured ? '<span class="absolute top-3 right-3 bg-brand-500 text-white text-xs font-bold px-2 py-1 rounded-full">★ Destaque</span>' : ''}
                     </div>

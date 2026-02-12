@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin — Painel de Controle</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = { theme: { extend: { colors: { brand: { 400: '#D4561E', 500: '#C1440E', 600: '#A33808' }, dark: { 700: '#242420', 800: '#1a1a16', 900: '#0D0A07' } } } } };
@@ -76,6 +77,62 @@
         .toast-error {
             background: #ef4444;
         }
+
+        /* Admin mobile responsive */
+        .admin-mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 60;
+            background: #1a1a2e;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 12px 16px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 49;
+            background: rgba(0,0,0,0.6);
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .admin-mobile-header {
+                display: flex;
+            }
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                z-index: 50;
+                transition: left 0.3s ease;
+                width: 260px;
+            }
+            .sidebar.open {
+                left: 0;
+            }
+            #admin-dashboard main {
+                margin-left: 0 !important;
+                padding: 16px;
+                padding-top: 70px;
+            }
+            #admin-dashboard main table {
+                font-size: 0.8rem;
+            }
+            #admin-dashboard main .flex.items-center.justify-between {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+        }
     </style>
 </head>
 
@@ -85,7 +142,7 @@
     <div id="login-screen" class="min-h-screen flex items-center justify-center">
         <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-md border border-white/5">
             <div class="text-center mb-8">
-                <span class="text-4xl">�</span>
+                <span class="text-4xl">🍕</span>
                 <h1 class="text-2xl font-bold text-white mt-4">Painel Admin</h1>
                 <p class="text-gray-400 mt-2">Faça login para gerenciar o site</p>
             </div>
@@ -113,12 +170,26 @@
 
     <!-- ========== ADMIN DASHBOARD ========== -->
     <div id="admin-dashboard" class="hidden">
+        <!-- Mobile header -->
+        <div class="admin-mobile-header">
+            <div class="flex items-center gap-2">
+                <span class="text-xl">�</span>
+                <span class="text-white font-bold text-sm">Admin</span>
+            </div>
+            <button onclick="toggleSidebar()" class="text-white p-2" aria-label="Menu">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+        <!-- Sidebar overlay -->
+        <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
         <div class="flex">
             <!-- Sidebar -->
             <aside class="sidebar bg-dark-800 border-r border-white/5 fixed h-full overflow-y-auto">
                 <div class="p-6 border-b border-white/5">
                     <div class="flex items-center gap-3">
-                        <span class="text-2xl">�</span>
+                        <span class="text-2xl">🍕</span>
                         <div>
                             <h2 class="text-white font-bold">Admin</h2>
                             <p class="text-gray-500 text-xs" id="admin-email">admin@restaurante.com</p>
@@ -141,6 +212,10 @@
                     <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400"
                         data-tab="config" onclick="switchTab('config')">
                         ⚙️ Configurações
+                    </button>
+                    <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400"
+                        data-tab="qrcode" onclick="switchTab('qrcode')">
+                        📱 QR Code
                     </button>
                 </nav>
                 <div class="absolute bottom-0 w-full p-4 border-t border-white/5">
@@ -254,6 +329,57 @@
                     </div>
                 </div>
 
+                <!-- TAB: QR CODE -->
+                <div id="tab-qrcode" class="tab-content hidden">
+                    <div class="flex items-center justify-between mb-8">
+                        <h1 class="text-2xl font-bold text-white">QR Code do Site</h1>
+                    </div>
+                    <div class="max-w-lg mx-auto">
+                        <div class="bg-dark-800 rounded-2xl p-8 border border-white/5 text-center">
+                            <p class="text-gray-400 text-sm mb-6">Gere um QR Code que direciona para o seu site. Ideal para imprimir em cardápios, flyers, mesas e balcão.</p>
+                            <div class="bg-dark-700/50 rounded-xl p-4 mb-6">
+                                <label class="text-sm text-gray-400 mb-2 block text-left">URL do site</label>
+                                <input type="url" id="qr-url" 
+                                    class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none text-sm"
+                                    placeholder="https://seurestaurante.com.br">
+                            </div>
+                            <div class="flex gap-3 justify-center mb-8">
+                                <button onclick="generateQRCode()" 
+                                    class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-xl text-sm font-medium transition">
+                                    📱 Gerar QR Code
+                                </button>
+                            </div>
+                            <div id="qr-result" class="hidden">
+                                <div class="inline-block bg-white rounded-2xl p-6 mb-6">
+                                    <div id="qr-canvas"></div>
+                                </div>
+                                <p class="text-gray-500 text-xs mb-4" id="qr-url-display"></p>
+                                <div class="flex gap-3 justify-center">
+                                    <button onclick="downloadQRCode('png')" 
+                                        class="bg-dark-700 hover:bg-dark-900 text-brand-400 px-5 py-2.5 rounded-xl text-sm font-medium transition border border-brand-500/20">
+                                        📥 Baixar PNG
+                                    </button>
+                                    <button onclick="printQRCode()" 
+                                        class="bg-dark-700 hover:bg-dark-900 text-gray-300 px-5 py-2.5 rounded-xl text-sm font-medium transition border border-white/10">
+                                        🖨️ Imprimir
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tips -->
+                        <div class="bg-dark-800 rounded-2xl p-6 border border-white/5 mt-6">
+                            <h3 class="text-white font-semibold text-sm mb-3">💡 Dicas de uso</h3>
+                            <ul class="text-gray-400 text-sm space-y-2">
+                                <li>• Coloque nas mesas para os clientes acessarem o cardápio digital</li>
+                                <li>• Imprima em flyers e materiais de divulgação</li>
+                                <li>• Cole no balcão ou porta de entrada do restaurante</li>
+                                <li>• Adicione em cartões de visita e embalagens de delivery</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
             </main>
         </div>
     </div>
@@ -277,9 +403,9 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="text-sm text-gray-400 mb-1 block">Preço (R$) *</label>
-                        <input type="number" id="dish-price" step="0.01" required
+                        <input type="text" id="dish-price" inputmode="numeric" required
                             class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
-                            placeholder="39.90">
+                            placeholder="R$ 39,90">
                     </div>
                     <div>
                         <label class="text-sm text-gray-400 mb-1 block">Categoria *</label>
@@ -474,8 +600,43 @@
         let csrfToken = null;
         let categories = [];
 
+        // Default placeholder images (SVG data URIs)
+        const PLACEHOLDER_SM = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect fill='%231a1a2e' width='80' height='80'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='28' fill='%23444'%3E%F0%9F%8D%BD%3C/text%3E%3C/svg%3E`;
+        const PLACEHOLDER_LG = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Crect fill='%231a1a2e' width='400' height='400'/%3E%3Ctext x='50%25' y='45%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='64' fill='%23444'%3E%F0%9F%93%B7%3C/text%3E%3Ctext x='50%25' y='62%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='16' fill='%23555'%3ESem imagem%3C/text%3E%3C/svg%3E`;
+
         function formatPrice(cents) {
             return (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        // --- Price Mask (R$ XX,XX) ---
+        function initPriceMask() {
+            const priceInput = document.getElementById('dish-price');
+            if (!priceInput) return;
+
+            priceInput.addEventListener('input', function (e) {
+                let v = e.target.value.replace(/\D/g, '');
+                if (v.length === 0) { e.target.value = ''; return; }
+                v = v.replace(/^0+/, '') || '0';
+                const cents = parseInt(v, 10);
+                e.target.value = (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            });
+
+            priceInput.addEventListener('keydown', function (e) {
+                if (['Backspace', 'Delete', 'Tab', 'Escape', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+                if (!/[0-9]/.test(e.key)) e.preventDefault();
+            });
+        }
+
+        function getPriceCents() {
+            const raw = document.getElementById('dish-price').value.replace(/\D/g, '');
+            return parseInt(raw, 10) || 0;
+        }
+
+        function setPriceFromCents(cents) {
+            const priceInput = document.getElementById('dish-price');
+            if (!priceInput) return;
+            if (!cents || cents === 0) { priceInput.value = ''; return; }
+            priceInput.value = (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
         // --- Fetch CSRF Token ---
@@ -578,6 +739,13 @@
 
         // --- Tabs ---
         function switchTab(tab) {
+            // Close sidebar on mobile when switching tabs
+            if (window.innerWidth <= 768) {
+                const sidebar = document.querySelector('.sidebar');
+                const overlay = document.getElementById('sidebar-overlay');
+                if (sidebar) sidebar.classList.remove('open');
+                if (overlay) overlay.classList.remove('active');
+            }
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(el => {
                 el.classList.remove('active');
@@ -592,6 +760,7 @@
             if (tab === 'categories') loadCategories();
             if (tab === 'gallery') loadGalleryAdmin();
             if (tab === 'config') loadConfig();
+            if (tab === 'qrcode') initQRCodeTab();
         }
 
         // --- Toast ---
@@ -621,13 +790,13 @@
                 // Se tem imagem mas não tem protocolo, adiciona o domínio da API
                 const imgSrc = d.image
                     ? (d.image.startsWith('http') ? d.image : `${API}${d.image}`)
-                    : 'https://via.placeholder.com/40';
+                    : PLACEHOLDER_SM;
 
                 return `
         <tr class="hover:bg-white/[0.02] transition">
             <td class="px-6 py-4">
                 <div class="flex items-center gap-3">
-                    <img src="${imgSrc}" class="w-10 h-10 rounded-lg object-cover" alt="" onerror="this.src='https://via.placeholder.com/40'">
+                    <img src="${imgSrc}" class="w-10 h-10 rounded-lg object-cover" alt="" onerror="this.src=PLACEHOLDER_SM">
                     <span class="text-white font-medium text-sm">${d.name}</span>
                 </div>
             </td>
@@ -649,7 +818,7 @@
             document.getElementById('dish-id').value = dish?.id || '';
             document.getElementById('dish-name').value = dish?.name || '';
             document.getElementById('dish-description').value = dish?.description || '';
-            document.getElementById('dish-price').value = dish ? (dish.price / 100).toFixed(2) : '';
+            setPriceFromCents(dish?.price || 0);
             document.getElementById('dish-category').value = dish?.categoryId || '';
             document.getElementById('dish-featured').checked = dish?.featured || false;
             document.getElementById('dish-active').checked = dish?.active !== false;
@@ -674,7 +843,9 @@
             const formData = new FormData();
             formData.append('name', document.getElementById('dish-name').value);
             formData.append('description', document.getElementById('dish-description').value);
-            formData.append('price', Math.round(parseFloat(document.getElementById('dish-price').value) * 100).toString());
+            const priceCents = getPriceCents();
+            if (priceCents <= 0) { toast('Informe um preço válido', 'error'); return; }
+            formData.append('price', priceCents.toString());
             formData.append('categoryId', document.getElementById('dish-category').value);
             formData.append('featured', document.getElementById('dish-featured').checked.toString());
             formData.append('active', document.getElementById('dish-active').checked.toString());
@@ -792,11 +963,11 @@
                 // Se tem imagem mas não tem protocolo, adiciona o domínio da API
                 const imgSrc = img.src
                     ? (img.src.startsWith('http') ? img.src : `${API}${img.src}`)
-                    : 'https://via.placeholder.com/400';
+                    : PLACEHOLDER_LG;
 
                 return `
         <div class="relative group rounded-xl overflow-hidden aspect-square border border-white/5">
-            <img src="${imgSrc}" alt="${img.alt || ''}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400'">
+            <img src="${imgSrc}" alt="${img.alt || ''}" class="w-full h-full object-cover" onerror="this.src=PLACEHOLDER_LG">
             <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
                 <button onclick="deleteGalleryImage('${img.id}')" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition">Excluir</button>
             </div>
@@ -1072,9 +1243,102 @@
             return completed.length < 5;
         }
 
+        // --- QR Code Generator ---
+        let qrInstance = null;
+
+        function generateQRCode() {
+            const urlInput = document.getElementById('qr-url');
+            let url = urlInput.value.trim();
+
+            if (!url) {
+                // Auto-detect current site URL
+                url = window.location.origin;
+                urlInput.value = url;
+            }
+
+            // Ensure URL has protocol
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+                urlInput.value = url;
+            }
+
+            // Clear previous
+            const canvas = document.getElementById('qr-canvas');
+            canvas.innerHTML = '';
+
+            // Generate QR Code
+            qrInstance = new QRCode(canvas, {
+                text: url,
+                width: 256,
+                height: 256,
+                colorDark: '#1a1a2e',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H,
+            });
+
+            document.getElementById('qr-url-display').textContent = url;
+            document.getElementById('qr-result').classList.remove('hidden');
+            toast('QR Code gerado!');
+        }
+
+        function downloadQRCode(format) {
+            const canvas = document.querySelector('#qr-canvas canvas');
+            if (!canvas) { toast('Gere o QR Code primeiro', 'error'); return; }
+
+            const link = document.createElement('a');
+            link.download = 'qrcode-restaurante.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            toast('QR Code baixado!');
+        }
+
+        function printQRCode() {
+            const canvas = document.querySelector('#qr-canvas canvas');
+            if (!canvas) { toast('Gere o QR Code primeiro', 'error'); return; }
+
+            const url = document.getElementById('qr-url').value || window.location.origin;
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head><title>QR Code</title>
+                <style>
+                    body { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: Arial, sans-serif; margin: 0; }
+                    img { width: 300px; height: 300px; }
+                    p { margin-top: 16px; color: #666; font-size: 14px; }
+                    h2 { margin-bottom: 8px; }
+                </style>
+                </head>
+                <body>
+                    <h2>Escaneie para acessar nosso site</h2>
+                    <img src="${canvas.toDataURL('image/png')}" alt="QR Code">
+                    <p>${url}</p>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.onload = () => { printWindow.print(); };
+        }
+
+        function initQRCodeTab() {
+            // Auto-fill URL when switching to QR tab
+            const urlInput = document.getElementById('qr-url');
+            if (urlInput && !urlInput.value) {
+                urlInput.value = window.location.origin;
+            }
+        }
+
+        // --- Sidebar Toggle (mobile) ---
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (sidebar) sidebar.classList.toggle('open');
+            if (overlay) overlay.classList.toggle('active');
+        }
+
         // --- Init ---
         // Fetch CSRF token on page load
         fetchCsrfToken();
+        initPriceMask();
 
         if (token) {
             // Validate token

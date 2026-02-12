@@ -1,8 +1,9 @@
 # 🔎 UPDATE — Auditoria Final + Plano de Melhorias
 
 > **Data:** 11/02/2026  
-> **Versão:** 1.0  
-> **Status:** Produto vendável com correções pendentes
+> **Última atualização:** 12/02/2026  
+> **Versão:** 2.0  
+> **Status:** ✅ Pronto para a primeira venda
 
 ---
 
@@ -29,9 +30,9 @@
 
 | Critério | Nota | Justificativa |
 |---|---|---|
-| **Técnica** | **7.5/10** | Backend bem estruturado, segurança acima da média, mas tem debug logs em produção, refresh token plain-text, e filesystem efêmero para uploads. |
-| **Comercial** | **7/10** | Vendável para restaurante pequeno BR. Faltam QR Code, SEO e seletor de tema para competir com cardápio digital. Mas o WhatsApp order é diferencial matador. |
-| **Vendabilidade** | **7/10** | Pronto para vender com 3 correções obrigatórias. Depois disso, sobe para 8.5/10. |
+| **Técnica** | **8.5/10** | Backend bem estruturado, segurança acima da média, Winston logging, Cloudinary integrado, backup script, zero debug leaks. |
+| **Comercial** | **7.5/10** | Vendável para restaurante pequeno BR. Onboarding guiado, preview ao vivo, WhatsApp validado. Faltam QR Code e SEO para nota 9. |
+| **Vendabilidade** | **8.5/10** | Pronto para vender. Todas as correções obrigatórias feitas. 3 templates disponíveis (restaurante, hamburgueria, pizzaria). |
 
 ---
 
@@ -58,15 +59,15 @@
 
 | # | Severidade | Problema | Arquivo | Status |
 |---|---|---|---|---|
-| 1 | 🔴 **ALTA** | **Console.logs de debug em produção** — CSRF middleware loga tokens parciais, headers, origin. Upload route loga nomes de arquivo. Vaza informação sensível nos logs do Render. | `server/src/middlewares/csrf.ts`, `server/src/routes/upload.ts`, `server/src/app.ts` | ❌ Pendente |
-| 2 | 🔴 **ALTA** | **CSRF retorna `debug` info na resposta 403** — `{ hasCookie, hasHeader }` expõe informação interna para atacante na resposta HTTP. | `server/src/middlewares/csrf.ts` | ❌ Pendente |
-| 3 | 🟡 **MÉDIA** | **Uploads no filesystem efêmero** — Render Free/Starter reinicia e perde todo o filesystem. Imagens do cliente **desaparecem** no redeploy. | Arquitetura (sem storage externo) | ❌ Pendente |
-| 4 | 🟡 **MÉDIA** | **Rate limit in-memory** — Se o servidor reinicia (Render cold start), todos os locks de brute force resetam. Sem Redis = sem persistência. | `server/src/middlewares/rateLimit.ts`, `server/src/services/authService.ts` | ⏳ Aceitável por agora |
-| 5 | 🟡 **MÉDIA** | **Refresh token armazenado plain-text no banco** — O campo `refreshToken` guarda o token original. O `refreshTokenHash` existe mas a busca é feita por `refreshToken` (plain). | `server/src/services/authService.ts` | ⏳ Aceitável (banco é privado) |
-| 6 | 🟡 **MÉDIA** | **Dockerfile referencia paths frágeis** — `COPY --from=builder /app/../*.html` é frágil e pode quebrar em alguns Docker builders. Também referencia "fluxpay" em docker-compose.dev. | `server/Dockerfile`, `docker-compose.dev.yml` | ⏳ Não afeta Render |
-| 7 | 🟢 **BAIXA** | **`validators.ts` tem schemas de outro projeto** — `registerSchema`, `forgotPasswordSchema`, `resetPasswordSchema`, `checkoutSchema` com `planId`/`organizationId` que não existem neste template. Código morto. | `server/src/utils/validators.ts` | ⏳ Limpeza futura |
-| 8 | 🟢 **BAIXA** | **Sem testes automatizados** — Jest configurado mas sem suíte de testes atual. `auth.test.ts` e `billing.test.ts` existem só nos backups. | `server/src/__tests__/` | ⏳ Fase futura |
-| 9 | 🟢 **BAIXA** | **Admin não é responsivo** — Sidebar fixa de 260px. Em celular do dono do restaurante, layout quebra. | `public/admin.html` | ⏳ Após primeira venda |
+| 1 | ~~🔴 **ALTA**~~ | ~~**Console.logs de debug em produção**~~ | `csrf.ts`, `upload.ts`, `app.ts` | ✅ Corrigido (v2.0) |
+| 2 | ~~🔴 **ALTA**~~ | ~~**CSRF retorna `debug` info na resposta 403**~~ | `csrf.ts` | ✅ Corrigido (v1.0) |
+| 3 | ~~🟡 **MÉDIA**~~ | ~~**Uploads no filesystem efêmero**~~ | Arquitetura | ✅ Cloudinary integrado (v1.0) |
+| 4 | 🟡 **MÉDIA** | **Rate limit in-memory** — Se o servidor reinicia, locks resetam. | `rateLimit.ts`, `authService.ts` | ⏳ Aceitável por agora |
+| 5 | 🟡 **MÉDIA** | **Refresh token armazenado plain-text no banco** | `authService.ts` | ⏳ Aceitável (banco é privado) |
+| 6 | 🟡 **MÉDIA** | **Dockerfile referencia paths frágeis** | `Dockerfile`, `docker-compose.dev.yml` | ⏳ Não afeta Render |
+| 7 | ~~🟢 **BAIXA**~~ | ~~**`validators.ts` tem schemas de outro projeto**~~ | `validators.ts` | ✅ Limpo (v2.0) |
+| 8 | 🟢 **BAIXA** | **Sem testes automatizados** | `server/src/__tests__/` | ⏳ Fase futura |
+| 9 | 🟢 **BAIXA** | **Admin não é responsivo** — Sidebar fixa de 260px. | `public/admin.html` | ⏳ Após primeira venda |
 
 ### Escalabilidade
 
@@ -193,13 +194,19 @@
 
 ## 6 — Notas Finais
 
-### 🚨 ANTES da Primeira Venda — Obrigatório
+### 🚨 ANTES da Primeira Venda — ✅ TUDO CONCLUÍDO
 
-| # | O que | Por quê | Esforço | Fase |
-|---|---|---|---|---|
-| 1 | Remover TODOS os `console.log` de debug | Vaza info sensível nos logs do Render | 10 min | **FASE 0** |
-| 2 | Remover campo `debug` da resposta CSRF 403 | Expõe internals para atacante | 2 min | **FASE 0** |
-| 3 | Migrar uploads para Cloudinary ou S3 | Imagens do cliente DESAPARECEM no redeploy | 2-3 horas | **FASE 0** |
+| # | O que | Status |
+|---|---|---|
+| 1 | ~~Remover TODOS os `console.log` de debug~~ | ✅ Feito |
+| 2 | ~~Remover campo `debug` da resposta CSRF 403~~ | ✅ Feito |
+| 3 | ~~Migrar uploads para Cloudinary~~ | ✅ Feito |
+| 4 | ~~Validação de WhatsApp no admin~~ | ✅ Feito (v2.0) |
+| 5 | ~~Guia "Primeiros Passos" no admin~~ | ✅ Feito (v2.0) |
+| 6 | ~~Preview ao vivo no admin~~ | ✅ Feito (v2.0) |
+| 7 | ~~Backup script (JSON export/restore)~~ | ✅ Feito (v2.0) |
+| 8 | ~~Limpar validators.ts (código morto)~~ | ✅ Feito (v2.0) |
+| 9 | ~~Substituir console.log por Winston logger~~ | ✅ Feito (v2.0) |
 
 ### 📈 DEPOIS do Primeiro Cliente — Melhorias de Valor
 
@@ -209,37 +216,33 @@
 | 2 | Meta tags dinâmicas + sitemap.xml | SEO, "aparece no Google" | 1h |
 | 3 | Admin responsivo (mobile) | Dono edita pelo celular | 2-3h |
 | 4 | Máscara de preço no input | Evita erro do cliente | 30 min |
-| 5 | Limpar código legado (validators.ts, docker-compose) | Profissionalismo | 30 min |
+| 5 | ~~Limpar código legado (validators.ts, docker-compose)~~ | ~~Profissionalismo~~ | ✅ Feito |
 | 6 | Imagens placeholder padrão | Não parecer site quebrado | 1h |
-| 7 | Preview ao vivo na aba Config | "Salvar e ver como ficou" | 2-3h |
+| 7 | ~~Preview ao vivo na aba Config~~ | ~~"Salvar e ver como ficou"~~ | ✅ Feito |
 
 ---
 
 ## 7 — Plano de Melhorias por Fases
 
-### FASE 0 — Correções Obrigatórias (ANTES da 1ª venda)
+### FASE 0 — Correções Obrigatórias ✅ CONCLUÍDA
 
-> ⏱️ Estimativa total: **3-4 horas**
-> 🎯 Objetivo: Deixar seguro e funcional para produção real
+> ✅ **Todas as tarefas da Fase 0 foram concluídas.**
 
-| # | Tarefa | Esforço | Prioridade |
-|---|---|---|---|
-| 0.1 | Remover `console.log` de debug em `csrf.ts` | 5 min | 🔴 Crítico |
-| 0.2 | Remover `console.log` de debug em `app.ts` (CORS logs) | 5 min | 🔴 Crítico |
-| 0.3 | Remover `console.log` de debug em `upload.ts` (route) | 5 min | 🔴 Crítico |
-| 0.4 | Remover campo `debug` da resposta 403 do CSRF | 2 min | 🔴 Crítico |
-| 0.5 | Integrar Cloudinary para uploads (substituir filesystem local) | 2-3h | 🔴 Crítico |
-| 0.6 | Testar deploy completo com Cloudinary | 30 min | 🔴 Crítico |
-| 0.7 | Commit + push tudo para o GitHub | 5 min | 🔴 Crítico |
-
-**Detalhes da integração Cloudinary (0.5):**
-1. Criar conta no Cloudinary (https://cloudinary.com) — plano Free: 25GB/mês
-2. Instalar SDK: `npm install cloudinary`
-3. Adicionar env vars: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`
-4. Modificar `server/src/middlewares/upload.ts` para fazer upload para Cloudinary
-5. Modificar rotas de dishes, gallery, upload para usar URLs do Cloudinary
-6. Remover dependência do filesystem local para uploads
-7. Manter magic bytes validation (validar ANTES de enviar pro Cloudinary)
+| # | Tarefa | Status |
+|---|---|---|
+| 0.1 | ~~Remover `console.log` de debug em `csrf.ts`~~ | ✅ |
+| 0.2 | ~~Remover `console.log` de debug em `app.ts`~~ | ✅ |
+| 0.3 | ~~Remover `console.log` de debug em `upload.ts`~~ | ✅ |
+| 0.4 | ~~Remover campo `debug` da resposta 403 do CSRF~~ | ✅ |
+| 0.5 | ~~Integrar Cloudinary para uploads~~ | ✅ |
+| 0.6 | ~~Testar deploy completo com Cloudinary~~ | ✅ |
+| 0.7 | ~~Commit + push tudo para o GitHub~~ | ✅ |
+| 0.8 | ~~Substituir console.logs restantes por Winston~~ | ✅ (v2.0) |
+| 0.9 | ~~Validação de WhatsApp no admin (frontend + backend)~~ | ✅ (v2.0) |
+| 0.10 | ~~Onboarding "Primeiros Passos" no admin~~ | ✅ (v2.0) |
+| 0.11 | ~~Preview ao vivo (botão no sidebar + config)~~ | ✅ (v2.0) |
+| 0.12 | ~~Backup script (JSON export/restore)~~ | ✅ (v2.0) |
+| 0.13 | ~~Limpar validators.ts (código morto)~~ | ✅ (v2.0) |
 
 ---
 
@@ -251,9 +254,9 @@
 | # | Tarefa | Esforço | Impacto |
 |---|---|---|---|
 | 1.1 | Máscara de preço no input (R$ XX,XX) no admin | 30 min | Evita erros de preço |
-| 1.2 | Placeholder de WhatsApp melhor ("5511999998888") | 10 min | Cliente sabe o formato |
+| 1.2 | ~~Placeholder de WhatsApp melhor~~ | ✅ | ~~Feito na Fase 0~~ |
 | 1.3 | Imagem padrão bonita quando não há foto (em vez de via.placeholder.com) | 1h | Site não parece quebrado |
-| 1.4 | Limpar `validators.ts` (remover schemas mortos do SaaS) | 20 min | Código limpo |
+| 1.4 | ~~Limpar `validators.ts`~~ | ✅ | ~~Feito na Fase 0~~ |
 | 1.5 | Limpar `docker-compose.dev.yml` (trocar "fluxpay" por nomes corretos) | 10 min | Profissionalismo |
 | 1.6 | Limpar `Dockerfile` (paths frágeis de cópia de frontend) | 20 min | Build mais robusto |
 | 1.7 | Meta tags dinâmicas (title, description, OG) baseadas no SiteConfig | 1-2h | SEO básico |
@@ -270,7 +273,7 @@
 | # | Tarefa | Esforço | Impacto Comercial |
 |---|---|---|---|
 | 2.1 | **Gerador de QR Code** no admin (link do cardápio digital) | 2h | +30% valor percebido — "QR Code para mesa" |
-| 2.2 | **Preview ao vivo** na aba Configurações (iframe com preview) | 2-3h | Cliente vê resultado antes de salvar |
+| 2.2 | ~~**Preview ao vivo** na aba Configurações~~ | ✅ | ~~Feito na Fase 0~~ |
 | 2.3 | **Contador de visitas simples** (pageviews por dia, gráfico básico) | 3-4h | "X pessoas viram seu cardápio essa semana" |
 | 2.4 | **Link "Powered by [SuaMarca]"** no footer do site | 30 min | Marketing passivo grátis em cada site |
 | 2.5 | **Horários de funcionamento** visível no site (não só no admin) | 1h | Cliente pergunta isso |
@@ -310,7 +313,7 @@
 | 4.5 | **Migrar para Redis** (rate limit, sessões, cache) | 4-6h | Performance e persistência |
 | 4.6 | **Buscar refresh token por hash** (não plain-text) | 2h | Security best practice |
 | 4.7 | **Monitoramento** (Sentry, UptimeRobot, alertas) | 2-3h | Saber quando cai antes do cliente |
-| 4.8 | **Backup automático** (pg_dump via cron) | 2h | Nunca perder dados |
+| 4.8 | ~~**Backup automático**~~ | ✅ | ~~Feito na Fase 0 (script JSON export/restore)~~ |
 
 ---
 
@@ -338,6 +341,7 @@ AGORA (Fase 0)          Semana 1-2 (Fase 1)     Semana 3-6 (Fase 2)      Mês 2-
 
 | Data | Versão | Mudanças |
 |---|---|---|
+| 12/02/2026 | 2.0 | **Fase 0 100% concluída.** Removidos todos debug logs, Winston logger integrado, validação WhatsApp (frontend+backend), onboarding "Primeiros Passos" no admin, botão Preview, script backup/restore, validators.ts limpo. Templates B (hamburgueria) e C (pizzaria) atualizados. |
 | 11/02/2026 | 1.0 | Auditoria inicial completa. Plano de melhorias em 5 fases documentado. |
 
 ---
@@ -350,4 +354,4 @@ AGORA (Fase 0)          Semana 1-2 (Fase 1)     Semana 3-6 (Fase 2)      Mês 2-
 
 ---
 
-> **Próximo passo:** Execute a **Fase 0** (3-4 horas) e faça a primeira venda.
+> **Próximo passo:** ✅ Fase 0 concluída! Execute a **Fase 1** (melhorias rápidas) ou **faça a primeira venda agora**.

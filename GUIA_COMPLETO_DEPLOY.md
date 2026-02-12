@@ -1,11 +1,11 @@
 # 🚀 GUIA COMPLETO — Do Teste Local ao Cliente Final
 
 > **Projeto:** Restaurant Template (Express + Prisma + PostgreSQL)  
-> **Última atualização:** 11/02/2026  
-> **Auditoria:** Ver [UPDATE.md](UPDATE.md) para relatório completo (nota 7.5/10 técnica, 7/10 comercial)  
+> **Última atualização:** 12/02/2026  
+> **Auditoria:** Ver [UPDATE.md](UPDATE.md) para relatório completo (nota 8.5/10 técnica, 7.5/10 comercial)  
 > **Leia na ordem. Cada passo depende do anterior.**
 
-> ⚠️ **IMPORTANTE:** Antes de seguir este guia, complete a **Fase 0** do [UPDATE.md](UPDATE.md) (remover debug logs + integrar Cloudinary). Sem isso, imagens dos clientes vão desaparecer no redeploy.
+> ✅ **Fase 0 concluída!** Todas as correções obrigatórias já foram feitas (debug logs removidos, Cloudinary integrado, Winston logger, validação WhatsApp, onboarding, preview, backup script). Pule direto para a Etapa 1.
 
 ---
 
@@ -13,7 +13,7 @@
 
 | # | Etapa | Tempo estimado |
 |---|-------|----------------|
-| [0](#0--fase-0--correções-obrigatórias-da-auditoria) | 🔴 Correções obrigatórias (auditoria) | ~3-4 h |
+| [0](#0--fase-0--correções-obrigatórias-da-auditoria) | ✅ ~~Correções obrigatórias~~ (concluído) | ~~3-4 h~~ |
 | [1](#1--consertar-o-que-falta-antes-de-subir) | Consertar o que falta (obrigatório) | ~10 min |
 | [2](#2--testar-tudo-localmente) | Testar tudo localmente | ~15 min |
 | [3](#3--preparar-o-repositório-github) | Preparar repositório GitHub | ~10 min |

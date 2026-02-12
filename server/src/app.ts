@@ -39,7 +39,7 @@ app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.tailwindcss.com", "https://js.stripe.com", "https://unpkg.com"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.tailwindcss.com", "https://js.stripe.com", "https://unpkg.com", "https://cdn.jsdelivr.net"],
             scriptSrcAttr: ["'unsafe-inline'"], // Permite onclick/oninput inline (admin panel)
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.tailwindcss.com", "https://unpkg.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com"],
@@ -166,6 +166,44 @@ app.use('/api/upload', csrfVerifyToken, uploadLimiter, uploadRoutes);
 
 // --- Serve frontend pages ---
 const publicDir = path.join(__dirname, '../../public');
+
+// --- Dynamic sitemap.xml ---
+app.get('/sitemap.xml', (_req: Request, res: Response) => {
+    const baseUrl = process.env.APP_URL || `${_req.protocol}://${_req.get('host')}`;
+    const sitemapPages = [
+        { loc: '/', priority: '1.0', changefreq: 'weekly' },
+        { loc: '/menu', priority: '0.9', changefreq: 'weekly' },
+        { loc: '/gallery', priority: '0.7', changefreq: 'monthly' },
+        { loc: '/about', priority: '0.6', changefreq: 'monthly' },
+        { loc: '/contact', priority: '0.6', changefreq: 'monthly' },
+    ];
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${sitemapPages.map(p => `  <url>
+    <loc>${baseUrl}${p.loc}</loc>
+    <changefreq>${p.changefreq}</changefreq>
+    <priority>${p.priority}</priority>
+  </url>`).join('\n')}
+</urlset>`;
+
+    res.header('Content-Type', 'application/xml');
+    res.send(xml);
+});
+
+// --- robots.txt ---
+app.get('/robots.txt', (_req: Request, res: Response) => {
+    const baseUrl = process.env.APP_URL || `${_req.protocol}://${_req.get('host')}`;
+    const robotsTxt = `User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+Sitemap: ${baseUrl}/sitemap.xml`;
+
+    res.header('Content-Type', 'text/plain');
+    res.send(robotsTxt);
+});
 
 const pages = ['index', 'menu', 'gallery', 'about', 'contact', 'admin', 'buy', 'buy-success'];
 pages.forEach(page => {

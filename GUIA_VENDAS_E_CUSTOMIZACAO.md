@@ -400,14 +400,19 @@ Render vai redeploy automaticamente (~3 min).
 
 ## 4 — Preços Sugeridos
 
-### ⚠️ Antes de Vender — Checklist Obrigatório
+### ✅ Checklist Pré-Venda — CONCLUÍDO
 
-Antes de fechar qualquer venda, garanta que completou a **Fase 0** do [UPDATE.md](UPDATE.md):
+Todas as correções obrigatórias foram concluídas (ver [UPDATE.md](UPDATE.md) v2.0):
 
-- [ ] Removeu todos os `console.log` de debug (csrf.ts, app.ts, upload.ts)
-- [ ] Removeu campo `debug` da resposta 403 do CSRF
-- [ ] Integrou Cloudinary para uploads (imagens somem sem isso!)
-- [ ] Testou deploy completo com Cloudinary funcionando
+- [x] Removeu todos os `console.log` de debug
+- [x] Removeu campo `debug` da resposta 403 do CSRF
+- [x] Integrou Cloudinary para uploads
+- [x] Validação de WhatsApp (DDI + DDD + número)
+- [x] Onboarding "Primeiros Passos" no admin
+- [x] Botão Preview no admin
+- [x] Script de backup/restore
+- [x] Winston structured logging
+- [x] Limpo código legado
 
 ### Pacotes
 
@@ -586,9 +591,9 @@ Antes de marcar como "entregue", verifique:
 
 | Risco | Probabilidade | O que acontece | Como resolver |
 |---|---|---|---|
-| **Imagens somem no redeploy** | 🔴 100% (sem Cloudinary) | Cliente perde todas as fotos do cardápio/galeria | Integrar Cloudinary (Fase 0 — **obrigatório**) |
+| ~~**Imagens somem no redeploy**~~ | ~~🔴 100%~~ | ~~Fotos desaparecem~~ | ✅ Resolvido — Cloudinary integrado |
 | **Render Free dorme** | 🔴 ALTA | Site leva 30s para abrir | Usar Render Starter ($7/mês) para clientes reais |
-| **Neon Free cai** | 🟢 BAIXA | Raro, mas possível | Backup pg_dump mensal |
+| **Neon Free cai** | 🟢 BAIXA | Raro, mas possível | Usar script `npm run backup` mensal |
 | **Dependências desatualizadas** | 🟡 MÉDIA a longo prazo | Vulnerabilidades futuras | `npm audit` + update a cada 3-6 meses |
 
 ### Riscos Comerciais
@@ -622,22 +627,34 @@ Antes de marcar como "entregue", verifique:
 
 ### Resumo das Fases
 
-| Fase | Quando | O que | Impacto em Vendas |
+| Fase | Quando | O que | Status |
 |---|---|---|---|
-| **0 — Correções** | **AGORA** (antes da 1ª venda) | Debug logs, Cloudinary, CSRF fix | Obrigatório — sem isso não vende |
-| **1 — UX Rápido** | Semana 1-2 | Máscara preço, placeholder WA, SEO, admin mobile | Site mais profissional |
-| **2 — Valor** | Semana 3-6 | QR Code, preview config, contador visitas, maps | Justifica pacote Premium |
-| **3 — Diferencial** | Mês 2-3 | Seletor tema, PWA, avaliações, Pix, dashboard | Compete com iFood/cardápio digital |
-| **4 — Escala** | Mês 3+ | Multi-tenant, auto-provisioning, CI/CD, testes | Gerenciar 50+ clientes sem estresse |
+| **0 — Correções** | ~~AGORA~~ | Debug logs, Cloudinary, CSRF, onboarding, preview, backup | ✅ **Concluída** |
+| **1 — UX Rápido** | Semana 1-2 | Máscara preço, SEO, admin mobile | 🟡 Próximo |
+| **2 — Valor** | Semana 3-6 | QR Code, contador visitas, maps | ⏳ Futuro |
+| **3 — Diferencial** | Mês 2-3 | Seletor tema, PWA, avaliações, Pix, dashboard | ⏳ Futuro |
+| **4 — Escala** | Mês 3+ | Multi-tenant, auto-provisioning, CI/CD, testes | ⏳ Futuro |
 
 ### O que fazer AGORA vs DEPOIS
 
-**AGORA (Fase 0 — 3 horas):**
-1. Remover debug logs
-2. Integrar Cloudinary
-3. Testar e commitar
+**AGORA — Vender! ✅ Tudo pronto:**
+- Fase 0 concluída (segurança, Cloudinary, onboarding, preview, backup)
+- 3 templates disponíveis (main, template-b, template-c)
+- Basta criar instância no Render + Neon e vender
 
 **Após 1ª venda (com dinheiro no bolso):**
 1. Admin responsivo (dono edita pelo celular)
 2. SEO (meta tags, sitemap)
 3. QR Code (vende mais pacotes Premium)
+
+### Backup de Dados
+
+Sempre faça backup antes de atualizar um site de cliente:
+
+```bash
+cd server
+npm run backup                          # Cria backup JSON
+npm run backup:restore backup-XXXX.json # Restaura backup
+```
+
+Backups ficam em `server/backups/` (últimos 10 mantidos automaticamente).

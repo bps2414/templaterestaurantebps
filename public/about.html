@@ -5,17 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sobre — Forno & Massa</title>
+    <meta name="page-name" content="Sobre">
     <script src="https://cdn.tailwindcss.com"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <script>
-        tailwind.config = { theme: { extend: { colors: { brand: { 400: '#e86f3a', 500: '#C1440E', 600: '#a33a0c' }, olive: { 400: '#6B9F42', 500: '#5B7A3A' }, dark: { 800: '#1a1612', 900: '#0D0A07' } }, fontFamily: { display: ['Lora', 'serif'], body: ['Inter', 'sans-serif'] } } } };
+        tailwind.config = { theme: { extend: { colors: { brand: { 400: '#E77C5A', 500: '#C1440E', 600: '#A33A0C' }, dark: { 800: '#1a1a2e', 900: '#0f0f1a' } }, fontFamily: { display: ['Lora', 'serif'], body: ['Inter', 'sans-serif'] } } } };
     </script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: #0D0A07;
+            background: #0f0f1a;
             color: #f5f5f5;
         }
 
@@ -25,7 +26,7 @@
 
         .nav-glass {
             backdrop-filter: blur(12px);
-            background: rgba(13, 10, 7, 0.85);
+            background: rgba(15, 15, 26, 0.8);
         }
 
         .reveal {
@@ -101,7 +102,7 @@
     <section class="pt-32 pb-16 bg-dark-900">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Sobre Nós</p>
-            <h1 class="font-display text-4xl md:text-6xl font-bold text-white mb-4" id="about-title">Nossa Tradição</h1>
+            <h1 class="font-display text-4xl md:text-6xl font-bold text-white mb-4" id="about-title">Nossa História</h1>
         </div>
     </section>
 
@@ -111,18 +112,18 @@
             <!-- Story Section -->
             <div class="grid md:grid-cols-2 gap-12 items-center mb-20 reveal">
                 <div>
-                    <img src="https://images.unsplash.com/photo-1579751626657-72bc17010498?w=800&q=80"
-                        alt="Forno a lenha" class="rounded-2xl w-full h-[400px] object-cover">
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Interior"
+                        class="rounded-2xl w-full h-[400px] object-cover">
                 </div>
                 <div>
-                    <h2 class="font-display text-3xl font-bold text-white mb-6">Paixão Pelo Forno a Lenha</h2>
+                    <h2 class="font-display text-3xl font-bold text-white mb-6">Uma Paixão por Sabores</h2>
                     <p class="text-gray-400 text-lg leading-relaxed mb-6" id="about-text">
-                        Fundado em 2008, o Forno & Massa nasceu do sonho de trazer a autêntica pizza italiana para
-                        São Paulo. Cada massa é preparada artesanalmente, fermentada por 72 horas.
+                        Fundado em 2010, o Forno & Massa nasceu da paixão por unir ingredientes da mais alta qualidade
+                        com técnicas culinárias contemporâneas.
                     </p>
                     <p class="text-gray-400 text-lg leading-relaxed">
-                        Nosso pizzaiolo, com anos de experiência em Napoli, traz para cada pizza a
-                        combinação perfeita de tradição e sabor.
+                        Nosso chef executivo, com passagens por restaurantes estrelados na Europa, traz para cada prato
+                        uma combinação única de tradição e inovação.
                     </p>
                 </div>
             </div>
@@ -130,22 +131,22 @@
             <!-- Values -->
             <div class="grid md:grid-cols-3 gap-8 mb-20">
                 <div class="reveal bg-dark-800/60 rounded-2xl p-8 border border-white/5 text-center">
-                    <div class="text-4xl mb-4">🔥</div>
-                    <h3 class="font-display text-xl font-bold text-white mb-3">Forno a Lenha</h3>
-                    <p class="text-gray-400">Nossas pizzas são assadas em forno a lenha a 450°C, garantindo a crosta
-                        perfeita e o sabor defumado.</p>
+                    <div class="text-4xl mb-4">🌿</div>
+                    <h3 class="font-display text-xl font-bold text-white mb-3">Ingredientes Frescos</h3>
+                    <p class="text-gray-400">Selecionamos diariamente os melhores ingredientes de produtores locais e
+                        orgânicos.</p>
                 </div>
                 <div class="reveal bg-dark-800/60 rounded-2xl p-8 border border-white/5 text-center">
-                    <div class="text-4xl mb-4">🧀</div>
-                    <h3 class="font-display text-xl font-bold text-white mb-3">Massa Artesanal</h3>
-                    <p class="text-gray-400">Fermentação natural de 72 horas com farinha italiana importada para uma
-                        textura única.</p>
+                    <div class="text-4xl mb-4">👨‍🍳</div>
+                    <h3 class="font-display text-xl font-bold text-white mb-3">Chef Premiado</h3>
+                    <p class="text-gray-400">Nossa equipe de cozinha é liderada por chefs com experiência internacional
+                        e estrelas Michelin.</p>
                 </div>
                 <div class="reveal bg-dark-800/60 rounded-2xl p-8 border border-white/5 text-center">
-                    <div class="text-4xl mb-4">🇮🇹</div>
-                    <h3 class="font-display text-xl font-bold text-white mb-3">Tradição Italiana</h3>
-                    <p class="text-gray-400">Receitas passadas de geração em geração, com ingredientes autênticos e
-                        respeito à tradição.</p>
+                    <div class="text-4xl mb-4">❤️</div>
+                    <h3 class="font-display text-xl font-bold text-white mb-3">Feito com Amor</h3>
+                    <p class="text-gray-400">Cada prato é uma obra de arte, preparada com dedicação e carinho para
+                        nossos convidados.</p>
                 </div>
             </div>
 
@@ -161,15 +162,15 @@
                             class="w-full h-full object-cover">
                     </div>
                     <h3 class="font-display text-lg font-bold text-white">Marco Oliveira</h3>
-                    <p class="text-brand-400 text-sm">Pizzaiolo Chefe</p>
+                    <p class="text-brand-400 text-sm">Chef Executivo</p>
                 </div>
                 <div class="text-center">
                     <div class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-4 border-2 border-brand-500/30">
                         <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&q=80"
-                            alt="Cozinheiro" class="w-full h-full object-cover">
+                            alt="Sommelier" class="w-full h-full object-cover">
                     </div>
                     <h3 class="font-display text-lg font-bold text-white">Ana Costa</h3>
-                    <p class="text-brand-400 text-sm">Cozinheira Chefe</p>
+                    <p class="text-brand-400 text-sm">Sommelier</p>
                 </div>
                 <div class="text-center">
                     <div class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-4 border-2 border-brand-500/30">
