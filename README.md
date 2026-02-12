@@ -4,15 +4,23 @@
 
 > ⚠️ **Este projeto é de uso interno** e não deve ser distribuído como template público sem adaptação contratual.
 
-### 📊 Status da Auditoria (11/02/2026)
+### 📊 Status da Auditoria (12/02/2026)
 
 | Critério | Nota |
 |---|---|
-| Técnica | **7.5/10** |
-| Comercial | **7/10** |
-| Vendabilidade | **7/10** (sobe para 8.5 após Fase 0) |
+| Técnica | **8.5/10** |
+| Comercial | **7.5/10** |
+| Vendabilidade | **8.5/10** ✅ Pronto para vender |
 
 > Ver [UPDATE.md](UPDATE.md) para auditoria completa e plano de melhorias em 5 fases.
+
+### 🎨 Templates Disponíveis
+
+| Branch | Tipo | Design | Status |
+|---|---|---|---|
+| `main` | Restaurante genérico | Playfair Display, laranja #ee7620, 🍽 Sabor & Arte | ✅ Pronto |
+| `template-b` | Hamburgueria | Barlow Condensed, vermelho #DC2626, 🍔 Burger House | ✅ Pronto |
+| `template-c` | Pizzaria | Lora, terracotta #C1440E, 🍕 Forno & Massa | ✅ Pronto |
 
 ---
 
@@ -56,12 +64,16 @@ Este sistema serve como **base técnica** para a criação de sites personalizad
 ### Funcionalidades
 
 - ✅ **Painel Admin** — CRUD completo de pratos, categorias, galeria e configurações
+- ✅ **Onboarding Guiado** — Modal "Primeiros Passos" para novos admins (auto-detecção de progresso)
+- ✅ **Preview ao Vivo** — Botão para visualizar o site em nova aba direto do admin
 - ✅ **Cardápio Digital** — Categorias com filtros, preços e fotos
 - ✅ **Galeria de Fotos** — Upload com lightbox e navegação
-- ✅ **WhatsApp Integrado** — Botão flutuante + pedidos diretos
-- ✅ **Upload Seguro** — 2MB max, MIME whitelist, UUID filenames
+- ✅ **WhatsApp Integrado** — Botão flutuante + pedidos diretos + validação de número
+- ✅ **Upload Seguro** — 2MB max, MIME whitelist, UUID filenames, Cloudinary
 - ✅ **Autenticação Robusta** — JWT + refresh token, brute force protection
 - ✅ **Segurança Hardened** — Ver seção [Segurança](#-segurança)
+- ✅ **Logger Estruturado** — Winston (console + arquivo em produção)
+- ✅ **Backup/Restore** — Script JSON para export/import de dados
 - ✅ **SEO Ready** — Meta tags, semântica HTML5
 - ✅ **100% Responsivo** — Mobile-first design
 

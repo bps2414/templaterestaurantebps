@@ -5,40 +5,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galeria — Burger House</title>
+    <meta name="page-name" content="Galeria">
     <script src="https://cdn.tailwindcss.com"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        cream: { 50: '#FFF8F0', 100: '#FFF0E0', 200: '#FFE4C9' },
-                        fire: { 400: '#EF4444', 500: '#DC2626', 600: '#B91C1C', 700: '#991B1B' },
-                        gold: { 300: '#FCD34D', 400: '#FBBF24', 500: '#F59E0B' },
-                        charcoal: { 800: '#1F1F1F', 900: '#111111' },
-                    }, fontFamily: { display: ['Barlow Condensed', 'sans-serif'], body: ['Outfit', 'sans-serif'] }
-                }
-            }
-        };
+        tailwind.config = { theme: { extend: { colors: { brand: { 400: '#f87171', 500: '#DC2626', 600: '#b91c1c' }, dark: { 800: '#1a1a2e', 900: '#0f0f1a' } }, fontFamily: { display: ['Barlow Condensed', 'sans-serif'], body: ['Inter', 'sans-serif'] } } } };
     </script>
     <style>
         body {
-            font-family: 'Outfit', sans-serif;
-            background: #FFF8F0;
-            color: #1F1F1F;
+            font-family: 'Inter', sans-serif;
+            background: #0f0f1a;
+            color: #f5f5f5;
         }
 
         .font-display {
             font-family: 'Barlow Condensed', sans-serif;
-            text-transform: uppercase;
         }
 
-        .nav-warm {
-            backdrop-filter: blur(16px);
-            background: rgba(17, 17, 17, 0.95);
-            border-bottom: 1px solid rgba(251, 191, 36, 0.2);
+        .nav-glass {
+            backdrop-filter: blur(12px);
+            background: rgba(15, 15, 26, 0.8);
         }
 
         .whatsapp-float {
@@ -64,7 +52,7 @@
         .gallery-item {
             cursor: pointer;
             overflow: hidden;
-            border-radius: 1rem;
+            border-radius: 0.75rem;
         }
 
         .gallery-item img {
@@ -75,6 +63,7 @@
             transform: scale(1.1);
         }
 
+        /* Lightbox */
         .lightbox {
             display: none;
             position: fixed;
@@ -93,7 +82,7 @@
             max-width: 90vw;
             max-height: 85vh;
             object-fit: contain;
-            border-radius: 0.75rem;
+            border-radius: 0.5rem;
         }
 
         .lightbox-close {
@@ -122,51 +111,26 @@
         .lightbox-next {
             right: 16px;
         }
-
-        .gold-line {
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #DC2626, #FBBF24, transparent);
-            margin: 0 auto;
-            border-radius: 2px;
-        }
-
-        .separator {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            justify-content: center;
-        }
-
-        .separator::before,
-        .separator::after {
-            content: '';
-            width: 40px;
-            height: 2px;
-            background: #FBBF24;
-        }
     </style>
 </head>
 
 <body>
 
     <!-- NAVBAR -->
-    <nav class="nav-warm fixed top-0 w-full z-50">
+    <nav class="nav-glass fixed top-0 w-full z-50 border-b border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 md:h-20">
                 <a href="/" class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-fire-500 flex items-center justify-center shadow-md">
-                        <span class="text-cream-50 text-lg">🍔</span>
-                    </div>
+                    <span class="text-2xl">�</span>
                     <span class="font-display text-xl md:text-2xl font-bold text-white" id="nav-brand">Burger
                         House</span>
                 </a>
                 <div class="hidden md:flex items-center gap-8">
-                    <a href="/" class="text-white/60 hover:text-gold-400 transition text-sm">Início</a>
-                    <a href="/menu" class="text-white/60 hover:text-gold-400 transition text-sm">Cardápio</a>
-                    <a href="/gallery" class="text-gold-400 font-medium text-sm">Galeria</a>
-                    <a href="/about" class="text-white/60 hover:text-gold-400 transition text-sm">Sobre</a>
-                    <a href="/contact" class="text-white/60 hover:text-gold-400 transition text-sm">Contato</a>
+                    <a href="/" class="text-gray-300 hover:text-brand-400 transition text-sm">Início</a>
+                    <a href="/menu" class="text-gray-300 hover:text-brand-400 transition text-sm">Cardápio</a>
+                    <a href="/gallery" class="text-brand-400 font-medium text-sm">Galeria</a>
+                    <a href="/about" class="text-gray-300 hover:text-brand-400 transition text-sm">Sobre</a>
+                    <a href="/contact" class="text-gray-300 hover:text-brand-400 transition text-sm">Contato</a>
                 </div>
                 <button id="menu-toggle" class="md:hidden text-white p-2"><svg class="w-6 h-6" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
@@ -175,33 +139,32 @@
                     </svg></button>
             </div>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden bg-charcoal-900/95 backdrop-blur border-t border-gold-400/20">
+        <div id="mobile-menu" class="hidden md:hidden bg-dark-900/95 backdrop-blur border-t border-white/5">
             <div class="px-4 py-4 space-y-3">
-                <a href="/" class="block text-white/60 py-2">Início</a>
-                <a href="/menu" class="block text-white/60 py-2">Cardápio</a>
-                <a href="/gallery" class="block text-gold-400 font-medium py-2">Galeria</a>
-                <a href="/about" class="block text-white/60 py-2">Sobre</a>
-                <a href="/contact" class="block text-white/60 py-2">Contato</a>
+                <a href="/" class="block text-gray-300 py-2">Início</a>
+                <a href="/menu" class="block text-gray-300 py-2">Cardápio</a>
+                <a href="/gallery" class="block text-brand-400 font-medium py-2">Galeria</a>
+                <a href="/about" class="block text-gray-300 py-2">Sobre</a>
+                <a href="/contact" class="block text-gray-300 py-2">Contato</a>
             </div>
         </div>
     </nav>
 
     <!-- HERO -->
-    <section class="pt-32 pb-16 bg-cream-50">
+    <section class="pt-32 pb-16 bg-dark-900">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <div class="separator mb-4"><span
-                    class="text-fire-500 text-xs tracking-[0.3em] uppercase font-medium">Galeria</span></div>
-            <h1 class="font-display text-4xl md:text-6xl font-extrabold text-charcoal-900 mb-4">Nossos Burgers</h1>
-            <p class="text-charcoal-800/50 text-lg max-w-2xl mx-auto">Cada foto mostra o cuidado e a qualidade dos nossos hambúrgueres.</p>
-            <div class="gold-line mt-6"></div>
+            <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Galeria</p>
+            <h1 class="font-display text-4xl md:text-6xl font-bold text-white mb-4">Nossos Momentos</h1>
+            <p class="text-gray-400 text-lg max-w-2xl mx-auto">Cada imagem conta a história do nosso cuidado com cada
+                detalhe.</p>
         </div>
     </section>
 
     <!-- GALLERY GRID -->
-    <section class="pb-20 bg-cream-50">
+    <section class="pb-20 bg-dark-900">
         <div class="max-w-7xl mx-auto px-4">
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="gallery-grid">
-                <div class="text-center py-20 col-span-full text-charcoal-800/40">Carregando galeria...</div>
+                <div class="text-center py-20 col-span-full text-gray-500">Carregando galeria...</div>
             </div>
         </div>
     </section>
@@ -219,9 +182,9 @@
     </div>
 
     <!-- FOOTER -->
-    <footer class="bg-charcoal-900 py-12">
+    <footer class="bg-dark-900 border-t border-white/5 py-12">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-white/30 text-sm" id="footer-copy">© 2026 Burger House</p>
+            <p class="text-gray-600 text-sm" id="footer-copy">© 2026 Burger House</p>
         </div>
     </footer>
 
@@ -242,15 +205,16 @@
         let galleryImages = [];
         let currentIndex = 0;
 
+        // Fallback images when no gallery images from API
         const fallbackImages = [
-            { src: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80', alt: 'Hambúrguer artesanal' },
-            { src: 'https://images.unsplash.com/photo-1550547660-d9450f859349?w=600&q=80', alt: 'Cheeseburger duplo' },
-            { src: 'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=600&q=80', alt: 'Burger gourmet' },
-            { src: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=600&q=80', alt: 'Batata frita crocante' },
-            { src: 'https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=600&q=80', alt: 'Smash burger' },
-            { src: 'https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=600&q=80', alt: 'Onion rings' },
-            { src: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=600&q=80', alt: 'X-Bacon' },
-            { src: 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=600&q=80', alt: 'Burger com cheddar' },
+            { src: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80', alt: 'Ambiente do restaurante' },
+            { src: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80', alt: 'Prato gourmet' },
+            { src: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80', alt: 'Bar do restaurante' },
+            { src: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80', alt: 'Salada fresca' },
+            { src: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80', alt: 'Pizza artesanal' },
+            { src: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=600&q=80', alt: 'Sobremesa' },
+            { src: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&q=80', alt: 'Prato de peixe' },
+            { src: 'https://images.unsplash.com/photo-1551218808-94e220e084d2?w=600&q=80', alt: 'Cozinha' },
         ];
 
         async function loadGallery() {
@@ -259,10 +223,10 @@
 
             const grid = document.getElementById('gallery-grid');
             grid.innerHTML = galleryImages.map((img, i) => `
-                <div class="gallery-item aspect-square shadow-sm border border-gold-400/10" onclick="openLightbox(${i})">
-                    <img src="${img.src}" alt="${img.alt || ''}" class="w-full h-full object-cover" loading="lazy">
-                </div>
-            `).join('');
+        <div class="gallery-item aspect-square" onclick="openLightbox(${i})">
+            <img src="${img.src}" alt="${img.alt || ''}" class="w-full h-full object-cover" loading="lazy">
+        </div>
+    `).join('');
         }
 
         function openLightbox(index) {
@@ -287,6 +251,7 @@
             document.getElementById('lightbox-img').src = galleryImages[currentIndex].src;
         }
 
+        // Keyboard navigation
         document.addEventListener('keydown', (e) => {
             const lb = document.getElementById('lightbox');
             if (!lb.classList.contains('active')) return;
