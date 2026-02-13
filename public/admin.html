@@ -1433,7 +1433,7 @@
                 <label class="text-sm text-gray-400 mb-2 block">${label} <span class="pro-badge">PRO</span></label>
                 <div class="flex items-center gap-4 mb-3">
                     ${value ? `<img src="${escapeAttr(value)}" class="${previewSize} rounded-lg object-cover border border-white/10" onerror="this.style.display='none'">` : ''}
-                    <input type="file" data-upload-key="${key}" accept="image/png,image/jpeg,image/svg+xml,image/webp,image/x-icon" ${disabledAttr}
+                    <input type="file" data-upload-key="${key}" accept="image/png,image/jpeg,image/webp" ${disabledAttr}
                         class="text-sm text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-brand-500 file:text-white file:font-medium file:cursor-pointer hover:file:bg-brand-600">
                 </div>
                 <input type="text" data-key="${key}" value="${escapeAttr(value)}" ${disabledAttr}

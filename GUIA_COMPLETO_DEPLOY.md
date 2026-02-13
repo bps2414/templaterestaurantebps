@@ -417,131 +417,172 @@ postgresql://neondb_owner:AbCdEf123@ep-cool-name-123456.us-east-2.aws.neon.tech/
 
 ### 5.1 — Criar o serviço
 
-1. Acesse **https://dashboard.render.com** → Crie conta
+1. Acesse **https://dashboard.render.com** → Crie conta (pode usar GitHub)
 2. Clique em **New +** → **Web Service**
-3. Conecte sua conta GitHub → selecione o repositório `restaurant-template`
-4. Configure:
+3. **Connect a repository** → se primeira vez, clique em **Configure account** para conectar o GitHub
+4. Selecione o repositório `restaurant-template` (ou nome que você deu)
+5. Clique em **Connect**
 
-| Campo | Valor |
-|-------|-------|
-| **Name** | `restaurante-saborarte` (ou nome do cliente) |
-| **Region** | Mesma do Neon (ex: Ohio / US East) |
-| **Branch** | `main` |
-| **Root Directory** | `server` |
-| **Runtime** | `Node` |
-| **Build Command** | `npm ci --include=dev && npx prisma generate && npm run build` |
-| **Start Command** | `npx prisma migrate deploy && node dist/index.js` |
-| **Plan** | Free (para começar) ou Starter ($7/mês para produção real) |
+### 5.2 — Configurar o serviço (ATENÇÃO aos detalhes!)
 
-> ⚠️ **IMPORTANTE:** O **Root Directory** é `server` porque o `package.json` está dentro de `server/`. O Render precisa saber onde rodar `npm ci`.
+Na tela de configuração, preencha **exatamente assim**:
 
-### 5.2 — Variáveis de Ambiente
+| Campo | Valor | ⚠️ Importante |
+|-------|-------|---------------|
+| **Name** | `restaurante-saborarte` (ou nome do cliente, sem espaços) | Esse nome vira a URL: `https://restaurante-saborarte.onrender.com` |
+| **Region** | `Oregon (US West)` ou mesma do Neon | Escolha região mais próxima dos clientes finais |
+| **Branch** | `main` | O Render vai monitorar esse branch para redeploys automáticos |
+| **Root Directory** | `server` | 🔴 **CRÍTICO** — é onde está o `package.json` do backend |
+| **Runtime** | `Node` | Render detecta automaticamente, mas confirme que está Node |
+| **Build Command** | `npm ci --include=dev && npx prisma generate && npm run build` | Instala deps, gera Prisma Client, compila TypeScript |
+| **Start Command** | `npx prisma migrate deploy && node dist/index.js` | Roda migrations e inicia o servidor |
+| **Instance Type** | `Free` (para testar) ou `Starter` ($7/mês para produção) | Free dorme após 15 min de inatividade, Starter fica sempre ligado |
 
-No serviço criado → **Environment** → **Add Environment Variable**
+> **⚠️ CUIDADO:** Se o **Root Directory** não for `server`, o build vai falhar com `Cannot find module 'package.json'`. O Render precisa entrar na pasta `server/` antes de rodar `npm ci`.
 
-Adicione **uma por uma**:
+### 5.3 — Auto-Deploy (recomendado)
 
-| Key | Value | Notas |
-|-----|-------|-------|
-| `DATABASE_URL` | `postgresql://neondb_owner:...@...neon.tech/neondb?sslmode=require` | Cole a string do Neon (etapa 4) |
-| `JWT_SECRET` | *(valor aleatório — veja abaixo)* | NUNCA reutilize entre clientes |
-| `NODE_ENV` | `production` | Ativa HTTPS redirect, HSTS, etc. |
-| `APP_URL` | `https://restaurante-saborarte.onrender.com` | URL do seu serviço no Render |
-| `CORS_ORIGINS` | `https://restaurante-saborarte.onrender.com` | Mesma URL |
-| `PORT` | `3000` | Render usa isso internamente |
+Logo abaixo das configurações, você verá:
 
-**Como gerar o JWT_SECRET:**
+**Auto-Deploy:** ✅ `Yes` (deixe marcado)
 
-No seu terminal local, rode:
+Isso faz deploy automático toda vez que você fizer `git push` para a branch `main`. Muito útil para correções rápidas.
 
-```bash
-node -e "console.log(require('crypto').randomBytes(64).toString('base64'))"
-```
+### 5.4 — Variáveis de Ambiente (TODAS necessárias!)
 
-Copie o resultado e cole como valor de `JWT_SECRET`.
+**ANTES de clicar em "Create Web Service"**, role até **Environment Variables** e clique em **Add Environment Variable**.
 
-**Variáveis opcionais** (adicione se tiver):
+Adicione **TODAS** as variáveis abaixo (uma por uma):
+
+#### 🔴 Variáveis OBRIGATÓRIAS (sem elas o site não funciona):
+
+| Key | Value | Como obter |
+|-----|-------|------------|
+| `DATABASE_URL` | `postgresql://user:pass@ep-xxx-pooler.c-2.us-west-2.aws.neon.tech/neondb?sslmode=require` | 1. Vá no [Neon Dashboard](https://console.neon.tech) → seu projeto<br>2. **Connection Details** → **Connection string**<br>3. **Pooled connection** (com `-pooler` na URL)<br>4. Copie e cole aqui |
+| `DIRECT_URL` | `postgresql://user:pass@ep-xxx.c-2.us-west-2.aws.neon.tech/neondb?sslmode=require` | 1. Mesmo lugar do DATABASE_URL<br>2. Mas agora copie **Unpooled connection** (SEM `-pooler`)<br>3. **IMPORTANTE:** Prisma precisa dessa URL para migrations (advisory locks) |
+| `JWT_SECRET` | `gerado aleatoriamente` | Rode no terminal local:<br>`node -e "console.log(require('crypto').randomBytes(64).toString('base64'))"`<br>Copie o resultado (64 caracteres aleatórios) |
+| `NODE_ENV` | `production` | Ativa modo produção (HTTPS redirect, HSTS, rate limit, sem CORS permissivo) |
+| `APP_URL` | `https://restaurante-saborarte.onrender.com` | Substitua `restaurante-saborarte` pelo **Name** que você escolheu na etapa 5.2 |
+| `CORS_ORIGINS` | `https://restaurante-saborarte.onrender.com` | Mesma URL do APP_URL (permite frontend acessar backend) |
+| `PORT` | `3000` | Render usa internamente, mas o app será acessado pela porta 443 (HTTPS) |
+| `CLOUDINARY_CLOUD_NAME` | `dmebhvwpo` (exemplo) | 1. Vá em [Cloudinary Dashboard](https://console.cloudinary.com)<br>2. Canto superior esquerdo: **Product Environment Settings**<br>3. Copie o **Cloud name** |
+| `CLOUDINARY_API_KEY` | `123456789012345` (exemplo) | Mesmo lugar, copie **API Key** |
+| `CLOUDINARY_API_SECRET` | `AbCdEfGh1234567890` (exemplo) | Mesmo lugar, clique em **API Secret** → **Show** → copie |
+| `CLOUDINARY_FOLDER_PREFIX` | `restaurante_saborarte` | Nome único para organizar uploads deste cliente (use letras, números e underscore apenas) |
+
+#### 📊 Variáveis OPCIONAIS (para clientes específicos):
 
 | Key | Value | Quando usar |
 |-----|-------|-------------|
-| `CLOUDINARY_CLOUD_NAME` | `dmebhvwpo` | **Obrigatório** — uploads de imagens (pegar na dashboard Cloudinary) |
-| `CLOUDINARY_API_KEY` | `123456789...` | **Obrigatório** — uploads de imagens |
-| `CLOUDINARY_API_SECRET` | `AbCdEf...` | **Obrigatório** — uploads de imagens (clicar "Show" para revelar) |
-| `CLOUDINARY_FOLDER_PREFIX` | `restauranteteste` | **Obrigatório** — organiza uploads por site (usar nome do site) |
-| `STRIPE_SECRET_KEY` | `sk_live_...` | Se vender templates online |
-| `STRIPE_WEBHOOK_SECRET` | `whsec_...` | Se usar Stripe |
+| `STRIPE_SECRET_KEY` | `sk_live_...` | Se o restaurante aceitar pagamentos online (Stripe) |
+| `STRIPE_WEBHOOK_SECRET` | `whsec_...` | Para validar webhooks do Stripe |
+| `SENDGRID_API_KEY` | `SG.xyz...` | Se quiser enviar emails transacionais (confirmações, etc) |
 
-### 5.3 — Deploy automático
+> **💡 Dica:** Para cada novo cliente, gere um **JWT_SECRET novo** e crie um **CLOUDINARY_FOLDER_PREFIX único**. NUNCA reutilize entre sites.
 
-Depois de salvar as variáveis, clique em **Manual Deploy → Deploy latest commit**.
+### 5.5 — Criar o serviço
+
+Depois de adicionar **TODAS** as variáveis obrigatórias, clique em **Create Web Service** no final da página.
 
 O Render vai:
-1. Clonar o repo
-2. Entrar em `server/` (Root Directory)
-3. Rodar `npm ci && npx prisma generate && npm run build`
-4. Quando build terminar, rodar `npx prisma migrate deploy && node dist/index.js`
+1. Clonar o repositório do GitHub
+2. Entrar na pasta `server/` (Root Directory)
+3. Rodar o **Build Command** (leva ~2-3 minutos)
+4. Se build passar, rodar o **Start Command**
+5. Provisionar certificado SSL automático (HTTPS)
 
-**Acompanhe os logs em tempo real no painel.** O deploy leva 2-5 minutos.
+**Acompanhe os logs em tempo real** na aba **Logs** do painel. Você vai ver:
 
-Quando aparecer `🍽 Restaurant Template server running` nos logs → está no ar!
+```
+==> Cloning from https://github.com/seu-usuario/restaurant-template...
+==> Running 'npm ci --include=dev && npx prisma generate && npm run build'
+...
+==> Build successful 🎉
+==> Deploying...
+==> Running 'npx prisma migrate deploy && node dist/index.js'
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "neondb"
+3 migrations found in prisma/migrations
+Applying migration `20250101000000_init`
+Applying migration `20250110000000_add_config`
+Applying migration `20250112000000_security`
+The following migrations have been applied:
+✅ 3 migrations applied
 
-### 5.4 — Rodar o seed (popular o banco)
+🍽️  Restaurant Template server running on http://localhost:3000
+```
 
-O seed não roda automaticamente no deploy. Você precisa rodar manualmente **uma única vez**.
+Quando aparecer `Restaurant Template server running` → **está no ar!**
 
-#### Opção A: Plano Starter/Paid (com Shell)
+### 5.6 — Testar se subiu
 
-No Render → seu serviço → **Shell** (aba no topo):
+A URL do seu site é: `https://[nome-que-voce-escolheu].onrender.com`
+
+Teste rapidamente:
+- `https://SEU_APP.onrender.com/healthz` → deve retornar `{"status":"ok"}`
+- `https://SEU_APP.onrender.com` → deve carregar a página inicial (mas SEM dados ainda, porque não rodou o seed)
+
+### 5.7 — Popular o banco (seed) — OBRIGATÓRIO!
+
+O seed **NÃO roda automaticamente** no deploy. Você precisa rodar **manualmente uma única vez** para criar:
+- Admin padrão
+- Categorias (Entradas, Pratos Principais, etc)
+- 10 pratos de exemplo
+- Configurações do site (nome, WhatsApp, etc)
+
+#### ✅ Opção A: Plano Starter/Paid (com Shell no Render)
+
+Se você pagou pelo plano Starter ($7/mês), tem acesso à Shell:
+
+1. No Render → seu serviço → aba **Shell** (topo)
+2. Aguarde o terminal carregar
+3. Digite:
 
 ```bash
 npx prisma db seed
 ```
 
-Saída esperada:
-```
-🌱 Seeding database...
-✅ Admin: admin@restaurante.com (senha: admin123)
-✅ Categorias criadas
-✅ 10 pratos criados
-✅ Configurações do site criadas
-🎉 Seed concluído com sucesso!
-```
+4. Aguarde aparecer `✅ 10 pratos criados` e `🎉 Seed concluído`
 
-> **Para clientes:** use as variáveis de ambiente para customizar:
-> ```bash
-> SEED_ADMIN_EMAIL="dono@pizzaria.com" SEED_ADMIN_PASSWORD="SenhaForte456!" npx prisma db seed
-> ```
-
-#### Opção B: Plano Free (sem Shell) — Rodar localmente
-
-⚠️ **O plano Free do Render NÃO tem acesso à Shell.** Use este workaround:
-
-1. **No seu computador**, vá para a pasta `server/`:
+**Para customizar o admin:**
 ```bash
+SEED_ADMIN_EMAIL="dono@pizzaria.com" SEED_ADMIN_PASSWORD="SenhaForte123!" npx prisma db seed
+```
+
+---
+
+#### ❌ Opção B: Plano Free (SEM Shell) — Rodar localmente apontando para o Neon
+
+O plano Free **não tem Shell**, então você roda o seed do seu computador, mas conectando no banco do Neon:
+
+1. **No seu computador**, abra o PowerShell e vá para a pasta `server/`:
+
+```powershell
 cd F:\VSCode\Landpage\server
 ```
 
-2. **Configure a DATABASE_URL do Neon** (copie do painel do Render → Environment):
+2. **Configure a DATABASE_URL temporariamente** (copie do painel do Render → Environment → `DATABASE_URL`):
+
 ```powershell
 # PowerShell (Windows)
-$env:DATABASE_URL="postgresql://neondb_owner:ABC...@ep-...neon.tech/neondb?sslmode=require"
-$env:SEED_ADMIN_EMAIL="dono@pizzaria.com"
-$env:SEED_ADMIN_PASSWORD="SenhaForte123!"
+$env:DATABASE_URL="postgresql://neondb_owner:ABC...@ep-xxx-pooler.c-2.us-west-2.aws.neon.tech/neondb?sslmode=require"
+$env:SEED_ADMIN_EMAIL="dono@saborarte.com"
+$env:SEED_ADMIN_PASSWORD="Admin2026!"
 npx prisma db seed
 ```
 
-```bash
-# Bash (Mac/Linux)
-DATABASE_URL="postgresql://..." \
-SEED_ADMIN_EMAIL="dono@pizzaria.com" \
-SEED_ADMIN_PASSWORD="SenhaForte123!" \
-npx prisma db seed
+3. **Confirme** que apareceu:
+```
+✅ Admin: dono@saborarte.com
+✅ 10 pratos criados
+🎉 Seed concluído
 ```
 
-3. **Confirme** que apareceu `✅ 10 pratos criados`
+4. **Teste no site**: Acesse `https://SEU_APP.onrender.com/admin` e faça login com as credenciais que você definiu.
 
-**Seguro?** Sim — o seed só cria dados, não apaga nada existente.
+> **Seguro?** Sim — o seed só **cria** dados se não existirem. Não apaga nada.
 
+---
 ---
 
 ## 6 — Testar em produção
