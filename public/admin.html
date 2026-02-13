@@ -1848,11 +1848,14 @@
 
                 const defaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect fill='%231a1a2e' width='80' height='80'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='32' fill='%23444'%3E👤%3C/text%3E%3C/svg%3E";
 
+                // Se não tem imagem ou está vazio, usa o placeholder
+                const imgSrc = (m.image && m.image.trim() !== '') ? m.image : defaultAvatar;
+
                 card.innerHTML = `
                     <div class="flex items-start gap-4">
                         <div class="flex-shrink-0">
                             <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-brand-500/30 mb-2">
-                                <img id="team-preview-${i}" src="${escapeAttr(m.image || defaultAvatar)}" 
+                                <img id="team-preview-${i}" src="${escapeAttr(imgSrc)}" 
                                     alt="${escapeAttr(m.name || 'Preview')}"
                                     class="w-full h-full object-cover"
                                     onerror="this.src='${defaultAvatar}'">
@@ -1908,7 +1911,8 @@
                         teamMembers[idx].image = value;
                         const preview = document.getElementById(`team-preview-${idx}`);
                         if (preview) {
-                            preview.src = value || defaultAvatar;
+                            // Se valor vazio ou só espaços, volta para o placeholder
+                            preview.src = (value && value.trim() !== '') ? value : defaultAvatar;
                         }
                     });
                 });

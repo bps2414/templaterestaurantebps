@@ -121,9 +121,17 @@
     }
 
     async function loadConfig() {
+        // Fallback: força visibilidade após 500ms se config não carregar
+        const fallbackTimer = setTimeout(() => {
+            if (!document.body.classList.contains('config-loaded')) {
+                document.body.classList.add('config-loaded');
+            }
+        }, 500);
+
         try {
             // Force cache-busting by appending a timestamp
             const data = await api(`/config?_=${Date.now()}`);
+            clearTimeout(fallbackTimer);
             if (data) {
                 siteConfig = validateConfig(data);
                 applyConfig();
@@ -142,6 +150,7 @@
                 document.body.classList.add('config-loaded');
             }
         } catch (e) {
+            clearTimeout(fallbackTimer);
             showToast('Erro ao carregar configurações.', 'error');
             siteConfig = {
                 restaurant_name: 'Restaurante',
