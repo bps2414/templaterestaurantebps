@@ -905,7 +905,8 @@
         }
 
         // --- Auth ---
-        async function apiAuth(endpoint, options = {}) {
+        let isRefreshing = false;
+        async function apiAuth(endpoint, options = {}, _retried = false) {
             const headers = { ...(options.headers || {}) };
             if (token) headers['Authorization'] = `Bearer ${token}`;
             if (csrfToken) headers['X-CSRF-Token'] = csrfToken;
@@ -914,13 +915,47 @@
             }
             const res = await fetch(`${API}/api${endpoint}`, { ...options, headers, credentials: 'include' });
             const json = await res.json();
-            if (res.status === 401) {
-                // Token expired - silently redirect to login (no console spam)
+            if (res.status === 401 && !_retried) {
+                // Try to refresh token before giving up
+                const refreshed = await tryRefreshToken();
+                if (refreshed) {
+                    return apiAuth(endpoint, options, true);
+                }
                 token = null;
                 localStorage.removeItem('admin_token');
+                localStorage.removeItem('admin_refresh');
                 showLogin();
             }
             return json;
+        }
+
+        async function tryRefreshToken() {
+            if (isRefreshing) return false;
+            isRefreshing = true;
+            try {
+                const refresh = localStorage.getItem('admin_refresh');
+                if (!refresh) return false;
+                const res = await fetch(`${API}/api/auth/refresh`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ refreshToken: refresh }),
+                });
+                const json = await res.json();
+                if (json.success && json.data?.accessToken) {
+                    token = json.data.accessToken;
+                    localStorage.setItem('admin_token', token);
+                    if (json.data.refreshToken) {
+                        localStorage.setItem('admin_refresh', json.data.refreshToken);
+                    }
+                    return true;
+                }
+                return false;
+            } catch {
+                return false;
+            } finally {
+                isRefreshing = false;
+            }
         }
 
         function showLogin() {

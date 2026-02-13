@@ -1,3 +1,4 @@
-# Ignore HTML files to prevent template literal formatting issues
+# Ignore HTML and JS files to prevent template literal formatting issues
 public/**/*.html
+public/**/*.js
 *.html

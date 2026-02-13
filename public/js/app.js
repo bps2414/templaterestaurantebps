@@ -398,15 +398,16 @@
 
     // --- Apply favicon dynamically ---
     function applyFavicon(url) {
-        let link = document.querySelector('link[rel="icon"]');
-        if (link) {
-            link.href = url;
-            // Update type based on URL
-            if (url.endsWith('.png')) link.type = 'image/png';
-            else if (url.endsWith('.ico')) link.type = 'image/x-icon';
-            else if (url.endsWith('.svg')) link.type = 'image/svg+xml';
-            else link.type = 'image/png'; // default for uploaded images
-        }
+        // Remove existing favicons to force browser refresh
+        document.querySelectorAll('link[rel="icon"], link[rel="shortcut icon"]').forEach(el => el.remove());
+        // Create fresh favicon link
+        const link = document.createElement('link');
+        link.rel = 'icon';
+        if (url.endsWith('.svg')) link.type = 'image/svg+xml';
+        else if (url.endsWith('.ico')) link.type = 'image/x-icon';
+        else link.type = 'image/png';
+        link.href = url + (url.includes('?') ? '&' : '?') + '_v=' + Date.now();
+        document.head.appendChild(link);
     }
 
 
@@ -458,34 +459,35 @@
                 el.textContent = text;
             }
         }
+    }
 
-        function setHref(id, url) {
-            const el = document.getElementById(id);
-            if (el && url) el.href = url;
+    function setHref(id, url) {
+        const el = document.getElementById(id);
+        if (el && url) el.href = url;
+    }
+
+    function escapeHTML(value) {
+        const div = document.createElement('div');
+        div.textContent = value ?? '';
+        return div.innerHTML;
+    }
+
+    function escapeAttr(value) {
+        return escapeHTML(value).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    // --- Featured dishes (homepage) ---
+    async function loadFeaturedDishes() {
+        const container = document.getElementById('featured-dishes');
+        if (!container) return;
+
+        const dishes = await api('/dishes/featured');
+        if (!dishes || dishes.length === 0) {
+            container.innerHTML = '<p class="text-center col-span-3 text-gray-500 py-12">Nenhum destaque disponível.</p>';
+            return;
         }
 
-        function escapeHTML(value) {
-            const div = document.createElement('div');
-            div.textContent = value ?? '';
-            return div.innerHTML;
-        }
-
-        function escapeAttr(value) {
-            return escapeHTML(value).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-        }
-
-        // --- Featured dishes (homepage) ---
-        async function loadFeaturedDishes() {
-            const container = document.getElementById('featured-dishes');
-            if (!container) return;
-
-            const dishes = await api('/dishes/featured');
-            if (!dishes || dishes.length === 0) {
-                container.innerHTML = '<p class="text-center col-span-3 text-gray-500 py-12">Nenhum destaque disponível.</p>';
-                return;
-            }
-
-            container.innerHTML = dishes.slice(0, 3).map(dish => `
+        container.innerHTML = dishes.slice(0, 3).map(dish => `
         <div class="card-hover reveal bg-dark-800/60 rounded-2xl overflow-hidden border border-white/5 group">
             <div class="relative h-64 overflow-hidden">
                 <img src="${escapeAttr(dish.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80')}"
@@ -517,176 +519,176 @@
         </div >
                 `).join('');
 
-            initReveal();
+        initReveal();
+    }
+
+    // --- Category cards (homepage) ---
+    async function loadCategoryCards() {
+        const container = document.getElementById('category-cards');
+        if (!container) return;
+
+        const categories = await api('/categories');
+        if (!categories || categories.length === 0) {
+            container.innerHTML = '<p class="text-center col-span-4 text-gray-500 py-12">Nenhuma categoria disponível.</p>';
+            return;
         }
 
-        // --- Category cards (homepage) ---
-        async function loadCategoryCards() {
-            const container = document.getElementById('category-cards');
-            if (!container) return;
+        var icons = ['🥗', '🥩', '🍰', '🍷', '🍝', '🐟', '🥘', '🍕'];
+        container.textContent = '';
+        categories.forEach(function (cat, i) {
+            var link = document.createElement('a');
+            link.href = '/menu#' + (cat.slug || '');
+            link.className = 'card-hover reveal bg-dark-800/60 rounded-2xl p-8 text-center border border-white/5 group';
 
-            const categories = await api('/categories');
-            if (!categories || categories.length === 0) {
-                container.innerHTML = '<p class="text-center col-span-4 text-gray-500 py-12">Nenhuma categoria disponível.</p>';
-                return;
-            }
+            var iconDiv = document.createElement('div');
+            iconDiv.className = 'text-5xl mb-4';
+            iconDiv.textContent = icons[i % icons.length];
+            link.appendChild(iconDiv);
 
-            var icons = ['🥗', '🥩', '🍰', '🍷', '🍝', '🐟', '🥘', '🍕'];
-            container.textContent = '';
-            categories.forEach(function (cat, i) {
-                var link = document.createElement('a');
-                link.href = '/menu#' + (cat.slug || '');
-                link.className = 'card-hover reveal bg-dark-800/60 rounded-2xl p-8 text-center border border-white/5 group';
+            var nameH3 = document.createElement('h3');
+            nameH3.className = 'font-display text-lg font-bold text-white group-hover:text-brand-400 transition';
+            nameH3.textContent = cat.name;
+            link.appendChild(nameH3);
 
-                var iconDiv = document.createElement('div');
-                iconDiv.className = 'text-5xl mb-4';
-                iconDiv.textContent = icons[i % icons.length];
-                link.appendChild(iconDiv);
+            var countP = document.createElement('p');
+            countP.className = 'text-gray-500 text-sm mt-2';
+            countP.textContent = (cat.dishes ? cat.dishes.length : 0) + ' itens';
+            link.appendChild(countP);
 
-                var nameH3 = document.createElement('h3');
-                nameH3.className = 'font-display text-lg font-bold text-white group-hover:text-brand-400 transition';
-                nameH3.textContent = cat.name;
-                link.appendChild(nameH3);
+            container.appendChild(link);
+        });
 
-                var countP = document.createElement('p');
-                countP.className = 'text-gray-500 text-sm mt-2';
-                countP.textContent = (cat.dishes ? cat.dishes.length : 0) + ' itens';
-                link.appendChild(countP);
+        initReveal();
+    }
 
-                container.appendChild(link);
+    // --- Order via WhatsApp (legacy, kept for compatibility) ---
+    function orderWhatsApp(dishName) {
+        const waNum = siteConfig.whatsapp_number ? siteConfig.whatsapp_number.replace(/\D/g, '') : '';
+        if (!waNum || waNum.length < 10) {
+            showToast('WhatsApp não configurado. Entre em contato por telefone.', 'error');
+            return;
+        }
+        const msg = encodeURIComponent(`Olá, vi o site e gostaria de pedir ${dishName}`);
+        window.open(`https://wa.me/${waNum}?text=${msg}`, '_blank');
+    }
+
+    // --- Quick Order (new system) ---
+    function quickOrderFromHome(id, name, image, price) {
+        const dish = { id, name, image, price };
+        if (window.orderModal) {
+            window.orderModal.openQuickOrder(dish);
+        } else {
+            // Fallback to legacy method
+            orderWhatsApp(name);
+        }
+    }
+
+    // --- Add to Cart (new system) ---
+    function addToCartFromHome(id, name, image, price) {
+        const dish = { id, name, image, price };
+        if (window.cart) {
+            window.cart.add(dish);
+
+            showAddToCartToast();
+        }
+    }
+
+    function showAddToCartToast() {
+        var toast = document.createElement('div');
+        toast.className = 'fixed top-24 right-4 z-[9999] bg-green-600 text-white px-6 py-4 rounded-xl shadow-2xl font-medium transform transition-all flex items-center gap-3';
+
+        var icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        icon.setAttribute('class', 'w-6 h-6');
+        icon.setAttribute('fill', 'none');
+        icon.setAttribute('stroke', 'currentColor');
+        icon.setAttribute('viewBox', '0 0 24 24');
+        var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('stroke-linecap', 'round');
+        path.setAttribute('stroke-linejoin', 'round');
+        path.setAttribute('stroke-width', '2');
+        path.setAttribute('d', 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z');
+        icon.appendChild(path);
+        toast.appendChild(icon);
+
+        var textDiv = document.createElement('div');
+        var title = document.createElement('div');
+        title.className = 'font-bold';
+        title.textContent = 'Adicionado ao carrinho!';
+        var subtitle = document.createElement('div');
+        subtitle.className = 'text-sm text-green-100';
+        subtitle.textContent = 'Clique no botão laranja no canto inferior direito';
+        textDiv.appendChild(title);
+        textDiv.appendChild(subtitle);
+        toast.appendChild(textDiv);
+
+        document.body.appendChild(toast);
+        setTimeout(function () {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(-20px)';
+            setTimeout(function () { toast.remove(); }, 300);
+        }, 3500);
+    }
+
+    // --- Scroll Reveal ---
+    function initReveal() {
+        const reveals = document.querySelectorAll('.reveal:not(.visible)');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
             });
+        }, { threshold: 0.1 });
 
-            initReveal();
+        reveals.forEach(el => observer.observe(el));
+    }
+
+    // --- Mobile menu toggle ---
+    function initMobileMenu() {
+        const toggle = document.getElementById('menu-toggle');
+        const menu = document.getElementById('mobile-menu');
+        if (toggle && menu) {
+            toggle.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
         }
+    }
 
-        // --- Order via WhatsApp (legacy, kept for compatibility) ---
-        function orderWhatsApp(dishName) {
-            const waNum = siteConfig.whatsapp_number ? siteConfig.whatsapp_number.replace(/\D/g, '') : '';
-            if (!waNum || waNum.length < 10) {
-                showToast('WhatsApp não configurado. Entre em contato por telefone.', 'error');
-                return;
-            }
-            const msg = encodeURIComponent(`Olá, vi o site e gostaria de pedir ${dishName}`);
-            window.open(`https://wa.me/${waNum}?text=${msg}`, '_blank');
+    // --- Event delegation for order buttons ---
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.order-btn');
+        if (!btn) return;
+
+        const action = btn.dataset.action;
+        const id = btn.dataset.id;
+        const name = btn.dataset.name;
+        const image = btn.dataset.image;
+        const price = Number(btn.dataset.price);
+
+        if (action === 'quick') {
+            quickOrderFromHome(id, name, image, price);
+        } else if (action === 'cart') {
+            addToCartFromHome(id, name, image, price);
         }
+    });
 
-        // --- Quick Order (new system) ---
-        function quickOrderFromHome(id, name, image, price) {
-            const dish = { id, name, image, price };
-            if (window.orderModal) {
-                window.orderModal.openQuickOrder(dish);
-            } else {
-                // Fallback to legacy method
-                orderWhatsApp(name);
-            }
-        }
+    // --- Init ---
+    document.addEventListener('DOMContentLoaded', function () {
+        getCsrfToken(); // Fetch and cache CSRF token
+        loadConfig();
+        loadFeaturedDishes();
+        loadCategoryCards();
+        initReveal();
+        initMobileMenu();
+    });
 
-        // --- Add to Cart (new system) ---
-        function addToCartFromHome(id, name, image, price) {
-            const dish = { id, name, image, price };
-            if (window.cart) {
-                window.cart.add(dish);
+    // Expose only needed functions globally (for event delegation & menu.html)
+    window.quickOrderFromHome = quickOrderFromHome;
+    window.addToCartFromHome = addToCartFromHome;
+    window.api = api;
+    window.formatPrice = formatPrice;
+    window.initReveal = initReveal;
+    window.showToast = window.showToast || function () { };
 
-                showAddToCartToast();
-            }
-        }
-
-        function showAddToCartToast() {
-            var toast = document.createElement('div');
-            toast.className = 'fixed top-24 right-4 z-[9999] bg-green-600 text-white px-6 py-4 rounded-xl shadow-2xl font-medium transform transition-all flex items-center gap-3';
-
-            var icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-            icon.setAttribute('class', 'w-6 h-6');
-            icon.setAttribute('fill', 'none');
-            icon.setAttribute('stroke', 'currentColor');
-            icon.setAttribute('viewBox', '0 0 24 24');
-            var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            path.setAttribute('stroke-linecap', 'round');
-            path.setAttribute('stroke-linejoin', 'round');
-            path.setAttribute('stroke-width', '2');
-            path.setAttribute('d', 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z');
-            icon.appendChild(path);
-            toast.appendChild(icon);
-
-            var textDiv = document.createElement('div');
-            var title = document.createElement('div');
-            title.className = 'font-bold';
-            title.textContent = 'Adicionado ao carrinho!';
-            var subtitle = document.createElement('div');
-            subtitle.className = 'text-sm text-green-100';
-            subtitle.textContent = 'Clique no botão laranja no canto inferior direito';
-            textDiv.appendChild(title);
-            textDiv.appendChild(subtitle);
-            toast.appendChild(textDiv);
-
-            document.body.appendChild(toast);
-            setTimeout(function () {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(-20px)';
-                setTimeout(function () { toast.remove(); }, 300);
-            }, 3500);
-        }
-
-        // --- Scroll Reveal ---
-        function initReveal() {
-            const reveals = document.querySelectorAll('.reveal:not(.visible)');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            reveals.forEach(el => observer.observe(el));
-        }
-
-        // --- Mobile menu toggle ---
-        function initMobileMenu() {
-            const toggle = document.getElementById('menu-toggle');
-            const menu = document.getElementById('mobile-menu');
-            if (toggle && menu) {
-                toggle.addEventListener('click', () => {
-                    menu.classList.toggle('hidden');
-                });
-            }
-        }
-
-        // --- Event delegation for order buttons ---
-        document.addEventListener('click', (e) => {
-            const btn = e.target.closest('.order-btn');
-            if (!btn) return;
-
-            const action = btn.dataset.action;
-            const id = btn.dataset.id;
-            const name = btn.dataset.name;
-            const image = btn.dataset.image;
-            const price = Number(btn.dataset.price);
-
-            if (action === 'quick') {
-                quickOrderFromHome(id, name, image, price);
-            } else if (action === 'cart') {
-                addToCartFromHome(id, name, image, price);
-            }
-        });
-
-        // --- Init ---
-        document.addEventListener('DOMContentLoaded', function () {
-            getCsrfToken(); // Fetch and cache CSRF token
-            loadConfig();
-            loadFeaturedDishes();
-            loadCategoryCards();
-            initReveal();
-            initMobileMenu();
-        });
-
-        // Expose only needed functions globally (for event delegation & menu.html)
-        window.quickOrderFromHome = quickOrderFromHome;
-        window.addToCartFromHome = addToCartFromHome;
-        window.api = api;
-        window.formatPrice = formatPrice;
-        window.initReveal = initReveal;
-        window.showToast = window.showToast || function () { };
-
-    }) (); // end IIFE
+})(); // end IIFE
