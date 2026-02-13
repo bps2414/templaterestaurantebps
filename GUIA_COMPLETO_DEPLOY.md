@@ -418,6 +418,7 @@ git push -u origin main
    postgresql://neondb_owner:AbCdEf123@ep-cool-name-123456.us-east-2.aws.neon.tech/neondb?sslmode=require
    ```
    - Essa URL **sem `-pooler`** é necessária para migrations (Prisma precisa de advisory locks)
+   - ⚠️ **IMPORTANTE:** Se a URL tiver `.c-2.` ou `.c-3.` no hostname (ex: `ep-xxx.c-2.us-west-2`), **REMOVA** essa parte! Use apenas `ep-xxx.us-west-2`
 
 6. **GUARDE as duas strings.** Você vai precisar de ambas no Render.
 
@@ -455,13 +456,13 @@ $env:DATABASE_URL="<URL_NEON_DIRECT>" ; $env:SEED_TYPE="<TIPO>" ; $env:SEED_ADMI
 
 ```powershell
 # Exemplo 1: Hamburgueria Essential (básico)
-$env:DATABASE_URL="postgresql://neondb_owner:AbC123@ep-name.us-east-2.aws.neon.tech/neondb?sslmode=require" ; $env:SEED_TYPE="hamburgueria" ; $env:SEED_ADMIN_EMAIL="dono@burger.com" ; $env:SEED_ADMIN_PASSWORD="Burger2026!" ; $env:PLAN="essential" ; npx prisma migrate deploy ; npx prisma db seed
+$env:DATABASE_URL="postgresql://neondb_owner:npg_72sUuBqyIFYf@ep-holy-king-akhv0drx.c-3.us-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require" ; $env:SEED_TYPE="hamburgueria" ; $env:SEED_ADMIN_EMAIL="bryanpsouza123@gmail.com" ; $env:SEED_ADMIN_PASSWORD="14072010reyna" ; $env:PLAN="essential" ; npx prisma migrate deploy ; npx prisma db seed
 
 # Exemplo 2: Pizzaria Professional (completo)
 $env:DATABASE_URL="postgresql://neondb_owner:XyZ789@ep-name.us-east-2.aws.neon.tech/neondb?sslmode=require" ; $env:SEED_TYPE="pizzaria" ; $env:SEED_ADMIN_EMAIL="dono@pizza.com" ; $env:SEED_ADMIN_PASSWORD="Pizza2026!" ; $env:PLAN="professional" ; npx prisma migrate deploy ; npx prisma db seed
 
 # Exemplo 3: Restaurante genérico Professional
-$env:DATABASE_URL="postgresql://neondb_owner:XyZ789@ep-name.us-east-2.aws.neon.tech/neondb?sslmode=require" ; $env:SEED_TYPE="restaurante" ; $env:SEED_ADMIN_EMAIL="dono@bistrô.com" ; $env:SEED_ADMIN_PASSWORD="Bistrô2026!" ; $env:PLAN="professional" ; npx prisma migrate deploy ; npx prisma db seed
+$env:DATABASE_URL="postgresql://neondb_owner:npg_82APcKbrmCUY@ep-aged-hall-afx02gbc-pooler.c-2.us-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require" ; $env:SEED_TYPE="restaurante" ; $env:SEED_ADMIN_EMAIL="bryanpsouza123@gmail.com" ; $env:SEED_ADMIN_PASSWORD="14072010raze" ; $env:PLAN="professional" ; npx prisma migrate deploy ; npx prisma db seed
 ```
 
 3. **Pressione Enter** e aguarde:
@@ -516,9 +517,39 @@ $env:DATABASE_URL="..." ; $env:SEED_TYPE="restaurante" ; $env:SEED_ADMIN_EMAIL="
 
 Se você já rodou seed antes e quer **apagar tudo** e recomeçar (ex: mudou de pizzaria para hamburgueria, ou resetou credenciais):
 
+**🔴 IMPORTANTE: Entre na pasta server PRIMEIRO!**
+
+**🔴🔴 CRÍTICO: Use URL DIRECT (SEM `-pooler`)!**
+
 ```powershell
-# ⚠️ APAGA TUDO E RECRIA DO ZERO
-$env:DATABASE_URL="<URL_NEON_DIRECT>" ; $env:SEED_TYPE="hamburgueria" ; $env:SEED_ADMIN_EMAIL="novo@email.com" ; $env:SEED_ADMIN_PASSWORD="NovaSenha!" ; $env:PLAN="professional" ; npx prisma migrate reset --force
+# 1. Entre na pasta server (OBRIGATÓRIO)
+cd F:\VSCode\Landpage\server
+
+# 2. DEPOIS rode o reset (⚠️ APAGA TUDO E RECRIA DO ZERO)
+# ⚠️ ATENÇÃO: Use a URL **DIRECT** (SEM -pooler) do Neon!
+$env:DATABASE_URL="<URL_NEON_DIRECT_SEM_POOLER>" ; $env:SEED_TYPE="hamburgueria" ; $env:SEED_ADMIN_EMAIL="novo@email.com" ; $env:SEED_ADMIN_PASSWORD="NovaSenha!" ; $env:PLAN="professional" ; npx prisma migrate reset --force
+```
+
+**Exemplo completo com valores reais:**
+```powershell
+cd F:\VSCode\Landpage\server
+
+# ⚠️ NOTE: URL SEM -pooler (direct connection)
+$env:DATABASE_URL="postgresql://neondb_owner:npg_ABC123@ep-name.us-west-2.aws.neon.tech/neondb?sslmode=require" ; $env:SEED_TYPE="hamburgueria" ; $env:SEED_ADMIN_EMAIL="esqueceeotrem@gmail.com" ; $env:SEED_ADMIN_PASSWORD="NovaSenha!" ; $env:PLAN="essential" ; npx prisma migrate reset --force
+```
+
+**❌ ERRADO (NÃO funciona):**
+```powershell
+# Se a URL tiver -pooler, o reset VAI FALHAR silenciosamente!
+$env:DATABASE_URL="postgresql://...@ep-name-pooler.us-west-2.aws.neon.tech/..." ; ...
+                                         ^^^^^^^ NÃO USE ESTA URL!
+```
+
+**✅ CERTO:**
+```powershell
+# URL sem -pooler = funciona
+$env:DATABASE_URL="postgresql://...@ep-name.us-west-2.aws.neon.tech/..." ; ...
+                                     ^^^^^^^ SEM -pooler
 ```
 
 > ⚠️ **ATENÇÃO:** `prisma migrate reset --force` **APAGA TODOS OS DADOS** do banco (pratos, categorias, fotos, configs). Use apenas:
@@ -1000,10 +1031,59 @@ R: Quantos quiser. Cada cliente é uma instância independente (Render + Neon), 
 R: Cobre pelo menos o custo de infra ($7-26/mês) + sua margem. Muitos cobram R$50-200/mês por manutenção do site de restaurante.
 
 **P: Como fazer upgrade de um cliente de Essential para Professional?**
-R: No seu computador, conecte no banco do cliente e rode:
+
+Você tem **2 opções** (escolha a mais fácil para você):
+
+---
+
+**OPÇÃO 1: Via Neon SQL Editor (MAIS RÁPIDO — recomendado)**
+
+1. **Acesse https://console.neon.tech** → Faça login
+2. **Selecione o projeto** do cliente (ex: `restaurante-saborarte`)
+3. **Clique em "SQL Editor"** (menu lateral esquerdo)
+4. **Cole e execute este comando:**
+
+```sql
+UPDATE site_configs 
+SET value = 'professional' 
+WHERE key = 'site_plan';
+```
+
+5. **Clique em "Run"** (ou pressione Ctrl+Enter)
+6. Deve aparecer: `✅ UPDATE 1` (1 linha atualizada)
+
+**✅ Pronto!** O cliente agora tem acesso ao Plano Professional.
+
+> **💡 Dica:** Se o comando der erro `relation "site_configs" does not exist`, primeiro descubra o nome correto da tabela rodando:
+> ```sql
+> SELECT tablename FROM pg_tables WHERE schemaname = 'public';
+> ```
+> ⚠️ **Copie APENAS o comando de dentro do bloco de código** (sem o `>` da citação).
+> 
+> Procure a tabela relacionada a configurações (pode ser `SiteConfig`, `site_config`, `site_configs`, etc.) e use esse nome exato no comando UPDATE.
+
+---
+
+**OPÇÃO 2: Via Prisma Studio (se preferir interface gráfica local)**
+
+1. **No seu computador**, abra o PowerShell e rode:
+
 ```powershell
 cd F:\VSCode\Landpage\server
 $env:DATABASE_URL="<URL_NEON_DIRECT_DO_CLIENTE>"
 npx prisma studio
 ```
-No Prisma Studio, vá em `SiteConfig` → encontre a linha com `key = "site_plan"` → mude `value` de `"essential"` para `"professional"` → salve. O cliente precisará fazer logout/login no admin para ver as novas funcionalidades (logo, cor da marca, favicon, seção de equipe).
+
+2. **No navegador que abrir**, vá em `SiteConfig`
+3. **Procure a linha** com `key = "site_plan"`
+4. **Clique no campo `value`** e mude de `"essential"` para `"professional"`
+5. **Clique em "Save 1 change"** (botão verde no topo)
+
+---
+
+**⚠️ IMPORTANTE:** Depois do upgrade, o cliente precisa:
+1. **Fazer logout** do painel admin
+2. **Fazer login novamente**
+3. Agora vai ver as novas funcionalidades (logo, cor da marca, favicon, seção de equipe)
+
+**🔄 Para fazer downgrade** (Professional → Essential), use o mesmo processo mas mude `value` para `"essential"`.
