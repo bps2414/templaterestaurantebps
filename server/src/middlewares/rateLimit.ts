@@ -38,6 +38,16 @@ export const uploadLimiter = rateLimit({
     keyGenerator,
 });
 
+// Checkout limiter (prevent Stripe session spam)
+export const checkoutLimiter = rateLimit({
+    windowMs: 30 * 60 * 1000, // 30 minutes
+    max: 5, // 5 checkout sessions per 30 min per IP
+    message: { success: false, error: 'Muitas tentativas de checkout. Tente novamente em 30 minutos.' },
+    standardHeaders: true,
+    legacyHeaders: false,
+    keyGenerator,
+});
+
 // NOTE: For production with Redis, use rate-limit-redis store:
 // import RedisStore from 'rate-limit-redis';
 // import Redis from 'ioredis';

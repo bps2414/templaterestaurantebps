@@ -302,7 +302,7 @@
     </div>
 
     <!-- ========== DISH MODAL ========== -->
-    <div class="modal-overlay" id="dish-modal">
+    <div class="modal-overlay" id="dish-modal" role="dialog" aria-modal="true" aria-labelledby="dish-modal-title">
         <div
             class="bg-white rounded-2xl p-8 w-full max-w-lg border border-gold-300/30 max-h-[90vh] overflow-y-auto shadow-xl">
             <h2 class="font-display text-2xl font-bold text-charcoal-900 mb-6" id="dish-modal-title">Novo Prato</h2>
@@ -361,7 +361,7 @@
     </div>
 
     <!-- ========== CATEGORY MODAL ========== -->
-    <div class="modal-overlay" id="category-modal">
+    <div class="modal-overlay" id="category-modal" role="dialog" aria-modal="true" aria-labelledby="category-modal-title">
         <div class="bg-white rounded-2xl p-8 w-full max-w-md border border-gold-300/30 shadow-xl">
             <h2 class="font-display text-2xl font-bold text-charcoal-900 mb-6" id="category-modal-title">Nova Categoria
             </h2>
@@ -388,7 +388,7 @@
     </div>
 
     <!-- ========== GALLERY UPLOAD MODAL ========== -->
-    <div class="modal-overlay" id="gallery-modal">
+    <div class="modal-overlay" id="gallery-modal" role="dialog" aria-modal="true" aria-label="Nova Imagem">
         <div class="bg-white rounded-2xl p-8 w-full max-w-md border border-gold-300/30 shadow-xl">
             <h2 class="font-display text-2xl font-bold text-charcoal-900 mb-6">Nova Imagem</h2>
             <form id="gallery-form" class="space-y-4">
@@ -414,7 +414,7 @@
     </div>
 
     <!-- ========== PASSWORD CHANGE MODAL ========== -->
-    <div class="modal-overlay" id="password-modal">
+    <div class="modal-overlay" id="password-modal" role="dialog" aria-modal="true" aria-label="Alterar Senha">
         <div class="bg-white rounded-2xl p-8 w-full max-w-md border border-gold-300/30 shadow-xl">
             <h2 class="font-display text-2xl font-bold text-charcoal-900 mb-6">🔑 Alterar Senha</h2>
             <form id="password-form" class="space-y-4">
@@ -929,6 +929,47 @@
                 errEl.classList.remove('hidden');
             }
         });
+
+        // --- Focus Trap for admin modals ---
+        (function initAdminFocusTrap() {
+            let lastFocusedElement = null;
+            const originalOpen = openModal;
+            const originalClose = closeModal;
+
+            window.openModal = function (id) {
+                lastFocusedElement = document.activeElement;
+                originalOpen(id);
+                setTimeout(() => {
+                    const modal = document.getElementById(id);
+                    if (!modal) return;
+                    const focusable = modal.querySelectorAll('input:not([disabled]):not([type="hidden"]), textarea:not([disabled]), select:not([disabled]), button:not([disabled]), a[href]');
+                    const visible = Array.from(focusable).filter(el => el.offsetParent !== null);
+                    if (visible.length > 0) visible[0].focus();
+                }, 100);
+            };
+
+            window.closeModal = function (id) {
+                originalClose(id);
+                if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+                    try { lastFocusedElement.focus(); } catch (e) {}
+                }
+                lastFocusedElement = null;
+            };
+
+            document.addEventListener('keydown', (e) => {
+                const activeModal = document.querySelector('.modal-overlay.active');
+                if (!activeModal) return;
+                if (e.key === 'Escape') { e.preventDefault(); closeModal(activeModal.id); return; }
+                if (e.key === 'Tab') {
+                    const focusable = activeModal.querySelectorAll('input:not([disabled]):not([type="hidden"]), textarea:not([disabled]), select:not([disabled]), button:not([disabled]), a[href]');
+                    const visible = Array.from(focusable).filter(el => el.offsetParent !== null);
+                    if (visible.length === 0) return;
+                    const first = visible[0], last = visible[visible.length - 1];
+                    if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
+                    else { if (document.activeElement === last) { e.preventDefault(); first.focus(); } }
+                }
+            });
+        })();
 
         // --- Init ---
         fetchCsrfToken();

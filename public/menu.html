@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cardápio — Sabor & Arte</title>
+    <title>Cardápio — Restaurante</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <meta name="page-name" content="Cardápio">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -94,13 +94,19 @@
         body:not(.config-loaded) #nav-brand,
         body:not(.config-loaded) #footer-brand,
         body:not(.config-loaded) #footer-tagline,
-        body:not(.config-loaded) #footer-copy {
+        body:not(.config-loaded) #footer-copy,
+        body:not(.config-loaded) #footer-address,
+        body:not(.config-loaded) #footer-phone,
+        body:not(.config-loaded) #footer-email {
             visibility: hidden;
         }
         body.config-loaded #nav-brand,
         body.config-loaded #footer-brand,
         body.config-loaded #footer-tagline,
-        body.config-loaded #footer-copy {
+        body.config-loaded #footer-copy,
+        body.config-loaded #footer-address,
+        body.config-loaded #footer-phone,
+        body.config-loaded #footer-email {
             animation: configFadeIn 0.3s ease;
         }
         @keyframes configFadeIn {
@@ -176,7 +182,7 @@
     <!-- FOOTER -->
     <footer class="bg-dark-900 border-t border-white/5 py-12">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-gray-600 text-sm" id="footer-copy">© 2026 Sabor & Arte</p>
+            <p class="text-gray-600 text-sm" id="footer-copy"></p>
         </div>
     </footer>
 

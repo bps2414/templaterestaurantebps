@@ -43,8 +43,8 @@ model AdminUser {
 model Session {
   id               String   @id @default(uuid())
   userId           String
-  refreshToken     String   @unique
-  refreshTokenHash String?
+  refreshToken     String   // Stores only first 8 chars (prefix for debugging)
+  refreshTokenHash String   @unique // SHA-256 hash — used for secure lookup
   userAgent        String?
   ipAddress        String?
   expiresAt        DateTime

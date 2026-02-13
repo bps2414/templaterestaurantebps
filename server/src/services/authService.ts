@@ -154,7 +154,7 @@ export const authService = {
     },
 
     /**
-     * Create session with token pair (refresh token stored as hash)
+     * Create session with token pair (only hash stored — never plaintext)
      */
     async createSession(
         userId: string,
@@ -166,6 +166,7 @@ export const authService = {
     ): Promise<TokenPair> {
         const refreshToken = generateRefreshToken();
         const refreshTokenHash = hashToken(refreshToken);
+        const tokenPrefix = refreshToken.substring(0, 8); // Prefix only, for debugging
         const expiresAt = new Date(Date.now() + parseDuration(JWT_REFRESH_EXP as string));
 
         // Limit concurrent sessions per user (max 5)
@@ -180,8 +181,8 @@ export const authService = {
         await prisma.session.create({
             data: {
                 userId,
-                refreshToken,
-                refreshTokenHash,
+                refreshToken: tokenPrefix, // Only prefix stored (NOT the full token)
+                refreshTokenHash,          // SHA-256 hash — used for all lookups
                 ipAddress,
                 userAgent,
                 expiresAt,
@@ -189,15 +190,17 @@ export const authService = {
         });
 
         const accessToken = generateAccessToken({ userId, email, role, tokenVersion });
-        return { accessToken, refreshToken };
+        return { accessToken, refreshToken }; // Full token returned to client only
     },
 
     /**
-     * Refresh token rotation (invalidates old token)
+     * Refresh token rotation — lookup by hash (never plaintext)
      */
     async refreshTokens(currentRefreshToken: string, ipAddress?: string, userAgent?: string): Promise<TokenPair> {
+        const currentHash = hashToken(currentRefreshToken);
+
         const session = await prisma.session.findUnique({
-            where: { refreshToken: currentRefreshToken },
+            where: { refreshTokenHash: currentHash },
             include: { user: true },
         });
 
@@ -224,10 +227,11 @@ export const authService = {
     },
 
     /**
-     * Logout — invalidate refresh token
+     * Logout — invalidate refresh token by hash lookup
      */
     async logout(refreshToken: string) {
-        const session = await prisma.session.findUnique({ where: { refreshToken } });
+        const tokenHash = hashToken(refreshToken);
+        const session = await prisma.session.findUnique({ where: { refreshTokenHash: tokenHash } });
         if (session) {
             await prisma.session.delete({ where: { id: session.id } });
         }

@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser';
 import path from 'path';
 
 import { errorHandler } from './middlewares/errorHandler';
-import { apiLimiter, authLimiter, uploadLimiter } from './middlewares/rateLimit';
+import { apiLimiter, authLimiter, uploadLimiter, checkoutLimiter } from './middlewares/rateLimit';
 import { csrfSetToken, csrfVerifyToken, getCsrfToken } from './middlewares/csrf';
 import logger from './utils/logger';
 import authRoutes from './routes/auth';
@@ -166,7 +166,7 @@ app.use('/api/about-content', csrfVerifyToken, apiLimiter, aboutContentRoutes);
 app.use('/api/plan', apiLimiter, planRoutes); // Public GET — no CSRF needed
 // Webhook MUST skip CSRF — Stripe has its own signature verification
 app.use('/api/checkout/webhook', apiLimiter, checkoutRoutes);
-app.use('/api/checkout', csrfVerifyToken, apiLimiter, checkoutRoutes);
+app.use('/api/checkout', csrfVerifyToken, checkoutLimiter, checkoutRoutes);
 app.use('/api/upload', csrfVerifyToken, uploadLimiter, uploadRoutes);
 
 // --- Serve frontend pages ---

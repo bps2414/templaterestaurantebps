@@ -561,7 +561,7 @@
     </div>
 
     <!-- ========== DISH MODAL ========== -->
-    <div class="modal-overlay" id="dish-modal">
+    <div class="modal-overlay" id="dish-modal" role="dialog" aria-modal="true" aria-labelledby="dish-modal-title">
         <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-lg border border-white/5 max-h-[90vh] overflow-y-auto">
             <h2 class="text-xl font-bold text-white mb-6" id="dish-modal-title">Novo Prato</h2>
             <form id="dish-form" class="space-y-4">
@@ -619,7 +619,7 @@
     </div>
 
     <!-- ========== CATEGORY MODAL ========== -->
-    <div class="modal-overlay" id="category-modal">
+    <div class="modal-overlay" id="category-modal" role="dialog" aria-modal="true" aria-labelledby="category-modal-title">
         <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-md border border-white/5">
             <h2 class="text-xl font-bold text-white mb-6" id="category-modal-title">Nova Categoria</h2>
             <form id="category-form" class="space-y-4">
@@ -645,7 +645,7 @@
     </div>
 
     <!-- ========== GALLERY UPLOAD MODAL ========== -->
-    <div class="modal-overlay" id="gallery-modal">
+    <div class="modal-overlay" id="gallery-modal" role="dialog" aria-modal="true" aria-label="Nova Imagem">
         <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-md border border-white/5">
             <h2 class="text-xl font-bold text-white mb-6">Nova Imagem</h2>
             <form id="gallery-form" class="space-y-4">
@@ -671,7 +671,7 @@
     </div>
 
     <!-- ========== PASSWORD CHANGE MODAL ========== -->
-    <div class="modal-overlay" id="password-modal">
+    <div class="modal-overlay" id="password-modal" role="dialog" aria-modal="true" aria-label="Alterar Senha">
         <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-md border border-white/5">
             <h2 class="text-xl font-bold text-white mb-6">🔑 Alterar Senha</h2>
             <form id="password-form" class="space-y-4">
@@ -710,7 +710,7 @@
     <div id="toast" class="toast"></div>
 
     <!-- ========== FIRST STEPS ONBOARDING MODAL ========== -->
-    <div class="modal-overlay" id="onboarding-modal">
+    <div class="modal-overlay" id="onboarding-modal" role="dialog" aria-modal="true" aria-label="Primeiros Passos">
         <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-lg border border-white/5 max-h-[90vh] overflow-y-auto">
             <div class="text-center mb-6">
                 <span class="text-5xl">🚀</span>
@@ -1073,6 +1073,24 @@
             return escapeHTML(value).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
 
+        // --- Loading state helper (double-click prevention) ---
+        function setLoading(btn, isLoading, originalText) {
+            if (typeof btn === 'string') btn = document.querySelector(btn);
+            if (!btn) return;
+            if (isLoading) {
+                btn._originalText = btn._originalText || originalText || btn.textContent;
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+                btn.style.pointerEvents = 'none';
+                btn.textContent = 'Salvando...';
+            } else {
+                btn.disabled = false;
+                btn.style.opacity = '';
+                btn.style.pointerEvents = '';
+                btn.textContent = btn._originalText || originalText || 'Salvar';
+            }
+        }
+
         // --- Modals ---
         function openModal(id) { document.getElementById(id).classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
@@ -1156,6 +1174,7 @@
 
         document.getElementById('dish-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
             const id = document.getElementById('dish-id').value;
             const formData = new FormData();
             formData.append('name', document.getElementById('dish-name').value);
@@ -1173,7 +1192,9 @@
             const endpoint = id ? `/dishes/${id}` : '/dishes';
             const method = id ? 'PUT' : 'POST';
 
+            setLoading(submitBtn, true, 'Salvar');
             const res = await apiAuth(endpoint, { method, body: formData });
+            setLoading(submitBtn, false, 'Salvar');
             if (res.success) {
                 toast(id ? 'Prato atualizado!' : 'Prato criado!');
                 closeModal('dish-modal');
@@ -1247,6 +1268,7 @@
 
         document.getElementById('category-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
             const id = document.getElementById('category-id').value;
             const body = {
                 name: document.getElementById('category-name').value,
@@ -1256,7 +1278,9 @@
             const endpoint = id ? `/categories/${id}` : '/categories';
             const method = id ? 'PUT' : 'POST';
 
+            setLoading(submitBtn, true, 'Salvar');
             const res = await apiAuth(endpoint, { method, body: JSON.stringify(body) });
+            setLoading(submitBtn, false, 'Salvar');
             if (res.success) {
                 toast(id ? 'Categoria atualizada!' : 'Categoria criada!');
                 closeModal('category-modal');
@@ -1316,11 +1340,14 @@
 
         document.getElementById('gallery-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
             const formData = new FormData();
             formData.append('image', document.getElementById('gallery-image').files[0]);
             formData.append('alt', document.getElementById('gallery-alt').value);
 
+            setLoading(submitBtn, true, 'Enviar');
             const res = await apiAuth('/gallery', { method: 'POST', body: formData });
+            setLoading(submitBtn, false, 'Enviar');
             if (res.success) {
                 toast('Imagem adicionada!');
                 closeModal('gallery-modal');
@@ -1510,6 +1537,7 @@
         }
 
         async function saveConfig() {
+            const saveBtn = document.querySelector('#tab-config button[onclick="saveConfig()"]');
             const data = {};
             let hasError = false;
             document.querySelectorAll('#config-form [data-key]').forEach(el => {
@@ -1535,10 +1563,12 @@
                 data.whatsapp_number = cleaned;
             }
 
+            setLoading(saveBtn, true, '💾 Salvar Tudo');
             const res = await apiAuth('/config', {
                 method: 'PUT',
                 body: JSON.stringify(data),
             });
+            setLoading(saveBtn, false, '💾 Salvar Tudo');
 
             if (res.success) {
                 toast('Configurações salvas!');
@@ -1569,6 +1599,7 @@
 
         document.getElementById('password-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
             const errEl = document.getElementById('pw-error');
             errEl.classList.add('hidden');
 
@@ -1594,10 +1625,12 @@
                 return;
             }
 
+            setLoading(submitBtn, true, 'Alterar Senha');
             const res = await apiAuth('/auth/change-password', {
                 method: 'PUT',
                 body: JSON.stringify({ currentPassword, newPassword }),
             });
+            setLoading(submitBtn, false, 'Alterar Senha');
 
             if (res.success) {
                 closeModal('password-modal');
@@ -2091,6 +2124,67 @@
             if (sidebar) sidebar.classList.toggle('open');
             if (overlay) overlay.classList.toggle('active');
         }
+
+        // --- Focus Trap for admin modals ---
+        (function initAdminFocusTrap() {
+            let lastFocusedElement = null;
+            const originalOpen = openModal;
+            const originalClose = closeModal;
+
+            window.openModal = function (id) {
+                lastFocusedElement = document.activeElement;
+                originalOpen(id);
+                // Focus first focusable element inside modal
+                setTimeout(() => {
+                    const modal = document.getElementById(id);
+                    if (!modal) return;
+                    const focusable = modal.querySelectorAll('input:not([disabled]):not([type="hidden"]), textarea:not([disabled]), select:not([disabled]), button:not([disabled]), a[href]');
+                    const visible = Array.from(focusable).filter(el => el.offsetParent !== null);
+                    if (visible.length > 0) visible[0].focus();
+                }, 100);
+            };
+
+            window.closeModal = function (id) {
+                originalClose(id);
+                if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+                    try { lastFocusedElement.focus(); } catch (e) {}
+                }
+                lastFocusedElement = null;
+            };
+
+            document.addEventListener('keydown', (e) => {
+                const activeModal = document.querySelector('.modal-overlay.active');
+                if (!activeModal) return;
+
+                // ESC to close
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    closeModal(activeModal.id);
+                    return;
+                }
+
+                // Tab trap
+                if (e.key === 'Tab') {
+                    const focusable = activeModal.querySelectorAll('input:not([disabled]):not([type="hidden"]), textarea:not([disabled]), select:not([disabled]), button:not([disabled]), a[href]');
+                    const visible = Array.from(focusable).filter(el => el.offsetParent !== null);
+                    if (visible.length === 0) return;
+                    const first = visible[0];
+                    const last = visible[visible.length - 1];
+
+                    if (e.shiftKey) {
+                        if (document.activeElement === first) {
+                            e.preventDefault();
+                            last.focus();
+                        }
+                    } else {
+                        if (document.activeElement === last) {
+                            e.preventDefault();
+                            first.focus();
+                        }
+                    }
+                }
+            });
+        })();
 
         // --- Init ---
         // Fetch CSRF token on page load

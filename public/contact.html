@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contato — Sabor & Arte</title>
+    <title>Contato — Restaurante</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <meta name="page-name" content="Contato">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -73,13 +73,21 @@
         body:not(.config-loaded) #nav-brand,
         body:not(.config-loaded) #footer-brand,
         body:not(.config-loaded) #footer-tagline,
-        body:not(.config-loaded) #footer-copy {
+        body:not(.config-loaded) #footer-copy,
+        body:not(.config-loaded) #contact-address,
+        body:not(.config-loaded) #contact-phone,
+        body:not(.config-loaded) #contact-email,
+        body:not(.config-loaded) #contact-hours {
             visibility: hidden;
         }
         body.config-loaded #nav-brand,
         body.config-loaded #footer-brand,
         body.config-loaded #footer-tagline,
-        body.config-loaded #footer-copy {
+        body.config-loaded #footer-copy,
+        body.config-loaded #contact-address,
+        body.config-loaded #contact-phone,
+        body.config-loaded #contact-email,
+        body.config-loaded #contact-hours {
             animation: configFadeIn 0.3s ease;
         }
         @keyframes configFadeIn {
@@ -154,7 +162,7 @@
                             </div>
                             <div>
                                 <h3 class="text-white font-semibold mb-1">Endereço</h3>
-                                <p class="text-gray-400" id="contact-address">Endereço da Loja</p>
+                                <p class="text-gray-400" id="contact-address"></p>
                             </div>
                         </div>
 
@@ -169,7 +177,7 @@
                             </div>
                             <div>
                                 <h3 class="text-white font-semibold mb-1">Telefone</h3>
-                                <p class="text-gray-400" id="contact-phone">(00) 00000-0000</p>
+                                <p class="text-gray-400" id="contact-phone"></p>
                             </div>
                         </div>
 
@@ -184,7 +192,7 @@
                             </div>
                             <div>
                                 <h3 class="text-white font-semibold mb-1">Email</h3>
-                                <p class="text-gray-400" id="contact-email">contato@email.com</p>
+                                <p class="text-gray-400" id="contact-email"></p>
                             </div>
                         </div>
 
@@ -199,7 +207,7 @@
                             </div>
                             <div>
                                 <h3 class="text-white font-semibold mb-1">Horários</h3>
-                                <p class="text-gray-400" id="contact-hours">Consulte nosso horário</p>
+                                <p class="text-gray-400" id="contact-hours"></p>
                             </div>
                         </div>
 
@@ -234,7 +242,7 @@
     <!-- FOOTER -->
     <footer class="bg-dark-900 border-t border-white/5 py-12">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-gray-600 text-sm" id="footer-copy">© 2026 Restaurante</p>
+            <p class="text-gray-600 text-sm" id="footer-copy"></p>
         </div>
     </footer>
 
