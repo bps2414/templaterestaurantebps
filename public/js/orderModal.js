@@ -278,6 +278,10 @@
         // Save current focus for restoration on close
         this._lastFocusedElement = document.activeElement;
 
+        // Reset loading state when opening modal
+        this.isSubmitting = false;
+        this._setLoading(false);
+
         this.modal.classList.remove('hidden');
         this.modal.classList.add('flex');
 
@@ -417,6 +421,10 @@
                 }
 
                 window.WhatsAppFormatter.openWhatsApp(message, whatsappNumber);
+
+                // Reset loading state BEFORE closing
+                self._setLoading(false);
+                self.isSubmitting = false;
 
                 // Clear cart AFTER WhatsApp opens
                 if (self.isCartMode) {
