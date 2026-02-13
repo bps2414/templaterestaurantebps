@@ -4,30 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sobre — Restaurante</title>
+    <title>Sobre — Hamburgueria</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <meta name="page-name" content="Sobre">
     <script src="https://cdn.tailwindcss.com"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <script>
-        tailwind.config = { theme: { extend: { colors: { brand: { 400: '#f19244', 500: '#ee7620', 600: '#d95c16' }, dark: { 800: '#1a1a2e', 900: '#0f0f1a' } }, fontFamily: { display: ['Playfair Display', 'serif'], body: ['Inter', 'sans-serif'] } } } };
+        tailwind.config = { theme: { extend: { colors: { brand: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' }, dark: { 800: '#1c1917', 900: '#0c0a09' } }, fontFamily: { display: ['Oswald', 'sans-serif'], body: ['Inter', 'sans-serif'] } } } };
     </script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: #0f0f1a;
-            color: #f5f5f5;
+            background: #0c0a09;
+            color: #f5f5f4;
         }
 
         .font-display {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
         }
 
         .nav-glass {
-            backdrop-filter: blur(12px);
-            background: rgba(15, 15, 26, 0.8);
+            backdrop-filter: blur(16px);
+            background: rgba(12, 10, 9, 0.85);
         }
 
         .reveal {
@@ -60,6 +62,7 @@
         .whatsapp-float:hover {
             transform: scale(1.1);
         }
+
         /* FOUC prevention */
         body:not(.config-loaded) #nav-brand,
         body:not(.config-loaded) #footer-brand,
@@ -83,19 +86,19 @@
 <body>
 
     <!-- NAVBAR -->
-    <nav class="nav-glass fixed top-0 w-full z-50 border-b border-white/5">
+    <nav class="nav-glass fixed top-0 w-full z-50 border-b border-amber-400/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 md:h-20">
                 <a href="/" class="flex items-center gap-3">
-                    <span class="text-2xl">🍽</span>
-                    <span class="font-display text-xl md:text-2xl font-bold text-white" id="nav-brand"></span>
+                    <span class="text-2xl">🍔</span>
+                    <span class="font-display text-xl md:text-2xl font-bold text-amber-400" id="nav-brand"></span>
                 </a>
                 <div class="hidden md:flex items-center gap-8">
-                    <a href="/" class="text-gray-300 hover:text-brand-400 transition text-sm">Início</a>
-                    <a href="/menu" class="text-gray-300 hover:text-brand-400 transition text-sm">Cardápio</a>
-                    <a href="/gallery" class="text-gray-300 hover:text-brand-400 transition text-sm">Galeria</a>
-                    <a href="/about" class="text-brand-400 font-medium text-sm">Sobre</a>
-                    <a href="/contact" class="text-gray-300 hover:text-brand-400 transition text-sm">Contato</a>
+                    <a href="/" class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Início</a>
+                    <a href="/menu" class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Cardápio</a>
+                    <a href="/gallery" class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Galeria</a>
+                    <a href="/about" class="text-amber-400 font-medium text-sm tracking-wide">Sobre</a>
+                    <a href="/contact" class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Contato</a>
                 </div>
                 <button id="menu-toggle" class="md:hidden text-white p-2"><svg class="w-6 h-6" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
@@ -104,74 +107,73 @@
                     </svg></button>
             </div>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden bg-dark-900/95 backdrop-blur border-t border-white/5">
+        <div id="mobile-menu" class="hidden md:hidden bg-zinc-950/95 backdrop-blur border-t border-amber-400/10">
             <div class="px-4 py-4 space-y-3">
-                <a href="/" class="block text-gray-300 py-2">Início</a>
-                <a href="/menu" class="block text-gray-300 py-2">Cardápio</a>
-                <a href="/gallery" class="block text-gray-300 py-2">Galeria</a>
-                <a href="/about" class="block text-brand-400 font-medium py-2">Sobre</a>
-                <a href="/contact" class="block text-gray-300 py-2">Contato</a>
+                <a href="/" class="block text-stone-400 py-2">Início</a>
+                <a href="/menu" class="block text-stone-400 py-2">Cardápio</a>
+                <a href="/gallery" class="block text-stone-400 py-2">Galeria</a>
+                <a href="/about" class="block text-amber-400 font-medium py-2">Sobre</a>
+                <a href="/contact" class="block text-stone-400 py-2">Contato</a>
             </div>
         </div>
     </nav>
 
     <!-- HERO -->
-    <section class="pt-32 pb-16 bg-dark-900">
+    <section class="pt-32 pb-16 bg-zinc-950">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Sobre Nós</p>
+            <p class="text-amber-400 font-display font-medium tracking-[0.3em] text-sm mb-3">Sobre Nós</p>
             <h1 class="font-display text-4xl md:text-6xl font-bold text-white mb-4" id="about-title">Nossa História</h1>
         </div>
     </section>
 
     <!-- ABOUT CONTENT -->
-    <section class="pb-20 bg-dark-900">
+    <section class="pb-20 bg-zinc-950">
         <div class="max-w-6xl mx-auto px-4">
             <!-- Story Section -->
             <div class="grid md:grid-cols-2 gap-12 items-center mb-20 reveal">
                 <div>
-                    <img id="about-image" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Interior"
+                    <img id="about-image" src="https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=800&q=80" alt="Interior"
                         class="rounded-2xl w-full h-[400px] object-cover">
                 </div>
                 <div>
-                    <h2 class="font-display text-3xl font-bold text-white mb-6">Uma Paixão por Sabores</h2>
-                    <p class="text-gray-400 text-lg leading-relaxed mb-6" id="about-text">
+                    <h2 class="font-display text-3xl font-bold text-white mb-6">Uma Paixão por Hambúrgueres</h2>
+                    <p class="text-stone-400 text-lg leading-relaxed mb-6" id="about-text">
                         Carregando...
                     </p>
-                    <p class="text-gray-400 text-lg leading-relaxed" id="about-text-2">
+                    <p class="text-stone-400 text-lg leading-relaxed" id="about-text-2">
                     </p>
                 </div>
             </div>
 
             <!-- Values (dynamic) -->
             <div class="grid md:grid-cols-3 gap-8 mb-20" id="about-features">
-                <div class="text-center py-12 col-span-3 text-gray-500">Carregando...</div>
+                <div class="text-center py-12 col-span-3 text-stone-500">Carregando...</div>
             </div>
 
             <!-- Team (dynamic — PRO only) -->
             <div id="team-section" style="display:none;">
                 <div class="text-center mb-12 reveal">
-                    <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Equipe</p>
+                    <p class="text-amber-400 font-display font-medium tracking-[0.3em] text-sm mb-3">Equipe</p>
                     <h2 class="font-display text-3xl md:text-4xl font-bold text-white">Nosso Time</h2>
                 </div>
                 <div class="grid md:grid-cols-3 gap-8 reveal" id="team-members">
-                    <div class="text-center py-12 col-span-3 text-gray-500">Carregando...</div>
+                    <div class="text-center py-12 col-span-3 text-stone-500">Carregando...</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- FOOTER -->
-    <footer class="bg-dark-900 border-t border-white/5 py-12">
+    <footer class="bg-zinc-950 border-t border-amber-400/10 py-12">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-gray-600 text-sm" id="footer-copy">© 2026 Sabor & Arte</p>
+            <p class="text-stone-600 text-sm" id="footer-copy"></p>
         </div>
     </footer>
 
     <!-- WHATSAPP -->
     <a href="#" id="whatsapp-float" class="whatsapp-float" target="_blank" rel="noopener">
         <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path
-                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
         </svg>
     </a>
 
@@ -212,10 +214,10 @@
                 const featuresContainer = document.getElementById('about-features');
                 if (featuresContainer && data.about_features && data.about_features.length > 0) {
                     featuresContainer.innerHTML = data.about_features.map(f => `
-                        <div class="reveal bg-dark-800/60 rounded-2xl p-8 border border-white/5 text-center">
+                        <div class="reveal bg-stone-900/60 rounded-2xl p-8 border border-amber-400/10 text-center">
                             <div class="text-4xl mb-4">${escapeHTMLAbout(f.icon)}</div>
                             <h3 class="font-display text-xl font-bold text-white mb-3">${escapeHTMLAbout(f.title)}</h3>
-                            <p class="text-gray-400">${escapeHTMLAbout(f.description)}</p>
+                            <p class="text-stone-400">${escapeHTMLAbout(f.description)}</p>
                         </div>
                     `).join('');
                 } else if (featuresContainer) {
@@ -227,25 +229,23 @@
                 const teamContainer = document.getElementById('team-members');
                 if (isPro && teamContainer && data.team_members && data.team_members.length > 0) {
                     if (teamSection) teamSection.style.display = '';
-                    const defaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Crect fill='%231a1a2e' width='160' height='160'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='48' fill='%23444'%3E%F0%9F%91%A4%3C/text%3E%3C/svg%3E";
+                    const defaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Crect fill='%231c1917' width='160' height='160'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='48' fill='%23444'%3E%F0%9F%91%A4%3C/text%3E%3C/svg%3E";
                     teamContainer.innerHTML = data.team_members.map(m => `
                         <div class="text-center">
-                            <div class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-4 border-2 border-brand-500/30">
+                            <div class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-4 border-2 border-amber-500/30">
                                 <img src="${escapeAttrAbout(m.image || defaultAvatar)}" alt="${escapeAttrAbout(m.name)}"
                                     class="w-full h-full object-cover"
                                     onerror="this.src='${defaultAvatar}'">
                             </div>
                             <h3 class="font-display text-lg font-bold text-white">${escapeHTMLAbout(m.name)}</h3>
-                            <p class="text-brand-400 text-sm">${escapeHTMLAbout(m.role)}</p>
+                            <p class="text-amber-400 text-sm">${escapeHTMLAbout(m.role)}</p>
                         </div>
                     `).join('');
                 } else {
-                    // Hide team section entirely on Essential plan or no members
                     if (teamSection) teamSection.style.display = 'none';
                     if (teamContainer) teamContainer.innerHTML = '';
                 }
 
-                // Re-init scroll reveal for dynamically inserted elements
                 if (typeof initReveal === 'function') {
                     setTimeout(initReveal, 100);
                 }

@@ -4,30 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contato — Restaurante</title>
+    <title>Contato — Hamburgueria</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <meta name="page-name" content="Contato">
     <script src="https://cdn.tailwindcss.com"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <script>
-        tailwind.config = { theme: { extend: { colors: { brand: { 400: '#f19244', 500: '#ee7620', 600: '#d95c16' }, dark: { 800: '#1a1a2e', 900: '#0f0f1a' } }, fontFamily: { display: ['Playfair Display', 'serif'], body: ['Inter', 'sans-serif'] } } } };
+        tailwind.config = { theme: { extend: { colors: { brand: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' }, dark: { 800: '#1c1917', 900: '#0c0a09' } }, fontFamily: { display: ['Oswald', 'sans-serif'], body: ['Inter', 'sans-serif'] } } } };
     </script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: #0f0f1a;
-            color: #f5f5f5;
+            background: #0c0a09;
+            color: #f5f5f4;
         }
 
         .font-display {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
         }
 
         .nav-glass {
-            backdrop-filter: blur(12px);
-            background: rgba(15, 15, 26, 0.8);
+            backdrop-filter: blur(16px);
+            background: rgba(12, 10, 9, 0.85);
         }
 
         .reveal {
@@ -47,7 +49,7 @@
 
         .btn-glow:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(238, 118, 32, 0.4);
+            box-shadow: 0 8px 30px rgba(251, 191, 36, 0.35);
         }
 
         .whatsapp-float {
@@ -69,6 +71,7 @@
         .whatsapp-float:hover {
             transform: scale(1.1);
         }
+
         /* FOUC prevention */
         body:not(.config-loaded) #nav-brand,
         body:not(.config-loaded) #footer-brand,
@@ -100,19 +103,19 @@
 <body>
 
     <!-- NAVBAR -->
-    <nav class="nav-glass fixed top-0 w-full z-50 border-b border-white/5">
+    <nav class="nav-glass fixed top-0 w-full z-50 border-b border-amber-400/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 md:h-20">
                 <a href="/" class="flex items-center gap-3">
-                    <span class="text-2xl">🍽</span>
-                    <span class="font-display text-xl md:text-2xl font-bold text-white" id="nav-brand"></span>
+                    <span class="text-2xl">🍔</span>
+                    <span class="font-display text-xl md:text-2xl font-bold text-amber-400" id="nav-brand"></span>
                 </a>
                 <div class="hidden md:flex items-center gap-8">
-                    <a href="/" class="text-gray-300 hover:text-brand-400 transition text-sm">Início</a>
-                    <a href="/menu" class="text-gray-300 hover:text-brand-400 transition text-sm">Cardápio</a>
-                    <a href="/gallery" class="text-gray-300 hover:text-brand-400 transition text-sm">Galeria</a>
-                    <a href="/about" class="text-gray-300 hover:text-brand-400 transition text-sm">Sobre</a>
-                    <a href="/contact" class="text-brand-400 font-medium text-sm">Contato</a>
+                    <a href="/" class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Início</a>
+                    <a href="/menu" class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Cardápio</a>
+                    <a href="/gallery" class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Galeria</a>
+                    <a href="/about" class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Sobre</a>
+                    <a href="/contact" class="text-amber-400 font-medium text-sm tracking-wide">Contato</a>
                 </div>
                 <button id="menu-toggle" class="md:hidden text-white p-2"><svg class="w-6 h-6" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
@@ -121,93 +124,79 @@
                     </svg></button>
             </div>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden bg-dark-900/95 backdrop-blur border-t border-white/5">
+        <div id="mobile-menu" class="hidden md:hidden bg-zinc-950/95 backdrop-blur border-t border-amber-400/10">
             <div class="px-4 py-4 space-y-3">
-                <a href="/" class="block text-gray-300 py-2">Início</a>
-                <a href="/menu" class="block text-gray-300 py-2">Cardápio</a>
-                <a href="/gallery" class="block text-gray-300 py-2">Galeria</a>
-                <a href="/about" class="block text-gray-300 py-2">Sobre</a>
-                <a href="/contact" class="block text-brand-400 font-medium py-2">Contato</a>
+                <a href="/" class="block text-stone-400 py-2">Início</a>
+                <a href="/menu" class="block text-stone-400 py-2">Cardápio</a>
+                <a href="/gallery" class="block text-stone-400 py-2">Galeria</a>
+                <a href="/about" class="block text-stone-400 py-2">Sobre</a>
+                <a href="/contact" class="block text-amber-400 font-medium py-2">Contato</a>
             </div>
         </div>
     </nav>
 
     <!-- HERO -->
-    <section class="pt-32 pb-16 bg-dark-900">
+    <section class="pt-32 pb-16 bg-zinc-950">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Contato</p>
+            <p class="text-amber-400 font-display font-medium tracking-[0.3em] text-sm mb-3">Contato</p>
             <h1 class="font-display text-4xl md:text-6xl font-bold text-white mb-4">Fale Conosco</h1>
-            <p class="text-gray-400 text-lg max-w-2xl mx-auto">Estamos prontos para atendê-lo. Entre em contato por
-                qualquer canal.</p>
+            <p class="text-stone-400 text-lg max-w-2xl mx-auto">Quer fazer um pedido especial ou tirar dúvidas? Fala com a gente!</p>
         </div>
     </section>
 
     <!-- CONTACT CONTENT -->
-    <section class="pb-20 bg-dark-900">
+    <section class="pb-20 bg-zinc-950">
         <div class="max-w-6xl mx-auto px-4">
             <div class="grid md:grid-cols-2 gap-12">
                 <!-- Info -->
                 <div class="reveal">
                     <div class="space-y-8">
                         <div class="flex items-start gap-4">
-                            <div
-                                class="w-12 h-12 rounded-xl bg-brand-500/10 flex items-center justify-center flex-shrink-0">
-                                <svg class="w-6 h-6 text-brand-400" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
                             </div>
                             <div>
                                 <h3 class="text-white font-semibold mb-1">Endereço</h3>
-                                <p class="text-gray-400" id="contact-address"></p>
+                                <p class="text-stone-400" id="contact-address"></p>
                             </div>
                         </div>
 
                         <div class="flex items-start gap-4">
-                            <div
-                                class="w-12 h-12 rounded-xl bg-brand-500/10 flex items-center justify-center flex-shrink-0">
-                                <svg class="w-6 h-6 text-brand-400" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                 </svg>
                             </div>
                             <div>
                                 <h3 class="text-white font-semibold mb-1">Telefone</h3>
-                                <p class="text-gray-400" id="contact-phone"></p>
+                                <p class="text-stone-400" id="contact-phone"></p>
                             </div>
                         </div>
 
                         <div class="flex items-start gap-4">
-                            <div
-                                class="w-12 h-12 rounded-xl bg-brand-500/10 flex items-center justify-center flex-shrink-0">
-                                <svg class="w-6 h-6 text-brand-400" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                 </svg>
                             </div>
                             <div>
                                 <h3 class="text-white font-semibold mb-1">Email</h3>
-                                <p class="text-gray-400" id="contact-email"></p>
+                                <p class="text-stone-400" id="contact-email"></p>
                             </div>
                         </div>
 
                         <div class="flex items-start gap-4">
-                            <div
-                                class="w-12 h-12 rounded-xl bg-brand-500/10 flex items-center justify-center flex-shrink-0">
-                                <svg class="w-6 h-6 text-brand-400" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                             </div>
                             <div>
                                 <h3 class="text-white font-semibold mb-1">Horários</h3>
-                                <p class="text-gray-400" id="contact-hours"></p>
+                                <p class="text-stone-400" id="contact-hours"></p>
                             </div>
                         </div>
 
@@ -216,10 +205,9 @@
                                 class="btn-glow inline-flex items-center gap-2 bg-[#25d366] hover:bg-[#1da851] text-white px-8 py-4 rounded-full text-lg font-medium"
                                 target="_blank">
                                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
                                 </svg>
-                                Falar pelo WhatsApp
+                                Pedir pelo WhatsApp
                             </a>
                         </div>
                     </div>
@@ -227,7 +215,7 @@
 
                 <!-- Map -->
                 <div class="reveal">
-                    <div class="rounded-2xl overflow-hidden border border-white/5 h-[500px]" id="map-container">
+                    <div class="rounded-2xl overflow-hidden border border-amber-400/10 h-[500px]" id="map-container">
                         <iframe id="google-map"
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.1976670254753!2d-46.65529378502211!3d-23.56517098468082!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDMzJzU0LjYiUyA0NsKwMzknMTEuMSJX!5e0!3m2!1spt-BR!2sbr!4v1234567890"
                             width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
@@ -240,17 +228,16 @@
     </section>
 
     <!-- FOOTER -->
-    <footer class="bg-dark-900 border-t border-white/5 py-12">
+    <footer class="bg-zinc-950 border-t border-amber-400/10 py-12">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-gray-600 text-sm" id="footer-copy"></p>
+            <p class="text-stone-600 text-sm" id="footer-copy"></p>
         </div>
     </footer>
 
     <!-- WHATSAPP -->
     <a href="#" id="whatsapp-float" class="whatsapp-float" target="_blank" rel="noopener">
         <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path
-                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
         </svg>
     </a>
 
