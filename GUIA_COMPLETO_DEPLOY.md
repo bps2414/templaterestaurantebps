@@ -443,26 +443,26 @@ cd F:\VSCode\Landpage\server
 
 ```powershell
 # 🎯 SUBSTITUA:
-# <URL_NEON_DIRECT> = URL direta do Neon (SEM -pooler, SEM .c-2. ou .c-3.)
+# <URL_NEON_DIRECT> = URL direta do Neon (SEM -pooler)
 # <TIPO> = hamburgueria OU pizzaria
 # <EMAIL> = email do admin (ex: dono@burger.com)
 # <SENHA> = senha forte (mínimo 8 caracteres, 1 maiúscula, 1 número)
 # <PLANO> = essential OU professional
 
-$env:DATABASE_URL="<URL_NEON_DIRECT>" ; $env:DIRECT_URL="<URL_NEON_DIRECT>" ; $env:SEED_TYPE="<TIPO>" ; $env:SEED_ADMIN_EMAIL="<EMAIL>" ; $env:SEED_ADMIN_PASSWORD="<SENHA>" ; $env:PLAN="<PLANO>" ; npx prisma migrate deploy ; npx prisma db seed
+$env:DATABASE_URL="<URL_NEON_DIRECT>" ; $env:SEED_TYPE="<TIPO>" ; $env:SEED_ADMIN_EMAIL="<EMAIL>" ; $env:SEED_ADMIN_PASSWORD="<SENHA>" ; $env:PLAN="<PLANO>" ; npx prisma migrate deploy ; npx prisma db seed
 ```
 
 **✅ EXEMPLOS PRONTOS (copie e edite):**
 
 ```powershell
 # Exemplo 1: Hamburgueria Essential (básico)
-$env:DATABASE_URL="postgresql://neondb_owner:npg_ng92NpDkBMwR@ep-ancient-pond-af1vq6j6-pooler.c-2.us-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require" ; $env:SEED_TYPE="hamburgueria" ; $env:SEED_ADMIN_EMAIL="admin@restaurante.com" ; $env:SEED_ADMIN_PASSWORD="admin123" ; $env:PLAN="essential" ; npx prisma migrate deploy ; npx prisma db seed
+$env:DATABASE_URL="postgresql://neondb_owner:npg_72sUuBqyIFYf@ep-holy-king-akhv0drx.c-3.us-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require" ; $env:SEED_TYPE="hamburgueria" ; $env:SEED_ADMIN_EMAIL="bryanpsouza123@gmail.com" ; $env:SEED_ADMIN_PASSWORD="14072010reyna" ; $env:PLAN="essential" ; npx prisma migrate deploy ; npx prisma db seed
 
 # Exemplo 2: Pizzaria Professional (completo)
-$env:DATABASE_URL="postgresql://neondb_owner:XyZ789@ep-name.us-east-2.aws.neon.tech/neondb?sslmode=require" ; $env:DIRECT_URL="postgresql://neondb_owner:npg_ng92NpDkBMwR@ep-ancient-pond-af1vq6j6.c-2.us-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require" ; $env:SEED_TYPE="pizzaria" ; $env:SEED_ADMIN_EMAIL="dono@pizza.com" ; $env:SEED_ADMIN_PASSWORD="Pizza2026!" ; $env:PLAN="professional" ; npx prisma migrate deploy ; npx prisma db seed
+$env:DATABASE_URL="postgresql://neondb_owner:XyZ789@ep-name.us-east-2.aws.neon.tech/neondb?sslmode=require" ; $env:SEED_TYPE="pizzaria" ; $env:SEED_ADMIN_EMAIL="dono@pizza.com" ; $env:SEED_ADMIN_PASSWORD="Pizza2026!" ; $env:PLAN="professional" ; npx prisma migrate deploy ; npx prisma db seed
 
 # Exemplo 3: Restaurante genérico Professional
-$env:DATABASE_URL="postgresql://neondb_owner:npg_82APcKbrmCUY@ep-aged-hall-afx02gbc.us-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require" ; $env:DIRECT_URL="postgresql://neondb_owner:npg_82APcKbrmCUY@ep-aged-hall-afx02gbc.us-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require" ; $env:SEED_TYPE="restaurante" ; $env:SEED_ADMIN_EMAIL="bryanpsouza123@gmail.com" ; $env:SEED_ADMIN_PASSWORD="14072010raze" ; $env:PLAN="professional" ; npx prisma migrate deploy ; npx prisma db seed
+$env:DATABASE_URL="postgresql://neondb_owner:npg_82APcKbrmCUY@ep-aged-hall-afx02gbc-pooler.c-2.us-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require" ; $env:SEED_TYPE="restaurante" ; $env:SEED_ADMIN_EMAIL="bryanpsouza123@gmail.com" ; $env:SEED_ADMIN_PASSWORD="14072010raze" ; $env:PLAN="professional" ; npx prisma migrate deploy ; npx prisma db seed
 ```
 
 3. **Pressione Enter** e aguarde:
@@ -477,7 +477,6 @@ $env:DATABASE_URL="postgresql://neondb_owner:npg_82APcKbrmCUY@ep-aged-hall-afx02
 4. **Limpe as variáveis** (para não conflitar com seu .env local):
 ```powershell
 Remove-Item Env:\DATABASE_URL
-Remove-Item Env:\DIRECT_URL
 ```
 
 **📊 Diferença entre os planos:**
@@ -504,12 +503,12 @@ Remove-Item Env:\DIRECT_URL
 
 **Exemplo sem SEED_TYPE (usa padrão = restaurante genérico):**
 ```powershell
-$env:DATABASE_URL="..." ; $env:DIRECT_URL="..." ; $env:SEED_ADMIN_EMAIL="dono@restaurante.com" ; $env:SEED_ADMIN_PASSWORD="Senha123!" ; $env:PLAN="essential" ; npx prisma migrate deploy ; npx prisma db seed
+$env:DATABASE_URL="..." ; $env:SEED_ADMIN_EMAIL="dono@restaurante.com" ; $env:SEED_ADMIN_PASSWORD="Senha123!" ; $env:PLAN="essential" ; npx prisma migrate deploy ; npx prisma db seed
 ```
 
 **Exemplo com restaurante explícito:**
 ```powershell
-$env:DATABASE_URL="..." ; $env:DIRECT_URL="..." ; $env:SEED_TYPE="restaurante" ; $env:SEED_ADMIN_EMAIL="dono@bistrô.com" ; $env:SEED_ADMIN_PASSWORD="Senha123!" ; $env:PLAN="professional" ; npx prisma migrate deploy ; npx prisma db seed
+$env:DATABASE_URL="..." ; $env:SEED_TYPE="restaurante" ; $env:SEED_ADMIN_EMAIL="dono@bistrô.com" ; $env:SEED_ADMIN_PASSWORD="Senha123!" ; $env:PLAN="professional" ; npx prisma migrate deploy ; npx prisma db seed
 ```
 
 ---
@@ -527,16 +526,16 @@ Se você já rodou seed antes e quer **apagar tudo** e recomeçar (ex: mudou de 
 cd F:\VSCode\Landpage\server
 
 # 2. DEPOIS rode o reset (⚠️ APAGA TUDO E RECRIA DO ZERO)
-# ⚠️ ATENÇÃO: Use a URL **DIRECT** (SEM -pooler, SEM .c-2. ou .c-3.) do Neon!
-$env:DATABASE_URL="<URL_NEON_DIRECT_SEM_POOLER>" ; $env:DIRECT_URL="<URL_NEON_DIRECT_SEM_POOLER>" ; $env:SEED_TYPE="hamburgueria" ; $env:SEED_ADMIN_EMAIL="novo@email.com" ; $env:SEED_ADMIN_PASSWORD="NovaSenha!" ; $env:PLAN="professional" ; npx prisma migrate reset --force
+# ⚠️ ATENÇÃO: Use a URL **DIRECT** (SEM -pooler) do Neon!
+$env:DATABASE_URL="<URL_NEON_DIRECT_SEM_POOLER>" ; $env:SEED_TYPE="hamburgueria" ; $env:SEED_ADMIN_EMAIL="novo@email.com" ; $env:SEED_ADMIN_PASSWORD="NovaSenha!" ; $env:PLAN="professional" ; npx prisma migrate reset --force
 ```
 
 **Exemplo completo com valores reais:**
 ```powershell
 cd F:\VSCode\Landpage\server
 
-# ⚠️ NOTE: URL SEM -pooler, SEM .c-2. ou .c-3. (direct connection)
-$env:DATABASE_URL="postgresql://neondb_owner:npg_ABC123@ep-name.us-west-2.aws.neon.tech/neondb?sslmode=require" ; $env:DIRECT_URL="postgresql://neondb_owner:npg_ABC123@ep-name.us-west-2.aws.neon.tech/neondb?sslmode=require" ; $env:SEED_TYPE="hamburgueria" ; $env:SEED_ADMIN_EMAIL="esqueceeotrem@gmail.com" ; $env:SEED_ADMIN_PASSWORD="NovaSenha!" ; $env:PLAN="essential" ; npx prisma migrate reset --force
+# ⚠️ NOTE: URL SEM -pooler (direct connection)
+$env:DATABASE_URL="postgresql://neondb_owner:npg_ABC123@ep-name.us-west-2.aws.neon.tech/neondb?sslmode=require" ; $env:SEED_TYPE="hamburgueria" ; $env:SEED_ADMIN_EMAIL="esqueceeotrem@gmail.com" ; $env:SEED_ADMIN_PASSWORD="NovaSenha!" ; $env:PLAN="essential" ; npx prisma migrate reset --force
 ```
 
 **❌ ERRADO (NÃO funciona):**
@@ -810,7 +809,7 @@ Você **não precisa** duplicar o código para cada cliente. Use o **mesmo repos
 cd F:\VSCode\Landpage\server
 
 # Cole e edite:
-$env:DATABASE_URL="<URL_NEON_DIRECT>" ; $env:DIRECT_URL="<URL_NEON_DIRECT>" ; $env:SEED_TYPE="pizzaria" ; $env:SEED_ADMIN_EMAIL="dono@napoli.com" ; $env:SEED_ADMIN_PASSWORD="Napoli2026!" ; $env:PLAN="professional" ; npx prisma migrate deploy ; npx prisma db seed
+$env:DATABASE_URL="<URL_NEON_DIRECT>" ; $env:SEED_TYPE="pizzaria" ; $env:SEED_ADMIN_EMAIL="dono@napoli.com" ; $env:SEED_ADMIN_PASSWORD="Napoli2026!" ; $env:PLAN="professional" ; npx prisma migrate deploy ; npx prisma db seed
 ```
 
 #### C) Web Service no Render
@@ -1045,9 +1044,7 @@ Você tem **2 opções** (escolha a mais fácil para você):
 4. **Cole e execute este comando:**
 
 ```sql
-UPDATE site_configs 
-SET value = 'professional' 
-WHERE key = 'site_plan';
+ 
 ```
 
 5. **Clique em "Run"** (ou pressione Ctrl+Enter)
