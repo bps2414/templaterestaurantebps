@@ -489,6 +489,37 @@ Remove-Item Env:\DATABASE_URL
 
 > 💡 **Dica comercial:** Cobre R$ 150-250 pelo plano Essential, R$ 350-500 pelo Professional.
 
+**🔄 Tipos de seed disponíveis:**
+
+| Valor de SEED_TYPE | Resultado |
+|--------------------|-----------|
+| `pizzaria` | Seed de pizzaria (Margherita, Calabresa, etc.) |
+| `hamburgueria` | Seed de hamburgueria (X-Burger, Smash, etc.) |
+| **Não definir** ou deixar vazio | Usa seed **padrão** (mesmo que pizzaria) |
+
+**Exemplo sem SEED_TYPE (usa padrão/pizzaria):**
+```powershell
+$env:DATABASE_URL="..." ; $env:SEED_ADMIN_EMAIL="dono@restaurante.com" ; $env:SEED_ADMIN_PASSWORD="Senha123!" ; $env:PLAN="essential" ; npx prisma migrate deploy ; npx prisma db seed
+```
+
+---
+
+**🗑️ RESETAR E POPULAR DO ZERO:**
+
+Se você já rodou seed antes e quer **apagar tudo** e recomeçar (ex: mudou de pizzaria para hamburgueria, ou resetou credenciais):
+
+```powershell
+# ⚠️ APAGA TUDO E RECRIA DO ZERO
+$env:DATABASE_URL="<URL_NEON_DIRECT>" ; $env:SEED_TYPE="hamburgueria" ; $env:SEED_ADMIN_EMAIL="novo@email.com" ; $env:SEED_ADMIN_PASSWORD="NovaSenha!" ; $env:PLAN="professional" ; npx prisma migrate reset --force
+```
+
+> ⚠️ **ATENÇÃO:** `prisma migrate reset --force` **APAGA TODOS OS DADOS** do banco (pratos, categorias, fotos, configs). Use apenas:
+> - Setup inicial
+> - Mudança de tipo de seed (pizzaria → hamburgueria)
+> - Cliente cancelou e vai reusar banco para outro
+> 
+> **NUNCA use** em banco com dados reais do cliente em produção!
+
 > 💾 **Importante:** Salve o comando num bloco de notas com os dados de cada cliente para reusar depois (ex: para redeploy ou troubleshooting).
 
 ---
