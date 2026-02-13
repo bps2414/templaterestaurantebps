@@ -77,7 +77,8 @@
         body:not(.config-loaded) #contact-address,
         body:not(.config-loaded) #contact-phone,
         body:not(.config-loaded) #contact-email,
-        body:not(.config-loaded) #contact-hours {
+        body:not(.config-loaded) #contact-hours,
+        body:not(.config-loaded) .pt-32 {
             opacity: 0;
             transition: opacity 0.3s ease;
         }
@@ -88,7 +89,8 @@
         body.config-loaded #contact-address,
         body.config-loaded #contact-phone,
         body.config-loaded #contact-email,
-        body.config-loaded #contact-hours {
+        body.config-loaded #contact-hours,
+        body.config-loaded .pt-32 {
             opacity: 1;
             animation: configFadeIn 0.3s ease;
         }

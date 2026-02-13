@@ -97,7 +97,8 @@
         body:not(.config-loaded) #footer-copy,
         body:not(.config-loaded) #footer-address,
         body:not(.config-loaded) #footer-phone,
-        body:not(.config-loaded) #footer-email {
+        body:not(.config-loaded) #footer-email,
+        body:not(.config-loaded) .pt-32 {
             opacity: 0;
             transition: opacity 0.3s ease;
         }
@@ -107,7 +108,8 @@
         body.config-loaded #footer-copy,
         body.config-loaded #footer-address,
         body.config-loaded #footer-phone,
-        body.config-loaded #footer-email {
+        body.config-loaded #footer-email,
+        body.config-loaded .pt-32 {
             opacity: 1;
             animation: configFadeIn 0.3s ease;
         }
