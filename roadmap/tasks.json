@@ -1,0 +1,464 @@
+{
+    "meta": {
+        "version": "1.0",
+        "generated": "2026-02-13",
+        "project": "Restaurant Template SaaS",
+        "total_tasks": 17,
+        "total_hours_min": 36,
+        "total_hours_max": 52
+    },
+    "sprints": [
+        {
+            "id": "sprint-1",
+            "name": "Quick Wins",
+            "duration_hours": "8-12",
+            "objective": "UX polish + deps audit",
+            "expected_gains": {
+                "ux": "+1.5",
+                "security": "+0.5",
+                "technical": "+0"
+            },
+            "tasks": [
+                {
+                    "id": "S1-T1",
+                    "title": "Loading states + toast notifications",
+                    "priority": "HIGH",
+                    "effort_hours": "2-3",
+                    "impact": "HIGH",
+                    "branch": "feature/loading-states",
+                    "description": "Implementar sistema global de loading states (spinners, button disabled, overlay) e toast notifications (sucesso/erro/info) usando biblioteca leve como Notyf ou custom CSS.",
+                    "files": [
+                        "public/js/app.js",
+                        "public/admin.html",
+                        "public/about.html",
+                        "styles.css"
+                    ],
+                    "implementation": "1. Adicionar <div id=\"loading-overlay\"> no HTML base\n2. Criar funções showLoading(btn), hideLoading(btn) em app.js\n3. Integrar Notyf (3KB) ou criar custom toast\n4. Aplicar em todas operações async (login, save, upload)",
+                    "validation": [
+                        "Clicar em 'Salvar' — botão deve desabilitar e mostrar spinner",
+                        "Upload de imagem — mostrar progress + toast de sucesso",
+                        "Login inválido — toast vermelho com mensagem de erro"
+                    ],
+                    "commands": {
+                        "test": "# Visual test: abrir admin panel e testar cada ação\nopen http://localhost:3000/admin.html"
+                    }
+                },
+                {
+                    "id": "S1-T2",
+                    "title": "Validação visual de formulários",
+                    "priority": "HIGH",
+                    "effort_hours": "1.5-2",
+                    "impact": "MEDIUM",
+                    "branch": "feature/form-validation",
+                    "description": "Adicionar feedback visual em tempo real: border vermelho + mensagem de erro para campos inválidos, checkmark verde para válidos. Validação antes de submit.",
+                    "files": [
+                        "public/admin.html",
+                        "public/login.html",
+                        "public/register.html",
+                        "styles.css"
+                    ],
+                    "implementation": "1. Criar classes CSS .input-error, .input-valid, .error-message\n2. Adicionar event listeners (blur, input) em campos\n3. Validar: email format, password min 8 chars, required fields\n4. Mostrar mensagem abaixo do campo em tempo real",
+                    "validation": [
+                        "Campo email vazio → border vermelho + 'Email obrigatório'",
+                        "Email inválido → 'Formato de email inválido'",
+                        "Password < 8 chars → 'Senha deve ter no mínimo 8 caracteres'",
+                        "Campo válido → border verde + checkmark"
+                    ],
+                    "commands": {
+                        "test": "# Visual test nos formulários\nopen http://localhost:3000/login.html\nopen http://localhost:3000/admin.html"
+                    }
+                },
+                {
+                    "id": "S1-T3",
+                    "title": "npm audit fix + atualização de dependências críticas",
+                    "priority": "HIGH",
+                    "effort_hours": "1-2",
+                    "impact": "HIGH",
+                    "branch": "chore/update-deps",
+                    "description": "Executar npm audit fix para corrigir vulnerabilidades conhecidas. Atualizar packages críticos (express, helmet, jsonwebtoken, bcrypt) para versões seguras. Verificar breaking changes.",
+                    "files": [
+                        "server/package.json",
+                        "server/package-lock.json"
+                    ],
+                    "implementation": "1. cd server && npm audit\n2. npm audit fix --force (review changes)\n3. npm outdated — listar packages desatualizados\n4. Atualizar críticos: npm update express helmet jsonwebtoken bcryptjs\n5. Testar build: npm run build\n6. Testar runtime: npm run dev",
+                    "validation": [
+                        "npm audit — 0 vulnerabilities",
+                        "npm run build — sucesso",
+                        "npm run dev — servidor inicia sem erros",
+                        "Login + upload — funcionalidades básicas OK"
+                    ],
+                    "commands": {
+                        "audit": "cd server && npm audit",
+                        "fix": "cd server && npm audit fix",
+                        "outdated": "cd server && npm outdated",
+                        "update": "cd server && npm update express helmet jsonwebtoken bcryptjs",
+                        "build": "cd server && npm run build",
+                        "test": "cd server && npm run dev"
+                    }
+                },
+                {
+                    "id": "S1-T4",
+                    "title": "Security headers extras (Expect-CT, CSP-Report)",
+                    "priority": "MEDIUM",
+                    "effort_hours": "0.5-1",
+                    "impact": "LOW",
+                    "branch": "feature/security-headers",
+                    "description": "Adicionar headers de segurança adicionais: Expect-CT (certificate transparency), Content-Security-Policy-Report-Only para monitorar violações sem bloquear.",
+                    "files": [
+                        "server/src/app.ts"
+                    ],
+                    "implementation": "Adicionar no bloco de security headers (após helmet):\nres.setHeader('Expect-CT', 'max-age=86400, enforce');\nres.setHeader('Content-Security-Policy-Report-Only', 'default-src \\'self\\'; report-uri /csp-report');",
+                    "validation": [
+                        "curl -I http://localhost:3000 | grep Expect-CT",
+                        "curl -I http://localhost:3000 | grep Content-Security-Policy-Report-Only"
+                    ],
+                    "commands": {
+                        "test": "curl -I http://localhost:3000 | grep -E '(Expect-CT|Content-Security-Policy-Report-Only)'"
+                    }
+                },
+                {
+                    "id": "S1-T5",
+                    "title": "ARIA labels + focus trap em modais",
+                    "priority": "MEDIUM",
+                    "effort_hours": "2-3",
+                    "impact": "MEDIUM",
+                    "branch": "feature/accessibility",
+                    "description": "Adicionar ARIA labels em todos botões de ícone (edit, delete, upload). Implementar focus trap em modais (tab cíclico, ESC fecha). Role='dialog', aria-labelledby, aria-describedby.",
+                    "files": [
+                        "public/admin.html",
+                        "public/about.html",
+                        "public/js/app.js"
+                    ],
+                    "implementation": "1. Adicionar aria-label='Editar prato' em todos botões de ícone\n2. Adicionar role='dialog' aria-modal='true' em modais\n3. Implementar focus trap: capturar Tab, ciclar focusable elements\n4. ESC key fecha modal: keydown event listener\n5. Focus automático no primeiro input ao abrir modal",
+                    "validation": [
+                        "Screen reader lê labels corretamente (testar com NVDA/JAWS)",
+                        "Tab dentro do modal — foco cicla só nos elementos do modal",
+                        "ESC — fecha modal e retorna foco ao trigger button",
+                        "Abrir modal — primeiro input recebe foco automaticamente"
+                    ],
+                    "commands": {
+                        "test": "# Manual test com screen reader e keyboard\n# Validar com axe DevTools extension"
+                    }
+                },
+                {
+                    "id": "S1-T6",
+                    "title": "Skeleton loaders (galeria, menu)",
+                    "priority": "LOW",
+                    "effort_hours": "1.5-2",
+                    "impact": "MEDIUM",
+                    "branch": "feature/skeleton-loaders",
+                    "description": "Implementar placeholders animados (skeleton screens) durante carregamento inicial da galeria e menu. Melhora percepção de performance.",
+                    "files": [
+                        "public/gallery.html",
+                        "public/menu.html",
+                        "styles.css"
+                    ],
+                    "implementation": "1. Criar CSS para skeleton: .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); animation: shimmer 1.5s infinite; }\n2. Renderizar 6 skeleton cards antes do fetch\n3. Substituir por conteúdo real após load\n4. Mostrar skeleton durante re-fetch (refresh)",
+                    "validation": [
+                        "Abrir /gallery.html — 6 skeleton cards aparecem imediatamente",
+                        "Após ~500ms — skeleton substituído por imagens reais",
+                        "Network throttling (Slow 3G) — skeleton visível por mais tempo"
+                    ],
+                    "commands": {
+                        "test": "# Abrir DevTools > Network > Throttling: Slow 3G\nopen http://localhost:3000/gallery.html"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "sprint-2",
+            "name": "Core Improvements",
+            "duration_hours": "16-24",
+            "objective": "Infraestrutura para produção escalável",
+            "expected_gains": {
+                "ux": "+0.3",
+                "security": "+0.5",
+                "technical": "+1.0"
+            },
+            "tasks": [
+                {
+                    "id": "S2-T1",
+                    "title": "Redis para rate limiting (multi-instance)",
+                    "priority": "HIGH",
+                    "effort_hours": "3-4",
+                    "impact": "HIGH",
+                    "branch": "feature/redis-rate-limit",
+                    "description": "Substituir rate limiting in-memory por Redis store. Essencial para horizontal scaling (múltiplas instâncias do servidor compartilham o mesmo rate limit state).",
+                    "files": [
+                        "server/src/middlewares/rateLimit.ts",
+                        "server/package.json",
+                        "server/.env.example"
+                    ],
+                    "implementation": "1. npm install rate-limit-redis redis\n2. Criar Redis client em rateLimit.ts\n3. Configurar RedisStore para todos limiters\n4. Adicionar REDIS_URL ao .env.example\n5. Health check: ping Redis no /healthz",
+                    "patch": "import RedisStore from 'rate-limit-redis';\nimport { createClient } from 'redis';\n\nconst redisClient = createClient({ url: process.env.REDIS_URL });\nredisClient.connect();\n\nexport const authLimiter = rateLimit({\n    store: new RedisStore({ client: redisClient }),\n    windowMs: 15 * 60 * 1000,\n    max: 10,\n    // ... rest of config\n});",
+                    "validation": [
+                        "Iniciar 2 instâncias do servidor (porta 3000 e 3001)",
+                        "Fazer 5 requests para :3000/api/auth/login",
+                        "Fazer 6 requests para :3001/api/auth/login → deve bloquear (compartilham rate limit)",
+                        "Reiniciar servidor → rate limit persiste (Redis mantém estado)"
+                    ],
+                    "commands": {
+                        "install": "cd server && npm install rate-limit-redis redis",
+                        "test": "# Terminal 1:\nPORT=3000 npm run dev\n# Terminal 2:\nPORT=3001 npm run dev\n# Terminal 3:\nfor i in {1..6}; do curl http://localhost:3000/api/auth/login -X POST; done\nfor i in {1..6}; do curl http://localhost:3001/api/auth/login -X POST; done"
+                    }
+                },
+                {
+                    "id": "S2-T2",
+                    "title": "Testes automatizados (auth, upload, config, 60%+ coverage)",
+                    "priority": "HIGH",
+                    "effort_hours": "6-8",
+                    "impact": "HIGH",
+                    "branch": "test/core-features",
+                    "description": "Implementar testes unitários e de integração para rotas críticas: auth (login, refresh, password change), upload (magic bytes, size limit), config (PRO key gating). Target: 60%+ coverage.",
+                    "files": [
+                        "server/tests/auth.test.ts",
+                        "server/tests/upload.test.ts",
+                        "server/tests/config.test.ts",
+                        "server/jest.config.ts",
+                        "server/package.json"
+                    ],
+                    "implementation": "1. npm install -D jest ts-jest @types/jest supertest\n2. Criar jest.config.ts\n3. Escrever testes:\n   - auth: login válido/inválido, refresh token, tokenVersion increment\n   - upload: magic bytes validation, size limit, MIME whitelist\n   - config: PRO keys blocked on Essential, GET filters PRO keys\n4. npm run test -- --coverage",
+                    "validation": [
+                        "npm run test — todos testes passam",
+                        "Coverage report — 60%+ overall, 80%+ em rotas críticas",
+                        "CI passa (após S3-T2)"
+                    ],
+                    "commands": {
+                        "install": "cd server && npm install -D jest ts-jest @types/jest supertest",
+                        "init": "cd server && npx ts-jest config:init",
+                        "test": "cd server && npm run test",
+                        "coverage": "cd server && npm run test -- --coverage"
+                    }
+                },
+                {
+                    "id": "S2-T3",
+                    "title": "Tailwind build local com tree-shaking",
+                    "priority": "MEDIUM",
+                    "effort_hours": "2-3",
+                    "impact": "MEDIUM",
+                    "branch": "feature/tailwind-build",
+                    "description": "Substituir Tailwind CDN por build local. Reduz payload de ~100KB para ~10KB com tree-shaking. Melhora performance e elimina dependência de CDN externo.",
+                    "files": [
+                        "public/index.html",
+                        "public/admin.html",
+                        "tailwind.config.js",
+                        "package.json",
+                        "styles.css"
+                    ],
+                    "implementation": "1. npm install -D tailwindcss postcss autoprefixer\n2. npx tailwindcss init\n3. Criar input.css com @tailwind directives\n4. Configurar content paths no tailwind.config.js\n5. Build script: tailwindcss -i ./input.css -o ./public/output.css --minify\n6. Substituir CDN por <link href=\"/output.css\"> nos HTMLs",
+                    "validation": [
+                        "npm run build:css — gera public/output.css (~10KB gzipped)",
+                        "Abrir qualquer página — estilos carregam corretamente",
+                        "Network tab — sem request para cdn.tailwindcss.com",
+                        "Lighthouse — Performance score aumenta ~5 pontos"
+                    ],
+                    "commands": {
+                        "install": "npm install -D tailwindcss postcss autoprefixer",
+                        "init": "npx tailwindcss init",
+                        "build": "npx tailwindcss -i ./input.css -o ./public/output.css --minify",
+                        "watch": "npx tailwindcss -i ./input.css -o ./public/output.css --watch"
+                    }
+                },
+                {
+                    "id": "S2-T4",
+                    "title": "Endpoint healthcheck avançado (DB + Redis ping)",
+                    "priority": "MEDIUM",
+                    "effort_hours": "1-2",
+                    "impact": "MEDIUM",
+                    "branch": "feature/health-check",
+                    "description": "Melhorar /healthz para incluir status de dependências externas: PostgreSQL (SELECT 1), Redis (PING). Retorna 503 se algum serviço estiver down.",
+                    "files": [
+                        "server/src/app.ts"
+                    ],
+                    "implementation": "Substituir /healthz:\napp.get('/healthz', async (req, res) => {\n  const health = { status: 'healthy', checks: {} };\n  try {\n    await prisma.$queryRaw`SELECT 1`;\n    health.checks.database = 'ok';\n  } catch { health.checks.database = 'down'; health.status = 'degraded'; }\n  try {\n    await redisClient.ping();\n    health.checks.redis = 'ok';\n  } catch { health.checks.redis = 'down'; health.status = 'degraded'; }\n  res.status(health.status === 'healthy' ? 200 : 503).json(health);\n});",
+                    "validation": [
+                        "curl http://localhost:3000/healthz — 200 {status: 'healthy', checks: {database: 'ok', redis: 'ok'}}",
+                        "Parar Redis → curl /healthz — 503 {status: 'degraded', checks: {redis: 'down'}}",
+                        "Kubernetes/Render liveness probe usa /healthz"
+                    ],
+                    "commands": {
+                        "test": "curl http://localhost:3000/healthz\n# Parar Redis: docker stop redis\ncurl http://localhost:3000/healthz\n# Deve retornar 503"
+                    }
+                },
+                {
+                    "id": "S2-T5",
+                    "title": "Keyboard navigation (ESC fecha modais, Tab order)",
+                    "priority": "LOW",
+                    "effort_hours": "2-3",
+                    "impact": "MEDIUM",
+                    "branch": "feature/keyboard-nav",
+                    "description": "Implementar navegação completa por teclado: ESC fecha modais/dropdowns, Enter submete forms, Tab order lógico, Skip to content link.",
+                    "files": [
+                        "public/js/app.js",
+                        "public/admin.html",
+                        "styles.css"
+                    ],
+                    "implementation": "1. Adicionar event listener global para ESC key → fecha modal ativo\n2. Verificar tabindex em todos elementos interativos\n3. Adicionar 'Skip to main content' link (oculto até Tab)\n4. Enter key em forms → submit\n5. Arrow keys em dropdowns/select",
+                    "validation": [
+                        "Abrir modal → ESC fecha",
+                        "Tab através da página — ordem lógica (não pula elementos)",
+                        "Tab na página → 'Skip to content' aparece no topo",
+                        "Enter no form de login → submete (sem clicar botão)"
+                    ],
+                    "commands": {
+                        "test": "# Manual keyboard-only navigation test\n# Não usar mouse, apenas Tab, Enter, ESC, Arrows"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "sprint-3",
+            "name": "Production Polish",
+            "duration_hours": "12-16",
+            "objective": "Excelência operacional e monitoramento",
+            "expected_gains": {
+                "ux": "+0.2",
+                "security": "+0.4",
+                "technical": "+0.6"
+            },
+            "tasks": [
+                {
+                    "id": "S3-T1",
+                    "title": "CSP com nonces (eliminar unsafe-inline)",
+                    "priority": "HIGH",
+                    "effort_hours": "3-4",
+                    "impact": "MEDIUM",
+                    "branch": "feature/csp-nonces",
+                    "description": "Implementar CSP nonces para eliminar 'unsafe-inline'. Gerar nonce aleatório por request, injetar em script/style tags inline, incluir no header CSP.",
+                    "files": [
+                        "server/src/app.ts",
+                        "public/admin.html",
+                        "public/about.html"
+                    ],
+                    "implementation": "1. Middleware: res.locals.nonce = crypto.randomBytes(16).toString('base64')\n2. Helmet CSP: script-src: [\"'self'\", (req, res) => `'nonce-${res.locals.nonce}'`]\n3. Templates: substituir <script> por <script nonce=\"<%= nonce %>\">\n4. Usar EJS/Pug ou string replacement dinâmico",
+                    "validation": [
+                        "curl -I http://localhost:3000 | grep Content-Security-Policy → contém nonce-",
+                        "Abrir página → scripts inline executam normalmente",
+                        "Injetar <script>alert(1)</script> via XSS → bloqueado por CSP"
+                    ],
+                    "commands": {
+                        "test": "curl -I http://localhost:3000/admin.html | grep -o \"nonce-[a-zA-Z0-9+/=]*\""
+                    }
+                },
+                {
+                    "id": "S3-T2",
+                    "title": "CI/CD pipeline (GitHub Actions: lint, test, build)",
+                    "priority": "HIGH",
+                    "effort_hours": "3-4",
+                    "impact": "HIGH",
+                    "branch": "chore/ci-pipeline",
+                    "description": "Configurar GitHub Actions para executar automaticamente em cada push/PR: linting (ESLint), type-check (tsc), testes (Jest), build, audit de segurança.",
+                    "files": [
+                        ".github/workflows/ci.yml"
+                    ],
+                    "implementation": "Criar .github/workflows/ci.yml:\nname: CI\non: [push, pull_request]\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v3\n      - uses: actions/setup-node@v3\n      - run: cd server && npm ci\n      - run: cd server && npm run lint\n      - run: cd server && npx tsc --noEmit\n      - run: cd server && npm test\n      - run: cd server && npm audit\n      - run: cd server && npm run build",
+                    "validation": [
+                        "Push para branch → GitHub Actions executa workflow",
+                        "Todos jobs passam (green check)",
+                        "PR mostra status check antes de merge",
+                        "Falha em teste → bloqueia merge (configurável)"
+                    ],
+                    "commands": {
+                        "test": "# Criar PR e verificar status checks no GitHub\n# Ou executar localmente:\ncd server && npm run lint && npx tsc --noEmit && npm test && npm run build"
+                    }
+                },
+                {
+                    "id": "S3-T3",
+                    "title": "Error monitoring (Sentry integration)",
+                    "priority": "MEDIUM",
+                    "effort_hours": "2-3",
+                    "impact": "MEDIUM",
+                    "branch": "feature/error-monitoring",
+                    "description": "Integrar Sentry para capturar e rastrear erros em produção (backend + frontend). Contexto de usuário, breadcrumbs, release tracking.",
+                    "files": [
+                        "server/src/app.ts",
+                        "server/src/index.ts",
+                        "public/js/app.js",
+                        "server/package.json"
+                    ],
+                    "implementation": "1. npm install @sentry/node @sentry/profiling-node\n2. Inicializar Sentry no topo de index.ts:\n   Sentry.init({ dsn: process.env.SENTRY_DSN, environment: process.env.NODE_ENV })\n3. Adicionar Sentry.Handlers.errorHandler() no app.ts (antes do errorHandler)\n4. Frontend: <script src=\"sentry-browser.min.js\"> + Sentry.init()",
+                    "validation": [
+                        "Lançar erro proposital → aparece no dashboard Sentry",
+                        "Erro inclui stack trace, user context, breadcrumbs",
+                        "Release tagging funciona (git SHA no Sentry)"
+                    ],
+                    "commands": {
+                        "install": "cd server && npm install @sentry/node @sentry/profiling-node",
+                        "test": "# Adicionar endpoint de teste:\napp.get('/debug-sentry', () => { throw new Error('Test Sentry'); });\ncurl http://localhost:3000/debug-sentry\n# Verificar erro no dashboard Sentry"
+                    }
+                },
+                {
+                    "id": "S3-T4",
+                    "title": "Subresource Integrity (SRI) para CDNs",
+                    "priority": "LOW",
+                    "effort_hours": "1",
+                    "impact": "LOW",
+                    "branch": "feature/sri-hashes",
+                    "description": "Adicionar hashes SRI em todos scripts/styles carregados de CDN externo (Stripe, Cloudinary widgets). Previne tampering de CDN comprometido.",
+                    "files": [
+                        "public/index.html",
+                        "public/admin.html",
+                        "public/buy.html"
+                    ],
+                    "implementation": "1. Gerar hashes: curl https://js.stripe.com/v3/ | openssl dgst -sha384 -binary | openssl base64 -A\n2. Adicionar integrity=\"sha384-HASH\" crossorigin=\"anonymous\" em <script> tags\n3. Repetir para todos CDNs externos",
+                    "validation": [
+                        "Modificar hash → script não carrega (erro de integridade no console)",
+                        "Hash correto → script carrega normalmente"
+                    ],
+                    "commands": {
+                        "generate": "curl -s https://js.stripe.com/v3/ | openssl dgst -sha384 -binary | openssl base64 -A",
+                        "test": "# Abrir DevTools Console → sem erros de SRI\n# Modificar hash → erro de integrity no console"
+                    }
+                },
+                {
+                    "id": "S3-T5",
+                    "title": "Pre-commit hooks (lint, type-check)",
+                    "priority": "LOW",
+                    "effort_hours": "1-2",
+                    "impact": "LOW",
+                    "branch": "chore/pre-commit-hooks",
+                    "description": "Configurar Husky + lint-staged para executar automaticamente linting e type-check antes de cada commit. Previne commits com erros de TS ou lint.",
+                    "files": [
+                        "server/package.json",
+                        ".husky/pre-commit",
+                        "server/.lintstagedrc.json"
+                    ],
+                    "implementation": "1. npm install -D husky lint-staged\n2. npx husky init\n3. Adicionar pre-commit hook:\n   npx lint-staged\n4. Configurar lint-staged:\n   { \"*.ts\": [\"eslint --fix\", \"tsc --noEmit\"] }",
+                    "validation": [
+                        "Fazer commit com erro de lint → commit bloqueado",
+                        "Fazer commit com erro TS → commit bloqueado",
+                        "Código válido → commit passa normalmente"
+                    ],
+                    "commands": {
+                        "install": "cd server && npm install -D husky lint-staged",
+                        "init": "cd server && npx husky init",
+                        "test": "# Adicionar erro de lint em arquivo\ngit add .\ngit commit -m 'test' # Deve falhar"
+                    }
+                },
+                {
+                    "id": "S3-T6",
+                    "title": "Performance budget CI check (Lighthouse)",
+                    "priority": "LOW",
+                    "effort_hours": "2",
+                    "impact": "LOW",
+                    "branch": "chore/perf-budget",
+                    "description": "Adicionar check de performance budget no CI usando Lighthouse. Bloqueia merge se Performance score < 85, Accessibility < 90, ou First Contentful Paint > 1.5s.",
+                    "files": [
+                        ".github/workflows/lighthouse.yml",
+                        "lighthouse.config.js"
+                    ],
+                    "implementation": "1. Criar workflow lighthouse.yml com @actions/lighthouse-ci\n2. Configurar budgets:\n   { performance: 0.85, accessibility: 0.90, 'first-contentful-paint': 1500 }\n3. Executar em cada PR contra ambiente de preview",
+                    "validation": [
+                        "PR com performance ruim → CI falha com report Lighthouse",
+                        "PR com performance boa → CI passa",
+                        "Report Lighthouse anexado no PR comment"
+                    ],
+                    "commands": {
+                        "install": "npm install -D @lhci/cli",
+                        "test": "npx lhci autorun --config=lighthouse.config.js"
+                    }
+                }
+            ]
+        }
+    ]
+}
