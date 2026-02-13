@@ -459,6 +459,9 @@ $env:DATABASE_URL="postgresql://neondb_owner:AbC123@ep-name.us-east-2.aws.neon.t
 
 # Exemplo 2: Pizzaria Professional (completo)
 $env:DATABASE_URL="postgresql://neondb_owner:XyZ789@ep-name.us-east-2.aws.neon.tech/neondb?sslmode=require" ; $env:SEED_TYPE="pizzaria" ; $env:SEED_ADMIN_EMAIL="dono@pizza.com" ; $env:SEED_ADMIN_PASSWORD="Pizza2026!" ; $env:PLAN="professional" ; npx prisma migrate deploy ; npx prisma db seed
+
+# Exemplo 3: Restaurante genérico Professional
+$env:DATABASE_URL="postgresql://neondb_owner:XyZ789@ep-name.us-east-2.aws.neon.tech/neondb?sslmode=require" ; $env:SEED_TYPE="restaurante" ; $env:SEED_ADMIN_EMAIL="dono@bistrô.com" ; $env:SEED_ADMIN_PASSWORD="Bistrô2026!" ; $env:PLAN="professional" ; npx prisma migrate deploy ; npx prisma db seed
 ```
 
 3. **Pressione Enter** e aguarde:
@@ -491,15 +494,20 @@ Remove-Item Env:\DATABASE_URL
 
 **🔄 Tipos de seed disponíveis:**
 
-| Valor de SEED_TYPE | Resultado |
-|--------------------|-----------|
-| `pizzaria` | Seed de pizzaria (Margherita, Calabresa, etc.) |
-| `hamburgueria` | Seed de hamburgueria (X-Burger, Smash, etc.) |
-| **Não definir** ou deixar vazio | Usa seed **padrão** (mesmo que pizzaria) |
+| Valor de SEED_TYPE | Resultado | Pratos de exemplo |
+|--------------------|-----------|-------------------|
+| `restaurante` ou **não definir** | Seed genérico de restaurante (padrão) | Bruschetta, Risoto de Funghi, Filé ao Madeira, Tiramisu |
+| `pizzaria` | Seed de pizzaria | Margherita, Calabresa, Quatro Queijos, Esfihas |
+| `hamburgueria` | Seed de hamburgueria | X-Burger, Smash Burger, Bacon Burger, Combos |
 
-**Exemplo sem SEED_TYPE (usa padrão/pizzaria):**
+**Exemplo sem SEED_TYPE (usa padrão = restaurante genérico):**
 ```powershell
 $env:DATABASE_URL="..." ; $env:SEED_ADMIN_EMAIL="dono@restaurante.com" ; $env:SEED_ADMIN_PASSWORD="Senha123!" ; $env:PLAN="essential" ; npx prisma migrate deploy ; npx prisma db seed
+```
+
+**Exemplo com restaurante explícito:**
+```powershell
+$env:DATABASE_URL="..." ; $env:SEED_TYPE="restaurante" ; $env:SEED_ADMIN_EMAIL="dono@bistrô.com" ; $env:SEED_ADMIN_PASSWORD="Senha123!" ; $env:PLAN="professional" ; npx prisma migrate deploy ; npx prisma db seed
 ```
 
 ---
