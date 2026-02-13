@@ -915,8 +915,9 @@
             }
             const res = await fetch(`${API}/api${endpoint}`, { ...options, headers, credentials: 'include' });
             const json = await res.json();
+            
+            // Handle 401 (JWT expired) - try refresh
             if (res.status === 401 && !_retried) {
-                // Try to refresh token before giving up
                 const refreshed = await tryRefreshToken();
                 if (refreshed) {
                     return apiAuth(endpoint, options, true);
@@ -926,6 +927,14 @@
                 localStorage.removeItem('admin_refresh');
                 showLogin();
             }
+            
+            // Handle 403 CSRF token expired - auto-renew and retry
+            if (res.status === 403 && !_retried && json.error?.includes('CSRF')) {
+                console.log('⚠️ CSRF token expirado, renovando...');
+                await fetchCsrfToken();
+                return apiAuth(endpoint, options, true);
+            }
+            
             return json;
         }
 
