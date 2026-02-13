@@ -1,7 +1,7 @@
 # 🗺️ ROADMAP — Melhoria Contínua (UX 9 · Segurança 9 · Técnica 9)
 
 **Projeto:** Restaurant Template SaaS  
-**Status atual:** ✅ SAFE TO SELL (UX 7/10 · Segurança 8/10 · Técnica 8/10)  
+**Status atual:** ✅ Sprint 1 COMPLETA (UX 8.5/10 · Segurança 8.5/10 · Técnica 8/10)  
 **Meta:** UX 9/10 · Segurança 9/10 · Técnica 9/10  
 **Versão:** 1.0  
 **Data:** 2026-02-13
@@ -44,17 +44,17 @@ Atingir **9/10 em todas as métricas** através de 3 sprints focados:
 
 ### Tarefas
 
-| ID | Título | Prioridade | Tempo | Ganho |
-|---|---|---|---|---|
-| **S1-T1** | Loading states + toast notifications | HIGH | 2–3h | UX +0.5 |
-| **S1-T2** | Validação visual de formulários | HIGH | 1.5–2h | UX +0.3 |
-| **S1-T3** | npm audit fix + dependências críticas | HIGH | 1–2h | Segurança +0.3 |
-| **S1-T4** | Security headers extras (Expect-CT, CSP-Report) | MEDIUM | 0.5–1h | Segurança +0.2 |
-| **S1-T5** | ARIA labels + focus trap em modais | MEDIUM | 2–3h | UX +0.4, A11y |
-| **S1-T6** | Skeleton loaders (galeria, menu) | LOW | 1.5–2h | UX +0.3 |
+| ID | Título | Prioridade | Tempo | Ganho | Status |
+|---|---|---|---|---|---|
+| **S1-T1** | Loading states + toast notifications | HIGH | 2–3h | UX +0.5 | ✅ DONE |
+| **S1-T2** | Validação visual de formulários | HIGH | 1.5–2h | UX +0.3 | ✅ DONE |
+| **S1-T3** | npm audit fix + dependências críticas | HIGH | 1–2h | Segurança +0.3 | ✅ DONE |
+| **S1-T4** | Security headers extras (Expect-CT, CSP-Report) | MEDIUM | 0.5–1h | Segurança +0.2 | ✅ DONE |
+| **S1-T5** | ARIA labels + focus trap em modais | MEDIUM | 2–3h | UX +0.4, A11y | ✅ DONE |
+| **S1-T6** | Skeleton loaders (galeria, menu) | LOW | 1.5–2h | UX +0.3 | ✅ DONE |
 
 **Total estimado:** 8–12h  
-**Ganhos:** UX 8.5/10 (+1.5) · Segurança 8.5/10 (+0.5)
+**Ganhos:** UX 8.5/10 (+1.5) · Segurança 8.5/10 (+0.5) ✅ ATINGIDO
 
 ---
 

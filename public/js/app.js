@@ -161,31 +161,8 @@
             };
             document.body.classList.add('config-loaded');
         }
-        // Toast helper global (caso não exista)
-        if (!window.showToast) {
-            window.showToast = function (message, type = 'error') {
-                let toast = document.getElementById('toast');
-                if (!toast) {
-                    toast = document.createElement('div');
-                    toast.id = 'toast';
-                    toast.style.position = 'fixed';
-                    toast.style.bottom = '32px';
-                    toast.style.left = '50%';
-                    toast.style.transform = 'translateX(-50%)';
-                    toast.style.background = type === 'error' ? '#dc2626' : '#16a34a';
-                    toast.style.color = '#fff';
-                    toast.style.padding = '16px 32px';
-                    toast.style.borderRadius = '8px';
-                    toast.style.zIndex = 9999;
-                    toast.style.fontSize = '1rem';
-                    document.body.appendChild(toast);
-                }
-                toast.textContent = message;
-                toast.style.background = type === 'error' ? '#dc2626' : '#16a34a';
-                toast.style.display = 'block';
-                setTimeout(() => { toast.style.display = 'none'; }, 3500);
-            };
-        }
+        // Toast system is now provided by feedback.js (showToast override)
+        // Legacy showToast calls are automatically routed to the new toast system
     }
 
     function applyConfig() {
@@ -497,6 +474,11 @@
         const container = document.getElementById('featured-dishes');
         if (!container) return;
 
+        // Show skeleton loaders while fetching
+        if (window.feedback && window.feedback.skeletons) {
+            container.innerHTML = window.feedback.skeletons.featuredCards();
+        }
+
         const dishes = await api('/dishes/featured');
         if (!dishes || dishes.length === 0) {
             container.innerHTML = '<p class="text-center col-span-3 text-gray-500 py-12">Nenhum destaque disponível.</p>';
@@ -542,6 +524,11 @@
     async function loadCategoryCards() {
         const container = document.getElementById('category-cards');
         if (!container) return;
+
+        // Show skeleton loaders while fetching
+        if (window.feedback && window.feedback.skeletons) {
+            container.innerHTML = window.feedback.skeletons.categoryCards();
+        }
 
         const categories = await api('/categories');
         if (!categories || categories.length === 0) {
@@ -610,39 +597,9 @@
     }
 
     function showAddToCartToast() {
-        var toast = document.createElement('div');
-        toast.className = 'fixed top-24 right-4 z-[9999] bg-green-600 text-white px-6 py-4 rounded-xl shadow-2xl font-medium transform transition-all flex items-center gap-3';
-
-        var icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        icon.setAttribute('class', 'w-6 h-6');
-        icon.setAttribute('fill', 'none');
-        icon.setAttribute('stroke', 'currentColor');
-        icon.setAttribute('viewBox', '0 0 24 24');
-        var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.setAttribute('stroke-linecap', 'round');
-        path.setAttribute('stroke-linejoin', 'round');
-        path.setAttribute('stroke-width', '2');
-        path.setAttribute('d', 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z');
-        icon.appendChild(path);
-        toast.appendChild(icon);
-
-        var textDiv = document.createElement('div');
-        var title = document.createElement('div');
-        title.className = 'font-bold';
-        title.textContent = 'Adicionado ao carrinho!';
-        var subtitle = document.createElement('div');
-        subtitle.className = 'text-sm text-green-100';
-        subtitle.textContent = 'Clique no botão laranja no canto inferior direito';
-        textDiv.appendChild(title);
-        textDiv.appendChild(subtitle);
-        toast.appendChild(textDiv);
-
-        document.body.appendChild(toast);
-        setTimeout(function () {
-            toast.style.opacity = '0';
-            toast.style.transform = 'translateY(-20px)';
-            setTimeout(function () { toast.remove(); }, 300);
-        }, 3500);
+        if (window.feedback) {
+            window.feedback.success('Adicionado ao carrinho! 🛒');
+        }
     }
 
     // --- Scroll Reveal ---

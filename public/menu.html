@@ -179,7 +179,7 @@
     <!-- MENU GRID -->
     <section class="py-16 bg-dark-900">
         <div class="max-w-7xl mx-auto px-4" id="menu-container">
-            <div class="text-center py-20 text-gray-500">Carregando cardápio...</div>
+            <!-- Skeleton will be injected by JS -->
         </div>
     </section>
 
@@ -201,6 +201,8 @@
     <script src="/js/performance.js"></script>
     <script src="/js/mobile.js"></script>
     <script src="/js/a11y.js"></script>
+    <script src="/js/feedback.js"></script>
+    <script src="/js/formValidation.js"></script>
     <script src="/js/app.js"></script>
     <script src="/js/cart.js"></script>
     <script src="/js/whatsappFormatter.js"></script>
@@ -223,6 +225,14 @@
         }
 
         async function loadMenu() {
+            // Show skeleton loaders and tab skeletons
+            var menuContainer = document.getElementById('menu-container');
+            var tabsContainer = document.getElementById('category-tabs');
+            if (window.feedback && window.feedback.skeletons) {
+                menuContainer.innerHTML = window.feedback.skeletons.menuCards(6);
+                tabsContainer.innerHTML = window.feedback.skeletons.categoryTabs();
+            }
+
             const categories = await api('/categories');
             if (!categories) return;
             allCategories = categories;
@@ -330,42 +340,10 @@
             const dish = { id, name, image, price };
             window.cart.add(dish);
 
-            // Toast notification melhorado (XSS-safe, no innerHTML)
-            const toast = document.createElement('div');
-            toast.className = 'fixed top-24 right-4 z-[9999] bg-green-600 text-white px-6 py-4 rounded-xl shadow-2xl font-medium transform transition-all flex items-center gap-3';
-
-            const svgNS = 'http://www.w3.org/2000/svg';
-            const svg = document.createElementNS(svgNS, 'svg');
-            svg.setAttribute('class', 'w-6 h-6');
-            svg.setAttribute('fill', 'none');
-            svg.setAttribute('stroke', 'currentColor');
-            svg.setAttribute('viewBox', '0 0 24 24');
-            const path = document.createElementNS(svgNS, 'path');
-            path.setAttribute('stroke-linecap', 'round');
-            path.setAttribute('stroke-linejoin', 'round');
-            path.setAttribute('stroke-width', '2');
-            path.setAttribute('d', 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z');
-            svg.appendChild(path);
-
-            const textDiv = document.createElement('div');
-            const titleDiv = document.createElement('div');
-            titleDiv.className = 'font-bold';
-            titleDiv.textContent = 'Adicionado ao carrinho!';
-            const subtitleDiv = document.createElement('div');
-            subtitleDiv.className = 'text-sm text-green-100';
-            subtitleDiv.textContent = 'Clique no botão laranja no canto inferior direito';
-            textDiv.appendChild(titleDiv);
-            textDiv.appendChild(subtitleDiv);
-
-            toast.appendChild(svg);
-            toast.appendChild(textDiv);
-            document.body.appendChild(toast);
-
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(-20px)';
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
+            // Use new feedback toast system
+            if (window.feedback) {
+                window.feedback.success('Adicionado ao carrinho! 🛒');
+            }
         }
 
         // Event delegation for order buttons

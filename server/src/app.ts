@@ -70,6 +70,26 @@ app.use((_req: Request, res: Response, next: NextFunction) => {
     res.setHeader('X-Frame-Options', 'DENY');
     res.setHeader('X-XSS-Protection', '0'); // Modern browsers use CSP instead
     res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+
+    // --- Sprint 1 (S1-T4): Extra Security Headers ---
+    // Expect-CT: Enforce Certificate Transparency (deprecated in modern Chrome but still useful for other browsers)
+    if (process.env.NODE_ENV === 'production') {
+        res.setHeader('Expect-CT', 'max-age=86400, enforce');
+    }
+
+    // CSP-Report-Only: Shadow CSP without blocking — preparation for Sprint 3 (CSP nonces)
+    // This allows us to collect violation reports without breaking the site
+    const cspReportUri = process.env.CSP_REPORT_URI || '';
+    if (cspReportUri) {
+        res.setHeader('Content-Security-Policy-Report-Only',
+            `default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; report-uri ${cspReportUri}`
+        );
+    }
+
+    // Cross-Origin policies for additional isolation
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+    res.setHeader('Cross-Origin-Resource-Policy', 'same-site');
+
     next();
 });
 
