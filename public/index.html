@@ -135,6 +135,7 @@
         }
 
         /* FOUC prevention */
+        body:not(.config-loaded) #main-content,
         body:not(.config-loaded) #nav-brand,
         body:not(.config-loaded) #footer-brand,
         body:not(.config-loaded) #hero-title,
@@ -149,6 +150,7 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
+        body.config-loaded #main-content,
         body.config-loaded #nav-brand,
         body.config-loaded #footer-brand,
         body.config-loaded #hero-title,

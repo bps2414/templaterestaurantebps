@@ -67,14 +67,18 @@
         body:not(.config-loaded) #nav-brand,
         body:not(.config-loaded) #footer-brand,
         body:not(.config-loaded) #footer-tagline,
-        body:not(.config-loaded) #footer-copy {
+        body:not(.config-loaded) #footer-copy,
+        body:not(.config-loaded) .pt-32.pb-16,
+        body:not(.config-loaded) .pb-20.bg-zinc-950 {
             opacity: 0;
             transition: opacity 0.3s ease;
         }
         body.config-loaded #nav-brand,
         body.config-loaded #footer-brand,
         body.config-loaded #footer-tagline,
-        body.config-loaded #footer-copy {
+        body.config-loaded #footer-copy,
+        body.config-loaded .pt-32.pb-16,
+        body.config-loaded .pb-20.bg-zinc-950 {
             opacity: 1;
             animation: configFadeIn 0.3s ease;
         }
