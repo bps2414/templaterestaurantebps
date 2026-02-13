@@ -101,6 +101,7 @@ jobs:
           
           # Para cada cliente, listar branches e deletar os mais antigos
           CLIENTS=(
+            # "ep-hidden-sunset-akoc9ah3"
             # "ep-ancient-pond-af1vq6j6"
           )
           
