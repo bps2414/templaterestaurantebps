@@ -225,22 +225,29 @@
                 // Render team members (PRO only)
                 const teamSection = document.getElementById('team-section');
                 const teamContainer = document.getElementById('team-members');
+                
+                // Apenas mostra a seção se for PRO E tiver membros cadastrados
                 if (isPro && teamContainer && data.team_members && data.team_members.length > 0) {
                     if (teamSection) teamSection.style.display = '';
                     const defaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Crect fill='%231a1a2e' width='160' height='160'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='48' fill='%23444'%3E%F0%9F%91%A4%3C/text%3E%3C/svg%3E";
-                    teamContainer.innerHTML = data.team_members.map(m => `
-                        <div class="text-center">
-                            <div class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-4 border-2 border-brand-500/30">
-                                <img src="${escapeAttrAbout(m.image || defaultAvatar)}" alt="${escapeAttrAbout(m.name)}"
-                                    class="w-full h-full object-cover"
-                                    onerror="this.src='${defaultAvatar}'">
+                    
+                    teamContainer.innerHTML = data.team_members.map(m => {
+                        // Se a imagem está vazia ou undefined, usa defaultAvatar
+                        const imgSrc = (m.image && m.image.trim() !== '') ? escapeAttrAbout(m.image) : defaultAvatar;
+                        return `
+                            <div class="text-center">
+                                <div class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-4 border-2 border-brand-500/30">
+                                    <img src="${imgSrc}" alt="${escapeAttrAbout(m.name)}"
+                                        class="w-full h-full object-cover"
+                                        onerror="this.src='${defaultAvatar}'">
+                                </div>
+                                <h3 class="font-display text-lg font-bold text-white">${escapeHTMLAbout(m.name)}</h3>
+                                <p class="text-brand-400 text-sm">${escapeHTMLAbout(m.role)}</p>
                             </div>
-                            <h3 class="font-display text-lg font-bold text-white">${escapeHTMLAbout(m.name)}</h3>
-                            <p class="text-brand-400 text-sm">${escapeHTMLAbout(m.role)}</p>
-                        </div>
-                    `).join('');
+                        `;
+                    }).join('');
                 } else {
-                    // Hide team section entirely on Essential plan or no members
+                    // Oculta a seção se não for PRO ou se não tiver membros
                     if (teamSection) teamSection.style.display = 'none';
                     if (teamContainer) teamContainer.innerHTML = '';
                 }
