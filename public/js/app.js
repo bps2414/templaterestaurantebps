@@ -132,17 +132,24 @@
             } else {
                 showToast('Erro ao carregar configurações.', 'error');
                 siteConfig = {
-                    restaurant_name: 'Restaurant',
+                    restaurant_name: 'Restaurante',
                     restaurant_tagline: 'Delivery de qualidade',
-                    hero_title: 'Bem-vindo',
-                    hero_subtitle: 'Peça agora pelo WhatsApp',
+                    hero_title: 'Uma experiência gastronômica única',
+                    hero_subtitle: 'Ingredientes frescos, técnicas refinadas e sabores que contam histórias',
+                    footer_text: '© 2026 Restaurante. Todos os direitos reservados.',
                 };
                 applyConfig();
                 document.body.classList.add('config-loaded');
             }
         } catch (e) {
             showToast('Erro ao carregar configurações.', 'error');
-            siteConfig = { restaurant_name: 'Restaurant' };
+            siteConfig = {
+                restaurant_name: 'Restaurante',
+                restaurant_tagline: 'Delivery de qualidade',
+                hero_title: 'Uma experiência gastronômica única',
+                hero_subtitle: 'Ingredientes frescos, técnicas refinadas e sabores que contam histórias',
+                footer_text: '© 2026 Restaurante. Todos os direitos reservados.',
+            };
             document.body.classList.add('config-loaded');
         }
         // Toast helper global (caso não exista)
