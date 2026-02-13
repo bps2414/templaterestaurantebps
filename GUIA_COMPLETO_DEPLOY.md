@@ -401,15 +401,165 @@ git push -u origin main
 2. **Create Project** → nome: `restaurante-saborarte` (ou nome do cliente)
 3. Região: escolha a mais próxima dos clientes (ex: `São Paulo` ou `US East`)
 4. Depois de criado, vá em **Dashboard → Connection Details**
-5. Copie a **connection string** completa. Ela parece com:
+5. **IMPORTANTE:** Copie **DUAS** connection strings:
 
-```
-postgresql://neondb_owner:AbCdEf123@ep-cool-name-123456.us-east-2.aws.neon.tech/neondb?sslmode=require
-```
+   **A) Pooled connection (para DATABASE_URL):**
+   - Clique em **Pooled connection**
+   - Copie a string completa (tem `-pooler` no meio):
+   ```
+   postgresql://neondb_owner:AbCdEf123@ep-cool-name-123456-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require
+   ```
+   - Essa URL **com `-pooler`** é usada pelo app em produção (otimiza conexões)
 
-6. **GUARDE essa string.** Você vai colar no Render na próxima etapa.
+   **B) Direct connection (para DIRECT_URL):**
+   - Clique em **Direct connection** (ou **Unpooled connection**)
+   - Copie a string completa (SEM `-pooler`):
+   ```
+   postgresql://neondb_owner:AbCdEf123@ep-cool-name-123456.us-east-2.aws.neon.tech/neondb?sslmode=require
+   ```
+   - Essa URL **sem `-pooler`** é necessária para migrations (Prisma precisa de advisory locks)
+   - ⚠️ **IMPORTANTE:** Se a URL tiver `.c-2.` ou `.c-3.` no hostname (ex: `ep-xxx.c-2.us-west-2`), **REMOVA** essa parte! Use apenas `ep-xxx.us-west-2`
+
+6. **GUARDE as duas strings.** Você vai precisar de ambas no Render.
+
+> **Por que duas URLs?**  
+> - **Pooled** = gerencia até 10 mil conexões simultâneas (perfeito para app em produção)  
+> - **Direct** = conexão única, necessária para migrations (o comando `prisma migrate deploy` precisa dessa)
 
 > **Dica:** Para cada novo cliente, você cria um **novo projeto** no Neon. Assim cada restaurante tem seu banco isolado.
+
+### 4.2 — Popular o banco de dados (seed) — FAÇA AGORA!
+
+🔴 **IMPORTANTE:** Rode o seed **ANTES** de criar o Render. Assim o banco já está pronto quando o site subir.
+
+**📋 PASSO A PASSO:**
+
+1. **Abra o PowerShell** e vá para a pasta server:
+```powershell
+cd F:\VSCode\Landpage\server
+```
+
+2. **Cole e edite o comando abaixo** com os dados do seu cliente:
+
+```powershell
+# 🎯 SUBSTITUA:
+# <URL_NEON_DIRECT> = URL direta do Neon (SEM -pooler)
+# <TIPO> = hamburgueria OU pizzaria
+# <EMAIL> = email do admin (ex: dono@burger.com)
+# <SENHA> = senha forte (mínimo 8 caracteres, 1 maiúscula, 1 número)
+# <PLANO> = essential OU professional
+
+$env:DATABASE_URL="<URL_NEON_DIRECT>" ; $env:SEED_TYPE="<TIPO>" ; $env:SEED_ADMIN_EMAIL="<EMAIL>" ; $env:SEED_ADMIN_PASSWORD="<SENHA>" ; $env:PLAN="<PLANO>" ; npx prisma migrate deploy ; npx prisma db seed
+```
+
+**✅ EXEMPLOS PRONTOS (copie e edite):**
+
+```powershell
+# Exemplo 1: Hamburgueria Essential (básico)
+$env:DATABASE_URL="postgresql://neondb_owner:npg_72sUuBqyIFYf@ep-holy-king-akhv0drx.c-3.us-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require" ; $env:SEED_TYPE="hamburgueria" ; $env:SEED_ADMIN_EMAIL="bryanpsouza123@gmail.com" ; $env:SEED_ADMIN_PASSWORD="14072010reyna" ; $env:PLAN="essential" ; npx prisma migrate deploy ; npx prisma db seed
+
+# Exemplo 2: Pizzaria Professional (completo)
+$env:DATABASE_URL="postgresql://neondb_owner:XyZ789@ep-name.us-east-2.aws.neon.tech/neondb?sslmode=require" ; $env:SEED_TYPE="pizzaria" ; $env:SEED_ADMIN_EMAIL="dono@pizza.com" ; $env:SEED_ADMIN_PASSWORD="Pizza2026!" ; $env:PLAN="professional" ; npx prisma migrate deploy ; npx prisma db seed
+
+# Exemplo 3: Restaurante genérico Professional
+$env:DATABASE_URL="postgresql://neondb_owner:npg_82APcKbrmCUY@ep-aged-hall-afx02gbc-pooler.c-2.us-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require" ; $env:SEED_TYPE="restaurante" ; $env:SEED_ADMIN_EMAIL="bryanpsouza123@gmail.com" ; $env:SEED_ADMIN_PASSWORD="14072010raze" ; $env:PLAN="professional" ; npx prisma migrate deploy ; npx prisma db seed
+```
+
+3. **Pressione Enter** e aguarde:
+```
+✅ 3 migrations aplicadas
+✅ Admin: dono@burger.com
+✅ Plano: essential
+✅ 10 pratos criados
+🎉 Seed concluído
+```
+
+4. **Limpe as variáveis** (para não conflitar com seu .env local):
+```powershell
+Remove-Item Env:\DATABASE_URL
+```
+
+**📊 Diferença entre os planos:**
+
+| Recurso | Essential (FREE) | Professional (PRO) |
+|---------|------------------|---------------------|
+| Pratos e categorias | ✅ | ✅ |
+| Galeria de fotos | ✅ | ✅ |
+| Configurações básicas | ✅ | ✅ |
+| **Logo customizada** | ❌ | ✅ |
+| **Cor da marca** | ❌ | ✅ |
+| **Favicon customizado** | ❌ | ✅ |
+| **Seção de equipe** | ❌ | ✅ |
+
+> 💡 **Dica comercial:** Cobre R$ 150-250 pelo plano Essential, R$ 350-500 pelo Professional.
+
+**🔄 Tipos de seed disponíveis:**
+
+| Valor de SEED_TYPE | Resultado | Pratos de exemplo |
+|--------------------|-----------|-------------------|
+| `restaurante` ou **não definir** | Seed genérico de restaurante (padrão) | Bruschetta, Risoto de Funghi, Filé ao Madeira, Tiramisu |
+| `pizzaria` | Seed de pizzaria | Margherita, Calabresa, Quatro Queijos, Esfihas |
+| `hamburgueria` | Seed de hamburgueria | X-Burger, Smash Burger, Bacon Burger, Combos |
+
+**Exemplo sem SEED_TYPE (usa padrão = restaurante genérico):**
+```powershell
+$env:DATABASE_URL="..." ; $env:SEED_ADMIN_EMAIL="dono@restaurante.com" ; $env:SEED_ADMIN_PASSWORD="Senha123!" ; $env:PLAN="essential" ; npx prisma migrate deploy ; npx prisma db seed
+```
+
+**Exemplo com restaurante explícito:**
+```powershell
+$env:DATABASE_URL="..." ; $env:SEED_TYPE="restaurante" ; $env:SEED_ADMIN_EMAIL="dono@bistrô.com" ; $env:SEED_ADMIN_PASSWORD="Senha123!" ; $env:PLAN="professional" ; npx prisma migrate deploy ; npx prisma db seed
+```
+
+---
+
+**🗑️ RESETAR E POPULAR DO ZERO:**
+
+Se você já rodou seed antes e quer **apagar tudo** e recomeçar (ex: mudou de pizzaria para hamburgueria, ou resetou credenciais):
+
+**🔴 IMPORTANTE: Entre na pasta server PRIMEIRO!**
+
+**🔴🔴 CRÍTICO: Use URL DIRECT (SEM `-pooler`)!**
+
+```powershell
+# 1. Entre na pasta server (OBRIGATÓRIO)
+cd F:\VSCode\Landpage\server
+
+# 2. DEPOIS rode o reset (⚠️ APAGA TUDO E RECRIA DO ZERO)
+# ⚠️ ATENÇÃO: Use a URL **DIRECT** (SEM -pooler) do Neon!
+$env:DATABASE_URL="<URL_NEON_DIRECT_SEM_POOLER>" ; $env:SEED_TYPE="hamburgueria" ; $env:SEED_ADMIN_EMAIL="novo@email.com" ; $env:SEED_ADMIN_PASSWORD="NovaSenha!" ; $env:PLAN="professional" ; npx prisma migrate reset --force
+```
+
+**Exemplo completo com valores reais:**
+```powershell
+cd F:\VSCode\Landpage\server
+
+# ⚠️ NOTE: URL SEM -pooler (direct connection)
+$env:DATABASE_URL="postgresql://neondb_owner:npg_ABC123@ep-name.us-west-2.aws.neon.tech/neondb?sslmode=require" ; $env:SEED_TYPE="hamburgueria" ; $env:SEED_ADMIN_EMAIL="esqueceeotrem@gmail.com" ; $env:SEED_ADMIN_PASSWORD="NovaSenha!" ; $env:PLAN="essential" ; npx prisma migrate reset --force
+```
+
+**❌ ERRADO (NÃO funciona):**
+```powershell
+# Se a URL tiver -pooler, o reset VAI FALHAR silenciosamente!
+$env:DATABASE_URL="postgresql://...@ep-name-pooler.us-west-2.aws.neon.tech/..." ; ...
+                                         ^^^^^^^ NÃO USE ESTA URL!
+```
+
+**✅ CERTO:**
+```powershell
+# URL sem -pooler = funciona
+$env:DATABASE_URL="postgresql://...@ep-name.us-west-2.aws.neon.tech/..." ; ...
+                                     ^^^^^^^ SEM -pooler
+```
+
+> ⚠️ **ATENÇÃO:** `prisma migrate reset --force` **APAGA TODOS OS DADOS** do banco (pratos, categorias, fotos, configs). Use apenas:
+> - Setup inicial
+> - Mudança de tipo de seed (pizzaria → hamburgueria)
+> - Cliente cancelou e vai reusar banco para outro
+> 
+> **NUNCA use** em banco com dados reais do cliente em produção!
+
+> 💾 **Importante:** Salve o comando num bloco de notas com os dados de cada cliente para reusar depois (ex: para redeploy ou troubleshooting).
 
 ---
 
@@ -435,7 +585,7 @@ Na tela de configuração, preencha **exatamente assim**:
 | **Root Directory** | `server` | 🔴 **CRÍTICO** — é onde está o `package.json` do backend |
 | **Runtime** | `Node` | Render detecta automaticamente, mas confirme que está Node |
 | **Build Command** | `npm ci --include=dev && npx prisma generate && npm run build` | Instala deps, gera Prisma Client, compila TypeScript |
-| **Start Command** | `npx prisma migrate deploy && node dist/index.js` | Roda migrations e inicia o servidor |
+| **Start Command** | `sh scripts/start.sh` | 🔴 **IMPORTANTE** — Script que roda migrations + seed (se necessário) + inicia servidor. Lida com timeouts do Neon gracefully |
 | **Instance Type** | `Free` (para testar) ou `Starter` ($7/mês para produção) | Free dorme após 15 min de inatividade, Starter fica sempre ligado |
 
 > **⚠️ CUIDADO:** Se o **Root Directory** não for `server`, o build vai falhar com `Cannot find module 'package.json'`. O Render precisa entrar na pasta `server/` antes de rodar `npm ci`.
@@ -520,69 +670,11 @@ A URL do seu site é: `https://[nome-que-voce-escolheu].onrender.com`
 
 Teste rapidamente:
 - `https://SEU_APP.onrender.com/healthz` → deve retornar `{"status":"ok"}`
-- `https://SEU_APP.onrender.com` → deve carregar a página inicial (mas SEM dados ainda, porque não rodou o seed)
+- `https://SEU_APP.onrender.com` → deve carregar a página inicial **COM DADOS** (você já rodou o seed na Etapa 4.2)
+- `https://SEU_APP.onrender.com/admin` → faça login com as credenciais que você definiu no seed
 
-### 5.7 — Popular o banco (seed) — OBRIGATÓRIO!
+✅ Se tudo funcionar, pule direto para a **Etapa 6 — Testar em produção**.
 
-O seed **NÃO roda automaticamente** no deploy. Você precisa rodar **manualmente uma única vez** para criar:
-- Admin padrão
-- Categorias (Entradas, Pratos Principais, etc)
-- 10 pratos de exemplo
-- Configurações do site (nome, WhatsApp, etc)
-
-#### ✅ Opção A: Plano Starter/Paid (com Shell no Render)
-
-Se você pagou pelo plano Starter ($7/mês), tem acesso à Shell:
-
-1. No Render → seu serviço → aba **Shell** (topo)
-2. Aguarde o terminal carregar
-3. Digite:
-
-```bash
-npx prisma db seed
-```
-
-4. Aguarde aparecer `✅ 10 pratos criados` e `🎉 Seed concluído`
-
-**Para customizar o admin:**
-```bash
-SEED_ADMIN_EMAIL="dono@pizzaria.com" SEED_ADMIN_PASSWORD="SenhaForte123!" npx prisma db seed
-```
-
----
-
-#### ❌ Opção B: Plano Free (SEM Shell) — Rodar localmente apontando para o Neon
-
-O plano Free **não tem Shell**, então você roda o seed do seu computador, mas conectando no banco do Neon:
-
-1. **No seu computador**, abra o PowerShell e vá para a pasta `server/`:
-
-```powershell
-cd F:\VSCode\Landpage\server
-```
-
-2. **Configure a DATABASE_URL temporariamente** (copie do painel do Render → Environment → `DATABASE_URL`):
-
-```powershell
-# PowerShell (Windows)
-$env:DATABASE_URL="postgresql://neondb_owner:ABC...@ep-xxx-pooler.c-2.us-west-2.aws.neon.tech/neondb?sslmode=require"
-$env:SEED_ADMIN_EMAIL="dono@saborarte.com"
-$env:SEED_ADMIN_PASSWORD="Admin2026!"
-npx prisma db seed
-```
-
-3. **Confirme** que apareceu:
-```
-✅ Admin: dono@saborarte.com
-✅ 10 pratos criados
-🎉 Seed concluído
-```
-
-4. **Teste no site**: Acesse `https://SEU_APP.onrender.com/admin` e faça login com as credenciais que você definiu.
-
-> **Seguro?** Sim — o seed só **cria** dados se não existirem. Não apaga nada.
-
----
 ---
 
 ## 6 — Testar em produção
@@ -709,32 +801,27 @@ Você **não precisa** duplicar o código para cada cliente. Use o **mesmo repos
 #### A) Banco de dados
 
 1. Neon → **New Project** → nome do cliente (ex: `pizzaria-napoli`)
-2. Copie a `DATABASE_URL`
+2. Copie a `DIRECT_URL` (unpooled connection)
 
-#### B) Web Service no Render
+#### B) Popular o banco
 
-1. Render → **New → Web Service** → mesmo repo do GitHub
-2. Configure com os mesmos valores da etapa 5.1
-3. Mude o **Name** para o do cliente
-4. **Environment variables:** cole a `DATABASE_URL` nova + gere um **novo `JWT_SECRET`**
-5. Deploy
+```powershell
+cd F:\VSCode\Landpage\server
 
-#### C) Popular o banco
-
-1. Render → Shell do novo serviço:
-```bash
-SEED_ADMIN_EMAIL="dono@pizzaria.com" SEED_ADMIN_PASSWORD="SenhaForte456!" npx prisma db seed
+# Cole e edite:
+$env:DATABASE_URL="<URL_NEON_DIRECT>" ; $env:SEED_TYPE="pizzaria" ; $env:SEED_ADMIN_EMAIL="dono@napoli.com" ; $env:SEED_ADMIN_PASSWORD="Napoli2026!" ; $env:PLAN="professional" ; npx prisma migrate deploy ; npx prisma db seed
 ```
 
-#### D) Personalizar conteúdo
+#### C) Web Service no Render
 
-O cliente acessa o admin e troca:
-- Nome do restaurante
-- Endereço, telefone, WhatsApp
-- Pratos e categorias
-- Fotos
+1. Render → **New → Web Service** → mesmo repo do GitHub
+2. Configure igual a Etapa 5.2 (mude só o **Name**)
+3. **Environment variables:** cole a `DATABASE_URL` (pooled) + gere novo `JWT_SECRET` + `CLOUDINARY_FOLDER_PREFIX` único
+4. Deploy
 
-(Tudo isso é feito pelo painel, sem mexer em código)
+#### D) Testar
+
+Acesse `https://pizzaria-napoli.onrender.com/admin` e faça login.
 
 #### E) Domínio (se tiver)
 
@@ -942,3 +1029,61 @@ R: Quantos quiser. Cada cliente é uma instância independente (Render + Neon), 
 
 **P: E se eu quiser cobrar mensalidade do cliente?**
 R: Cobre pelo menos o custo de infra ($7-26/mês) + sua margem. Muitos cobram R$50-200/mês por manutenção do site de restaurante.
+
+**P: Como fazer upgrade de um cliente de Essential para Professional?**
+
+Você tem **2 opções** (escolha a mais fácil para você):
+
+---
+
+**OPÇÃO 1: Via Neon SQL Editor (MAIS RÁPIDO — recomendado)**
+
+1. **Acesse https://console.neon.tech** → Faça login
+2. **Selecione o projeto** do cliente (ex: `restaurante-saborarte`)
+3. **Clique em "SQL Editor"** (menu lateral esquerdo)
+4. **Cole e execute este comando:**
+
+```sql
+UPDATE site_configs 
+SET value = 'professional' 
+WHERE key = 'site_plan';
+```
+
+5. **Clique em "Run"** (ou pressione Ctrl+Enter)
+6. Deve aparecer: `✅ UPDATE 1` (1 linha atualizada)
+
+**✅ Pronto!** O cliente agora tem acesso ao Plano Professional.
+
+> **💡 Dica:** Se o comando der erro `relation "site_configs" does not exist`, primeiro descubra o nome correto da tabela rodando:
+> ```sql
+> SELECT tablename FROM pg_tables WHERE schemaname = 'public';
+> ```
+> ⚠️ **Copie APENAS o comando de dentro do bloco de código** (sem o `>` da citação).
+> 
+> Procure a tabela relacionada a configurações (pode ser `SiteConfig`, `site_config`, `site_configs`, etc.) e use esse nome exato no comando UPDATE.
+
+---
+
+**OPÇÃO 2: Via Prisma Studio (se preferir interface gráfica local)**
+
+1. **No seu computador**, abra o PowerShell e rode:
+
+```powershell
+cd F:\VSCode\Landpage\server
+$env:DATABASE_URL="<URL_NEON_DIRECT_DO_CLIENTE>"
+npx prisma studio
+```
+
+2. **No navegador que abrir**, vá em `SiteConfig`
+3. **Procure a linha** com `key = "site_plan"`
+4. **Clique no campo `value`** e mude de `"essential"` para `"professional"`
+5. **Clique em "Save 1 change"** (botão verde no topo)
+
+---
+
+**⚠️ IMPORTANTE:** Depois do upgrade, o cliente precisa:
+1. **Fazer logout** do painel admin
+2. **Fazer login novamente**
+3. Agora vai ver as novas funcionalidades (logo, cor da marca, favicon, seção de equipe)
+
+**🔄 Para fazer downgrade** (Professional → Essential), use o mesmo processo mas mude `value` para `"essential"`.

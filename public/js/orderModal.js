@@ -309,6 +309,7 @@
             document.getElementById('order-form').reset();
             self._clearErrors();
             self.isSubmitting = false;
+            self._setLoading(false); // Reset loading state when closing modal
 
             // Restore focus to element that had focus before modal opened
             if (self._lastFocusedElement && typeof self._lastFocusedElement.focus === 'function') {
