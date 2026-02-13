@@ -230,10 +230,15 @@ Sitemap: ${baseUrl}/sitemap.xml`;
     res.send(robotsTxt);
 });
 
+// --- Serve pages with noindex for non-public routes ---
+const noIndexPages = ['admin', 'buy', 'buy-success'];
 const pages = ['index', 'menu', 'gallery', 'about', 'contact', 'admin', 'buy', 'buy-success'];
 pages.forEach(page => {
     const route = page === 'index' ? '/' : `/${page}`;
     app.get(route, (_req: Request, res: Response) => {
+        if (noIndexPages.includes(page)) {
+            res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+        }
         res.sendFile(path.join(publicDir, `${page}.html`));
     });
 });

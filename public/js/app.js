@@ -211,6 +211,47 @@
             meta.content = content;
         });
 
+        // --- Canonical URL ---
+        let canonical = document.querySelector('link[rel="canonical"]');
+        if (!canonical) {
+            canonical = document.createElement('link');
+            canonical.rel = 'canonical';
+            document.head.appendChild(canonical);
+        }
+        canonical.href = window.location.origin + window.location.pathname;
+
+        // --- JSON-LD Structured Data (Restaurant schema) ---
+        let jsonLd = document.getElementById('seo-jsonld');
+        if (!jsonLd) {
+            jsonLd = document.createElement('script');
+            jsonLd.type = 'application/ld+json';
+            jsonLd.id = 'seo-jsonld';
+            document.head.appendChild(jsonLd);
+        }
+        const structuredData = {
+            '@context': 'https://schema.org',
+            '@type': 'Restaurant',
+            'name': siteName,
+            'url': window.location.origin,
+            'description': siteDesc,
+            'servesCuisine': c.cuisine_type || 'Brasileira',
+            'acceptsReservations': 'True',
+            'menu': window.location.origin + '/menu',
+        };
+        if (c.hero_image || c.about_image) structuredData.image = c.hero_image || c.about_image;
+        if (c.restaurant_phone) structuredData.telephone = c.restaurant_phone;
+        if (c.restaurant_address) {
+            structuredData.address = {
+                '@type': 'PostalAddress',
+                'streetAddress': c.restaurant_address,
+                'addressCountry': 'BR',
+            };
+        }
+        if (c.opening_hours) {
+            structuredData.openingHours = c.opening_hours;
+        }
+        jsonLd.textContent = JSON.stringify(structuredData);
+
         // --- Brand color (PRO) ---
         if (c.brand_color && /^#[0-9A-Fa-f]{6}$/.test(c.brand_color)) {
             applyBrandColor(c.brand_color);
