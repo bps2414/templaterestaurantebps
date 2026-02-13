@@ -196,17 +196,21 @@ async function seedRestaurante() {
             { icon: '👨‍🍳', title: 'Chef Premiado', description: 'Nossa equipe de cozinha é liderada por chefs com experiência internacional e estrelas Michelin.' },
             { icon: '❤️', title: 'Feito com Amor', description: 'Cada prato é uma obra de arte, preparada com dedicação e carinho para nossos convidados.' },
         ]),
-        team_members: JSON.stringify([
-            { name: 'Marco Oliveira', role: 'Chef Executivo', image: '' },
-            { name: 'Ana Costa', role: 'Sommelier', image: '' },
-            { name: 'Ricardo Santos', role: 'Gerente Geral', image: '' },
-        ]),
         opening_hours: 'Seg-Qui: 11h30–15h / 18h30–23h | Sex-Sáb: 11h30–00h | Dom: 11h30–16h',
         google_maps_embed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.1976670254753!2d-46.65529378502211!3d-23.56517098468082!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDMzJzU0LjYiUyA0NsKwMzknMTEuMSJX!5e0!3m2!1spt-BR!2sbr!4v1234567890',
         instagram_url: 'https://instagram.com/saborarte',
         facebook_url: 'https://facebook.com/saborarte',
         footer_text: '© 2026 Sabor & Arte. Todos os direitos reservados.',
     };
+
+    // Adicionar team_members apenas se for plano Professional
+    if (validPlan === 'professional') {
+        configs.team_members = JSON.stringify([
+            { name: 'Marco Oliveira', role: 'Chef Executivo', image: 'https://images.unsplash.com/photo-1583394293214-28ded15ee548?w=400&h=400&fit=crop' },
+            { name: 'Ana Costa', role: 'Sommelier', image: 'https://images.unsplash.com/photo-1595273670150-bd0c3c392e46?w=400&h=400&fit=crop' },
+            { name: 'Ricardo Santos', role: 'Gerente Geral', image: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=400&h=400&fit=crop' },
+        ]);
+    }
 
     for (const [key, value] of Object.entries(configs)) {
         await prisma.siteConfig.upsert({

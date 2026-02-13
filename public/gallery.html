@@ -117,12 +117,14 @@
         body:not(.config-loaded) #footer-brand,
         body:not(.config-loaded) #footer-tagline,
         body:not(.config-loaded) #footer-copy {
-            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
         body.config-loaded #nav-brand,
         body.config-loaded #footer-brand,
         body.config-loaded #footer-tagline,
         body.config-loaded #footer-copy {
+            opacity: 1;
             animation: configFadeIn 0.3s ease;
         }
         @keyframes configFadeIn {
