@@ -239,7 +239,6 @@
             allDishes = categories.flatMap(cat => cat.dishes.map(d => ({ ...d, category: { id: cat.id, name: cat.name, slug: cat.slug } })));
 
             // Build tabs
-            const tabsContainer = document.getElementById('category-tabs');
             tabsContainer.textContent = '';
 
             const allBtn = document.createElement('button');
