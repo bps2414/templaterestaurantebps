@@ -355,6 +355,26 @@
             .hover\\:border-brand-400:hover { border-color: ${shades[400]} !important; }
             .focus\\:border-brand-400:focus { border-color: ${shades[400]} !important; }
             .ring-brand-400 { --tw-ring-color: ${shades[400]}; }
+            /* Amber variants for template-b (hamburgueria) */
+            .text-amber-300 { color: ${shades[300]} !important; }
+            .text-amber-400 { color: ${shades[400]} !important; }
+            .text-amber-500 { color: ${shades[500]} !important; }
+            .text-amber-600 { color: ${shades[600]} !important; }
+            .bg-amber-400 { background-color: ${shades[400]} !important; }
+            .bg-amber-500 { background-color: ${shades[500]} !important; }
+            .bg-amber-600 { background-color: ${shades[600]} !important; }
+            .hover\\:bg-amber-600:hover { background-color: ${shades[600]} !important; }
+            .hover\\:bg-amber-400:hover { background-color: ${shades[400]} !important; }
+            .hover\\:text-amber-400:hover { color: ${shades[400]} !important; }
+            .border-amber-400 { border-color: ${shades[400]} !important; }
+            .border-amber-500 { border-color: ${shades[500]} !important; }
+            .hover\\:border-amber-400:hover { border-color: ${shades[400]} !important; }
+            .focus\\:border-amber-400:focus { border-color: ${shades[400]} !important; }
+            .ring-amber-400 { --tw-ring-color: ${shades[400]}; }
+            /* Amber opacity variants (ex: amber-400/10, amber-500/10) */
+            .border-amber-400\\/10 { border-color: ${hex}1a !important; }
+            .border-amber-400\\/5 { border-color: ${hex}0d !important; }
+            .bg-amber-500\\/10 { background-color: ${hex}1a !important; }
             /* Fire/gold variants for template-b */
             .text-fire-400 { color: ${shades[400]} !important; }
             .text-fire-500 { color: ${shades[500]} !important; }
