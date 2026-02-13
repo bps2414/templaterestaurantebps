@@ -36,8 +36,7 @@
         this.isOpen = false;
         this._boundKeydown = null;
         this._boundToggle = null;
-        this._boundClose = null;
-        this._init();
+        this._boundClose = null;        this._lastFocusedElement = null; // Sprint 1 - S1-T5: Focus restoration        this._init();
     }
 
     CartUI.prototype._init = function () {
@@ -161,8 +160,32 @@
     CartUI.prototype._attachEvents = function () {
         var self = this;
         this._boundKeydown = function (e) {
-            if (e.key === 'Escape' && self.isOpen) {
+            if (!self.isOpen) return;
+
+            // ESC to close
+            if (e.key === 'Escape') {
                 self.close();
+                return;
+            }
+
+            // Sprint 1 - S1-T5: Tab focus trap
+            if (e.key === 'Tab') {
+                var sidebar = document.getElementById('cart-sidebar');
+                var focusable = sidebar.querySelectorAll('button:not([disabled]), a[href], input:not([disabled]), textarea:not([disabled])');
+                var focusableArray = Array.from(focusable);
+                
+                if (focusableArray.length === 0) return;
+
+                var firstElement = focusableArray[0];
+                var lastElement = focusableArray[focusableArray.length - 1];
+
+                if (e.shiftKey && document.activeElement === firstElement) {
+                    e.preventDefault();
+                    lastElement.focus();
+                } else if (!e.shiftKey && document.activeElement === lastElement) {
+                    e.preventDefault();
+                    firstElement.focus();
+                }
             }
         };
         document.addEventListener('keydown', this._boundKeydown);
@@ -297,10 +320,26 @@
     };
 
     CartUI.prototype.open = function () {
+        // Sprint 1 - S1-T5: Save focus for restoration
+        this._lastFocusedElement = document.activeElement;
+
         this.isOpen = true;
         document.getElementById('cart-sidebar').classList.remove('translate-x-full');
         document.getElementById('cart-backdrop').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
+
+        // Sprint 1 - S1-T5: Focus close button after animation
+        var self = this;
+        setTimeout(function () {
+
+        // Sprint 1 - S1-T5: Restore focus
+        if (this._lastFocusedElement && typeof this._lastFocusedElement.focus === 'function') {
+            this._lastFocusedElement.focus();
+            this._lastFocusedElement = null;
+        }
+            var closeBtn = document.getElementById('cart-close-btn');
+            if (closeBtn) closeBtn.focus();
+        }, 100);
     };
 
     CartUI.prototype.close = function () {

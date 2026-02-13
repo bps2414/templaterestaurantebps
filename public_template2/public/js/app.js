@@ -197,6 +197,11 @@
         const container = document.getElementById('featured-dishes');
         if (!container) return;
 
+        // Show skeleton loaders while loading
+        if (window.feedback && window.feedback.skeletons) {
+            container.innerHTML = window.feedback.skeletons.featuredCards();
+        }
+
         const dishes = await api('/dishes/featured');
         if (!dishes || dishes.length === 0) {
             container.innerHTML = '<p class="text-center col-span-3 text-gray-500 py-12">Nenhum destaque disponível.</p>';
@@ -242,6 +247,11 @@
     async function loadCategoryCards() {
         const container = document.getElementById('category-cards');
         if (!container) return;
+
+        // Show skeleton loaders while loading
+        if (window.feedback && window.feedback.skeletons) {
+            container.innerHTML = window.feedback.skeletons.categoryCards();
+        }
 
         const categories = await api('/categories');
         if (!categories || categories.length === 0) {
@@ -301,6 +311,13 @@
         if (window.cart) {
             window.cart.add(dish);
 
+        // Use novo toast system se disponível
+        if (window.feedback && window.feedback.success) {
+            window.feedback.success('Adicionado ao carrinho! 🛒');
+            return;
+        }
+
+        // Fallback para toast legado
             showAddToCartToast();
         }
     }

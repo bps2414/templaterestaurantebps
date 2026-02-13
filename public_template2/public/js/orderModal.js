@@ -69,6 +69,7 @@
     OrderModal.prototype._init = function () {
         this._createModal();
         this._attachEvents();
+        this._initFormValidation(); // Sprint 1 - S1-T2
     };
 
     OrderModal.prototype._createModal = function () {
@@ -127,6 +128,29 @@
 
         document.body.appendChild(modal);
         this.modal = modal;
+    };
+
+    // Sprint 1 - S1-T2: Visual inline form validation
+    OrderModal.prototype._initFormValidation = function () {
+        if (!window.formValidation) return; // Graceful degradation
+
+        this.formValidator = window.formValidation.enhance('#order-form', {
+            name: [
+                window.formValidation.validators.required('Nome é obrigatório'),
+                window.formValidation.validators.minLength(2, 'Nome deve ter pelo menos 2 caracteres')
+            ],
+            phone: [
+                window.formValidation.validators.required('Telefone é obrigatório'),
+                window.formValidation.validators.phone('Telefone inválido (ex: 11999998888)')
+            ],
+            address: [
+                window.formValidation.validators.required('Endereço é obrigatório'),
+                window.formValidation.validators.minLength(5, 'Endereço muito curto')
+            ]
+        }, {
+            onBlur: true,
+            showErrors: true
+        });
     };
 
     OrderModal.prototype._attachEvents = function () {
@@ -337,17 +361,28 @@
     OrderModal.prototype._setLoading = function (loading) {
         var btn = document.getElementById('order-submit-btn');
         var text = document.getElementById('order-submit-text');
+        
         if (loading) {
             btn.disabled = true;
+            btn.setAttribute('aria-busy', 'true');
             btn.classList.add('opacity-50', 'cursor-not-allowed');
-            text.textContent = 'Validando pedido...';
+            
+            // Spinner SVG + texto "Processando..."
+            text.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Processando...';
         } else {
             btn.disabled = false;
+            btn.removeAttribute('aria-busy');
             btn.classList.remove('opacity-50', 'cursor-not-allowed');
             text.textContent = 'Enviar pelo WhatsApp';
         }
     };
+// Sprint 1 - S1-T2: Trigger visual validation first
+        if (this.formValidator && !this.formValidator.validate()) {
+            // Errors are already shown inline by formValidation.js
+            return;
+        }
 
+        
     OrderModal.prototype._handleSubmit = function (form) {
         var self = this;
         if (this.isSubmitting) return;

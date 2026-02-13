@@ -232,6 +232,8 @@
         </svg>
     </a>
 
+    <script src="/js/feedback.js"></script>
+    <script src="/js/formValidation.js"></script>
     <script src="/js/app.js"></script>
     <script src="/js/cart.js"></script>
     <script src="/js/whatsappFormatter.js"></script>
@@ -253,10 +255,16 @@
         ];
 
         async function loadGallery() {
+            const grid = document.getElementById('gallery-grid');
+            
+            // Sprint 1 - S1-T6: Skeleton loaders
+            if (window.feedback && window.feedback.skeletons) {
+                grid.innerHTML = window.feedback.skeletons.gallery(8);
+            }
+
             const data = await api('/gallery');
             galleryImages = (data && data.length > 0) ? data : fallbackImages;
 
-            const grid = document.getElementById('gallery-grid');
             grid.innerHTML = galleryImages.map((img, i) => `
                 <div class="gallery-item aspect-square shadow-sm border border-gold-400/10" onclick="openLightbox(${i})">
                     <img src="${img.src}" alt="${img.alt || ''}" class="w-full h-full object-cover" loading="lazy">
@@ -266,9 +274,22 @@
 
         function openLightbox(index) {
             currentIndex = index;
+            const lightbox = document.getElementById('lightbox');
+            
+            // Sprint 1 - S1-T5: ARIA attributes
+            lightbox.setAttribute('role', 'dialog');
+            lightbox.setAttribute('aria-modal', 'true');
+            lightbox.setAttribute('aria-label', 'Visualização de imagem');
+            
             document.getElementById('lightbox-img').src = galleryImages[index].src;
-            document.getElementById('lightbox').classList.add('active');
+            lightbox.classList.add('active');
             document.body.style.overflow = 'hidden';
+
+            // Sprint 1 - S1-T5: Focus close button
+            setTimeout(() => {
+                const closeBtn = lightbox.querySelector('[onclick="closeLightbox()"]');
+                if (closeBtn) closeBtn.focus();
+            }, 100);
         }
 
         function closeLightbox() {
@@ -276,9 +297,28 @@
             document.body.style.overflow = '';
         }
 
-        function nextImage() {
-            currentIndex = (currentIndex + 1) % galleryImages.length;
-            document.getElementById('lightbox-img').src = galleryImages[currentIndex].src;
+        func
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'ArrowLeft') prevImage();
+
+            // Sprint 1 - S1-T5: Tab focus trap
+            if (e.key === 'Tab') {
+                const focusable = lb.querySelectorAll('button:not([disabled])');
+                const focusableArray = Array.from(focusable);
+                if (focusableArray.length === 0) return;
+
+                const firstElement = focusableArray[0];
+                const lastElement = focusableArray[focusableArray.length - 1];
+
+                if (e.shiftKey && document.activeElement === firstElement) {
+                    e.preventDefault();
+                    lastElement.focus();
+                } else if (!e.shiftKey && document.activeElement === lastElement) {
+                    e.preventDefault();
+                    firstElement.focus();
+                }
+            }.src = galleryImages[currentIndex].src;
         }
 
         function prevImage() {
