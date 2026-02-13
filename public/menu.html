@@ -101,7 +101,8 @@
         body:not(.config-loaded) #footer-address,
         body:not(.config-loaded) #footer-phone,
         body:not(.config-loaded) #footer-email {
-            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
         body.config-loaded #nav-brand,
         body.config-loaded #footer-brand,
@@ -110,6 +111,7 @@
         body.config-loaded #footer-address,
         body.config-loaded #footer-phone,
         body.config-loaded #footer-email {
+            opacity: 1;
             animation: configFadeIn 0.3s ease;
         }
         @keyframes configFadeIn {

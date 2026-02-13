@@ -81,7 +81,8 @@
         body:not(.config-loaded) #contact-phone,
         body:not(.config-loaded) #contact-email,
         body:not(.config-loaded) #contact-hours {
-            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
         body.config-loaded #nav-brand,
         body.config-loaded #footer-brand,
@@ -91,6 +92,7 @@
         body.config-loaded #contact-phone,
         body.config-loaded #contact-email,
         body.config-loaded #contact-hours {
+            opacity: 1;
             animation: configFadeIn 0.3s ease;
         }
         @keyframes configFadeIn {
