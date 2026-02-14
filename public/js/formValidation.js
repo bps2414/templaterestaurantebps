@@ -1,12 +1,12 @@
-// ============================================
-// Form Validation ��� Visual Inline Errors + Real-time Feedback
+﻿// ============================================
+// Form Validation ÔÇö Visual Inline Errors + Real-time Feedback
 // Sprint 1: S1-T2
 // ============================================
 
 (function () {
     'use strict';
 
-    // ��������� CSS Injection ���������������������������������������������������������������������������������������������������������������������������������
+    // ÔöÇÔöÇÔöÇ CSS Injection ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
 
     function injectStyles() {
         if (document.getElementById('form-validation-styles')) return;
@@ -52,37 +52,37 @@
         document.head.appendChild(style);
     }
 
-    // ��������� Validation Rules ������������������������������������������������������������������������������������������������������������������������
+    // ÔöÇÔöÇÔöÇ Validation Rules ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
 
     var validators = {
         required: function (value) {
-            return (value || '').trim().length > 0 ? null : 'Este campo é obrigatório';
+            return (value || '').trim().length > 0 ? null : 'Este campo ├® obrigat├│rio';
         },
         minLength: function (min) {
             return function (value) {
-                return (value || '').trim().length >= min ? null : 'Mínimo de ' + min + ' caracteres';
+                return (value || '').trim().length >= min ? null : 'M├¡nimo de ' + min + ' caracteres';
             };
         },
         maxLength: function (max) {
             return function (value) {
-                return (value || '').length <= max ? null : 'Máximo de ' + max + ' caracteres';
+                return (value || '').length <= max ? null : 'M├íximo de ' + max + ' caracteres';
             };
         },
         phone: function (value) {
             var digits = (value || '').replace(/\D/g, '');
             if (digits.length < 10 || digits.length > 11) {
-                return 'Telefone inválido (use DDD + número)';
+                return 'Telefone inv├ílido (use DDD + n├║mero)';
             }
             return null;
         },
         email: function (value) {
             if (!value || !value.trim()) return null; // optional
             var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(value.trim()) ? null : 'Email inválido';
+            return re.test(value.trim()) ? null : 'Email inv├ílido';
         },
     };
 
-    // ��������� DOM Helpers ���������������������������������������������������������������������������������������������������������������������������������������
+    // ÔöÇÔöÇÔöÇ DOM Helpers ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
 
     function getFieldWrapper(input) {
         // Look for the parent <div> that wraps label + input
@@ -146,12 +146,12 @@
         if (existing) existing.remove();
     }
 
-    // ��������� Form Enhancer ���������������������������������������������������������������������������������������������������������������������������������
+    // ÔöÇÔöÇÔöÇ Form Enhancer ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
 
     /**
      * Enhance a form with inline validation
      * @param {HTMLFormElement|string} formOrSelector
-     * @param {Object} rules - Map of field name ��� array of validator functions
+     * @param {Object} rules - Map of field name ÔåÆ array of validator functions
      * @param {Object} [options]
      * @param {string} [options.validateOn='blur'] - 'blur', 'input', or 'submit'
      * @param {Function} [options.onValid] - called when form passes all validation
@@ -265,7 +265,7 @@
         };
     }
 
-    // ��������� Debounce Helper ���������������������������������������������������������������������������������������������������������������������������
+    // ÔöÇÔöÇÔöÇ Debounce Helper ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
 
     function debounce(fn, delay) {
         var timer;
@@ -279,7 +279,7 @@
         };
     }
 
-    // ��������� Expose Public API ���������������������������������������������������������������������������������������������������������������������
+    // ÔöÇÔöÇÔöÇ Expose Public API ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
 
     var FormValidation = Object.freeze({
         enhance: enhanceForm,
