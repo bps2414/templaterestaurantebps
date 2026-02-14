@@ -1056,6 +1056,12 @@
                     } else {
                         errEl.textContent = json.error || 'Erro ao fazer login';
                     }
+                    errEl.classList.remove('hidden');
+                }
+            } catch (err) {
+                errEl.textContent = 'Erro de rede. Verifique sua conexão.';
+                errEl.classList.remove('hidden');
+            }
              
             
             // Restore button state (only if not rate-limited)
