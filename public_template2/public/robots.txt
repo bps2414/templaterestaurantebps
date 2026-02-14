@@ -1,0 +1,22 @@
+# robots.txt — Restaurant Template
+# https://www.robotstxt.org/
+
+User-agent: *
+Allow: /
+
+# Páginas públicas
+Allow: /index.html
+Allow: /menu.html
+Allow: /about.html
+Allow: /gallery.html
+Allow: /contact.html
+Allow: /privacy.html
+
+# Bloquear páginas administrativas e internas
+Disallow: /admin.html
+Disallow: /buy.html
+Disallow: /buy-success.html
+Disallow: /js/
+
+# Sitemap
+Sitemap: https://SEU-DOMINIO.com/sitemap.xml
