@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin — Painel de Controle</title>
+    <title>Admin ÔÇö Painel de Controle</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
@@ -81,7 +81,7 @@
         }
 
         .pro-locked-overlay::after {
-            content: '🔒 Recurso do Plano Profissional';
+            content: '­ƒöÆ Recurso do Plano Profissional';
             position: absolute;
             inset: 0;
             background: rgba(15, 15, 26, 0.85);
@@ -260,9 +260,9 @@
     <div id="login-screen" class="min-h-screen flex items-center justify-center">
         <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-md border border-white/5">
             <div class="text-center mb-8">
-                <span class="text-4xl">🍽</span>
+                <span class="text-4xl">­ƒì¢</span>
                 <h1 class="text-2xl font-bold text-white mt-4">Painel Admin</h1>
-                <p class="text-gray-400 mt-2">Faça login para gerenciar o site</p>
+                <p class="text-gray-400 mt-2">Fa├ºa login para gerenciar o site</p>
             </div>
             <form id="login-form" class="space-y-4">
                 <div>
@@ -275,7 +275,7 @@
                     <label class="text-sm text-gray-400 mb-1 block">Senha</label>
                     <input type="password" id="login-password" required
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none transition"
-                        placeholder="••••••">
+                        placeholder="ÔÇóÔÇóÔÇóÔÇóÔÇóÔÇó">
                 </div>
                 <p id="login-error" class="text-red-400 text-sm hidden"></p>
                 <button type="submit" id="login-btn"
@@ -291,7 +291,7 @@
         <!-- Mobile header -->
         <div class="admin-mobile-header">
             <div class="flex items-center gap-2">
-                <span class="text-xl">🍽</span>
+                <span class="text-xl">­ƒì¢</span>
                 <span class="text-white font-bold text-sm">Admin</span>
             </div>
             <button onclick="toggleSidebar()" class="text-white p-2" aria-label="Menu">
@@ -307,7 +307,7 @@
             <aside class="sidebar bg-dark-800 border-r border-white/5 fixed h-full overflow-y-auto">
                 <div class="p-6 border-b border-white/5">
                     <div class="flex items-center gap-3">
-                        <span class="text-2xl">🍽</span>
+                        <span class="text-2xl">­ƒì¢</span>
                         <div>
                             <h2 class="text-white font-bold">Admin</h2>
                             <p class="text-gray-500 text-xs" id="admin-email">admin@restaurante.com</p>
@@ -318,49 +318,49 @@
                 <nav class="p-4 space-y-1">
                     <button class="tab-btn active w-full text-left px-4 py-3 rounded-lg text-sm" data-tab="dishes"
                         onclick="switchTab('dishes')">
-                        🍝 Pratos
+                        ­ƒìØ Pratos
                     </button>
                     <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400"
                         data-tab="categories" onclick="switchTab('categories')">
-                        📂 Categorias
+                        ­ƒôé Categorias
                     </button>
                     <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400"
                         data-tab="gallery" onclick="switchTab('gallery')">
-                        📸 Galeria
+                        ­ƒô© Galeria
                     </button>
                     <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400"
                         data-tab="config" onclick="switchTab('config')">
-                        ⚙️ Configurações
+                        ÔÜÖ´©Å Configura├º├Áes
                     </button>
                     <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400" data-tab="about"
                         onclick="switchTab('about')">
-                        📝 Sobre / Equipe <span class="pro-badge pro-only-badge" style="display:none;">PRO</span>
+                        ­ƒôØ Sobre / Equipe <span class="pro-badge pro-only-badge" style="display:none;">PRO</span>
                     </button>
                     <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400"
                         data-tab="qrcode" onclick="switchTab('qrcode')">
-                        📱 QR Code <span class="pro-badge pro-only-badge" style="display:none;">PRO</span>
+                        ­ƒô▒ QR Code <span class="pro-badge pro-only-badge" style="display:none;">PRO</span>
                     </button>
                 </nav>
                 <div class="absolute bottom-0 w-full p-4 border-t border-white/5">
                     <button onclick="previewSite()"
                         class="w-full text-left px-4 py-3 rounded-lg text-sm text-brand-400 hover:bg-brand-500/10 transition font-medium">
-                        👀 Visualizar Site
+                        ­ƒæÇ Visualizar Site
                     </button>
                     <button onclick="showOnboarding()"
                         class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:text-brand-400 transition">
-                        🚀 Primeiros Passos
+                        ­ƒÜÇ Primeiros Passos
                     </button>
                     <button onclick="openPasswordModal()"
                         class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:text-brand-400 transition">
-                        🔑 Alterar Senha
+                        ­ƒöæ Alterar Senha
                     </button>
                     <button onclick="logout()"
                         class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:text-red-400 transition">
-                        🚪 Sair
+                        ­ƒÜ¬ Sair
                     </button>
                     <a href="/"
                         class="block text-left px-4 py-2 rounded-lg text-xs text-gray-500 hover:text-gray-300 transition">
-                        ← Voltar ao site
+                        ÔåÉ Voltar ao site
                     </a>
                 </div>
             </aside>
@@ -385,14 +385,14 @@
                                     </th>
                                     <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">
                                         Categoria</th>
-                                    <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">Preço
+                                    <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">Pre├ºo
                                     </th>
                                     <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">
                                         Destaque</th>
                                     <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">Ativo
                                     </th>
                                     <th class="text-right px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">
-                                        Ações</th>
+                                        A├º├Áes</th>
                                 </tr>
                             </thead>
                             <tbody id="dishes-table" class="divide-y divide-white/5">
@@ -435,15 +435,15 @@
                 <!-- TAB: CONFIG -->
                 <div id="tab-config" class="tab-content hidden">
                     <div class="flex items-center justify-between mb-8">
-                        <h1 class="text-2xl font-bold text-white">Configurações do Site</h1>
+                        <h1 class="text-2xl font-bold text-white">Configura├º├Áes do Site</h1>
                         <div class="flex gap-3">
                             <button onclick="previewSite()"
                                 class="bg-dark-700 hover:bg-dark-900 text-brand-400 px-5 py-2.5 rounded-xl text-sm font-medium transition border border-brand-500/20">
-                                👀 Visualizar Site
+                                ­ƒæÇ Visualizar Site
                             </button>
                             <button onclick="saveConfig()"
                                 class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition">
-                                💾 Salvar Tudo
+                                ­ƒÆ¥ Salvar Tudo
                             </button>
                         </div>
                     </div>
@@ -458,16 +458,16 @@
                         <h1 class="text-2xl font-bold text-white">Sobre / Equipe</h1>
                         <button onclick="saveAboutContent()"
                             class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition">
-                            💾 Salvar Tudo
+                            ­ƒÆ¥ Salvar Tudo
                         </button>
                     </div>
 
                     <!-- About Text 2 -->
                     <div class="bg-dark-800 rounded-xl p-6 border border-white/5 mb-8">
-                        <label class="text-sm text-gray-400 mb-2 block">Segundo parágrafo do Sobre</label>
+                        <label class="text-sm text-gray-400 mb-2 block">Segundo par├ígrafo do Sobre</label>
                         <textarea id="about-text-2-input" rows="3"
                             class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none resize-none"
-                            placeholder="Segundo parágrafo da seção Sobre (opcional)"></textarea>
+                            placeholder="Segundo par├ígrafo da se├º├úo Sobre (opcional)"></textarea>
                     </div>
 
                     <!-- Features / Values -->
@@ -479,7 +479,7 @@
                                 + Adicionar
                             </button>
                         </div>
-                        <p class="text-gray-500 text-xs mb-4">Máximo 6 itens. Cada item aparece como card na página
+                        <p class="text-gray-500 text-xs mb-4">M├íximo 6 itens. Cada item aparece como card na p├ígina
                             Sobre.</p>
                         <div id="features-list" class="space-y-4">
                             <div class="text-center py-8 text-gray-500">Carregando...</div>
@@ -496,7 +496,7 @@
                                 + Adicionar
                             </button>
                         </div>
-                        <p class="text-gray-500 text-xs mb-4">Máximo 10 membros. Exibidos na página Sobre.</p>
+                        <p class="text-gray-500 text-xs mb-4">M├íximo 10 membros. Exibidos na p├ígina Sobre.</p>
                         <div id="team-list" class="space-y-4">
                             <div class="text-center py-8 text-gray-500">Carregando...</div>
                         </div>
@@ -512,7 +512,7 @@
                     <div id="qrcode-content-wrapper" class="max-w-lg mx-auto">
                         <div class="bg-dark-800 rounded-2xl p-8 border border-white/5 text-center">
                             <p class="text-gray-400 text-sm mb-6">Gere um QR Code que direciona para o seu site. Ideal
-                                para imprimir em cardápios, flyers, mesas e balcão.</p>
+                                para imprimir em card├ípios, flyers, mesas e balc├úo.</p>
                             <div class="bg-dark-700/50 rounded-xl p-4 mb-6">
                                 <label class="text-sm text-gray-400 mb-2 block text-left">URL do site</label>
                                 <input type="url" id="qr-url"
@@ -522,7 +522,7 @@
                             <div class="flex gap-3 justify-center mb-8">
                                 <button onclick="generateQRCode()"
                                     class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-xl text-sm font-medium transition">
-                                    📱 Gerar QR Code
+                                    ­ƒô▒ Gerar QR Code
                                 </button>
                             </div>
                             <div id="qr-result" class="hidden">
@@ -533,11 +533,11 @@
                                 <div class="flex gap-3 justify-center">
                                     <button onclick="downloadQRCode('png')"
                                         class="bg-dark-700 hover:bg-dark-900 text-brand-400 px-5 py-2.5 rounded-xl text-sm font-medium transition border border-brand-500/20">
-                                        📥 Baixar PNG
+                                        ­ƒôÑ Baixar PNG
                                     </button>
                                     <button onclick="printQRCode()"
                                         class="bg-dark-700 hover:bg-dark-900 text-gray-300 px-5 py-2.5 rounded-xl text-sm font-medium transition border border-white/10">
-                                        🖨️ Imprimir
+                                        ­ƒû¿´©Å Imprimir
                                     </button>
                                 </div>
                             </div>
@@ -545,12 +545,12 @@
 
                         <!-- Tips -->
                         <div class="bg-dark-800 rounded-2xl p-6 border border-white/5 mt-6">
-                            <h3 class="text-white font-semibold text-sm mb-3">💡 Dicas de uso</h3>
+                            <h3 class="text-white font-semibold text-sm mb-3">­ƒÆí Dicas de uso</h3>
                             <ul class="text-gray-400 text-sm space-y-2">
-                                <li>• Coloque nas mesas para os clientes acessarem o cardápio digital</li>
-                                <li>• Imprima em flyers e materiais de divulgação</li>
-                                <li>• Cole no balcão ou porta de entrada do restaurante</li>
-                                <li>• Adicione em cartões de visita e embalagens de delivery</li>
+                                <li>ÔÇó Coloque nas mesas para os clientes acessarem o card├ípio digital</li>
+                                <li>ÔÇó Imprima em flyers e materiais de divulga├º├úo</li>
+                                <li>ÔÇó Cole no balc├úo ou porta de entrada do restaurante</li>
+                                <li>ÔÇó Adicione em cart├Áes de visita e embalagens de delivery</li>
                             </ul>
                         </div>
                     </div>
@@ -572,13 +572,13 @@
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none">
                 </div>
                 <div>
-                    <label class="text-sm text-gray-400 mb-1 block">Descrição</label>
+                    <label class="text-sm text-gray-400 mb-1 block">Descri├º├úo</label>
                     <textarea id="dish-description" rows="3"
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none resize-none"></textarea>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="text-sm text-gray-400 mb-1 block">Preço (R$) *</label>
+                        <label class="text-sm text-gray-400 mb-1 block">Pre├ºo (R$) *</label>
                         <input type="text" id="dish-price" inputmode="numeric" required
                             class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
                             placeholder="R$ 39,90">
@@ -655,10 +655,10 @@
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white file:mr-4 file:rounded-lg file:border-0 file:bg-brand-500 file:px-4 file:py-2 file:text-sm file:text-white">
                 </div>
                 <div>
-                    <label class="text-sm text-gray-400 mb-1 block">Descrição (alt)</label>
+                    <label class="text-sm text-gray-400 mb-1 block">Descri├º├úo (alt)</label>
                     <input type="text" id="gallery-alt"
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
-                        placeholder="Descrição da imagem">
+                        placeholder="Descri├º├úo da imagem">
                 </div>
                 <div class="flex gap-3 pt-4">
                     <button type="submit"
@@ -673,26 +673,26 @@
     <!-- ========== PASSWORD CHANGE MODAL ========== -->
     <div class="modal-overlay" id="password-modal" role="dialog" aria-modal="true" aria-label="Alterar Senha">
         <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-md border border-white/5">
-            <h2 class="text-xl font-bold text-white mb-6">🔑 Alterar Senha</h2>
+            <h2 class="text-xl font-bold text-white mb-6">­ƒöæ Alterar Senha</h2>
             <form id="password-form" class="space-y-4">
                 <div>
                     <label class="text-sm text-gray-400 mb-1 block">Senha Atual *</label>
                     <input type="password" id="pw-current" required
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
-                        placeholder="••••••">
+                        placeholder="ÔÇóÔÇóÔÇóÔÇóÔÇóÔÇó">
                 </div>
                 <div>
                     <label class="text-sm text-gray-400 mb-1 block">Nova Senha *</label>
                     <input type="password" id="pw-new" required minlength="8"
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
-                        placeholder="Mínimo 8 caracteres">
-                    <p class="text-xs text-gray-500 mt-1">Deve conter maiúscula, minúscula e número</p>
+                        placeholder="M├¡nimo 8 caracteres">
+                    <p class="text-xs text-gray-500 mt-1">Deve conter mai├║scula, min├║scula e n├║mero</p>
                 </div>
                 <div>
                     <label class="text-sm text-gray-400 mb-1 block">Confirmar Nova Senha *</label>
                     <input type="password" id="pw-confirm" required
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
-                        placeholder="••••••">
+                        placeholder="ÔÇóÔÇóÔÇóÔÇóÔÇóÔÇó">
                 </div>
                 <p id="pw-error" class="text-red-400 text-sm hidden"></p>
                 <div class="flex gap-3 pt-4">
@@ -713,65 +713,65 @@
     <div class="modal-overlay" id="onboarding-modal" role="dialog" aria-modal="true" aria-label="Primeiros Passos">
         <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-lg border border-white/5 max-h-[90vh] overflow-y-auto">
             <div class="text-center mb-6">
-                <span class="text-5xl">🚀</span>
+                <span class="text-5xl">­ƒÜÇ</span>
                 <h2 class="text-2xl font-bold text-white mt-4">Primeiros Passos</h2>
                 <p class="text-gray-400 mt-2">Configure seu restaurante em 5 minutos!</p>
             </div>
             <div class="space-y-3" id="onboarding-checklist">
                 <div class="onboarding-step bg-dark-700/50 rounded-xl p-4 border border-white/5 flex items-start gap-4 cursor-pointer hover:bg-dark-700 transition"
                     data-step="config" onclick="goToStep('config')">
-                    <span class="text-2xl mt-0.5" id="step-icon-config">⚙️</span>
+                    <span class="text-2xl mt-0.5" id="step-icon-config">ÔÜÖ´©Å</span>
                     <div class="flex-1">
                         <h3 class="text-white font-semibold text-sm">Configurar dados do restaurante</h3>
-                        <p class="text-gray-500 text-xs mt-1">Nome, endereço, telefone, WhatsApp, horários</p>
+                        <p class="text-gray-500 text-xs mt-1">Nome, endere├ºo, telefone, WhatsApp, hor├írios</p>
                     </div>
-                    <span class="step-check text-gray-600" id="step-check-config">○</span>
+                    <span class="step-check text-gray-600" id="step-check-config">Ôùï</span>
                 </div>
                 <div class="onboarding-step bg-dark-700/50 rounded-xl p-4 border border-white/5 flex items-start gap-4 cursor-pointer hover:bg-dark-700 transition"
                     data-step="categories" onclick="goToStep('categories')">
-                    <span class="text-2xl mt-0.5" id="step-icon-categories">📂</span>
+                    <span class="text-2xl mt-0.5" id="step-icon-categories">­ƒôé</span>
                     <div class="flex-1">
-                        <h3 class="text-white font-semibold text-sm">Criar categorias do cardápio</h3>
+                        <h3 class="text-white font-semibold text-sm">Criar categorias do card├ípio</h3>
                         <p class="text-gray-500 text-xs mt-1">Ex: Entradas, Pratos Principais, Sobremesas, Bebidas</p>
                     </div>
-                    <span class="step-check text-gray-600" id="step-check-categories">○</span>
+                    <span class="step-check text-gray-600" id="step-check-categories">Ôùï</span>
                 </div>
                 <div class="onboarding-step bg-dark-700/50 rounded-xl p-4 border border-white/5 flex items-start gap-4 cursor-pointer hover:bg-dark-700 transition"
                     data-step="dishes" onclick="goToStep('dishes')">
-                    <span class="text-2xl mt-0.5" id="step-icon-dishes">🍝</span>
+                    <span class="text-2xl mt-0.5" id="step-icon-dishes">­ƒìØ</span>
                     <div class="flex-1">
-                        <h3 class="text-white font-semibold text-sm">Adicionar pratos ao cardápio</h3>
-                        <p class="text-gray-500 text-xs mt-1">Nome, descrição, preço e foto de cada prato</p>
+                        <h3 class="text-white font-semibold text-sm">Adicionar pratos ao card├ípio</h3>
+                        <p class="text-gray-500 text-xs mt-1">Nome, descri├º├úo, pre├ºo e foto de cada prato</p>
                     </div>
-                    <span class="step-check text-gray-600" id="step-check-dishes">○</span>
+                    <span class="step-check text-gray-600" id="step-check-dishes">Ôùï</span>
                 </div>
                 <div class="onboarding-step bg-dark-700/50 rounded-xl p-4 border border-white/5 flex items-start gap-4 cursor-pointer hover:bg-dark-700 transition"
                     data-step="gallery" onclick="goToStep('gallery')">
-                    <span class="text-2xl mt-0.5" id="step-icon-gallery">📸</span>
+                    <span class="text-2xl mt-0.5" id="step-icon-gallery">­ƒô©</span>
                     <div class="flex-1">
                         <h3 class="text-white font-semibold text-sm">Enviar fotos para a galeria</h3>
                         <p class="text-gray-500 text-xs mt-1">Fotos do ambiente, pratos e equipe</p>
                     </div>
-                    <span class="step-check text-gray-600" id="step-check-gallery">○</span>
+                    <span class="step-check text-gray-600" id="step-check-gallery">Ôùï</span>
                 </div>
                 <div class="onboarding-step bg-dark-700/50 rounded-xl p-4 border border-white/5 flex items-start gap-4 cursor-pointer hover:bg-dark-700 transition"
                     data-step="preview" onclick="previewSite()">
-                    <span class="text-2xl mt-0.5" id="step-icon-preview">👀</span>
+                    <span class="text-2xl mt-0.5" id="step-icon-preview">­ƒæÇ</span>
                     <div class="flex-1">
                         <h3 class="text-white font-semibold text-sm">Visualizar o site</h3>
                         <p class="text-gray-500 text-xs mt-1">Abra o site em nova aba e veja como ficou!</p>
                     </div>
-                    <span class="step-check text-gray-600" id="step-check-preview">○</span>
+                    <span class="step-check text-gray-600" id="step-check-preview">Ôùï</span>
                 </div>
             </div>
             <div class="flex gap-3 pt-6">
                 <button onclick="closeOnboarding()"
                     class="flex-1 bg-brand-500 hover:bg-brand-600 text-white py-3 rounded-xl font-medium transition">
-                    Entendi, vamos lá! 💪
+                    Entendi, vamos l├í! ­ƒÆ¬
                 </button>
                 <button onclick="dismissOnboardingForever()"
                     class="text-gray-500 hover:text-gray-300 text-sm px-4 transition">
-                    Não mostrar novamente
+                    N├úo mostrar novamente
                 </button>
             </div>
         </div>
@@ -832,11 +832,11 @@
                 const data = await res.json();
                 csrfToken = data.token;
             } catch (error) {
-                console.error('❌ Erro ao obter CSRF token:', error);
+                console.error('ÔØî Erro ao obter CSRF token:', error);
                 // Show feedback after page is ready
                 setTimeout(() => {
                     if (typeof toast === 'function') {
-                        toast('Erro de segurança (CSRF). Recarregue a página.', 'error');
+                        toast('Erro de seguran├ºa (CSRF). Recarregue a p├ígina.', 'error');
                     }
                 }, 1000);
             }
@@ -853,7 +853,7 @@
                     applyPlanUI();
                 }
             } catch (error) {
-                console.error('❌ Erro ao obter info do plano:', error);
+                console.error('ÔØî Erro ao obter info do plano:', error);
             }
         }
 
@@ -865,7 +865,7 @@
             if (badge) {
                 if (isPro) {
                     badge.className = 'plan-badge-professional mt-1';
-                    badge.textContent = '⭐ Profissional';
+                    badge.textContent = 'Ô¡É Profissional';
                 } else {
                     badge.className = 'plan-badge-essential mt-1';
                     badge.textContent = 'Essencial';
@@ -930,7 +930,7 @@
             
             // Handle 403 CSRF token expired - auto-renew and retry
             if (res.status === 403 && !_retried && json.error?.includes('CSRF')) {
-                console.log('⚠️ CSRF token expirado, renovando...');
+                console.log('ÔÜá´©Å CSRF token expirado, renovando...');
                 await fetchCsrfToken();
                 return apiAuth(endpoint, options, true);
             }
@@ -989,38 +989,32 @@
 
         // Login form (double-click prevention + spinner + rate-limit handling)
         let isLoginSubmitting = false;
-        const loginForm = document.getElementById('login-form');
-        const loginBtn = document.getElementById('login-btn');
-        
-        loginForm.addEventListener('submit', async (e) => {
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 
             if (isLoginSubmitting) return; // Prevent double-submit
             isLoginSubmitting = true;
-            
-            // IMMEDIATELY disable button to prevent race condition
-            loginBtn.disabled = true;
 
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             const errEl = document.getElementById('login-error');
+            const btn = document.getElementById('login-btn');
 
-            // Visual feedback: spinner + aria-busy
-            loginBtn.setAttribute('aria-busy', 'true');
-            loginBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            const originalText = loginBtn.textContent;
-            loginBtn.innerHTML = `
+            // Visual feedback: disable button + spinner + aria-busy
+            btn.disabled = true;
+            btn.setAttribute('aria-busy', 'true');
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            const originalText = btn.textContent;
+            btn.innerHTML = `
                 <svg class="animate-spin h-5 w-5 inline-block mr-2" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                Entrando…
+                EntrandoÔÇª
             `;
 
-            // Ensure we have CSRF token
-            if (!csrfToken) {
-                await fetchCsrfToken();
-            }
+            // Always fetch fresh CSRF token before login (cookie may have expired)
+            await fetchCsrfToken();
 
             const headers = { 'Content-Type': 'application/json' };
             if (csrfToken) headers['X-CSRF-Token'] = csrfToken;
@@ -1041,37 +1035,28 @@
                     document.getElementById('admin-email').textContent = json.data.user.email;
                     showDashboard();
                 } else {
-                    // Handle 429 rate-limit specifically with formatted time
+                    // Handle 429 rate-limit specifically
                     if (res.status === 429) {
-                        const retryAfter = parseInt(res.headers.get('Retry-After') || '60', 10);
-                        const minutes = Math.floor(retryAfter / 60);
-                        const seconds = retryAfter % 60;
-                        
-                        let timeMessage = '';
-                        if (minutes > 0) {
-                            timeMessage = `${minutes} minuto${minutes > 1 ? 's' : ''}`;
-                            if (seconds > 0) {
-                                timeMessage += ` e ${seconds} segundo${seconds > 1 ? 's' : ''}`;
-                            }
-                        } else {
-                            timeMessage = `${seconds} segundo${seconds > 1 ? 's' : ''}`;
-                        }
-                        
-                        errEl.textContent = `Muitas tentativas. Aguarde ${timeMessage}.`;
+                        const retryAfter = res.headers.get('Retry-After') || '60';
+                        errEl.textContent = `Muitas tentativas. Aguarde ${retryAfter} segundos.`;
+                    } else if (res.status === 403 && json.error && json.error.includes('CSRF')) {
+                        // CSRF token expired - show friendly message
+                        errEl.textContent = 'Sess├úo expirou. Recarregando p├ígina...';
+                        setTimeout(() => window.location.reload(), 2000);
                     } else {
                         errEl.textContent = json.error || 'Erro ao fazer login';
                     }
                     errEl.classList.remove('hidden');
                 }
             } catch (err) {
-                errEl.textContent = 'Erro de rede. Verifique sua conexão.';
+                errEl.textContent = 'Erro de rede. Verifique sua conex├úo.';
                 errEl.classList.remove('hidden');
             } finally {
                 // Restore button state
-                loginBtn.disabled = false;
-                loginBtn.removeAttribute('aria-busy');
-                loginBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                loginBtn.textContent = originalText;
+                btn.disabled = false;
+                btn.removeAttribute('aria-busy');
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn.textContent = originalText;
                 isLoginSubmitting = false;
             }
         });
@@ -1172,7 +1157,7 @@
             allDishes = res.data;
 
             tbody.innerHTML = res.data.map(d => {
-                // Se tem imagem mas não tem protocolo, adiciona o domínio da API
+                // Se tem imagem mas n├úo tem protocolo, adiciona o dom├¡nio da API
                 const imgSrc = d.image
                     ? (d.image.startsWith('http') ? d.image : `${API}${d.image}`)
                     : PLACEHOLDER_SM;
@@ -1187,7 +1172,7 @@
             </td>
             <td class="px-6 py-4 text-gray-400 text-sm">${escapeHTML(d.category?.name || '-')}</td>
             <td class="px-6 py-4 text-brand-400 font-medium text-sm">${formatPrice(d.price)}</td>
-            <td class="px-6 py-4">${d.featured ? '<span class="text-yellow-400">★</span>' : '<span class="text-gray-600">-</span>'}</td>
+            <td class="px-6 py-4">${d.featured ? '<span class="text-yellow-400">Ôÿà</span>' : '<span class="text-gray-600">-</span>'}</td>
             <td class="px-6 py-4">${d.active ? '<span class="text-green-400 text-xs bg-green-400/10 px-2 py-1 rounded-full">Ativo</span>' : '<span class="text-gray-500 text-xs bg-gray-500/10 px-2 py-1 rounded-full">Inativo</span>'}</td>
             <td class="px-6 py-4 text-right">
                 <button data-action="edit-dish" data-dish-id="${d.id}" class="text-brand-400 hover:text-brand-300 text-sm mr-3">Editar</button>
@@ -1243,7 +1228,7 @@
             formData.append('name', document.getElementById('dish-name').value);
             formData.append('description', document.getElementById('dish-description').value);
             const priceCents = getPriceCents();
-            if (priceCents <= 0) { toast('Informe um preço válido', 'error'); return; }
+            if (priceCents <= 0) { toast('Informe um pre├ºo v├ílido', 'error'); return; }
             formData.append('price', priceCents.toString());
             formData.append('categoryId', document.getElementById('dish-category').value);
             formData.append('featured', document.getElementById('dish-featured').checked.toString());
@@ -1272,7 +1257,7 @@
             if (!confirm('Tem certeza que deseja excluir este prato?')) return;
             const res = await apiAuth(`/dishes/${id}`, { method: 'DELETE' });
             if (res.success) {
-                toast('Prato excluído!');
+                toast('Prato exclu├¡do!');
                 loadDishes();
             } else {
                 toast(res.error || 'Erro ao excluir', 'error');
@@ -1358,7 +1343,7 @@
             if (!confirm('Excluir categoria e todos os pratos relacionados?')) return;
             const res = await apiAuth(`/categories/${id}`, { method: 'DELETE' });
             if (res.success) {
-                toast('Categoria excluída!');
+                toast('Categoria exclu├¡da!');
                 loadCategories();
             } else {
                 toast(res.error || 'Erro ao excluir', 'error');
@@ -1377,7 +1362,7 @@
             }
 
             grid.innerHTML = res.data.map(img => {
-                // Se tem imagem mas não tem protocolo, adiciona o domínio da API
+                // Se tem imagem mas n├úo tem protocolo, adiciona o dom├¡nio da API
                 const imgSrc = img.src
                     ? (img.src.startsWith('http') ? img.src : `${API}${img.src}`)
                     : PLACEHOLDER_LG;
@@ -1437,24 +1422,24 @@
         const configLabels = {
             restaurant_name: 'Nome do Restaurante',
             restaurant_tagline: 'Slogan',
-            restaurant_description: 'Descrição',
-            restaurant_address: 'Endereço',
+            restaurant_description: 'Descri├º├úo',
+            restaurant_address: 'Endere├ºo',
             restaurant_phone: 'Telefone',
             restaurant_email: 'Email',
             whatsapp_number: 'WhatsApp (com DDI, ex: 5511999998888)',
-            whatsapp_message: 'Mensagem padrão do WhatsApp',
-            hero_title: 'Título do Hero',
-            hero_subtitle: 'Subtítulo do Hero',
-            about_title: 'Título do Sobre',
-            about_text: 'Texto do Sobre (1º parágrafo)',
-            about_text_2: 'Texto do Sobre (2º parágrafo)',
-            opening_hours: 'Horário de Funcionamento',
+            whatsapp_message: 'Mensagem padr├úo do WhatsApp',
+            hero_title: 'T├¡tulo do Hero',
+            hero_subtitle: 'Subt├¡tulo do Hero',
+            about_title: 'T├¡tulo do Sobre',
+            about_text: 'Texto do Sobre (1┬║ par├ígrafo)',
+            about_text_2: 'Texto do Sobre (2┬║ par├ígrafo)',
+            opening_hours: 'Hor├írio de Funcionamento',
             google_maps_embed: 'URL do Google Maps (embed)',
             instagram_url: 'Instagram URL',
             facebook_url: 'Facebook URL',
             footer_text: 'Texto do Footer',
             hero_image: 'Imagem de Fundo do Hero',
-            about_image: 'Imagem da Seção Sobre',
+            about_image: 'Imagem da Se├º├úo Sobre',
         };
 
         // PRO-only config fields
@@ -1507,7 +1492,7 @@
             }).join('');
 
             // PRO config fields
-            html += `<div class="mt-8 mb-4"><h2 class="text-lg font-semibold text-white">Personalização Avançada <span class="pro-badge">PRO</span></h2></div>`;
+            html += `<div class="mt-8 mb-4"><h2 class="text-lg font-semibold text-white">Personaliza├º├úo Avan├ºada <span class="pro-badge">PRO</span></h2></div>`;
             html += Object.entries(proConfigLabels).map(([key, label]) => {
                 const value = json.data[key] || '';
                 const disabledAttr = isPro ? '' : 'disabled';
@@ -1528,7 +1513,7 @@
                 </div>
                 <input type="text" data-key="${key}" value="${escapeAttr(value)}" ${disabledAttr}
                     class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white text-xs focus:border-brand-400 focus:outline-none"
-                    placeholder="${isPro ? 'URL preenchida automaticamente ao fazer upload' : 'Disponível no Plano Profissional'}">
+                    placeholder="${isPro ? 'URL preenchida automaticamente ao fazer upload' : 'Dispon├¡vel no Plano Profissional'}">
             </div>
         `;
                 } else if (isColorField) {
@@ -1542,7 +1527,7 @@
                         oninput="this.nextElementSibling.value = this.value">
                     <input type="text" data-key="${key}" value="${escapeAttr(value)}" ${disabledAttr}
                         class="flex-1 bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none font-mono"
-                        placeholder="${isPro ? '#FF0000' : 'Disponível no Plano Profissional'}"
+                        placeholder="${isPro ? '#FF0000' : 'Dispon├¡vel no Plano Profissional'}"
                         oninput="this.previousElementSibling.value = this.value">
                     ${value ? `<div class="w-8 h-8 rounded-full border border-white/20" style="background:${escapeAttr(value)}"></div>` : ''}
                 </div>
@@ -1554,7 +1539,7 @@
                 <label class="text-sm text-gray-400 mb-2 block">${label} <span class="pro-badge">PRO</span></label>
                 <input type="text" data-key="${key}" value="${escapeAttr(value)}" ${disabledAttr}
                     class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
-                    ${isPro ? '' : 'placeholder="Disponível no Plano Profissional"'}>
+                    ${isPro ? '' : 'placeholder="Dispon├¡vel no Plano Profissional"'}>
             </div>
         `;
                 }
@@ -1620,21 +1605,21 @@
                         whatsappInput.classList.add('border-red-500');
                         whatsappInput.focus();
                     }
-                    toast('WhatsApp inválido! Use formato: 5511999998888 (DDI + DDD + número)', 'error');
+                    toast('WhatsApp inv├ílido! Use formato: 5511999998888 (DDI + DDD + n├║mero)', 'error');
                     return;
                 }
                 data.whatsapp_number = cleaned;
             }
 
-            setLoading(saveBtn, true, '💾 Salvar Tudo');
+            setLoading(saveBtn, true, '­ƒÆ¥ Salvar Tudo');
             const res = await apiAuth('/config', {
                 method: 'PUT',
                 body: JSON.stringify(data),
             });
-            setLoading(saveBtn, false, '💾 Salvar Tudo');
+            setLoading(saveBtn, false, '­ƒÆ¥ Salvar Tudo');
 
             if (res.success) {
-                toast('Configurações salvas!');
+                toast('Configura├º├Áes salvas!');
                 // Reload config form to reflect any server-side sanitization
                 loadConfig();
                 // Refetch config em todas as abas abertas
@@ -1671,19 +1656,19 @@
             const confirmPassword = document.getElementById('pw-confirm').value;
 
             if (newPassword !== confirmPassword) {
-                errEl.textContent = 'As senhas não coincidem';
+                errEl.textContent = 'As senhas n├úo coincidem';
                 errEl.classList.remove('hidden');
                 return;
             }
 
             if (newPassword.length < 8) {
-                errEl.textContent = 'Nova senha deve ter no mínimo 8 caracteres';
+                errEl.textContent = 'Nova senha deve ter no m├¡nimo 8 caracteres';
                 errEl.classList.remove('hidden');
                 return;
             }
 
             if (!/[A-Z]/.test(newPassword) || !/[a-z]/.test(newPassword) || !/[0-9]/.test(newPassword)) {
-                errEl.textContent = 'Nova senha deve conter maiúscula, minúscula e número';
+                errEl.textContent = 'Nova senha deve conter mai├║scula, min├║scula e n├║mero';
                 errEl.classList.remove('hidden');
                 return;
             }
@@ -1697,7 +1682,7 @@
 
             if (res.success) {
                 closeModal('password-modal');
-                toast('Senha alterada! Faça login novamente.');
+                toast('Senha alterada! Fa├ºa login novamente.');
                 // Force re-login since all sessions are invalidated
                 setTimeout(() => {
                     token = null;
@@ -1792,11 +1777,11 @@
                 const check = document.getElementById(`step-check-${step}`);
                 if (check) {
                     if (completed.includes(step)) {
-                        check.textContent = '✅';
+                        check.textContent = 'Ô£à';
                         check.classList.remove('text-gray-600');
                         check.classList.add('text-green-400');
                     } else {
-                        check.textContent = '○';
+                        check.textContent = 'Ôùï';
                         check.classList.remove('text-green-400');
                         check.classList.add('text-gray-600');
                     }
@@ -1849,26 +1834,26 @@
                 <div class="bg-dark-700/50 rounded-xl p-4 border border-white/5">
                     <div class="flex items-start gap-3">
                         <div class="flex-shrink-0">
-                            <label class="text-xs text-gray-500 block mb-1">Ícone</label>
+                            <label class="text-xs text-gray-500 block mb-1">├ìcone</label>
                             <input type="text" value="${escapeAttr(f.icon)}" maxlength="4"
                                 onchange="aboutFeatures[${i}].icon=this.value"
                                 class="w-16 bg-dark-900 border border-white/10 rounded-lg px-2 py-2 text-white text-center text-xl focus:border-brand-400 focus:outline-none">
                         </div>
                         <div class="flex-1 space-y-2">
                             <div>
-                                <label class="text-xs text-gray-500 block mb-1">Título</label>
+                                <label class="text-xs text-gray-500 block mb-1">T├¡tulo</label>
                                 <input type="text" value="${escapeAttr(f.title)}" maxlength="60"
                                     onchange="aboutFeatures[${i}].title=this.value"
                                     class="w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none">
                             </div>
                             <div>
-                                <label class="text-xs text-gray-500 block mb-1">Descrição</label>
+                                <label class="text-xs text-gray-500 block mb-1">Descri├º├úo</label>
                                 <textarea rows="2" maxlength="400"
                                     onchange="aboutFeatures[${i}].description=this.value"
                                     class="w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none resize-none">${escapeHTML(f.description)}</textarea>
                             </div>
                         </div>
-                        <button onclick="removeFeature(${i})" class="text-red-400 hover:text-red-300 text-sm mt-5 flex-shrink-0" title="Remover">✕</button>
+                        <button onclick="removeFeature(${i})" class="text-red-400 hover:text-red-300 text-sm mt-5 flex-shrink-0" title="Remover">Ô£ò</button>
                     </div>
                 </div>
             `).join('');
@@ -1876,10 +1861,10 @@
 
         function addFeature() {
             if (aboutFeatures.length >= 6) {
-                toast('Máximo de 6 valores atingido', 'error');
+                toast('M├íximo de 6 valores atingido', 'error');
                 return;
             }
-            aboutFeatures.push({ icon: '⭐', title: '', description: '' });
+            aboutFeatures.push({ icon: 'Ô¡É', title: '', description: '' });
             renderFeaturesList();
         }
 
@@ -1900,9 +1885,9 @@
                 const card = document.createElement('div');
                 card.className = 'bg-dark-700/50 rounded-xl p-4 border border-white/5';
 
-                const defaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect fill='%231a1a2e' width='80' height='80'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='32' fill='%23444'%3E👤%3C/text%3E%3C/svg%3E";
+                const defaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect fill='%231a1a2e' width='80' height='80'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='32' fill='%23444'%3E­ƒæñ%3C/text%3E%3C/svg%3E";
 
-                // Se não tem imagem ou está vazio, usa o placeholder
+                // Se n├úo tem imagem ou est├í vazio, usa o placeholder
                 const imgSrc = (m.image && m.image.trim() !== '') ? m.image : defaultAvatar;
 
                 card.innerHTML = `
@@ -1917,7 +1902,7 @@
                             <input type="file" id="team-upload-${i}" accept="image/*" class="hidden">
                             <button onclick="document.getElementById('team-upload-${i}').click()" 
                                 class="text-xs text-brand-400 hover:text-brand-300 w-full text-center">
-                                📷 Upload
+                                ­ƒôÀ Upload
                             </button>
                         </div>
                         <div class="flex-1 space-y-3">
@@ -1943,7 +1928,7 @@
                                     placeholder="https://... (deixe vazio para usar upload)">
                             </div>
                         </div>
-                        <button onclick="removeTeamMember(${i})" class="text-red-400 hover:text-red-300 text-sm flex-shrink-0" title="Remover">✕</button>
+                        <button onclick="removeTeamMember(${i})" class="text-red-400 hover:text-red-300 text-sm flex-shrink-0" title="Remover">Ô£ò</button>
                     </div>
                 `;
 
@@ -1965,7 +1950,7 @@
                         teamMembers[idx].image = value;
                         const preview = document.getElementById(`team-preview-${idx}`);
                         if (preview) {
-                            // Se valor vazio ou só espaços, volta para o placeholder
+                            // Se valor vazio ou s├│ espa├ºos, volta para o placeholder
                             preview.src = (value && value.trim() !== '') ? value : defaultAvatar;
                         }
                     });
@@ -1978,12 +1963,12 @@
                     if (!file) return;
 
                     if (!file.type.startsWith('image/')) {
-                        toast('Apenas imagens são permitidas', 'error');
+                        toast('Apenas imagens s├úo permitidas', 'error');
                         return;
                     }
 
                     if (file.size > 5 * 1024 * 1024) {
-                        toast('Imagem muito grande. Máximo 5MB', 'error');
+                        toast('Imagem muito grande. M├íximo 5MB', 'error');
                         return;
                     }
 
@@ -2020,11 +2005,11 @@
 
         function addTeamMember() {
             if (currentPlan !== 'professional') {
-                toast('A seção de Equipe requer o Plano Profissional.', 'error');
+                toast('A se├º├úo de Equipe requer o Plano Profissional.', 'error');
                 return;
             }
             if (teamMembers.length >= 10) {
-                toast('Máximo de 10 membros atingido', 'error');
+                toast('M├íximo de 10 membros atingido', 'error');
                 return;
             }
             teamMembers.push({ name: '', role: '', image: '' });
@@ -2041,7 +2026,7 @@
             const validFeatures = aboutFeatures.filter(f => f.title && f.title.trim());
             for (const f of validFeatures) {
                 if (!f.title.trim()) {
-                    toast('Preencha o título de todos os valores', 'error');
+                    toast('Preencha o t├¡tulo de todos os valores', 'error');
                     return;
                 }
             }
