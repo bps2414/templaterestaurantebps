@@ -1,12 +1,12 @@
-﻿// ============================================
-// Form Validation ÔÇö Visual Inline Errors + Real-time Feedback
+// ============================================
+// Form Validation — Visual Inline Errors + Real-time Feedback
 // Sprint 1: S1-T2
 // ============================================
 
 (function () {
     'use strict';
 
-    // ÔöÇÔöÇÔöÇ CSS Injection ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    // ─── CSS Injection ───────────────────────────────────────────
 
     function injectStyles() {
         if (document.getElementById('form-validation-styles')) return;
@@ -52,37 +52,37 @@
         document.head.appendChild(style);
     }
 
-    // ÔöÇÔöÇÔöÇ Validation Rules ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    // ─── Validation Rules ────────────────────────────────────────
 
     var validators = {
         required: function (value) {
-            return (value || '').trim().length > 0 ? null : 'Este campo ├® obrigat├│rio';
+            return (value || '').trim().length > 0 ? null : 'Este campo é obrigatório';
         },
         minLength: function (min) {
             return function (value) {
-                return (value || '').trim().length >= min ? null : 'M├¡nimo de ' + min + ' caracteres';
+                return (value || '').trim().length >= min ? null : 'Mínimo de ' + min + ' caracteres';
             };
         },
         maxLength: function (max) {
             return function (value) {
-                return (value || '').length <= max ? null : 'M├íximo de ' + max + ' caracteres';
+                return (value || '').length <= max ? null : 'Máximo de ' + max + ' caracteres';
             };
         },
         phone: function (value) {
             var digits = (value || '').replace(/\D/g, '');
             if (digits.length < 10 || digits.length > 11) {
-                return 'Telefone inv├ílido (use DDD + n├║mero)';
+                return 'Telefone inválido (use DDD + número)';
             }
             return null;
         },
         email: function (value) {
             if (!value || !value.trim()) return null; // optional
             var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(value.trim()) ? null : 'Email inv├ílido';
+            return re.test(value.trim()) ? null : 'Email inválido';
         },
     };
 
-    // ÔöÇÔöÇÔöÇ DOM Helpers ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    // ─── DOM Helpers ─────────────────────────────────────────────
 
     function getFieldWrapper(input) {
         // Look for the parent <div> that wraps label + input
@@ -146,12 +146,12 @@
         if (existing) existing.remove();
     }
 
-    // ÔöÇÔöÇÔöÇ Form Enhancer ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    // ─── Form Enhancer ───────────────────────────────────────────
 
     /**
      * Enhance a form with inline validation
      * @param {HTMLFormElement|string} formOrSelector
-     * @param {Object} rules - Map of field name ÔåÆ array of validator functions
+     * @param {Object} rules - Map of field name → array of validator functions
      * @param {Object} [options]
      * @param {string} [options.validateOn='blur'] - 'blur', 'input', or 'submit'
      * @param {Function} [options.onValid] - called when form passes all validation
@@ -265,7 +265,7 @@
         };
     }
 
-    // ÔöÇÔöÇÔöÇ Debounce Helper ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    // ─── Debounce Helper ─────────────────────────────────────────
 
     function debounce(fn, delay) {
         var timer;
@@ -279,7 +279,7 @@
         };
     }
 
-    // ÔöÇÔöÇÔöÇ Expose Public API ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    // ─── Expose Public API ───────────────────────────────────────
 
     var FormValidation = Object.freeze({
         enhance: enhanceForm,
