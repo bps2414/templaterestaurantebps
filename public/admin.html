@@ -1037,8 +1037,18 @@
                 } else {
                     // Handle 429 rate-limit specifically
                     if (res.status === 429) {
-                        const retryAfter = res.headers.get('Retry-After') || '60';
-                        errEl.textContent = `Muitas tentativas. Aguarde ${retryAfter} segundos.`;
+                        const retryAfterSec = parseInt(res.headers.get('Retry-After') || '900', 10);
+                        const retryMinutes = Math.ceil(retryAfterSec / 60);
+                        errEl.textContent = `Muitas tentativas. Aguarde ${retryMinutes} minuto${retryMinutes > 1 ? 's' : ''}.`;
+                        // Keep button disabled permanently after rate limit
+                        btn.disabled = true;
+                        btn.classList.add('opacity-50', 'cursor-not-allowed');
+                        return; // Don't execute finally block
+                        errEl.textContent = `Muitas tentativas. Aguarde ${retryMinutes} minuto${retryMinutes > 1 ? 's' : ''}.`;
+                        // Keep button disabled permanently after rate limit
+                        btn.disabled = true;
+                        btn.classList.add('opacity-50', 'cursor-not-allowed');
+                        return; // Don't execute finally block
                     } else if (res.status === 403 && json.error && json.error.includes('CSRF')) {
                         // CSRF token expired - show friendly message
                         errEl.textContent = 'Sessão expirou. Recarregando página...';
@@ -1046,19 +1056,23 @@
                     } else {
                         errEl.textContent = json.error || 'Erro ao fazer login';
                     }
-                    errEl.classList.remove('hidden');
-                }
-            } catch (err) {
-                errEl.textContent = 'Erro de rede. Verifique sua conexão.';
-                errEl.classList.remove('hidden');
-            } finally {
-                // Restore button state
+             
+            
+            // Restore button state (only if not rate-limited)
+            if (!btn.disabled || btn.textContent !== originalText) {
                 btn.disabled = false;
                 btn.removeAttribute('aria-busy');
                 btn.classList.remove('opacity-50', 'cursor-not-allowed');
                 btn.textContent = originalText;
-                isLoginSubmitting = false;
             }
+            isLoginSubmitting = false;/ Restore button state (only if not rate-limited)
+            if (!btn.disabled || btn.textContent !== originalText) {
+                btn.disabled = false;
+                btn.removeAttribute('aria-busy');
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn.textContent = originalText;
+            }
+            isLoginSubmitting = false;
         });
 
         function logout() {
