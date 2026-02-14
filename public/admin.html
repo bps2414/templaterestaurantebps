@@ -1065,13 +1065,6 @@
                 btn.classList.remove('opacity-50', 'cursor-not-allowed');
                 btn.textContent = originalText;
             }
-            isLoginSubmitting = false;/ Restore button state (only if not rate-limited)
-            if (!btn.disabled || btn.textContent !== originalText) {
-                btn.disabled = false;
-                btn.removeAttribute('aria-busy');
-                btn.classList.remove('opacity-50', 'cursor-not-allowed');
-                btn.textContent = originalText;
-            }
             isLoginSubmitting = false;
         });
 
