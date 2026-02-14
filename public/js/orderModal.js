@@ -128,6 +128,7 @@
 
         document.body.appendChild(modal);
         this.modal = modal;
+        this.form = document.getElementById('order-form'); // Initialize form reference
     };
 
     OrderModal.prototype._attachEvents = function () {
