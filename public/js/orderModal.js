@@ -393,11 +393,7 @@
         }
 
         this.isSubmitting = true;
-        var btn = form.querySelector('button[type="submit"]');
-        btn.disabled = true;
-        btn.setAttribute('aria-busy', 'true');
-        btn.classList.add('opacity-70');
-        btn.textContent = 'Processando...';
+        this._setLoading(true);
         this._clearErrors();
 
         // Price validation flow
@@ -412,10 +408,7 @@
             .then(function (pricesValid) {
                 if (!pricesValid) {
                     self._showErrors(['Os preços foram atualizados. Revise seu pedido antes de enviar.']);
-                    btn.disabled = false;
-                    btn.removeAttribute('aria-busy');
-                    btn.classList.remove('opacity-70');
-                    btn.textContent = 'Enviar pelo WhatsApp';
+                    self._setLoading(false);
                     self.isSubmitting = false;
                     if (self.isCartMode) {
                         self._renderCartSummary(); // Re-render with updated prices
@@ -428,10 +421,7 @@
             .then(function (whatsappNumber) {
                 if (!whatsappNumber) {
                     self._showErrors(['Número do WhatsApp não configurado. Ligue para o restaurante.']);
-                    btn.disabled = false;
-                    btn.removeAttribute('aria-busy');
-                    btn.classList.remove('opacity-70');
-                    btn.textContent = 'Enviar pelo WhatsApp';
+                    self._setLoading(false);
                     self.isSubmitting = false;
                     return;
                 }

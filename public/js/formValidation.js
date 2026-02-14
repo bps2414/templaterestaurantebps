@@ -56,29 +56,29 @@
 
     var validators = {
         required: function (value) {
-            return (value || '').trim().length > 0 ? null : 'Este campo +� obrigat+�rio';
+            return (value || '').trim().length > 0 ? null : 'Este campo é obrigatório';
         },
         minLength: function (min) {
             return function (value) {
-                return (value || '').trim().length >= min ? null : 'M+�nimo de ' + min + ' caracteres';
+                return (value || '').trim().length >= min ? null : 'Mínimo de ' + min + ' caracteres';
             };
         },
         maxLength: function (max) {
             return function (value) {
-                return (value || '').length <= max ? null : 'M+�ximo de ' + max + ' caracteres';
+                return (value || '').length <= max ? null : 'Máximo de ' + max + ' caracteres';
             };
         },
         phone: function (value) {
             var digits = (value || '').replace(/\D/g, '');
             if (digits.length < 10 || digits.length > 11) {
-                return 'Telefone inv+�lido (use DDD + n+�mero)';
+                return 'Telefone inválido (use DDD + número)';
             }
             return null;
         },
         email: function (value) {
             if (!value || !value.trim()) return null; // optional
             var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(value.trim()) ? null : 'Email inv+�lido';
+            return re.test(value.trim()) ? null : 'Email inválido';
         },
     };
 
