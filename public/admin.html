@@ -278,7 +278,7 @@
                         placeholder="••••••">
                 </div>
                 <p id="login-error" class="text-red-400 text-sm hidden"></p>
-                <button type="submit"
+                <button type="submit" id="login-btn"
                     class="w-full bg-brand-500 hover:bg-brand-600 text-white py-3 rounded-xl font-medium transition">
                     Entrar
                 </button>
@@ -987,12 +987,31 @@
             }, 1000);
         }
 
-        // Login form
+        // Login form (double-click prevention + spinner + rate-limit handling)
+        let isLoginSubmitting = false;
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            if (isLoginSubmitting) return; // Prevent double-submit
+            isLoginSubmitting = true;
+
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             const errEl = document.getElementById('login-error');
+            const btn = document.getElementById('login-btn');
+
+            // Visual feedback: disable button + spinner + aria-busy
+            btn.disabled = true;
+            btn.setAttribute('aria-busy', 'true');
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            const originalText = btn.textContent;
+            btn.innerHTML = `
+                <svg class="animate-spin h-5 w-5 inline-block mr-2" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Entrando…
+            `;
 
             // Ensure we have CSRF token
             if (!csrfToken) {
@@ -1002,23 +1021,41 @@
             const headers = { 'Content-Type': 'application/json' };
             if (csrfToken) headers['X-CSRF-Token'] = csrfToken;
 
-            const res = await fetch(`${API}/api/auth/login`, {
-                method: 'POST',
-                headers,
-                credentials: 'include',
-                body: JSON.stringify({ email, password }),
-            });
-            const json = await res.json();
+            try {
+                const res = await fetch(`${API}/api/auth/login`, {
+                    method: 'POST',
+                    headers,
+                    credentials: 'include',
+                    body: JSON.stringify({ email, password }),
+                });
+                const json = await res.json();
 
-            if (json.success) {
-                token = json.data.accessToken;
-                localStorage.setItem('admin_token', token);
-                localStorage.setItem('admin_refresh', json.data.refreshToken);
-                document.getElementById('admin-email').textContent = json.data.user.email;
-                showDashboard();
-            } else {
-                errEl.textContent = json.error || 'Erro ao fazer login';
+                if (json.success) {
+                    token = json.data.accessToken;
+                    localStorage.setItem('admin_token', token);
+                    localStorage.setItem('admin_refresh', json.data.refreshToken);
+                    document.getElementById('admin-email').textContent = json.data.user.email;
+                    showDashboard();
+                } else {
+                    // Handle 429 rate-limit specifically
+                    if (res.status === 429) {
+                        const retryAfter = res.headers.get('Retry-After') || '60';
+                        errEl.textContent = `Muitas tentativas. Aguarde ${retryAfter} segundos.`;
+                    } else {
+                        errEl.textContent = json.error || 'Erro ao fazer login';
+                    }
+                    errEl.classList.remove('hidden');
+                }
+            } catch (err) {
+                errEl.textContent = 'Erro de rede. Verifique sua conexão.';
                 errEl.classList.remove('hidden');
+            } finally {
+                // Restore button state
+                btn.disabled = false;
+                btn.removeAttribute('aria-busy');
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn.textContent = originalText;
+                isLoginSubmitting = false;
             }
         });
 
