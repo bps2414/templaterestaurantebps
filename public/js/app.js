@@ -676,11 +676,6 @@
             orderWhatsApp(name);
         }
     }
-            toast.style.opacity = '0';
-            toast.style.transform = 'translateY(-20px)';
-            setTimeout(function () { toast.remove(); }, 300);
-        }, 3500);
-    }
 
     // --- Scroll Reveal ---
     function initReveal() {
