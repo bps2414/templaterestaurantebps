@@ -1,0 +1,74 @@
+From: UX Sync <ux-sync@landpage.dev>
+Subject: [PATCH] fix(template-b): add feedback.js and formValidation.js to HTML pages
+
+Add feedback.js and formValidation.js script tags before app.js in:
+- index.html, menu.html, about.html, contact.html, gallery.html
+These provide visual validation, shake animations, toast notifications, 
+and skeleton loaders for UX improvements.
+
+---
+diff --git a/public/index.html b/public/index.html
+index patched1..patched2 100644
+--- a/public/index.html
++++ b/public/index.html
+@@ -393,6 +393,8 @@
+     <script src="/js/performance.js"></script>
+     <script src="/js/mobile.js"></script>
+     <script src="/js/a11y.js"></script>
++    <script src="/js/feedback.js"></script>
++    <script src="/js/formValidation.js"></script>
+     <script src="/js/app.js"></script>
+     <script src="/js/cart.js"></script>
+     <script src="/js/whatsappFormatter.js"></script>
+diff --git a/public/menu.html b/public/menu.html
+index patched1..patched2 100644
+--- a/public/menu.html
++++ b/public/menu.html
+@@ -216,6 +216,8 @@
+     <script src="/js/performance.js"></script>
+     <script src="/js/mobile.js"></script>
+     <script src="/js/a11y.js"></script>
++    <script src="/js/feedback.js"></script>
++    <script src="/js/formValidation.js"></script>
+     <script src="/js/app.js"></script>
+     <script src="/js/cart.js"></script>
+     <script src="/js/whatsappFormatter.js"></script>
+diff --git a/public/about.html b/public/about.html
+index patched1..patched2 100644
+--- a/public/about.html
++++ b/public/about.html
+@@ -199,6 +199,8 @@
+         </svg>
+     </a>
+ 
++    <script src="/js/feedback.js"></script>
++    <script src="/js/formValidation.js"></script>
+     <script src="/js/app.js"></script>
+     <script src="/js/cart.js"></script>
+     <script src="/js/whatsappFormatter.js"></script>
+diff --git a/public/contact.html b/public/contact.html
+index patched1..patched2 100644
+--- a/public/contact.html
++++ b/public/contact.html
+@@ -259,6 +259,8 @@
+         </svg>
+     </a>
+ 
++    <script src="/js/feedback.js"></script>
++    <script src="/js/formValidation.js"></script>
+     <script src="/js/app.js"></script>
+     <script>
+         function applyPageConfig(c) {
+diff --git a/public/gallery.html b/public/gallery.html
+index patched1..patched2 100644
+--- a/public/gallery.html
++++ b/public/gallery.html
+@@ -226,6 +226,8 @@
+         </svg>
+     </a>
+ 
++    <script src="/js/feedback.js"></script>
++    <script src="/js/formValidation.js"></script>
+     <script src="/js/app.js"></script>
+     <script src="/js/cart.js"></script>
+     <script src="/js/whatsappFormatter.js"></script>

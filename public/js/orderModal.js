@@ -68,6 +68,7 @@
 
     OrderModal.prototype._init = function () {
         this._createModal();
+        this._initFormValidation();
         this._attachEvents();
     };
 
@@ -186,6 +187,15 @@
             }
         };
         document.addEventListener('keydown', this._boundKeydown);
+    };
+
+    OrderModal.prototype._initFormValidation = function () {
+        if (window.formValidation && this.form) {
+            this._formValidator = window.formValidation.enhance(this.form, {
+                onValidField: function (field) { field.classList.remove('field-shake'); },
+                onInvalidField: function (field) { field.classList.add('field-shake'); }
+            });
+        }
     };
 
     OrderModal.prototype.openQuickOrder = function (dish) {
@@ -328,6 +338,7 @@
     };
 
     OrderModal.prototype._clearErrors = function () {
+        if (this._formValidator) this._formValidator.clearAll();
         var errorsEl = document.getElementById('order-errors');
         errorsEl.textContent = '';
         errorsEl.classList.add('hidden');
@@ -357,6 +368,11 @@
         var self = this;
         if (this.isSubmitting) return;
 
+        // Trigger visual validation
+        if (this._formValidator && !this._formValidator.validateAll()) {
+            return;
+        }
+
         var formData = new FormData(form);
         var customerData = {
             name: (formData.get('name') || '').toString().trim(),
@@ -373,7 +389,11 @@
         }
 
         this.isSubmitting = true;
-        this._setLoading(true);
+        var btn = form.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.setAttribute('aria-busy', 'true');
+        btn.classList.add('opacity-70');
+        btn.textContent = 'Processando...';
         this._clearErrors();
 
         // Price validation flow
@@ -388,7 +408,10 @@
             .then(function (pricesValid) {
                 if (!pricesValid) {
                     self._showErrors(['Os preços foram atualizados. Revise seu pedido antes de enviar.']);
-                    self._setLoading(false);
+                    btn.disabled = false;
+                    btn.removeAttribute('aria-busy');
+                    btn.classList.remove('opacity-70');
+                    btn.textContent = 'Enviar pelo WhatsApp';
                     self.isSubmitting = false;
                     if (self.isCartMode) {
                         self._renderCartSummary(); // Re-render with updated prices
@@ -401,7 +424,10 @@
             .then(function (whatsappNumber) {
                 if (!whatsappNumber) {
                     self._showErrors(['Número do WhatsApp não configurado. Ligue para o restaurante.']);
-                    self._setLoading(false);
+                    btn.disabled = false;
+                    btn.removeAttribute('aria-busy');
+                    btn.classList.remove('opacity-70');
+                    btn.textContent = 'Enviar pelo WhatsApp';
                     self.isSubmitting = false;
                     return;
                 }
@@ -451,6 +477,11 @@
     };
 
     OrderModal.prototype._showToast = function (message, type) {
+        if (window.feedback && window.feedback.toast) {
+            window.feedback.toast(message, { type: type || 'info', duration: 4000 });
+            return;
+        }
+        // Fallback
         try {
             type = type || 'info';
             var toast = document.createElement('div');

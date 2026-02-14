@@ -1,0 +1,88 @@
+From: UX Sync <ux-sync@landpage.dev>
+Subject: [PATCH] fix(template-b): add focus-trap and focus-restore to cart sidebar
+
+Improve cart sidebar keyboard accessibility:
+- Trap focus inside sidebar when open (Tab/Shift+Tab cycle)
+- Store and restore focus when closing sidebar
+- Already has ESC key handler from existing code
+
+---
+diff --git a/public/js/cartUI.js b/public/js/cartUI.js
+index patched11..patched12 100644
+--- a/public/js/cartUI.js
++++ b/public/js/cartUI.js
+@@ -35,6 +35,7 @@
+         this._boundKeydown = null;
+         this._boundToggle = null;
+         this._boundClose = null;
++        this._lastFocusedElement = null;
+         this._init();
+     }
+ 
+@@ -161,10 +162,40 @@
+ 
+     CartUI.prototype._attachEvents = function () {
+         var self = this;
++
++        // ESC key + focus trap
+         this._boundKeydown = function (e) {
+             if (e.key === 'Escape' && self.isOpen) {
+                 self.close();
++                return;
++            }
++
++            // Focus trap (Tab/Shift+Tab cycling)
++            if (e.key === 'Tab' && self.isOpen) {
++                var sidebar = document.getElementById('cart-sidebar');
++                var focusable = sidebar.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
++                var firstElement = focusable[0];
++                var lastElement = focusable[focusable.length - 1];
++
++                if (e.shiftKey) {
++                    // Shift+Tab
++                    if (document.activeElement === firstElement) {
++                        e.preventDefault();
++                        lastElement.focus();
++                    }
++                } else {
++                    // Tab
++                    if (document.activeElement === lastElement) {
++                        e.preventDefault();
++                        firstElement.focus();
++                    }
++                }
+             }
+         };
+         document.addEventListener('keydown', this._boundKeydown);
+     };
+@@ -297,11 +328,21 @@
+     };
+ 
+     CartUI.prototype.open = function () {
++        // Store currently focused element for restoration
++        this._lastFocusedElement = document.activeElement;
++
+         this.isOpen = true;
+         document.getElementById('cart-sidebar').classList.remove('translate-x-full');
+         document.getElementById('cart-backdrop').classList.remove('hidden');
+         document.body.style.overflow = 'hidden';
++
++        // Focus close button for immediate keyboard access
++        setTimeout(function () {
++            var closeBtn = document.getElementById('cart-close-btn');
++            if (closeBtn) closeBtn.focus();
++        }, 100);
+     };
+ 
+     CartUI.prototype.close = function () {
+         this.isOpen = false;
+         document.getElementById('cart-sidebar').classList.add('translate-x-full');
+         document.getElementById('cart-backdrop').classList.add('hidden');
+         document.body.style.overflow = '';
++
++        // Restore focus to element that opened the cart
++        if (this._lastFocusedElement && typeof this._lastFocusedElement.focus === 'function') {
++            this._lastFocusedElement.focus();
++        }
+     };
+ 

@@ -1,0 +1,37 @@
+From: UX Sync <ux-sync@landpage.dev>
+Subject: [PATCH] fix(template-b): add skeleton loaders to app.js
+
+Add skeleton loader placeholders from feedback.js while data loads:
+- Featured dishes: show feedback.skeletons.featuredCards() before fetch
+- Category cards: show feedback.skeletons.categoryCards() before fetch
+Both degrade gracefully if window.feedback is undefined.
+
+---
+diff --git a/public/js/app.js b/public/js/app.js
+index patched5..patched11 100644
+--- a/public/js/app.js
++++ b/public/js/app.js
+@@ -574,6 +574,11 @@
+     async function loadFeaturedDishes() {
+         const container = document.getElementById('featured-dishes');
+         if (!container) return;
+ 
++        // Show skeleton loaders while fetching
++        if (window.feedback && window.feedback.skeletons) {
++            container.innerHTML = window.feedback.skeletons.featuredCards();
++        }
++
+         const dishes = await api('/dishes/featured');
+         if (!dishes || dishes.length === 0) {
+@@ -621,6 +626,11 @@
+     async function loadCategoryCards() {
+         const container = document.getElementById('category-cards');
+         if (!container) return;
+ 
++        // Show skeleton loaders while fetching
++        if (window.feedback && window.feedback.skeletons) {
++            container.innerHTML = window.feedback.skeletons.categoryCards();
++        }
++
+         const categories = await api('/categories');
+         if (!categories || categories.length === 0) {

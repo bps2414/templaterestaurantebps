@@ -1,0 +1,101 @@
+From: UX Sync <ux-sync@landpage.dev>
+Subject: [PATCH] fix(template-b): integrate formValidation with orderModal
+
+Add visual validation feedback to order modal:
+- Validate fields on submit with red borders and shake animation
+- Show inline error messages with role="alert"
+- Add aria-busy state to submit button during processing
+- Focus first invalid field automatically
+
+---
+diff --git a/public/js/orderModal.js b/public/js/orderModal.js
+index patched3..patched4 100644
+--- a/public/js/orderModal.js
++++ b/public/js/orderModal.js
+@@ -356,6 +356,39 @@
+     OrderModal.prototype._handleSubmit = function (form) {
+         var self = this;
+         if (this.isSubmitting) return;
++
++        // Visual validation using formValidation.js
++        if (window.formValidation) {
++            var formElement = document.getElementById('order-form');
++            var fields = {
++                'order-name': {
++                    validators: [
++                        window.formValidation.validators.required('Nome é obrigatório'),
++                        window.formValidation.validators.minLength(2, 'Nome deve ter pelo menos 2 caracteres')
++                    ]
++                },
++                'order-phone': {
++                    validators: [
++                        window.formValidation.validators.required('Telefone é obrigatório'),
++                        window.formValidation.validators.phone('Telefone inválido (use DDD + número)')
++                    ]
++                },
++                'order-address': {
++                    validators: [
++                        window.formValidation.validators.required('Endereço é obrigatório'),
++                        window.formValidation.validators.minLength(5, 'Endereço muito curto')
++                    ]
++                }
++            };
++
++            var validationResult = window.formValidation.validateForm(formElement, fields);
++            if (!validationResult.isValid) {
++                window.formValidation.showErrors(formElement, validationResult.errors);
++                validationResult.firstInvalidField.focus();
++                return;
++            }
++        }
+ 
+         var formData = new FormData(form);
+         var customerData = {
+@@ -376,6 +409,7 @@
+ 
+         this.isSubmitting = true;
+         this._setLoading(true);
++        document.getElementById('order-submit-btn').setAttribute('aria-busy', 'true');
+         this._clearErrors();
+ 
+         // Price validation flow
+@@ -391,6 +425,7 @@
+                     self._showErrors(['Os preços foram atualizados. Revise seu pedido antes de enviar.']);
+                     self._setLoading(false);
+                     self.isSubmitting = false;
++                    document.getElementById('order-submit-btn').setAttribute('aria-busy', 'false');
+                     if (self.isCartMode) {
+                         self._renderCartSummary(); // Re-render with updated prices
+                     }
+@@ -403,6 +438,7 @@
+                 if (!whatsappNumber) {
+                     self._showErrors(['Número do WhatsApp não configurado. Ligue para o restaurante.']);
+                     self._setLoading(false);
++                    document.getElementById('order-submit-btn').setAttribute('aria-busy', 'false');
+                     self.isSubmitting = false;
+                     return;
+                 }
+@@ -417,6 +453,7 @@
+                 if (!message) {
+                     self._showErrors(['Erro ao gerar mensagem. Tente novamente.']);
+                     self._setLoading(false);
++                    document.getElementById('order-submit-btn').setAttribute('aria-busy', 'false');
+                     self.isSubmitting = false;
+                     return;
+                 }
+@@ -425,6 +462,7 @@
+ 
+                 // Reset loading state BEFORE closing
+                 self._setLoading(false);
++                document.getElementById('order-submit-btn').setAttribute('aria-busy', 'false');
+                 self.isSubmitting = false;
+ 
+                 // Clear cart AFTER WhatsApp opens
+@@ -437,6 +475,7 @@
+             .catch(function () {
+                 self._showErrors(['Erro inesperado. Tente novamente.']);
+                 self._setLoading(false);
++                document.getElementById('order-submit-btn').setAttribute('aria-busy', 'false');
+                 self.isSubmitting = false;
+             });
+     };

@@ -70,6 +70,15 @@ app.use((_req: Request, res: Response, next: NextFunction) => {
     res.setHeader('X-Frame-Options', 'DENY');
     res.setHeader('X-XSS-Protection', '0'); // Modern browsers use CSP instead
     res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+
+    // Sprint 1 additional headers (main branch parity)
+    if (process.env.NODE_ENV === 'production') {
+        res.setHeader('Expect-CT', 'max-age=86400, enforce');
+        res.setHeader('Content-Security-Policy-Report-Only', "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self'; report-uri /api/csp-report");
+    }
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+    res.setHeader('Cross-Origin-Resource-Policy', 'same-site');
+
     next();
 });
 

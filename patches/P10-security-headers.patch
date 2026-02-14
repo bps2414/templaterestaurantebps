@@ -1,0 +1,33 @@
+From: UX Sync <ux-sync@landpage.dev>
+Subject: [PATCH] fix(template-b): add extra security headers
+
+Add production-only security headers:
+- Expect-CT: enforce certificate transparency
+- Cross-Origin-Opener-Policy: isolate browsing context
+- Cross-Origin-Resource-Policy: prevent cross-origin resource access
+Only enabled in production environment
+
+---
+diff --git a/server/src/app.ts b/server/src/app.ts
+index patched13..patched14 100644
+--- a/server/src/app.ts
++++ b/server/src/app.ts
+@@ -67,9 +67,18 @@
+ 
+ // --- Additional Security Headers ---
+ app.use((_req: Request, res: Response, next: NextFunction) => {
+     res.setHeader('X-Content-Type-Options', 'nosniff');
+     res.setHeader('X-Frame-Options', 'DENY');
+     res.setHeader('X-XSS-Protection', '0'); // Modern browsers use CSP instead
+     res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
++
++    // Production-only headers
++    if (process.env.NODE_ENV === 'production') {
++        res.setHeader('Expect-CT', 'max-age=86400, enforce');
++        res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
++        res.setHeader('Cross-Origin-Resource-Policy', 'same-site');
++    }
++
+     next();
+ });
+ 

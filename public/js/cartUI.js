@@ -37,6 +37,7 @@
         this._boundKeydown = null;
         this._boundToggle = null;
         this._boundClose = null;
+        this._lastFocusedElement = null;
         this._init();
     }
 
@@ -160,11 +161,43 @@
 
     CartUI.prototype._attachEvents = function () {
         var self = this;
+
+        // ESC key + focus trap
         this._boundKeydown = function (e) {
             if (e.key === 'Escape' && self.isOpen) {
+                e.preventDefault();
                 self.close();
+                return;
+            }
+
+            // Focus trap: Tab and Shift+Tab cycling
+            if (e.key === 'Tab' && self.isOpen) {
+                var sidebar = document.getElementById('cart-sidebar');
+                if (!sidebar) return;
+
+                var focusable = sidebar.querySelectorAll(
+                    'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                );
+                var focusableArray = Array.prototype.slice.call(focusable);
+                var firstFocusable = focusableArray[0];
+                var lastFocusable = focusableArray[focusableArray.length - 1];
+
+                if (e.shiftKey) {
+                    // Shift+Tab: moving backwards
+                    if (document.activeElement === firstFocusable) {
+                        e.preventDefault();
+                        lastFocusable.focus();
+                    }
+                } else {
+                    // Tab: moving forward
+                    if (document.activeElement === lastFocusable) {
+                        e.preventDefault();
+                        firstFocusable.focus();
+                    }
+                }
             }
         };
+
         document.addEventListener('keydown', this._boundKeydown);
     };
 
@@ -297,10 +330,17 @@
     };
 
     CartUI.prototype.open = function () {
+        this._lastFocusedElement = document.activeElement;
         this.isOpen = true;
         document.getElementById('cart-sidebar').classList.remove('translate-x-full');
         document.getElementById('cart-backdrop').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
+
+        // Focus on close button for accessibility
+        setTimeout(function () {
+            var closeBtn = document.querySelector('#cart-sidebar button[aria-label="Fechar carrinho"]');
+            if (closeBtn) closeBtn.focus();
+        }, 100);
     };
 
     CartUI.prototype.close = function () {
@@ -308,6 +348,12 @@
         document.getElementById('cart-sidebar').classList.add('translate-x-full');
         document.getElementById('cart-backdrop').classList.add('hidden');
         document.body.style.overflow = '';
+
+        // Restore focus to previously focused element
+        if (this._lastFocusedElement && this._lastFocusedElement.focus) {
+            this._lastFocusedElement.focus();
+        }
+        this._lastFocusedElement = null;
     };
 
     CartUI.prototype.increaseQuantity = function (dishId) {

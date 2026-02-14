@@ -1,0 +1,38 @@
+From: UX Sync <ux-sync@landpage.dev>
+Subject: [PATCH] fix(template-b): use feedback.toast() for notifications
+
+Replace inline toast implementation with centralized feedback.toast():
+- Provides stacked notifications with progress bars
+- Consistent styling and animation
+- Hover-to-pause functionality
+
+---
+diff --git a/public/js/orderModal.js b/public/js/orderModal.js
+index patched5..patched6 100644
+--- a/public/js/orderModal.js
++++ b/public/js/orderModal.js
+@@ -201,7 +201,11 @@
+     OrderModal.prototype.openCartCheckout = function () {
+         if (!window.cart || window.cart.items.length === 0) {
+-            this._showToast('Carrinho vazio', 'error');
++            if (window.feedback && window.feedback.toast) {
++                window.feedback.toast('Carrinho vazio', 'error');
++            } else {
++                this._showToast('Carrinho vazio', 'error');
++            }
+             return;
+         }
+ 
+@@ -469,7 +473,11 @@
+                 }
+ 
+                 self.close();
+-                self._showToast('Abrindo WhatsApp...', 'success');
++                if (window.feedback && window.feedback.toast) {
++                    window.feedback.toast('Abrindo WhatsApp...', 'success');
++                } else {
++                    self._showToast('Abrindo WhatsApp...', 'success');
++                }
+             })
+             .catch(function () {
+                 self._showErrors(['Erro inesperado. Tente novamente.']);

@@ -1,0 +1,59 @@
+From: UX Sync <ux-sync@landpage.dev>
+Subject: [PATCH] fix(template-b): add AbortController to order submission
+
+Add AbortController to cancel ongoing fetch if modal closes:
+- Prevents race conditions if user closes modal during submission
+- Cleanup signal on modal close
+
+---
+diff --git a/public/js/orderModal.js b/public/js/orderModal.js
+index patched9..patched10 100644
+--- a/public/js/orderModal.js
++++ b/public/js/orderModal.js
+@@ -7,6 +7,7 @@
+     'use strict';
+ 
+     // --- Safe DOM helpers ---
+     function escapeHTML(str) {
+         var div = document.createElement('div');
+         div.textContent = str;
+@@ -59,6 +60,7 @@
+         this.isCartMode = false;
+         this.isSubmitting = false;
+         this.currentDish = null;
++        this.abortController = null;
+         this._boundKeydown = null;
+         this._createModal();
+         this._attachEvents();
+@@ -156,6 +158,11 @@
+     };
+ 
+     OrderModal.prototype.close = function () {
++        // Abort ongoing fetch if modal closes
++        if (this.abortController) {
++            this.abortController.abort();
++            this.abortController = null;
++        }
+         if (!this.modal) return;
+         this.modal.classList.add('hidden');
+         this._clearForm();
+@@ -378,6 +385,10 @@
+             }
+         }
+ 
++        // Create AbortController for this submission
++        this.abortController = new AbortController();
++        var signal = this.abortController.signal;
++
+         var formData = new FormData(form);
+         var customerData = {
+             name: (formData.get('name') || '').toString().trim(),
+@@ -449,7 +460,7 @@
+     };
+ 
+     OrderModal.prototype._getWhatsAppNumber = function () {
+-        return fetch('/api/config')
++        return fetch('/api/config', { signal: this.abortController ? this.abortController.signal : undefined })
+             .then(function (res) { return res.json(); })
+             .then(function (data) {
+                 return (data.data && data.data.whatsapp_number) || null;

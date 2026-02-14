@@ -1,0 +1,69 @@
+From: UX Sync <ux-sync@landpage.dev>
+Subject: [PATCH] fix: admin login double-click prevention + spinner + aria-busy
+
+Prevent duplicate login requests and improve UX:
+- Disable submit button during login to prevent double-clicks
+- Add spinner SVG and "Entrando..." text during processing
+- Set aria-busy="true" for screen readers
+- Handle rate-limit 429 responses with friendly error message
+- Re-enable button after response (success or error)
+
+---
+diff --git a/public/admin.html b/public/admin.html
+index patched7..patched8 100644
+--- a/public/admin.html
++++ b/public/admin.html
+@@ -989,6 +989,7 @@
+ 
+         // Login form
+         document.getElementById('login-form').addEventListener('submit', async (e) => {
+             e.preventDefault();
++            const submitBtn = e.target.querySelector('button[type="submit"]');
+             const email = document.getElementById('login-email').value;
+             const password = document.getElementById('login-password').value;
+             const errEl = document.getElementById('login-error');
+@@ -997,6 +998,13 @@
+             if (!csrfToken) {
+                 await fetchCsrfToken();
+             }
++
++            // Disable button to prevent double-click
++            submitBtn.disabled = true;
++            submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
++            submitBtn.setAttribute('aria-busy', 'true');
++            const originalText = submitBtn.innerHTML;
++            submitBtn.innerHTML = '<svg class="animate-spin h-5 w-5 mr-2 inline" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Entrando...';
+ 
+             const headers = { 'Content-Type': 'application/json' };
+             if (csrfToken) headers['X-CSRF-Token'] = csrfToken;
+@@ -1013,9 +1021,26 @@
+                 localStorage.setItem('admin_refresh', json.data.refreshToken);
+                 document.getElementById('admin-email').textContent = json.data.user.email;
+                 showDashboard();
+             } else {
+-                errEl.textContent = json.error || 'Erro ao fazer login';
++                // Handle rate-limit 429 responses
++                if (res.status === 429) {
++                    const retryAfter = res.headers.get('Retry-After') || '60';
++                    errEl.textContent = `Muitas tentativas. Aguarde ${retryAfter} segundos.`;
++                } else {
++                    errEl.textContent = json.error || 'Erro ao fazer login';
++                }
+                 errEl.classList.remove('hidden');
++
++                // Re-enable button after error
++                submitBtn.disabled = false;
++                submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
++                submitBtn.setAttribute('aria-busy', 'false');
++                submitBtn.innerHTML = originalText;
++            }
++
++            // Ensure button is always re-enabled (catch network errors)
++            if (submitBtn.disabled) {
++                submitBtn.disabled = false;
++                submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
++                submitBtn.setAttribute('aria-busy', 'false');
++                submitBtn.innerHTML = originalText;
+             }
+         });
+ 
