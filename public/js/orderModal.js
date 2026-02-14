@@ -372,11 +372,6 @@
         var self = this;
         if (this.isSubmitting) return;
 
-        // Trigger visual validation
-        if (this._formValidator && !this._formValidator.validate()) {
-            return;
-        }
-
         var formData = new FormData(form);
         var customerData = {
             name: (formData.get('name') || '').toString().trim(),
@@ -385,8 +380,16 @@
             notes: (formData.get('notes') || '').toString().trim(),
         };
 
-        // Validate inputs
+        // Validate inputs (visual inline + block errors)
         var validationErrors = validateCustomerData(customerData);
+
+        // Also trigger visual inline validation if available
+        if (this._formValidator) {
+            var visualValid = this._formValidator.validate();
+            if (!visualValid && validationErrors.length === 0) {
+                return; // Visual validator caught errors not in legacy validator
+            }
+        }
         if (validationErrors.length > 0) {
             this._showErrors(validationErrors);
             return;
