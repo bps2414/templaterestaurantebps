@@ -191,12 +191,26 @@
     };
 
     OrderModal.prototype._initFormValidation = function () {
-        if (window.formValidation && this.form) {
-            this._formValidator = window.formValidation.enhance(this.form, {
-                onValidField: function (field) { field.classList.remove('field-shake'); },
-                onInvalidField: function (field) { field.classList.add('field-shake'); }
-            });
-        }
+        if (!window.formValidation) return; // Graceful degradation
+
+        this._formValidator = window.formValidation.enhance(this.form, {
+            name: [
+                window.formValidation.validators.required('Nome é obrigatório'),
+                window.formValidation.validators.minLength(2, 'Nome deve ter pelo menos 2 caracteres')
+            ],
+            phone: [
+                window.formValidation.validators.required('Telefone é obrigatório'),
+                window.formValidation.validators.phone('Telefone inválido (ex: 11999998888)')
+            ],
+            address: [
+                window.formValidation.validators.required('Endereço é obrigatório'),
+                window.formValidation.validators.minLength(5, 'Endereço muito curto')
+            ]
+        }, {
+            validateOn: 'blur',
+            onValidField: function (field) { field.classList.remove('field-shake'); },
+            onInvalidField: function (field) { field.classList.add('field-shake'); }
+        });
     };
 
     OrderModal.prototype.openQuickOrder = function (dish) {
@@ -370,7 +384,7 @@
         if (this.isSubmitting) return;
 
         // Trigger visual validation
-        if (this._formValidator && !this._formValidator.validateAll()) {
+        if (this._formValidator && !this._formValidator.validate()) {
             return;
         }
 
