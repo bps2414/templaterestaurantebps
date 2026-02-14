@@ -55,30 +55,36 @@
     // ─── Validation Rules ────────────────────────────────────────
 
     var validators = {
-        required: function (value) {
-            return (value || '').trim().length > 0 ? null : 'Este campo é obrigatório';
-        },
-        minLength: function (min) {
+        required: function (message) {
             return function (value) {
-                return (value || '').trim().length >= min ? null : 'Mínimo de ' + min + ' caracteres';
+                return (value || '').trim().length > 0 ? null : (message || 'Este campo é obrigatório');
             };
         },
-        maxLength: function (max) {
+        minLength: function (min, message) {
             return function (value) {
-                return (value || '').length <= max ? null : 'Máximo de ' + max + ' caracteres';
+                return (value || '').trim().length >= min ? null : (message || 'Mínimo de ' + min + ' caracteres');
             };
         },
-        phone: function (value) {
-            var digits = (value || '').replace(/\D/g, '');
-            if (digits.length < 10 || digits.length > 11) {
-                return 'Telefone inválido (use DDD + número)';
-            }
-            return null;
+        maxLength: function (max, message) {
+            return function (value) {
+                return (value || '').length <= max ? null : (message || 'Máximo de ' + max + ' caracteres');
+            };
         },
-        email: function (value) {
-            if (!value || !value.trim()) return null; // optional
-            var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(value.trim()) ? null : 'Email inválido';
+        phone: function (message) {
+            return function (value) {
+                var digits = (value || '').replace(/\D/g, '');
+                if (digits.length < 10 || digits.length > 11) {
+                    return message || 'Telefone inválido (use DDD + número)';
+                }
+                return null;
+            };
+        },
+        email: function (message) {
+            return function (value) {
+                if (!value || !value.trim()) return null; // optional
+                var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(value.trim()) ? null : (message || 'Email inválido');
+            };
         },
     };
 
