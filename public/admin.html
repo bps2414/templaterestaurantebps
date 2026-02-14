@@ -1013,10 +1013,8 @@
                 Entrando…
             `;
 
-            // Ensure we have CSRF token
-            if (!csrfToken) {
-                await fetchCsrfToken();
-            }
+            // Always fetch fresh CSRF token before login (cookie may have expired)
+            await fetchCsrfToken();
 
             const headers = { 'Content-Type': 'application/json' };
             if (csrfToken) headers['X-CSRF-Token'] = csrfToken;
@@ -1041,6 +1039,10 @@
                     if (res.status === 429) {
                         const retryAfter = res.headers.get('Retry-After') || '60';
                         errEl.textContent = `Muitas tentativas. Aguarde ${retryAfter} segundos.`;
+                    } else if (res.status === 403 && json.error && json.error.includes('CSRF')) {
+                        // CSRF token expired - show friendly message
+                        errEl.textContent = 'Sessão expirou. Recarregando página...';
+                        setTimeout(() => window.location.reload(), 2000);
                     } else {
                         errEl.textContent = json.error || 'Erro ao fazer login';
                     }
