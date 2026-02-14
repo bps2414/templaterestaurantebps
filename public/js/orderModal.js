@@ -191,26 +191,15 @@
     };
 
     OrderModal.prototype._initFormValidation = function () {
-        if (!window.formValidation) return; // Graceful degradation
+        if (!window.formValidation) return;
 
+        var v = window.formValidation.validators;
         this._formValidator = window.formValidation.enhance(this.form, {
-            name: [
-                window.formValidation.validators.required('Nome é obrigatório'),
-                window.formValidation.validators.minLength(2, 'Nome deve ter pelo menos 2 caracteres')
-            ],
-            phone: [
-                window.formValidation.validators.required('Telefone é obrigatório'),
-                window.formValidation.validators.phone('Telefone inválido (ex: 11999998888)')
-            ],
-            address: [
-                window.formValidation.validators.required('Endereço é obrigatório'),
-                window.formValidation.validators.minLength(5, 'Endereço muito curto')
-            ]
-        }, {
-            validateOn: 'blur',
-            onValidField: function (field) { field.classList.remove('field-shake'); },
-            onInvalidField: function (field) { field.classList.add('field-shake'); }
-        });
+            name: [v.required, v.minLength(2), v.maxLength(100)],
+            phone: [v.required, v.phone],
+            address: [v.required, v.minLength(5), v.maxLength(200)],
+            notes: [v.maxLength(500)],
+        }, { validateOn: 'blur' });
     };
 
     OrderModal.prototype.openQuickOrder = function (dish) {

@@ -1,12 +1,12 @@
 // ============================================
-// Form Validation — Visual Inline Errors + Real-time Feedback
+// Form Validation ��� Visual Inline Errors + Real-time Feedback
 // Sprint 1: S1-T2
 // ============================================
 
 (function () {
     'use strict';
 
-    // ─── CSS Injection ───────────────────────────────────────────
+    // ��������� CSS Injection ���������������������������������������������������������������������������������������������������������������������������������
 
     function injectStyles() {
         if (document.getElementById('form-validation-styles')) return;
@@ -52,43 +52,37 @@
         document.head.appendChild(style);
     }
 
-    // ─── Validation Rules ────────────────────────────────────────
+    // ��������� Validation Rules ������������������������������������������������������������������������������������������������������������������������
 
     var validators = {
-        required: function (message) {
+        required: function (value) {
+            return (value || '').trim().length > 0 ? null : 'Este campo +� obrigat+�rio';
+        },
+        minLength: function (min) {
             return function (value) {
-                return (value || '').trim().length > 0 ? null : (message || 'Este campo é obrigatório');
+                return (value || '').trim().length >= min ? null : 'M+�nimo de ' + min + ' caracteres';
             };
         },
-        minLength: function (min, message) {
+        maxLength: function (max) {
             return function (value) {
-                return (value || '').trim().length >= min ? null : (message || 'Mínimo de ' + min + ' caracteres');
+                return (value || '').length <= max ? null : 'M+�ximo de ' + max + ' caracteres';
             };
         },
-        maxLength: function (max, message) {
-            return function (value) {
-                return (value || '').length <= max ? null : (message || 'Máximo de ' + max + ' caracteres');
-            };
+        phone: function (value) {
+            var digits = (value || '').replace(/\D/g, '');
+            if (digits.length < 10 || digits.length > 11) {
+                return 'Telefone inv+�lido (use DDD + n+�mero)';
+            }
+            return null;
         },
-        phone: function (message) {
-            return function (value) {
-                var digits = (value || '').replace(/\D/g, '');
-                if (digits.length < 10 || digits.length > 11) {
-                    return message || 'Telefone inválido (use DDD + número)';
-                }
-                return null;
-            };
-        },
-        email: function (message) {
-            return function (value) {
-                if (!value || !value.trim()) return null; // optional
-                var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                return re.test(value.trim()) ? null : (message || 'Email inválido');
-            };
+        email: function (value) {
+            if (!value || !value.trim()) return null; // optional
+            var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(value.trim()) ? null : 'Email inv+�lido';
         },
     };
 
-    // ─── DOM Helpers ─────────────────────────────────────────────
+    // ��������� DOM Helpers ���������������������������������������������������������������������������������������������������������������������������������������
 
     function getFieldWrapper(input) {
         // Look for the parent <div> that wraps label + input
@@ -152,12 +146,12 @@
         if (existing) existing.remove();
     }
 
-    // ─── Form Enhancer ───────────────────────────────────────────
+    // ��������� Form Enhancer ���������������������������������������������������������������������������������������������������������������������������������
 
     /**
      * Enhance a form with inline validation
      * @param {HTMLFormElement|string} formOrSelector
-     * @param {Object} rules - Map of field name → array of validator functions
+     * @param {Object} rules - Map of field name ��� array of validator functions
      * @param {Object} [options]
      * @param {string} [options.validateOn='blur'] - 'blur', 'input', or 'submit'
      * @param {Function} [options.onValid] - called when form passes all validation
@@ -271,7 +265,7 @@
         };
     }
 
-    // ─── Debounce Helper ─────────────────────────────────────────
+    // ��������� Debounce Helper ���������������������������������������������������������������������������������������������������������������������������
 
     function debounce(fn, delay) {
         var timer;
@@ -285,7 +279,7 @@
         };
     }
 
-    // ─── Expose Public API ───────────────────────────────────────
+    // ��������� Expose Public API ���������������������������������������������������������������������������������������������������������������������
 
     var FormValidation = Object.freeze({
         enhance: enhanceForm,
