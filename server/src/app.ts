@@ -201,6 +201,7 @@ app.get('/sitemap.xml', (_req: Request, res: Response) => {
         { loc: '/gallery', priority: '0.7', changefreq: 'monthly' },
         { loc: '/about', priority: '0.6', changefreq: 'monthly' },
         { loc: '/contact', priority: '0.6', changefreq: 'monthly' },
+        { loc: '/privacy', priority: '0.3', changefreq: 'yearly' },
     ];
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -223,6 +224,7 @@ app.get('/robots.txt', (_req: Request, res: Response) => {
 Allow: /
 Disallow: /admin
 Disallow: /api/
+Disallow: /js/
 
 Sitemap: ${baseUrl}/sitemap.xml`;
 
@@ -232,7 +234,7 @@ Sitemap: ${baseUrl}/sitemap.xml`;
 
 // --- Serve pages with noindex for non-public routes ---
 const noIndexPages = ['admin', 'buy', 'buy-success'];
-const pages = ['index', 'menu', 'gallery', 'about', 'contact', 'admin', 'buy', 'buy-success'];
+const pages = ['index', 'menu', 'gallery', 'about', 'contact', 'privacy', 'admin', 'buy', 'buy-success'];
 pages.forEach(page => {
     const route = page === 'index' ? '/' : `/${page}`;
     app.get(route, (_req: Request, res: Response) => {

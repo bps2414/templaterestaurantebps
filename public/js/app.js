@@ -211,6 +211,24 @@
             meta.content = content;
         });
 
+        // --- Twitter Card tags ---
+        const twitterTags = {
+            'twitter:card': 'summary_large_image',
+            'twitter:title': document.title,
+            'twitter:description': siteDesc,
+            'twitter:image': c.hero_image || c.about_image || '',
+        };
+        Object.entries(twitterTags).forEach(([name, content]) => {
+            if (!content) return;
+            let meta = document.querySelector(`meta[name="${name}"]`);
+            if (!meta) {
+                meta = document.createElement('meta');
+                meta.setAttribute('name', name);
+                document.head.appendChild(meta);
+            }
+            meta.content = content;
+        });
+
         // --- Canonical URL ---
         let canonical = document.querySelector('link[rel="canonical"]');
         if (!canonical) {
