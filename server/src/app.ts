@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
+import compression from 'compression';
 import path from 'path';
 
 import { errorHandler } from './middlewares/errorHandler';
@@ -36,6 +37,9 @@ if (process.env.NODE_ENV === 'production') {
         next();
     });
 }
+
+// --- Compression ---
+app.use(compression());
 
 // --- Security Headers ---
 app.use(helmet({

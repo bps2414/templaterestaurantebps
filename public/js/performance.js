@@ -60,7 +60,7 @@
         try {
             var observer = new PerformanceObserver(function (list) {
                 list.getEntries().forEach(function (entry) {
-                    if (entry.duration > 1000) { // Log slow resources (>1s)
+                    if (entry.duration > 1000 && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) { // Log slow resources (>1s) only in dev
                         console.warn('Slow resource:', entry.name, entry.duration.toFixed(2) + 'ms');
                     }
                 });
