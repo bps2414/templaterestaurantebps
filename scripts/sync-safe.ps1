@@ -12,7 +12,8 @@ $ProtectedFiles = @(
     "public/images/",      
     "public/favicon.ico",  
     "styles.css",          
-    "index.html",          
+    "index.html",
+    "public/index.html",          
     "tailwind.config.js",  
     "config_full.json"     
 )
@@ -69,10 +70,12 @@ if (-not $DryRun) {
     Write-Color "   Iniciando merge da main (no-commit)..." "Gray"
     try {
         git merge main --no-commit --no-ff | Out-Null
-    } catch {
+    }
+    catch {
         Write-Warning "Conflitos de merge detectados. O script tentara resolver os protegidos automaticamente."
     }
-} else {
+}
+else {
     Write-Color "   [DryRun] git fetch origin main" "Gray"
     Write-Color "   [DryRun] git merge main --no-commit --no-ff" "Gray"
 }
@@ -84,28 +87,50 @@ foreach ($filePattern in $ProtectedFiles) {
     if (-not $DryRun) {
         $target = $filePattern
         try {
+            # Force checkout of protected files from HEAD (ignoring merge conflicts in them)
             git checkout HEAD -- $target 2>&1 | Out-Null
             Write-Success "Protegido: $target"
-        } catch {
+        }
+        catch {
             Write-Warning "Falha ao proteger $target (talvez nao exista ou nao tenha mudado)"
         }
-    } else {
+    }
+    else {
         Write-Color "   [DryRun] git checkout HEAD -- $filePattern" "Gray"
     }
 }
 
-# --- 5. Validacao Pos-Merge ---
-Write-Step "Validando integridade do projeto (Build)..."
+# --- 4. Verificacao de Conflitos Restantes ---
+if (-not $DryRun) {
+    $conflicts = git diff --name-only --diff-filter=U
+    if ($conflicts) {
+        Write-Error "CONFLITOS NAO RESOLVIDOS EM ARQUIVOS NAO-PROTEGIDOS:"
+        $conflicts | ForEach-Object { Write-Color "   - $_" "Red" }
+        Write-Warning "O script nao pode continuar. Resolva os conflitos manualmente e rode o build/test."
+        exit 1
+    }
+}
+
+# --- 5. Validacao e Dependencias ---
+Write-Step "Validando projeto..."
 
 if (-not $DryRun) {
-    Write-Color "   Executando npm run build no servidor..." "Gray"
-    
     Push-Location "server"
+    
+    # Check if package.json changed
+    $packageChanged = git diff "HEAD@{1}" --name-only | Select-String "package.json"
+    if ($packageChanged) {
+        Write-Warning "Dependencias alteradas. Rodando npm install..."
+        cmd /c "npm install" 2>&1 | Out-Null
+    }
+
+    Write-Color "   Executando npm run build..." "Gray"
     try {
         cmd /c "npm run build" 2>&1 | Out-Null
         if ($LASTEXITCODE -eq 0) {
             Write-Success "Build do servidor: OK"
-        } else {
+        }
+        else {
             Write-Error "O merge QUEBROU o build do servidor."
             Write-Warning "Recomendado: 'git merge --abort' para desfazer tudo."
             $abort = Read-Host "Deseja abortar agora? (s/n)"
@@ -115,12 +140,18 @@ if (-not $DryRun) {
                 exit 1
             }
         }
-    } catch {
+    }
+    catch {
         Write-Error "Erro ao tentar executar build."
     }
+    
+    # Optional: Run tests if available
+    # cmd /c "npm test" ...
+
     Pop-Location
-} else {
-    Write-Color "   [DryRun] cd server; npm run build" "Gray"
+}
+else {
+    Write-Color "   [DryRun] cd server; npm install (if needed); npm run build" "Gray"
 }
 
 # --- 6. Finalizacao ---
@@ -136,10 +167,12 @@ if (-not $DryRun) {
         git commit -m "sync: merge main -> template-b (shielded mode)"
         git push origin template-b
         Write-Success "Sincronizacao concluida com sucesso!"
-    } else {
+    }
+    else {
         Write-Warning "Commit cancelado. As alteracoes (staged) ainda estao no seu diretorio."
         Write-Color "Use 'git merge --abort' se quiser desfazer tudo." "Gray"
     }
-} else {
+}
+else {
     Write-Success "[DryRun] Simulacao concluida sem erros."
 }
