@@ -18,6 +18,7 @@ import aboutContentRoutes from './routes/aboutContent';
 import checkoutRoutes from './routes/checkout';
 import uploadRoutes from './routes/upload';
 import planRoutes from './routes/plan';
+import { prisma } from './prisma/client';
 
 const app = express();
 
@@ -158,11 +159,23 @@ app.use(express.static(path.join(__dirname, '../../public'), {
 }));
 
 // --- Health check ---
-app.get('/healthz', (_req: Request, res: Response) => {
-    res.json({
-        status: 'ok',
-        timestamp: new Date().toISOString(),
-    });
+app.get('/healthz', async (_req: Request, res: Response) => {
+    try {
+        await prisma.$queryRaw`SELECT 1`;
+        res.json({
+            status: 'ok',
+            database: 'connected',
+            timestamp: new Date().toISOString(),
+            version: '2.0.0'
+        });
+    } catch (error) {
+        logger.error('Health check failed', error);
+        res.status(503).json({
+            status: 'error',
+            database: 'disconnected',
+            timestamp: new Date().toISOString()
+        });
+    }
 });
 
 // --- Ping endpoint (for keep-alive services, returns 204 No Content) ---

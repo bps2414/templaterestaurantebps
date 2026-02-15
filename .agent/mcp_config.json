@@ -1,0 +1,34 @@
+{
+    "mcpServers": {
+        "mcp-server-neon": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "mcp-remote",
+                "https://mcp.neon.tech/sse"
+            ],
+            "env": {}
+        },
+        "render": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@niyogi/render-mcp",
+                "start"
+            ],
+            "env": {
+                "RENDER_API_KEY": "rnd_VS4LFLjDoVKYCGjMa3xxHtKzH3Yx"
+            }
+        },
+        "github-mcp-server": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-github"
+            ],
+            "env": {
+                "GITHUB_PERSONAL_ACCESS_TOKEN": "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"
+            }
+        }
+    }
+}
