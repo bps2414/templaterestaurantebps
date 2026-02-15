@@ -42,3 +42,23 @@ description: Guia para auditoria de UX e Acessibilidade (A11y)
 9. **Relatório UX**:
    - Gerar um resumo das melhorias necessárias.
    - Priorizar correções que impedem o uso (erros de contraste severos, botões inalcançáveis).
+
+10. **Motion & Acessibilidade**:
+    - Verificar animações: Elas respeitam `prefers-reduced-motion`?
+    - Garantir que nada pisque mais de 3x por segundo (risco de convulsão).
+    - Animações devem ser sutis e não bloquear a tarefa do usuário.
+
+11. **Dark Mode & Temas**:
+    - Verificar consistência visual ao trocar de tema.
+    - Garantir que não existam "flashes" de tema errado ao carregar (FOUC).
+    - Imagens e ícones devem se adaptar (ex: ícones escuros em fundo claro e vice-versa).
+
+12. **Tipografia & Leitura**:
+    - Comprimento de linha: Manter entre 45-75 caracteres para conforto de leitura.
+    - Altura da linha (`line-height`): Mínimo 1.5 para texto corrido.
+    - Tamanho de fonte: Mínimo 16px para corpo de texto (evitar zoom no mobile).
+
+13. **Ferramentas Recomendadas**:
+    - **Lighthouse** (Acessibilidade e Best Practices).
+    - **axe DevTools** (para varredura profunda de A11y).
+    - **Screen Reader Simulator** (ou NVDA/VoiceOver real).
