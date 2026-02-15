@@ -121,48 +121,40 @@
     }
 
     async function loadConfig() {
-        // Fallback: força visibilidade após 500ms se config não carregar
+        // Fallback: força visibilidade após 800ms (tempo seguro para evitar FOUC)
         const fallbackTimer = setTimeout(() => {
-            if (!document.body.classList.contains('config-loaded')) {
-                document.body.classList.add('config-loaded');
-            }
-        }, 500);
+            document.body.classList.add('config-loaded');
+        }, 800);
 
         try {
             // Force cache-busting by appending a timestamp
             const data = await api(`/config?_=${Date.now()}`);
-            clearTimeout(fallbackTimer);
+            
             if (data) {
                 siteConfig = validateConfig(data);
                 applyConfig();
-                // Mark config as loaded to trigger fade-in
-                document.body.classList.add('config-loaded');
             } else {
-                showToast('Erro ao carregar configurações.', 'error');
-                siteConfig = {
-                    restaurant_name: 'Restaurante',
-                    restaurant_tagline: 'Delivery de qualidade',
-                    hero_title: 'Uma experiência gastronômica única',
-                    hero_subtitle: 'Ingredientes frescos, técnicas refinadas e sabores que contam histórias',
-                    footer_text: '© 2026 Restaurante. Todos os direitos reservados.',
-                };
-                applyConfig();
-                document.body.classList.add('config-loaded');
+                throw new Error('No data returned');
             }
         } catch (e) {
-            clearTimeout(fallbackTimer);
-            showToast('Erro ao carregar configurações.', 'error');
+            console.error('Config load failed:', e);
+            showToast('Usando configurações padrão.', 'info');
+            // Default config is already set in the elements or verified in applyConfig
             siteConfig = {
                 restaurant_name: 'Restaurante',
-                restaurant_tagline: 'Delivery de qualidade',
-                hero_title: 'Uma experiência gastronômica única',
-                hero_subtitle: 'Ingredientes frescos, técnicas refinadas e sabores que contam histórias',
-                footer_text: '© 2026 Restaurante. Todos os direitos reservados.',
+                hero_title: 'Bem-vindo',
+                // ... defaults should be handled by validation or HTML structure
             };
-            document.body.classList.add('config-loaded');
+            applyConfig(); // Apply defaults
+        } finally {
+            clearTimeout(fallbackTimer);
+            // Ensure strictly distinct frame for transition
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    document.body.classList.add('config-loaded');
+                });
+            });
         }
-        // Toast system is now provided by feedback.js (showToast override)
-        // Legacy showToast calls are automatically routed to the new toast system
     }
 
     function applyConfig() {

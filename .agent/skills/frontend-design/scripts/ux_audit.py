@@ -118,36 +118,13 @@ class UXAuditor:
 
         # --- 1. PSYCHOLOGY LAWS ---
         # Hick's Law
-        nav_content = re.findall(r'<nav[^>]*>(.*?)</nav>', content, re.IGNORECASE | re.DOTALL)
-        total_nav_items = 0
-        for nav in nav_content:
-            items = len(re.findall(r'<NavLink|<Link|<a\s+href|nav-item', nav, re.IGNORECASE))
-            if items > 0: total_nav_items += items
-        
-        # If no semantic nav, try to find navigation by class
-        if not nav_content:
-            nav_by_class = re.findall(r'<div[^>]*class=["\'][^"\']*nav[^"\']*["\'][^>]*>(.*?)</div>', content, re.IGNORECASE | re.DOTALL)
-            for nav in nav_by_class:
-                items = len(re.findall(r'<NavLink|<Link|<a\s+href', nav, re.IGNORECASE))
-                if items > 0: total_nav_items += items
-
-        if total_nav_items > 7:
-            self.issues.append(f"[Hick's Law] {filename}: {total_nav_items} nav items (Max 7)")
+        nav_items = len(re.findall(r'<NavLink|<Link|<a\s+href|nav-item', content, re.IGNORECASE))
+        if nav_items > 7:
+            self.issues.append(f"[Hick's Law] {filename}: {nav_items} nav items (Max 7)")
         
         # Fitts' Law
-        # Extract classes from interactive elements only
-        interactive_classes = re.findall(r'<(?:button|a|input|select|textarea)[^>]*class=["\']([^"\']*)["\']', content, re.IGNORECASE)
-        has_small_target = False
-        for classes in interactive_classes:
-            # Check for specific small height classes (h-1 to h-10) WITHOUT padding that might compensate
-            if re.search(r'\bh-(?:[1-9]|10)\b', classes):
-                 # If it has significant padding (p-3, p-4, py-3, etc), it might be ok
-                 if not re.search(r'\bp(?:y|x)?-[3-9]\b', classes):
-                     has_small_target = True
-                     break
-        
-        if has_small_target:
-            self.warnings.append(f"[Fitts' Law] {filename}: Small targets detected on interactive elements (< 44px)")
+        if re.search(r'height:\s*([0-3]\d)px', content) or re.search(r'h-[1-9]\b|h-10\b', content):
+            self.warnings.append(f"[Fitts' Law] {filename}: Small targets (< 44px)")
         
         # Miller's Law
         form_fields = len(re.findall(r'<input|<select|<textarea', content, re.IGNORECASE))
@@ -159,7 +136,7 @@ class UXAuditor:
             self.warnings.append(f"[Von Restorff] {filename}: No primary CTA")
 
         # Serial Position Effect - Important items at beginning/end
-        if total_nav_items > 3:
+        if nav_items > 3:
             # Check if last nav item is important (contact, login, etc.)
             nav_content = re.findall(r'<NavLink|<Link|<a\s+href[^>]*>([^<]+)</a>', content, re.IGNORECASE)
             if nav_content and len(nav_content) > 2:
