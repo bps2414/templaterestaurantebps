@@ -7,7 +7,7 @@ import compression from 'compression';
 import path from 'path';
 
 import { errorHandler } from './middlewares/errorHandler';
-import { apiLimiter, authLimiter, uploadLimiter, checkoutLimiter } from './middlewares/rateLimit';
+import { apiLimiter, authLimiter, uploadLimiter } from './middlewares/rateLimit';
 import { csrfSetToken, csrfVerifyToken, getCsrfToken } from './middlewares/csrf';
 import logger from './utils/logger';
 import authRoutes from './routes/auth';
@@ -16,7 +16,7 @@ import dishRoutes from './routes/dishes';
 import galleryRoutes from './routes/gallery';
 import configRoutes from './routes/config';
 import aboutContentRoutes from './routes/aboutContent';
-import checkoutRoutes from './routes/checkout';
+
 import uploadRoutes from './routes/upload';
 import planRoutes from './routes/plan';
 import { prisma } from './prisma/client';
@@ -46,13 +46,13 @@ app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.tailwindcss.com", "https://js.stripe.com", "https://unpkg.com", "https://cdn.jsdelivr.net"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.tailwindcss.com", "https://unpkg.com", "https://cdn.jsdelivr.net"],
             scriptSrcAttr: ["'unsafe-inline'"], // Permite onclick/oninput inline (admin panel)
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.tailwindcss.com", "https://unpkg.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com"],
             imgSrc: ["'self'", "data:", "blob:", "https://res.cloudinary.com", "https://*.unsplash.com", "https://via.placeholder.com"],
-            connectSrc: ["'self'", "https://api.stripe.com"],
-            frameSrc: ["'self'", "https://js.stripe.com", "https://www.google.com", "https://maps.google.com"],
+            connectSrc: ["'self'"],
+            frameSrc: ["'self'", "https://www.google.com", "https://maps.google.com"],
             objectSrc: ["'none'"],
             baseUri: ["'self'"],
             formAction: ["'self'"],
@@ -87,7 +87,7 @@ app.use((_req: Request, res: Response, next: NextFunction) => {
     const cspReportUri = process.env.CSP_REPORT_URI || '';
     if (cspReportUri) {
         res.setHeader('Content-Security-Policy-Report-Only',
-            `default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; report-uri ${cspReportUri}`
+            `default-src 'self'; script-src 'self' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; report-uri ${cspReportUri}`
         );
     }
 
@@ -128,8 +128,7 @@ app.use(morgan(
 ));
 
 // --- Body parsers ---
-// Stripe webhook needs raw body (BEFORE json parser)
-app.use('/api/checkout/webhook', express.raw({ type: 'application/json' }));
+
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
@@ -201,9 +200,7 @@ app.use('/api/gallery', csrfVerifyToken, apiLimiter, galleryRoutes);
 app.use('/api/config', csrfVerifyToken, apiLimiter, configRoutes);
 app.use('/api/about-content', csrfVerifyToken, apiLimiter, aboutContentRoutes);
 app.use('/api/plan', apiLimiter, planRoutes); // Public GET — no CSRF needed
-// Webhook MUST skip CSRF — Stripe has its own signature verification
-app.use('/api/checkout/webhook', apiLimiter, checkoutRoutes);
-app.use('/api/checkout', csrfVerifyToken, checkoutLimiter, checkoutRoutes);
+
 app.use('/api/upload', csrfVerifyToken, uploadLimiter, uploadRoutes);
 
 // --- Serve frontend pages ---
@@ -250,8 +247,8 @@ Sitemap: ${baseUrl}/sitemap.xml`;
 });
 
 // --- Serve pages with noindex for non-public routes ---
-const noIndexPages = ['admin', 'buy', 'buy-success'];
-const pages = ['index', 'menu', 'gallery', 'about', 'contact', 'privacy', 'admin', 'buy', 'buy-success'];
+const noIndexPages = ['admin'];
+const pages = ['index', 'menu', 'gallery', 'about', 'contact', 'privacy', 'admin'];
 pages.forEach(page => {
     const route = page === 'index' ? '/' : `/${page}`;
     app.get(route, (_req: Request, res: Response) => {
