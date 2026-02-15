@@ -1044,9 +1044,7 @@ Você tem **2 opções** (escolha a mais fácil para você):
 4. **Cole e execute este comando:**
 
 ```sql
-UPDATE site_configs 
-SET value = 'professional' 
-WHERE key = 'site_plan';
+ 
 ```
 
 5. **Clique em "Run"** (ou pressione Ctrl+Enter)

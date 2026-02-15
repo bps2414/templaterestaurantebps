@@ -18,6 +18,7 @@ import aboutContentRoutes from './routes/aboutContent';
 import checkoutRoutes from './routes/checkout';
 import uploadRoutes from './routes/upload';
 import planRoutes from './routes/plan';
+import { prisma } from './prisma/client';
 
 const app = express();
 
@@ -71,11 +72,22 @@ app.use((_req: Request, res: Response, next: NextFunction) => {
     res.setHeader('X-XSS-Protection', '0'); // Modern browsers use CSP instead
     res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
 
-    // Sprint 1 additional headers (main branch parity)
+    // --- Sprint 1 (S1-T4): Extra Security Headers ---
+    // Expect-CT: Enforce Certificate Transparency (deprecated in modern Chrome but still useful for other browsers)
     if (process.env.NODE_ENV === 'production') {
         res.setHeader('Expect-CT', 'max-age=86400, enforce');
-        res.setHeader('Content-Security-Policy-Report-Only', "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self'; report-uri /api/csp-report");
     }
+
+    // CSP-Report-Only: Shadow CSP without blocking — preparation for Sprint 3 (CSP nonces)
+    // This allows us to collect violation reports without breaking the site
+    const cspReportUri = process.env.CSP_REPORT_URI || '';
+    if (cspReportUri) {
+        res.setHeader('Content-Security-Policy-Report-Only',
+            `default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; report-uri ${cspReportUri}`
+        );
+    }
+
+    // Cross-Origin policies for additional isolation
     res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
     res.setHeader('Cross-Origin-Resource-Policy', 'same-site');
 
@@ -147,11 +159,23 @@ app.use(express.static(path.join(__dirname, '../../public'), {
 }));
 
 // --- Health check ---
-app.get('/healthz', (_req: Request, res: Response) => {
-    res.json({
-        status: 'ok',
-        timestamp: new Date().toISOString(),
-    });
+app.get('/healthz', async (_req: Request, res: Response) => {
+    try {
+        await prisma.$queryRaw`SELECT 1`;
+        res.json({
+            status: 'ok',
+            database: 'connected',
+            timestamp: new Date().toISOString(),
+            version: '2.0.0'
+        });
+    } catch (error) {
+        logger.error('Health check failed', error);
+        res.status(503).json({
+            status: 'error',
+            database: 'disconnected',
+            timestamp: new Date().toISOString()
+        });
+    }
 });
 
 // --- Ping endpoint (for keep-alive services, returns 204 No Content) ---

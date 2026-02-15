@@ -1,7 +1,3 @@
-// ==============================================
-// Restaurant Template — Prisma Schema
-// ==============================================
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,45 +8,30 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-// ============================================
-// ENUMS
-// ============================================
-
-enum Role {
-  ADMIN
-  EDITOR
-}
-
-// ============================================
-// MODELS
-// ============================================
-
 model AdminUser {
-  id           String   @id @default(uuid())
-  email        String   @unique
+  id           String    @id @default(uuid())
+  email        String    @unique
   passwordHash String
   name         String
-  role         Role     @default(ADMIN)
-  tokenVersion Int      @default(0) // Incremented on password change to invalidate JWTs
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  sessions Session[]
+  role         Role      @default(ADMIN)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  tokenVersion Int       @default(0)
+  sessions     Session[]
 
   @@map("admin_users")
 }
 
 model Session {
-  id               String   @id @default(uuid())
+  id               String    @id @default(uuid())
   userId           String
-  refreshToken     String   // Stores only first 8 chars (prefix for debugging)
-  refreshTokenHash String   @unique // SHA-256 hash — used for secure lookup
+  refreshToken     String
+  refreshTokenHash String    @unique
   userAgent        String?
   ipAddress        String?
   expiresAt        DateTime
-  createdAt        DateTime @default(now())
-
-  user AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt        DateTime  @default(now())
+  user             AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("sessions")
 }
@@ -64,8 +45,7 @@ model Category {
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  dishes Dish[]
+  dishes    Dish[]
 
   @@map("categories")
 }
@@ -75,7 +55,7 @@ model Dish {
   name        String
   slug        String   @unique
   description String?
-  price       Int      // centavos (ex: 3990 = R$39,90)
+  price       Int
   image       String?
   featured    Boolean  @default(false)
   active      Boolean  @default(true)
@@ -83,8 +63,7 @@ model Dish {
   sortOrder   Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@map("dishes")
 }
@@ -113,10 +92,15 @@ model TemplatePurchase {
   name            String?
   stripeSessionId String?  @unique
   stripePaymentId String?
-  amount          Int      // centavos
+  amount          Int
   currency        String   @default("brl")
-  status          String   @default("pending") // pending, completed, failed
+  status          String   @default("pending")
   createdAt       DateTime @default(now())
 
   @@map("template_purchases")
+}
+
+enum Role {
+  ADMIN
+  EDITOR
 }

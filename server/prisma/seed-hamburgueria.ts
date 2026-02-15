@@ -263,8 +263,8 @@ export async function seedHamburgueria() {
             { icon: '🍞', title: 'Pão Artesanal', description: 'Pão brioche feito na casa, macio por dentro e crocante por fora.' },
         ]),
         team_members: JSON.stringify([
-            { name: 'Carlos Lima', role: 'Pitmaster', image: '' },
-            { name: 'Juliana Reis', role: 'Chef de Cozinha', image: '' },
+            { name: 'Carlos Lima', role: 'Pitmaster', image: 'https://images.unsplash.com/photo-1583394293214-28ded15ee548?w=400&h=400&fit=crop' },
+            { name: 'Juliana Reis', role: 'Chef de Cozinha', image: 'https://images.unsplash.com/photo-1595273670150-bd0c3c392e46?w=400&h=400&fit=crop' },
         ]),
         opening_hours: 'Ter-Dom: 18h–23h | Sex-Sáb: 18h–00h | Seg: Fechado',
         google_maps_embed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.1976670254753!2d-46.65529378502211!3d-23.56517098468082!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDMzJzU0LjYiUyA0NsKwMzknMTEuMSJX!5e0!3m2!1spt-BR!2sbr!4v1234567890',
@@ -272,6 +272,14 @@ export async function seedHamburgueria() {
         facebook_url: 'https://facebook.com/burgerhouse',
         footer_text: '© 2026 Burger House. Todos os direitos reservados.',
     };
+
+    // Adicionar team_members apenas se for plano Professional
+    if (validPlan === 'professional') {
+        configs.team_members = JSON.stringify([
+            { name: 'Carlos Lima', role: 'Pitmaster', image: 'https://images.unsplash.com/photo-1583394293214-28ded15ee548?w=400&h=400&fit=crop' },
+            { name: 'Juliana Reis', role: 'Chef de Cozinha', image: 'https://images.unsplash.com/photo-1595273670150-bd0c3c392e46?w=400&h=400&fit=crop' },
+        ]);
+    }
 
     for (const [key, value] of Object.entries(configs)) {
         await prisma.siteConfig.upsert({

@@ -1,0 +1,19 @@
+filename,original_path,moved_to,first_line_summary,archived_date
+accessibility_notes.txt,./accessibility_notes.txt,docs/archive/accessibility_notes.txt,Accessibility notes and improvements,2026-02-13
+AUDITORIA_PLANOS.md,./AUDITORIA_PLANOS.md,docs/archive/AUDITORIA_PLANOS.md,🔐 AUDITORIA DE SEGURANÇA — SISTEMA DE PLANOS,2026-02-13
+DEPLOY_GUIDE.md,./DEPLOY_GUIDE.md,docs/archive/DEPLOY_GUIDE.md,🚀 Guia Completo de Deploy - Template Restaurante SaaS,2026-02-13
+DEPLOY_RENDER_PLANOS.md,./DEPLOY_RENDER_PLANOS.md,docs/archive/DEPLOY_RENDER_PLANOS.md,Deploy instructions for Render with plans,2026-02-13
+EXEMPLOS_PRATICOS_PLANOS.md,./EXEMPLOS_PRATICOS_PLANOS.md,docs/archive/EXEMPLOS_PRATICOS_PLANOS.md,Practical examples for commercial plans,2026-02-13
+MANUAL_DO_PROPRIETARIO.md,./MANUAL_DO_PROPRIETARIO.md,docs/archive/MANUAL_DO_PROPRIETARIO.md,🎉 Bem-vindo ao seu novo Cardápio Digital!,2026-02-13
+migration_report.txt,./migration_report.txt,docs/archive/migration_report.txt,Migration report and logs,2026-02-13
+public_template2_README.md,./public_template2/README.md,docs/archive/public_template2_README.md,README for public template variant 2,2026-02-13
+RESUMO_AUDITORIA.md,./RESUMO_AUDITORIA.md,docs/archive/RESUMO_AUDITORIA.md,📋 RESUMO EXECUTIVO — AUDITORIA DE PLANOS,2026-02-13
+TAREFAS_FUTURAS.md,./TAREFAS_FUTURAS.md,docs/archive/TAREFAS_FUTURAS.md,📋 Tarefas para Implementar Depois,2026-02-13
+accessibility_and_perf.md,./final_report/accessibility_and_perf.md,docs/archive/final_report_old/accessibility_and_perf.md,Accessibility and performance audit report,2026-02-13
+bugs.json,./final_report/bugs.json,docs/archive/final_report_old/bugs.json,Bug tracking JSON report,2026-02-13
+deploy_checklist.md,./final_report/deploy_checklist.md,docs/archive/final_report_old/deploy_checklist.md,Pre-deployment checklist,2026-02-13
+hardcoded.json,./final_report/hardcoded.json,docs/archive/final_report_old/hardcoded.json,Hardcoded values scan results,2026-02-13
+inventory.json,./final_report/inventory.json,docs/archive/final_report_old/inventory.json,Project inventory and assets,2026-02-13
+manual_tests.md,./final_report/manual_tests.md,docs/archive/final_report_old/manual_tests.md,Manual testing procedures,2026-02-13
+security_summary.json,./final_report/security_summary.json,docs/archive/final_report_old/security_summary.json,Security audit summary JSON,2026-02-13
+ux_issues.md,./final_report/ux_issues.md,docs/archive/final_report_old/ux_issues.md,UX issues and improvements,2026-02-13

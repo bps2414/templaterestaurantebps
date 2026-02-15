@@ -1,0 +1,71 @@
+{
+    "preserved_files": [
+        {
+            "filename": "README-repo.md",
+            "original_path": "README.md",
+            "location": "docs/keep/README-repo.md",
+            "description": "Main repository README. Contains project overview, tech stack description, audit status, and comprehensive feature list. Primary entry point for developers and stakeholders understanding the restaurant template system.",
+            "use_when": "Onboarding new developers or providing project overview"
+        },
+        {
+            "filename": "PLANOS_COMERCIAIS.md",
+            "location": "docs/keep/PLANOS_COMERCIAIS.md",
+            "description": "Complete commercial plan documentation. Defines Essential vs Professional tier features, pricing strategy (R$150-350/month), monetization model, and business positioning for SaaS restaurant template sales.",
+            "use_when": "Pricing discussions, sales presentations, or defining client packages"
+        },
+        {
+            "filename": "UPDATE.md",
+            "location": "docs/keep/UPDATE.md",
+            "description": "Latest audit summary and improvement roadmap (v3.0 as of Feb 13, 2026). Tracks Phase 1 completion status, security scores (8/10), and prioritized next steps for achieving 9/10+ ratings across all metrics.",
+            "use_when": "Checking current project status or planning next development phase"
+        },
+        {
+            "filename": "CHECKLIST_CLIENTE.md",
+            "location": "docs/keep/CHECKLIST_CLIENTE.md",
+            "description": "Per-client configuration template. Comprehensive checklist for gathering client data (restaurant name, branding, WhatsApp, Stripe keys, domain) before deployment. Essential for consistent client onboarding.",
+            "use_when": "Starting new client project or preparing deployment variables"
+        },
+        {
+            "filename": "GUIA_COMPLETO_DEPLOY.md",
+            "location": "docs/keep/GUIA_COMPLETO_DEPLOY.md",
+            "description": "End-to-end deployment guide (1088 lines). Step-by-step instructions from local testing through production deployment on Render/Railway, including PostgreSQL setup, environment variables, Prisma migrations, and troubleshooting.",
+            "use_when": "Deploying to production or solving deployment issues"
+        },
+        {
+            "filename": "GUIA_VENDAS_E_CUSTOMIZACAO.md",
+            "location": "docs/keep/GUIA_VENDAS_E_CUSTOMIZACAO.md",
+            "description": "Sales and customization playbook for selling restaurant templates. Covers client discovery, demo preparation, objection handling, pricing negotiation, and common customization requests with implementation estimates.",
+            "use_when": "Preparing sales pitch or scoping custom work for clients"
+        },
+        {
+            "filename": "TEMPLATES_VENDAS.md",
+            "location": "docs/keep/TEMPLATES_VENDAS.md",
+            "description": "Ready-to-use sales message templates. Copy-paste WhatsApp/email scripts for prospecting, follow-ups, pricing discussions, objection responses, and closing. Optimized for restaurant owner communication style.",
+            "use_when": "Reaching out to prospects or following up with leads"
+        },
+        {
+            "filename": "verdict.md",
+            "location": "docs/keep/verdict.md",
+            "description": "Condensed final audit verdict (Feb 12, 2026). Production readiness assessment covering security (7.5/10), technical quality (8.5/10), and identified issues (H-01 to L-06) with severity classifications.",
+            "use_when": "Quick reference for audit results or security review"
+        },
+        {
+            "filename": "phased_corrections.md",
+            "location": "docs/keep/phased_corrections.md",
+            "description": "Phased correction roadmap (712 lines). Breaks down audit issues into actionable phases (Phase 0 blockers through Phase 3 polish), with specific code fixes, file references, and implementation priority for each item.",
+            "use_when": "Planning technical debt reduction or implementing security fixes"
+        },
+        {
+            "filename": "final_verdict.md",
+            "location": "docs/keep/final_verdict.md",
+            "description": "Latest production readiness verdict (Feb 13, 2026). GO/NO-GO decision with mandatory checklist verification (.env not committed, JWT_SECRET validation, CSRF protection, rate limiting). Final confirmation: SAFE TO SELL with 8/10 security, 8/10 technical, 7/10 UX scores.",
+            "use_when": "Final pre-sale verification or confirming production readiness"
+        }
+    ],
+    "meta": {
+        "last_updated": "2026-02-13",
+        "total_preserved": 10,
+        "total_archived": 18,
+        "archive_location": "docs/archive/"
+    }
+}
