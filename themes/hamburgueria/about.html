@@ -7,7 +7,8 @@
     <title>Sobre — Hamburgueria</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <meta name="page-name" content="Sobre">
-    <meta name="description" content="Conheça nossa história e paixão por hambúrgueres artesanais. Blends selecionados e ingredientes premium.">
+    <meta name="description"
+        content="Conheça nossa história e paixão por hambúrgueres artesanais. Blends selecionados e ingredientes premium.">
     <link rel="canonical" href="">
     <!-- Open Graph -->
     <meta property="og:type" content="website">
@@ -86,6 +87,7 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
+
         body.config-loaded #nav-brand,
         body.config-loaded #footer-brand,
         body.config-loaded #footer-tagline,
@@ -95,9 +97,15 @@
             opacity: 1;
             animation: configFadeIn 0.3s ease;
         }
+
         @keyframes configFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
     </style>
 </head>
@@ -109,15 +117,24 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 md:h-20">
                 <a href="/" class="flex items-center gap-3">
-                    <span class="text-2xl">🍔</span>
+                    <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.047 8.287 8.287 0 009 9.601a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 18a3.75 3.75 0 00.495-7.468 5.99 5.99 0 00-1.925 3.547 5.975 5.975 0 01-2.133-1.001A3.75 3.75 0 0012 18z" />
+                    </svg>
                     <span class="font-display text-xl md:text-2xl font-bold text-amber-400" id="nav-brand"></span>
                 </a>
                 <div class="hidden md:flex items-center gap-8">
                     <a href="/" class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Início</a>
-                    <a href="/menu" class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Cardápio</a>
-                    <a href="/gallery" class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Galeria</a>
+                    <a href="/menu"
+                        class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Cardápio</a>
+                    <a href="/gallery"
+                        class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Galeria</a>
                     <a href="/about" class="text-amber-400 font-medium text-sm tracking-wide">Sobre</a>
-                    <a href="/contact" class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Contato</a>
+                    <a href="/contact"
+                        class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Contato</a>
                 </div>
                 <button id="menu-toggle" class="md:hidden text-white p-2"><svg class="w-6 h-6" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
@@ -151,8 +168,8 @@
             <!-- Story Section -->
             <div class="grid md:grid-cols-2 gap-12 items-center mb-20 reveal">
                 <div>
-                    <img id="about-image" src="https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=800&q=80" alt="Interior"
-                        class="rounded-2xl w-full h-[400px] object-cover">
+                    <img id="about-image" src="https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=800&q=80"
+                        alt="Interior" class="rounded-2xl w-full h-[400px] object-cover">
                 </div>
                 <div>
                     <h2 class="font-display text-3xl font-bold text-white mb-6">Uma Paixão por Hambúrgueres</h2>
@@ -186,14 +203,16 @@
     <footer class="bg-zinc-950 border-t border-amber-400/10 py-12">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-stone-600 text-sm" id="footer-copy"></p>
-            <a href="/privacy" class="text-stone-600 hover:text-brand-400 text-xs mt-2 inline-block transition">Política de Privacidade</a>
+            <a href="/privacy" class="text-stone-600 hover:text-brand-400 text-xs mt-2 inline-block transition">Política
+                de Privacidade</a>
         </div>
     </footer>
 
     <!-- WHATSAPP -->
     <a href="#" id="whatsapp-float" class="whatsapp-float" target="_blank" rel="noopener">
         <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+            <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
         </svg>
     </a>
 
@@ -249,12 +268,12 @@
                 // Render team members (PRO only)
                 const teamSection = document.getElementById('team-section');
                 const teamContainer = document.getElementById('team-members');
-                
+
                 // Apenas mostra a seção se for PRO E tiver membros cadastrados
                 if (isPro && teamContainer && data.team_members && data.team_members.length > 0) {
                     if (teamSection) teamSection.style.display = '';
                     const defaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Crect fill='%231c1917' width='160' height='160'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='48' fill='%23444'%3E%F0%9F%91%A4%3C/text%3E%3C/svg%3E";
-                    
+
                     teamContainer.innerHTML = data.team_members.map(m => {
                         // Se a imagem está vazia ou undefined, usa defaultAvatar
                         const imgSrc = (m.image && m.image.trim() !== '') ? escapeAttrAbout(m.image) : defaultAvatar;

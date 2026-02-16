@@ -57,9 +57,19 @@
         }
 
         @keyframes checkPop {
-            0% { transform: scale(0); opacity: 0; }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); opacity: 1; }
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         .confetti {
@@ -71,8 +81,15 @@
         }
 
         @keyframes confettiFall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -84,8 +101,15 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 md:h-20">
                 <a href="/" class="flex items-center gap-3">
-                    <span class="text-2xl">🍔</span>
-                    <span class="font-display text-xl md:text-2xl font-bold text-amber-400">Hamburgueria Artesanal</span>
+                    <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.047 8.287 8.287 0 009 9.601a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 18a3.75 3.75 0 00.495-7.468 5.99 5.99 0 00-1.925 3.547 5.975 5.975 0 01-2.133-1.001A3.75 3.75 0 0012 18z" />
+                    </svg>
+                    <span class="font-display text-xl md:text-2xl font-bold text-amber-400">Hamburgueria
+                        Artesanal</span>
                 </a>
             </div>
         </div>
@@ -96,14 +120,17 @@
         <div class="max-w-3xl mx-auto px-4 text-center">
 
             <!-- Check Icon -->
-            <div class="check-animation mb-8 inline-flex items-center justify-center w-24 h-24 rounded-full bg-amber-500/10 border-2 border-amber-400">
-                <svg class="w-12 h-12 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <div
+                class="check-animation mb-8 inline-flex items-center justify-center w-24 h-24 rounded-full bg-amber-500/10 border-2 border-amber-400">
+                <svg class="w-12 h-12 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
             </div>
 
             <h1 class="font-display text-4xl md:text-5xl font-bold text-white mb-4">Compra Confirmada!</h1>
-            <p class="text-stone-400 text-lg mb-12">Obrigado pela compra! Siga os passos abaixo para colocar seu template no ar.</p>
+            <p class="text-stone-400 text-lg mb-12">Obrigado pela compra! Siga os passos abaixo para colocar seu
+                template no ar.</p>
 
             <!-- STEPS -->
             <div class="space-y-4 text-left">
@@ -111,7 +138,8 @@
                     <div class="step-number">1</div>
                     <div>
                         <h3 class="font-display text-lg text-white mb-1">Acesse o Repositório</h3>
-                        <p class="text-stone-400 text-sm">Você receberá um e-mail com o link do repositório Git. Clone o projeto na sua máquina.</p>
+                        <p class="text-stone-400 text-sm">Você receberá um e-mail com o link do repositório Git. Clone o
+                            projeto na sua máquina.</p>
                     </div>
                 </div>
 
@@ -119,7 +147,8 @@
                     <div class="step-number">2</div>
                     <div>
                         <h3 class="font-display text-lg text-white mb-1">Configure o Banco</h3>
-                        <p class="text-stone-400 text-sm">Crie um banco PostgreSQL (recomendamos Neon) e adicione a DATABASE_URL no arquivo .env.</p>
+                        <p class="text-stone-400 text-sm">Crie um banco PostgreSQL (recomendamos Neon) e adicione a
+                            DATABASE_URL no arquivo .env.</p>
                     </div>
                 </div>
 
@@ -127,7 +156,9 @@
                     <div class="step-number">3</div>
                     <div>
                         <h3 class="font-display text-lg text-white mb-1">Rode as Migrations</h3>
-                        <p class="text-stone-400 text-sm">Execute <code class="text-amber-400 bg-zinc-800 px-2 py-0.5 rounded text-xs">npx prisma migrate deploy</code> para criar as tabelas.</p>
+                        <p class="text-stone-400 text-sm">Execute <code
+                                class="text-amber-400 bg-zinc-800 px-2 py-0.5 rounded text-xs">npx prisma migrate deploy</code>
+                            para criar as tabelas.</p>
                     </div>
                 </div>
 
@@ -135,7 +166,8 @@
                     <div class="step-number">4</div>
                     <div>
                         <h3 class="font-display text-lg text-white mb-1">Deploy</h3>
-                        <p class="text-stone-400 text-sm">Faça deploy no Render, Railway ou qualquer servidor Node.js. Siga o guia no README.</p>
+                        <p class="text-stone-400 text-sm">Faça deploy no Render, Railway ou qualquer servidor Node.js.
+                            Siga o guia no README.</p>
                     </div>
                 </div>
 
@@ -143,7 +175,8 @@
                     <div class="step-number">5</div>
                     <div>
                         <h3 class="font-display text-lg text-white mb-1">Personalize</h3>
-                        <p class="text-stone-400 text-sm">Acesse o painel admin, cadastre seus pratos, configure cores, logo e informações do seu negócio.</p>
+                        <p class="text-stone-400 text-sm">Acesse o painel admin, cadastre seus pratos, configure cores,
+                            logo e informações do seu negócio.</p>
                     </div>
                 </div>
             </div>
@@ -161,7 +194,8 @@
     <!-- FOOTER -->
     <footer class="bg-zinc-950 border-t border-amber-400/10 py-8">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-stone-600 text-sm">© <span id="footer-year"></span> Template SaaS — Todos os direitos reservados.</p>
+            <p class="text-stone-600 text-sm">© <span id="footer-year"></span> Template SaaS — Todos os direitos
+                reservados.</p>
         </div>
     </footer>
 

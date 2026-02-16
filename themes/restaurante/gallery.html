@@ -7,7 +7,8 @@
     <title>Galeria — Restaurante</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <meta name="page-name" content="Galeria">
-    <meta name="description" content="Galeria de fotos — Conheça nosso espaço, pratos especiais e ambiente antes de sua visita.">
+    <meta name="description"
+        content="Galeria de fotos — Conheça nosso espaço, pratos especiais e ambiente antes de sua visita.">
     <link rel="canonical" href="">
     <!-- Open Graph -->
     <meta property="og:type" content="website">
@@ -125,6 +126,7 @@
         .lightbox-next {
             right: 16px;
         }
+
         /* FOUC prevention */
         body:not(.config-loaded) #nav-brand,
         body:not(.config-loaded) #footer-brand,
@@ -134,6 +136,7 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
+
         body.config-loaded #nav-brand,
         body.config-loaded #footer-brand,
         body.config-loaded #footer-tagline,
@@ -142,9 +145,15 @@
             opacity: 1;
             animation: configFadeIn 0.3s ease;
         }
+
         @keyframes configFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
     </style>
 </head>
@@ -156,7 +165,11 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 md:h-20">
                 <a href="/" class="flex items-center gap-3">
-                    <span class="text-2xl">🍽</span>
+                    <svg class="w-6 h-6 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.871c1.355 0 2.697.056 4.024.166C17.155 8.51 18 9.473 18 10.608v2.513M15 8.25v-1.5m-6 1.5v-1.5m12 9.75l-1.5.75a3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0L3 16.5m15-3.379a48.474 48.474 0 00-6-.371c-2.032 0-4.034.126-6 .371m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.169c0 .621-.504 1.125-1.125 1.125H4.125A1.125 1.125 0 013 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 016 13.12M16.5 3.75V16.5" />
+                    </svg>
                     <span class="font-display text-xl md:text-2xl font-bold text-white" id="nav-brand"></span>
                 </a>
                 <div class="hidden md:flex items-center gap-8">
@@ -219,7 +232,8 @@
     <footer class="bg-dark-900 border-t border-white/5 py-12">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-gray-600 text-sm" id="footer-copy">© 2026 Sabor & Arte</p>
-            <a href="/privacy" class="text-gray-500 hover:text-brand-400 text-xs mt-2 inline-block transition">Política de Privacidade</a>
+            <a href="/privacy" class="text-gray-500 hover:text-brand-400 text-xs mt-2 inline-block transition">Política
+                de Privacidade</a>
         </div>
     </footer>
 
