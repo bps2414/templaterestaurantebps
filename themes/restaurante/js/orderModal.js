@@ -68,8 +68,8 @@
 
     OrderModal.prototype._init = function () {
         this._createModal();
-        this._initFormValidation();
         this._attachEvents();
+        this._initFormValidation();
     };
 
     OrderModal.prototype._createModal = function () {
@@ -128,7 +128,6 @@
 
         document.body.appendChild(modal);
         this.modal = modal;
-        this.form = document.getElementById('order-form'); // Initialize form reference
     };
 
     OrderModal.prototype._attachEvents = function () {
@@ -190,11 +189,12 @@
         document.addEventListener('keydown', this._boundKeydown);
     };
 
+    // --- Visual inline form validation (S1-T2) ---
     OrderModal.prototype._initFormValidation = function () {
         if (!window.formValidation) return;
 
         var v = window.formValidation.validators;
-        this._formValidator = window.formValidation.enhance(this.form, {
+        this._formValidator = window.formValidation.enhance('#order-form', {
             name: [v.required, v.minLength(2), v.maxLength(100)],
             phone: [v.required, v.phone],
             address: [v.required, v.minLength(5), v.maxLength(200)],
@@ -329,6 +329,9 @@
             self.isSubmitting = false;
             self._setLoading(false); // Reset loading state when closing modal
 
+            // Clear visual inline validation states
+            if (self._formValidator) self._formValidator.clearAll();
+
             // Restore focus to element that had focus before modal opened
             if (self._lastFocusedElement && typeof self._lastFocusedElement.focus === 'function') {
                 try {
@@ -342,7 +345,6 @@
     };
 
     OrderModal.prototype._clearErrors = function () {
-        if (this._formValidator) this._formValidator.clearAll();
         var errorsEl = document.getElementById('order-errors');
         errorsEl.textContent = '';
         errorsEl.classList.add('hidden');
@@ -359,11 +361,14 @@
         var text = document.getElementById('order-submit-text');
         if (loading) {
             btn.disabled = true;
-            btn.classList.add('opacity-50', 'cursor-not-allowed');
-            text.textContent = 'Validando pedido...';
+            btn.classList.add('opacity-70', 'cursor-not-allowed');
+            btn.setAttribute('aria-busy', 'true');
+            // Just change the text, keep the WhatsApp icon that's already in the button
+            text.textContent = 'Processando...';
         } else {
             btn.disabled = false;
-            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            btn.classList.remove('opacity-70', 'cursor-not-allowed');
+            btn.removeAttribute('aria-busy');
             text.textContent = 'Enviar pelo WhatsApp';
         }
     };
@@ -390,6 +395,7 @@
                 return; // Visual validator caught errors not in legacy validator
             }
         }
+
         if (validationErrors.length > 0) {
             this._showErrors(validationErrors);
             return;
@@ -474,24 +480,23 @@
     };
 
     OrderModal.prototype._showToast = function (message, type) {
-        if (window.feedback && window.feedback.toast) {
-            window.feedback.toast(message, { type: type || 'info', duration: 4000 });
-            return;
-        }
-        // Fallback
         try {
-            type = type || 'info';
-            var toast = document.createElement('div');
-            var bgClass = type === 'error' ? 'bg-red-600' : type === 'success' ? 'bg-green-600' : 'bg-brand-500';
-            toast.className = 'fixed bottom-4 right-4 z-[10000] px-6 py-3 rounded-xl text-white font-medium shadow-lg transform transition-all ' + bgClass;
-            toast.textContent = message; // textContent — XSS safe
-            document.body.appendChild(toast);
-
-            setTimeout(function () {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(20px)';
-                setTimeout(function () { toast.remove(); }, 300);
-            }, 3000);
+            if (window.feedback) {
+                window.feedback.toast(message, type || 'info');
+            } else {
+                // Fallback if feedback.js not loaded
+                type = type || 'info';
+                var toast = document.createElement('div');
+                var bgClass = type === 'error' ? 'bg-red-600' : type === 'success' ? 'bg-green-600' : 'bg-brand-500';
+                toast.className = 'fixed bottom-4 right-4 z-[10000] px-6 py-3 rounded-xl text-white font-medium shadow-lg transform transition-all ' + bgClass;
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                setTimeout(function () {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateY(20px)';
+                    setTimeout(function () { toast.remove(); }, 300);
+                }, 3000);
+            }
         } catch (e) {
             console.error('Toast error:', e);
         }

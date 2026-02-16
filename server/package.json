@@ -5,7 +5,8 @@
     "main": "dist/index.js",
     "scripts": {
         "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-        "build": "tsc",
+        "select-theme": "node ../scripts/select-theme.js",
+        "build": "node ../scripts/select-theme.js && tsc",
         "start": "node dist/index.js",
         "start:render": "sh scripts/start.sh",
         "prisma:generate": "prisma generate",
@@ -18,7 +19,8 @@
         "backup:restore": "ts-node scripts/backup.ts restore",
         "test": "jest --forceExit --detectOpenHandles",
         "lint": "eslint src/ --ext .ts",
-        "format": "prettier --write \"src/**/*.ts\""
+        "format": "prettier --write \"src/**/*.ts\"",
+        "preflight": "powershell -ExecutionPolicy Bypass -File ../scripts/preflight.ps1"
     },
     "prisma": {
         "seed": "ts-node prisma/seed.ts"

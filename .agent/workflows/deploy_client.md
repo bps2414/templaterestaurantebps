@@ -21,21 +21,19 @@ description: Automates the full deployment process for a new client (Neon + Seed
      - `PLAN`: [PLAN]
 
 4. **Deploy to Render**:
-   - Determine **Branch**:
-     - If `BUSINESS_TYPE` is `restaurante` -> use `main`
-     - If `BUSINESS_TYPE` is `hamburgueria` -> use `template-b`
-     - (`pizzaria` is currently unused/legacy)
+   - **All clients use `main` branch now** (Single Branch Architecture).
    - Use `render.create_service` with:
      - `type`: "web_service"
      - `name`: `[CLIENT_NAME]`
      - `repo`: `https://github.com/bps2414/templaterestaurantebps`
-     - `branch`: [Selected Branch]
+     - `branch`: `main`
      - `rootDir`: `server`
      - `plan`: `free` (or starter)
      - `region`: `oregon` (US West - Low latency with Neon)
      - `buildCommand`: `npm ci --include=dev && npx prisma generate && npm run build`
      - `startCommand`: `sh scripts/start.sh`
      - `envVars`:
+       - `THEME`: [Set to BUSINESS_TYPE: "restaurante" or "hamburgueria"]
        - `DATABASE_URL`: [POOLED connection string from Step 2]
        - `Direct_URL`: [DIRECT connection string from Step 2]
        - `NODE_ENV`: "production"

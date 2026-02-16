@@ -1043,12 +1043,8 @@
                         // Keep button disabled permanently after rate limit
                         btn.disabled = true;
                         btn.classList.add('opacity-50', 'cursor-not-allowed');
-                        return; // Don't execute finally block
-                        errEl.textContent = `Muitas tentativas. Aguarde ${retryMinutes} minuto${retryMinutes > 1 ? 's' : ''}.`;
-                        // Keep button disabled permanently after rate limit
-                        btn.disabled = true;
-                        btn.classList.add('opacity-50', 'cursor-not-allowed');
-                        return; // Don't execute finally block
+                        isLoginSubmitting = false;
+                        return; // Don't execute code below
                     } else if (res.status === 403 && json.error && json.error.includes('CSRF')) {
                         // CSRF token expired - show friendly message
                         errEl.textContent = 'Sessão expirou. Recarregando página...';
@@ -1062,15 +1058,12 @@
                 errEl.textContent = 'Erro de rede. Verifique sua conexão.';
                 errEl.classList.remove('hidden');
             }
-             
             
             // Restore button state (only if not rate-limited)
-            if (!btn.disabled || btn.textContent !== originalText) {
-                btn.disabled = false;
-                btn.removeAttribute('aria-busy');
-                btn.classList.remove('opacity-50', 'cursor-not-allowed');
-                btn.textContent = originalText;
-            }
+            btn.disabled = false;
+            btn.removeAttribute('aria-busy');
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            btn.textContent = originalText;
             isLoginSubmitting = false;
         });
 
