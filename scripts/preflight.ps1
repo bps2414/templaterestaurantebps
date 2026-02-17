@@ -87,9 +87,9 @@ if (-not $Env:DATABASE_URL) {
 $Env:DIRECT_URL = $Env:DATABASE_URL
 
 # Silence Cloudinary warnings
-$Env:CLOUDINARY_CLOUD_NAME = "local_test"
-$Env:CLOUDINARY_API_KEY = "123456789"
-$Env:CLOUDINARY_API_SECRET = "local_secret"
+if (-not $Env:CLOUDINARY_CLOUD_NAME) { $Env:CLOUDINARY_CLOUD_NAME = "local_test" }
+if (-not $Env:CLOUDINARY_API_KEY) { $Env:CLOUDINARY_API_KEY = "123456789" }
+if (-not $Env:CLOUDINARY_API_SECRET) { $Env:CLOUDINARY_API_SECRET = "local_secret" }
 
 # Ensure a JWT_SECRET exists
 if (-not $Env:JWT_SECRET) {

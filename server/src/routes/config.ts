@@ -9,8 +9,13 @@ import { getCurrentPlan, isProConfigKey } from '../middlewares/plan';
 import { AuthenticatedRequest } from '../types';
 import { z } from 'zod';
 import { ForbiddenError, BadRequestError } from '../utils/errors';
+import cloudinaryService from '../services/cloudinaryService';
+import logger from '../utils/logger';
 
 const router = Router();
+
+// Keys that hold Cloudinary image URLs
+const IMAGE_CONFIG_KEYS = ['logo_url', 'hero_image', 'about_image', 'favicon_url'];
 
 // Sanitize string values against XSS
 function sanitizeValue(value: string): string {
@@ -106,6 +111,18 @@ router.put('/', requireAuth, requireAdmin, async (req: AuthenticatedRequest, res
             );
         }
 
+        // Fetch old values for image keys to cleanup Cloudinary
+        const imageKeysBeingUpdated = Object.keys(data).filter(k => IMAGE_CONFIG_KEYS.includes(k));
+        const oldImageValues: Record<string, string> = {};
+        if (imageKeysBeingUpdated.length > 0) {
+            const oldConfigs = await prisma.siteConfig.findMany({
+                where: { key: { in: imageKeysBeingUpdated } },
+            });
+            oldConfigs.forEach((c: { key: string; value: string }) => {
+                oldImageValues[c.key] = c.value;
+            });
+        }
+
         const updates = Object.entries(data).map(([key, value]) => {
             if (!ALLOWED_KEYS.includes(key)) {
                 throw new BadRequestError(`Chave "${key}" não é permitida`);
@@ -135,6 +152,17 @@ router.put('/', requireAuth, requireAdmin, async (req: AuthenticatedRequest, res
         });
 
         await Promise.all(updates);
+
+        // Cleanup old Cloudinary images (fire-and-forget, non-blocking)
+        for (const key of imageKeysBeingUpdated) {
+            const oldUrl = oldImageValues[key];
+            const newUrl = data[key];
+            if (oldUrl && oldUrl.includes('cloudinary.com') && oldUrl !== newUrl) {
+                cloudinaryService.delete(oldUrl).catch(err => {
+                    logger.warn('Failed to cleanup old Cloudinary image', { key, oldUrl, error: err.message });
+                });
+            }
+        }
 
         const configs = await prisma.siteConfig.findMany();
         const configMap: Record<string, string> = {};

@@ -9,6 +9,8 @@ import { requireAuth, requireAdmin } from '../middlewares/auth';
 import { getCurrentPlan } from '../middlewares/plan';
 import { AuthenticatedRequest } from '../types';
 import { z } from 'zod';
+import cloudinaryService from '../services/cloudinaryService';
+import logger from '../utils/logger';
 
 const router = Router();
 
@@ -107,12 +109,27 @@ router.put('/', requireAuth, requireAdmin, async (req: AuthenticatedRequest, res
         }
 
         if (data.team_members !== undefined) {
+            // Fetch old team member images for Cloudinary cleanup
+            const oldTeamConfig = await prisma.siteConfig.findUnique({ where: { key: 'team_members' } });
+            let oldMemberImages: string[] = [];
+            if (oldTeamConfig) {
+                try {
+                    const oldMembers = JSON.parse(oldTeamConfig.value) as Array<{ image?: string }>;
+                    oldMemberImages = oldMembers
+                        .map(m => m.image || '')
+                        .filter(img => img.includes('cloudinary.com'));
+                } catch {
+                    // Old value not parseable, skip cleanup
+                }
+            }
+
             // Sanitize all string fields in team members
             const sanitizedMembers = data.team_members.map(m => ({
                 name: sanitizeValue(m.name),
                 role: sanitizeValue(m.role),
                 image: m.image ? sanitizeValue(m.image) : '',
             }));
+            const newMemberImages = sanitizedMembers.map(m => m.image).filter(Boolean);
             const value = JSON.stringify(sanitizedMembers);
             updates.push(
                 prisma.siteConfig.upsert({
@@ -121,6 +138,15 @@ router.put('/', requireAuth, requireAdmin, async (req: AuthenticatedRequest, res
                     create: { key: 'team_members', value },
                 })
             );
+
+            // Cleanup orphaned Cloudinary images (fire-and-forget)
+            for (const oldImg of oldMemberImages) {
+                if (!newMemberImages.includes(oldImg)) {
+                    cloudinaryService.delete(oldImg).catch(err => {
+                        logger.warn('Failed to cleanup old team member image', { oldImg, error: err.message });
+                    });
+                }
+            }
         }
 
         if (data.about_text_2 !== undefined) {

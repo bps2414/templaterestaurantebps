@@ -619,7 +619,8 @@
     </div>
 
     <!-- ========== CATEGORY MODAL ========== -->
-    <div class="modal-overlay" id="category-modal" role="dialog" aria-modal="true" aria-labelledby="category-modal-title">
+    <div class="modal-overlay" id="category-modal" role="dialog" aria-modal="true"
+        aria-labelledby="category-modal-title">
         <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-md border border-white/5">
             <h2 class="text-xl font-bold text-white mb-6" id="category-modal-title">Nova Categoria</h2>
             <form id="category-form" class="space-y-4">
@@ -915,7 +916,7 @@
             }
             const res = await fetch(`${API}/api${endpoint}`, { ...options, headers, credentials: 'include' });
             const json = await res.json();
-            
+
             // Handle 401 (JWT expired) - try refresh
             if (res.status === 401 && !_retried) {
                 const refreshed = await tryRefreshToken();
@@ -927,14 +928,14 @@
                 localStorage.removeItem('admin_refresh');
                 showLogin();
             }
-            
+
             // Handle 403 CSRF token expired - auto-renew and retry
             if (res.status === 403 && !_retried && json.error?.includes('CSRF')) {
                 console.log('⚠️ CSRF token expirado, renovando...');
                 await fetchCsrfToken();
                 return apiAuth(endpoint, options, true);
             }
-            
+
             return json;
         }
 
@@ -1058,7 +1059,7 @@
                 errEl.textContent = 'Erro de rede. Verifique sua conexão.';
                 errEl.classList.remove('hidden');
             }
-            
+
             // Restore button state (only if not rate-limited)
             btn.disabled = false;
             btn.removeAttribute('aria-busy');
@@ -1478,6 +1479,10 @@
                     ${value ? `<img src="${escapeAttr(value)}" class="w-20 h-14 rounded-lg object-cover border border-white/10" onerror="this.style.display='none'">` : ''}
                     <input type="file" data-upload-key="${key}" accept="image/png,image/jpeg,image/webp"
                         class="text-sm text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-brand-500 file:text-white file:font-medium file:cursor-pointer hover:file:bg-brand-600">
+                    <button type="button" data-clear-key="${key}" onclick="clearConfigImage('${key}')" 
+                        class="text-red-400 hover:text-red-300 text-xs px-2 py-1 rounded-lg hover:bg-red-400/10 transition" 
+                        style="display: ${value ? 'inline-block' : 'none'}"
+                        title="Apagar imagem">🗑️</button>
                 </div>
                 <input type="text" data-key="${key}" value="${escapeAttr(value)}"
                     class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white text-xs focus:border-brand-400 focus:outline-none"
@@ -1516,6 +1521,10 @@
                     ${value ? `<img src="${escapeAttr(value)}" class="${previewSize} rounded-lg object-cover border border-white/10" onerror="this.style.display='none'">` : ''}
                     <input type="file" data-upload-key="${key}" accept="image/png,image/jpeg,image/webp" ${disabledAttr}
                         class="text-sm text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-brand-500 file:text-white file:font-medium file:cursor-pointer hover:file:bg-brand-600">
+                    ${isPro ? `<button type="button" data-clear-key="${key}" onclick="clearConfigImage('${key}')" 
+                        class="text-red-400 hover:text-red-300 text-xs px-2 py-1 rounded-lg hover:bg-red-400/10 transition" 
+                        style="display: ${value ? 'inline-block' : 'none'}"
+                        title="Apagar imagem">🗑️</button>` : ''}
                 </div>
                 <input type="text" data-key="${key}" value="${escapeAttr(value)}" ${disabledAttr}
                     class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white text-xs focus:border-brand-400 focus:outline-none"
@@ -1553,41 +1562,63 @@
 
             form.innerHTML = html;
 
-            // Attach upload handlers for image fields
+            // Attach upload handlers for image fields (deferred: upload on save)
             document.querySelectorAll('#config-form [data-upload-key]').forEach(fileInput => {
-                fileInput.addEventListener('change', async (e) => {
+                fileInput.addEventListener('change', (e) => {
                     const file = e.target.files[0];
                     if (!file) return;
                     const key = fileInput.dataset.uploadKey;
-                    const formData = new FormData();
-                    formData.append('image', file);
-                    toast('Enviando imagem...');
-                    try {
-                        const res = await apiAuth('/upload', { method: 'POST', body: formData });
-                        if (res.success && res.data?.url) {
-                            // Set the URL input value
-                            const urlInput = document.querySelector(`[data-key="${key}"]`);
-                            if (urlInput) urlInput.value = res.data.url;
-                            // Update preview
-                            const preview = fileInput.parentElement.querySelector('img');
-                            if (preview) {
-                                preview.src = res.data.url;
-                                preview.style.display = '';
-                            } else {
-                                const img = document.createElement('img');
-                                img.src = res.data.url;
-                                img.className = key === 'favicon_url' ? 'w-8 h-8 rounded-lg object-cover border border-white/10' : 'w-16 h-16 rounded-lg object-cover border border-white/10';
-                                fileInput.parentElement.prepend(img);
-                            }
-                            toast('Imagem enviada! Clique "Salvar" para aplicar.', 'success');
-                        } else {
-                            toast(res.error || 'Erro ao enviar imagem', 'error');
-                        }
-                    } catch (err) {
-                        toast('Erro ao enviar imagem', 'error');
+
+                    // Store file for upload on save
+                    pendingUploads[key] = file;
+
+                    // Show local preview (no network request)
+                    const blobUrl = URL.createObjectURL(file);
+                    const preview = fileInput.parentElement.querySelector('img');
+                    if (preview) {
+                        preview.src = blobUrl;
+                        preview.style.display = '';
+                    } else {
+                        const img = document.createElement('img');
+                        img.src = blobUrl;
+                        img.className = key === 'favicon_url' ? 'w-8 h-8 rounded-lg object-cover border border-white/10' : 'w-16 h-16 rounded-lg object-cover border border-white/10';
+                        fileInput.parentElement.prepend(img);
                     }
+
+                    // Show delete button
+                    const container = fileInput.parentElement;
+                    const delBtn = container.querySelector('[data-clear-key]');
+                    if (delBtn) delBtn.style.display = 'inline-block';
+
+                    toast('Imagem selecionada. Clique "Salvar" para aplicar.', 'success');
                 });
             });
+        }
+
+        function clearConfigImage(key) {
+            // Remove pending upload if any
+            delete pendingUploads[key];
+            const urlInput = document.querySelector(`[data-key="${key}"]`);
+            if (urlInput) urlInput.value = '';
+            const fileInput = document.querySelector(`[data-upload-key="${key}"]`);
+            if (fileInput) {
+                fileInput.value = '';
+                const container = fileInput.closest('.flex');
+                if (container) {
+                    const preview = container.querySelector('img');
+                    if (preview) preview.style.display = 'none';
+                    const delBtn = container.querySelector('[data-clear-key]');
+                    if (delBtn) delBtn.style.display = 'none';
+                }
+            }
+            toast('Imagem removida. Clique "Salvar" para aplicar.');
+        }
+
+        function clearTeamImage(index) {
+            delete teamMembers[index]._pendingFile;
+            teamMembers[index].image = '';
+            renderTeamList();
+            toast('Foto removida. Clique "Salvar" para aplicar.');
         }
 
         async function saveConfig() {
@@ -1618,6 +1649,32 @@
             }
 
             setLoading(saveBtn, true, '💾 Salvar Tudo');
+
+            // Upload pending images before saving
+            const uploadKeys = Object.keys(pendingUploads);
+            if (uploadKeys.length > 0) {
+                toast('Enviando imagens...');
+                for (const key of uploadKeys) {
+                    const formData = new FormData();
+                    formData.append('image', pendingUploads[key]);
+                    try {
+                        const uploadRes = await apiAuth('/upload', { method: 'POST', body: formData });
+                        if (uploadRes.success && uploadRes.data?.url) {
+                            data[key] = uploadRes.data.url;
+                        } else {
+                            toast(`Erro ao enviar imagem: ${uploadRes.error || 'Erro desconhecido'}`, 'error');
+                            setLoading(saveBtn, false, '💾 Salvar Tudo');
+                            return;
+                        }
+                    } catch (err) {
+                        toast('Erro ao enviar imagem', 'error');
+                        setLoading(saveBtn, false, '💾 Salvar Tudo');
+                        return;
+                    }
+                }
+                for (const key of uploadKeys) delete pendingUploads[key];
+            }
+
             const res = await apiAuth('/config', {
                 method: 'PUT',
                 body: JSON.stringify(data),
@@ -1803,6 +1860,7 @@
         }
 
         // --- ABOUT / TEAM ADMIN ---
+        const pendingUploads = {}; // Config images: deferred upload on save
         let aboutFeatures = [];
         let teamMembers = [];
 
@@ -1910,6 +1968,10 @@
                                 class="text-xs text-brand-400 hover:text-brand-300 w-full text-center">
                                 📷 Upload
                             </button>
+                            ${m.image && m.image.trim() !== '' ? `<button onclick="clearTeamImage(${i})"
+                                class="text-xs text-red-400 hover:text-red-300 w-full text-center mt-1">
+                                🗑️ Apagar
+                            </button>` : ''}
                         </div>
                         <div class="flex-1 space-y-3">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1964,7 +2026,7 @@
 
                 // Attach upload handler
                 const uploadInput = document.getElementById(`team-upload-${i}`);
-                uploadInput.addEventListener('change', async (e) => {
+                uploadInput.addEventListener('change', (e) => {
                     const file = e.target.files[0];
                     if (!file) return;
 
@@ -1978,31 +2040,11 @@
                         return;
                     }
 
-                    const formData = new FormData();
-                    formData.append('image', file);
-
-                    try {
-                        const preview = document.getElementById(`team-preview-${i}`);
-                        preview.style.opacity = '0.5';
-
-                        const res = await apiAuth('/upload', {
-                            method: 'POST',
-                            body: formData,
-                        });
-
-                        if (res.success && res.data.url) {
-                            teamMembers[i].image = res.data.url;
-                            preview.src = res.data.url;
-                            preview.style.opacity = '1';
-                            toast('Foto enviada!', 'success');
-                        } else {
-                            preview.style.opacity = '1';
-                            toast(res.error || 'Erro ao enviar foto', 'error');
-                        }
-                    } catch (err) {
-                        document.getElementById(`team-preview-${i}`).style.opacity = '1';
-                        toast('Erro ao enviar foto', 'error');
-                    }
+                    // Store file for upload on save
+                    teamMembers[i]._pendingFile = file;
+                    teamMembers[i].image = URL.createObjectURL(file);
+                    renderTeamList();
+                    toast('Foto selecionada. Salve para aplicar.', 'success');
 
                     e.target.value = '';
                 });
@@ -2052,6 +2094,28 @@
                 method: 'PUT',
                 body: JSON.stringify({ about_text_2: aboutText2 }),
             });
+
+            // Upload pending team member photos before saving
+            for (let ti = 0; ti < validTeam.length; ti++) {
+                if (validTeam[ti]._pendingFile) {
+                    toast('Enviando fotos da equipe...');
+                    const formData = new FormData();
+                    formData.append('image', validTeam[ti]._pendingFile);
+                    try {
+                        const uploadRes = await apiAuth('/upload', { method: 'POST', body: formData });
+                        if (uploadRes.success && uploadRes.data?.url) {
+                            validTeam[ti].image = uploadRes.data.url;
+                        } else {
+                            toast('Erro ao enviar foto da equipe', 'error');
+                            return;
+                        }
+                    } catch (err) {
+                        toast('Erro ao enviar foto da equipe', 'error');
+                        return;
+                    }
+                    delete validTeam[ti]._pendingFile;
+                }
+            }
 
             // Save features & team via about-content endpoint
             const aboutPayload = {
@@ -2205,7 +2269,7 @@
             window.closeModal = function (id) {
                 originalClose(id);
                 if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
-                    try { lastFocusedElement.focus(); } catch (e) {}
+                    try { lastFocusedElement.focus(); } catch (e) { }
                 }
                 lastFocusedElement = null;
             };

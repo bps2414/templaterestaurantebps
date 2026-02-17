@@ -13,6 +13,7 @@ import path from 'path';
 const router = Router();
 
 // POST /api/upload — Admin: upload a single image
+// Accepts optional `previousUrl` in body to cleanup old Cloudinary image
 router.post('/', requireAuth, requireAdmin, upload.single('image'), async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
         if (!req.file) {
@@ -45,6 +46,14 @@ router.post('/', requireAuth, requireAdmin, upload.single('image'), async (req: 
             return res.status(500).json({
                 success: false,
                 error: 'Erro ao fazer upload da imagem. Tente novamente.'
+            });
+        }
+
+        // Cleanup old Cloudinary image if previousUrl was provided
+        const previousUrl = req.body?.previousUrl;
+        if (previousUrl && typeof previousUrl === 'string' && previousUrl.includes('cloudinary.com')) {
+            cloudinaryService.delete(previousUrl).catch(() => {
+                // Non-blocking: log handled inside service
             });
         }
 
