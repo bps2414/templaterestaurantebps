@@ -69,13 +69,13 @@ if ($Serve) {
     Write-Host "`n[INTERACTIVE MODE]" -ForegroundColor Magenta
     
     # Use existing environment variables as defaults for the prompt if possible
-    $DefaultTypeIndex = if ($Env:SEED_TYPE -eq 'hamburgueria') { 1 } elseif ($Env:SEED_TYPE -eq 'pizzaria') { 2 } else { 0 }
+    $DefaultTypeIndex = if ($Env:SEED_TYPE -eq 'hamburgueria') { 1 } elseif ($Env:SEED_TYPE -eq 'pizzaria') { 2 } elseif ($Env:SEED_TYPE -eq 'confeitaria') { 3 } else { 0 }
     $DefaultPlanIndex = if ($Env:PLAN -eq 'essential') { 1 } else { 0 }
-    $DefaultThemeIndex = if ($Env:THEME -eq 'hamburgueria') { 1 } else { 0 }
+    $DefaultThemeIndex = if ($Env:THEME -eq 'hamburgueria') { 1 } elseif ($Env:THEME -eq 'confeitaria') { 2 } else { 0 }
 
-    $Env:SEED_TYPE = Prompt-Choice -Message "Choose Seed Type:" -Options @("restaurante", "hamburgueria", "pizzaria") -DefaultIndex $DefaultTypeIndex
+    $Env:SEED_TYPE = Prompt-Choice -Message "Choose Seed Type:" -Options @("restaurante", "hamburgueria", "pizzaria", "confeitaria") -DefaultIndex $DefaultTypeIndex
     $Env:PLAN = Prompt-Choice -Message "Choose Plan:" -Options @("professional", "essential") -DefaultIndex $DefaultPlanIndex
-    $Env:THEME = Prompt-Choice -Message "Choose Theme (Frontend):" -Options @("restaurante", "hamburgueria") -DefaultIndex $DefaultThemeIndex
+    $Env:THEME = Prompt-Choice -Message "Choose Theme (Frontend):" -Options @("restaurante", "hamburgueria", "confeitaria") -DefaultIndex $DefaultThemeIndex
     
     Write-Host "Overriding with SEED_TYPE=$($Env:SEED_TYPE), PLAN=$($Env:PLAN), THEME=$($Env:THEME) (Interactive)" -ForegroundColor Gray
 }

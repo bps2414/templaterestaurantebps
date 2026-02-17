@@ -1,0 +1,65 @@
+{
+    "type": "web_service",
+    "name": "restaurantevitri",
+    "ownerId": "tea-d66cpl4r85hc73ddoojg",
+    "repo": "https://github.com/bps2414/templaterestaurantebps",
+    "branch": "main",
+    "rootDir": "server",
+    "serviceDetails": {
+        "region": "oregon",
+        "plan": "free",
+        "runtime": "node",
+        "env": "node",
+        "numInstances": 1,
+        "envSpecificDetails": {
+            "buildCommand": "npm ci --include=dev && npx prisma generate && npm run build",
+            "startCommand": "sh scripts/start.sh"
+        }
+    },
+    "envVars": [
+        {
+            "key": "DATABASE_URL",
+            "value": "postgresql://neondb_owner:npg_2mWc0JwvFMyV@ep-lucky-mode-ak1jcjoj-pooler.c-3.us-west-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require"
+        },
+        {
+            "key": "DIRECT_URL",
+            "value": "postgresql://neondb_owner:npg_2mWc0JwvFMyV@ep-lucky-mode-ak1jcjoj.c-3.us-west-2.aws.neon.tech/neondb?sslmode=require"
+        },
+        {
+            "key": "THEME",
+            "value": "restaurante"
+        },
+        {
+            "key": "NODE_ENV",
+            "value": "production"
+        },
+        {
+            "key": "JWT_SECRET",
+            "value": "N/EzsJxGjHE5A7jwQj9we73aphy/2fTpyA68A/9zhGZERrt7AA77cind/GJJQr6XawBmpLijjnHSphRpQRaH44A=="
+        },
+        {
+            "key": "CLOUDINARY_CLOUD_NAME",
+            "value": "dmebhvwpo"
+        },
+        {
+            "key": "CLOUDINARY_API_KEY",
+            "value": "448539967934699"
+        },
+        {
+            "key": "CLOUDINARY_API_SECRET",
+            "value": "1XICB1VlrYJGz2Wh-EOraAOsehM"
+        },
+        {
+            "key": "CLOUDINARY_FOLDER_PREFIX",
+            "value": "restaurantevitri"
+        },
+        {
+            "key": "APP_URL",
+            "value": "https://restaurantevitri.onrender.com"
+        },
+        {
+            "key": "CORS_ORIGINS",
+            "value": "https://restaurantevitri.onrender.com"
+        }
+    ]
+}

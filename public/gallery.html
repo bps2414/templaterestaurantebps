@@ -4,45 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galeria — Hamburgueria</title>
+    <title>Galeria — Restaurante</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <meta name="page-name" content="Galeria">
-    <meta name="description" content="Galeria de fotos — Conheça nossos hambúrgueres, ambiente e pratos especiais.">
+    <meta name="description"
+        content="Galeria de fotos — Conheça nosso espaço, pratos especiais e ambiente antes de sua visita.">
     <link rel="canonical" href="">
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:locale" content="pt_BR">
-    <meta property="og:title" content="Galeria — Hamburgueria">
-    <meta property="og:description" content="Galeria de fotos — Nossos hambúrgueres e ambiente.">
+    <meta property="og:title" content="Galeria — Restaurante">
+    <meta property="og:description" content="Galeria de fotos — Conheça nosso espaço e pratos especiais.">
     <meta property="og:url" content="">
-    <meta property="og:site_name" content="Hamburgueria">
+    <meta property="og:site_name" content="Restaurante">
     <meta property="og:image" content="">
     <!-- Preconnect -->
     <link rel="preconnect" href="https://res.cloudinary.com">
     <link rel="dns-prefetch" href="https://res.cloudinary.com">
     <script src="https://cdn.tailwindcss.com"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <script>
-        tailwind.config = { theme: { extend: { colors: { brand: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' }, dark: { 800: '#1c1917', 900: '#0c0a09' } }, fontFamily: { display: ['Oswald', 'sans-serif'], body: ['Inter', 'sans-serif'] } } } };
+        tailwind.config = { theme: { extend: { colors: { brand: { 400: '#f19244', 500: '#ee7620', 600: '#d95c16' }, dark: { 800: '#1a1a2e', 900: '#0f0f1a' } }, fontFamily: { display: ['Playfair Display', 'serif'], body: ['Inter', 'sans-serif'] } } } };
     </script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: #0c0a09;
-            color: #f5f5f4;
+            background: #0f0f1a;
+            color: #f5f5f5;
         }
 
         .font-display {
-            font-family: 'Oswald', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 0.02em;
+            font-family: 'Playfair Display', serif;
         }
 
         .nav-glass {
-            backdrop-filter: blur(16px);
-            background: rgba(12, 10, 9, 0.85);
+            backdrop-filter: blur(12px);
+            background: rgba(15, 15, 26, 0.8);
         }
 
         .whatsapp-float {
@@ -68,7 +67,7 @@
         .gallery-item {
             cursor: pointer;
             overflow: hidden;
-            border-radius: 1rem;
+            border-radius: 0.75rem;
         }
 
         .gallery-item img {
@@ -79,6 +78,7 @@
             transform: scale(1.1);
         }
 
+        /* Lightbox */
         .lightbox {
             display: none;
             position: fixed;
@@ -119,8 +119,13 @@
             font-size: 2rem;
         }
 
-        .lightbox-prev { left: 16px; }
-        .lightbox-next { right: 16px; }
+        .lightbox-prev {
+            left: 16px;
+        }
+
+        .lightbox-next {
+            right: 16px;
+        }
 
         /* FOUC prevention */
         body:not(.config-loaded) #nav-brand,
@@ -131,6 +136,7 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
+
         body.config-loaded #nav-brand,
         body.config-loaded #footer-brand,
         body.config-loaded #footer-tagline,
@@ -139,9 +145,15 @@
             opacity: 1;
             animation: configFadeIn 0.3s ease;
         }
+
         @keyframes configFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
     </style>
 </head>
@@ -149,19 +161,23 @@
 <body>
 
     <!-- NAVBAR -->
-    <nav class="nav-glass fixed top-0 w-full z-50 border-b border-amber-400/10">
+    <nav class="nav-glass fixed top-0 w-full z-50 border-b border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 md:h-20">
                 <a href="/" class="flex items-center gap-3">
-                    <span class="text-2xl">🍔</span>
-                    <span class="font-display text-xl md:text-2xl font-bold text-amber-400" id="nav-brand"></span>
+                    <svg class="w-6 h-6 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.871c1.355 0 2.697.056 4.024.166C17.155 8.51 18 9.473 18 10.608v2.513M15 8.25v-1.5m-6 1.5v-1.5m12 9.75l-1.5.75a3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0L3 16.5m15-3.379a48.474 48.474 0 00-6-.371c-2.032 0-4.034.126-6 .371m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.169c0 .621-.504 1.125-1.125 1.125H4.125A1.125 1.125 0 013 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 016 13.12M16.5 3.75V16.5" />
+                    </svg>
+                    <span class="font-display text-xl md:text-2xl font-bold text-white" id="nav-brand"></span>
                 </a>
                 <div class="hidden md:flex items-center gap-8">
-                    <a href="/" class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Início</a>
-                    <a href="/menu" class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Cardápio</a>
-                    <a href="/gallery" class="text-amber-400 font-medium text-sm tracking-wide">Galeria</a>
-                    <a href="/about" class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Sobre</a>
-                    <a href="/contact" class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Contato</a>
+                    <a href="/" class="text-gray-300 hover:text-brand-400 transition text-sm">Início</a>
+                    <a href="/menu" class="text-gray-300 hover:text-brand-400 transition text-sm">Cardápio</a>
+                    <a href="/gallery" class="text-brand-400 font-medium text-sm">Galeria</a>
+                    <a href="/about" class="text-gray-300 hover:text-brand-400 transition text-sm">Sobre</a>
+                    <a href="/contact" class="text-gray-300 hover:text-brand-400 transition text-sm">Contato</a>
                 </div>
                 <button id="menu-toggle" class="md:hidden text-white p-2"><svg class="w-6 h-6" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
@@ -170,31 +186,32 @@
                     </svg></button>
             </div>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden bg-zinc-950/95 backdrop-blur border-t border-amber-400/10">
+        <div id="mobile-menu" class="hidden md:hidden bg-dark-900/95 backdrop-blur border-t border-white/5">
             <div class="px-4 py-4 space-y-3">
-                <a href="/" class="block text-stone-400 py-2">Início</a>
-                <a href="/menu" class="block text-stone-400 py-2">Cardápio</a>
-                <a href="/gallery" class="block text-amber-400 font-medium py-2">Galeria</a>
-                <a href="/about" class="block text-stone-400 py-2">Sobre</a>
-                <a href="/contact" class="block text-stone-400 py-2">Contato</a>
+                <a href="/" class="block text-gray-300 py-2">Início</a>
+                <a href="/menu" class="block text-gray-300 py-2">Cardápio</a>
+                <a href="/gallery" class="block text-brand-400 font-medium py-2">Galeria</a>
+                <a href="/about" class="block text-gray-300 py-2">Sobre</a>
+                <a href="/contact" class="block text-gray-300 py-2">Contato</a>
             </div>
         </div>
     </nav>
 
     <!-- HERO -->
-    <section class="pt-32 pb-16 bg-zinc-950">
+    <section class="pt-32 pb-16 bg-dark-900">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-amber-400 font-display font-medium tracking-[0.3em] text-sm mb-3">Galeria</p>
+            <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Galeria</p>
             <h1 class="font-display text-4xl md:text-6xl font-bold text-white mb-4">Nossos Momentos</h1>
-            <p class="text-stone-400 text-lg max-w-2xl mx-auto">Blends suculentos, batatas crocantes e a vibe da nossa cozinha.</p>
+            <p class="text-gray-400 text-lg max-w-2xl mx-auto">Cada imagem conta a história do nosso cuidado com cada
+                detalhe.</p>
         </div>
     </section>
 
     <!-- GALLERY GRID -->
-    <section class="pb-20 bg-zinc-950">
+    <section class="pb-20 bg-dark-900">
         <div class="max-w-7xl mx-auto px-4">
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="gallery-grid">
-                <div class="text-center py-20 col-span-full text-stone-500">Carregando galeria...</div>
+                <!-- Skeleton will be injected by JS -->
             </div>
         </div>
     </section>
@@ -212,20 +229,25 @@
     </div>
 
     <!-- FOOTER -->
-    <footer class="bg-zinc-950 border-t border-amber-400/10 py-12">
+    <footer class="bg-dark-900 border-t border-white/5 py-12">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-stone-600 text-sm" id="footer-copy"></p>
-            <a href="/privacy" class="text-stone-600 hover:text-brand-400 text-xs mt-2 inline-block transition">Política de Privacidade</a>
+            <p class="text-gray-600 text-sm" id="footer-copy">© 2026 Sabor & Arte</p>
+            <a href="/privacy" class="text-gray-500 hover:text-brand-400 text-xs mt-2 inline-block transition">Política
+                de Privacidade</a>
         </div>
     </footer>
 
     <!-- WHATSAPP -->
     <a href="#" id="whatsapp-float" class="whatsapp-float" target="_blank" rel="noopener">
         <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+            <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
         </svg>
     </a>
 
+    <script src="/js/performance.js"></script>
+    <script src="/js/mobile.js"></script>
+    <script src="/js/a11y.js"></script>
     <script src="/js/feedback.js"></script>
     <script src="/js/formValidation.js"></script>
     <script src="/js/app.js"></script>
@@ -247,11 +269,17 @@
         }
 
         async function loadGallery() {
+            // Show gallery skeleton loaders
+            var grid = document.getElementById('gallery-grid');
+            if (window.feedback && window.feedback.skeletons) {
+                grid.innerHTML = window.feedback.skeletons.gallery(8);
+            }
+
             const data = await api('/gallery');
 
             if (!data || data.length === 0) {
                 const grid = document.getElementById('gallery-grid');
-                grid.innerHTML = '<div class="text-center py-20 col-span-full text-stone-500">Nenhuma imagem na galeria ainda. Adicione fotos pelo painel admin.</div>';
+                grid.innerHTML = '<div class="text-center py-20 col-span-full text-gray-500">Nenhuma imagem na galeria ainda. Adicione fotos pelo painel admin.</div>';
                 return;
             }
 
@@ -280,12 +308,21 @@
             const lbImg = document.getElementById('lightbox-img');
             lbImg.src = galleryImages[index].src;
             lbImg.alt = galleryImages[index].alt || '';
-            document.getElementById('lightbox').classList.add('active');
+            var lb = document.getElementById('lightbox');
+            lb.classList.add('active');
+            lb.setAttribute('role', 'dialog');
+            lb.setAttribute('aria-modal', 'true');
+            lb.setAttribute('aria-label', 'Visualizador de imagem');
             document.body.style.overflow = 'hidden';
+            // Focus close button for keyboard accessibility
+            var closeBtn = lb.querySelector('.lightbox-close');
+            if (closeBtn) setTimeout(function () { closeBtn.focus(); }, 100);
         }
 
         function closeLightbox() {
-            document.getElementById('lightbox').classList.remove('active');
+            var lb = document.getElementById('lightbox');
+            lb.classList.remove('active');
+            lb.removeAttribute('aria-modal');
             document.body.style.overflow = '';
         }
 
@@ -303,12 +340,27 @@
             lbImg.alt = galleryImages[currentIndex].alt || '';
         }
 
+        // Keyboard navigation + focus trap
         document.addEventListener('keydown', (e) => {
             const lb = document.getElementById('lightbox');
             if (!lb.classList.contains('active')) return;
             if (e.key === 'Escape') closeLightbox();
             if (e.key === 'ArrowRight') nextImage();
             if (e.key === 'ArrowLeft') prevImage();
+
+            // Focus trap inside lightbox
+            if (e.key === 'Tab') {
+                var focusable = lb.querySelectorAll('button:not([disabled])');
+                var els = Array.prototype.slice.call(focusable);
+                if (els.length === 0) return;
+                var first = els[0];
+                var last = els[els.length - 1];
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault(); last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault(); first.focus();
+                }
+            }
         });
 
         document.addEventListener('DOMContentLoaded', loadGallery);

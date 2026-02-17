@@ -153,13 +153,6 @@
             this.items.push(sanitized);
         }
         this._save();
-
-        // Screen reader announcement
-        if (window.a11y) {
-            window.a11y.announceCartUpdate(1, 'add', sanitized.name);
-        }
-
-        // Notification moved to caller (app.js) to avoid duplication
     };
 
     Cart.prototype.remove = function (dishId) {

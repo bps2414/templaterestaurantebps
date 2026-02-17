@@ -11,6 +11,13 @@ const prisma = new PrismaClient();
 export async function seedHamburgueria() {
     console.log('🍔 Seeding database — HAMBURGUERIA...\n');
 
+    // --- Cleanup ---
+    console.log('🧹 Limpando dados antigos...');
+    await prisma.dish.deleteMany({});
+    await prisma.category.deleteMany({});
+    await prisma.siteConfig.deleteMany({});
+    console.log('✅ Banco limpo.');
+
     // --- Admin user ---
     const adminEmail = process.env.SEED_ADMIN_EMAIL || 'admin@hamburgueria.com';
     const adminPassword = process.env.SEED_ADMIN_PASSWORD || 'admin123';

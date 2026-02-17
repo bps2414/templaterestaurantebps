@@ -37,7 +37,6 @@
         this._boundKeydown = null;
         this._boundToggle = null;
         this._boundClose = null;
-        this._lastFocusedElement = null;
         this._init();
     }
 
@@ -161,43 +160,40 @@
 
     CartUI.prototype._attachEvents = function () {
         var self = this;
-
-        // ESC key + focus trap
         this._boundKeydown = function (e) {
-            if (e.key === 'Escape' && self.isOpen) {
+            if (!self.isOpen) return;
+
+            // ESC to close
+            if (e.key === 'Escape') {
                 e.preventDefault();
                 self.close();
                 return;
             }
 
-            // Focus trap: Tab and Shift+Tab cycling
-            if (e.key === 'Tab' && self.isOpen) {
+            // Focus trap inside sidebar
+            if (e.key === 'Tab') {
                 var sidebar = document.getElementById('cart-sidebar');
                 if (!sidebar) return;
+                var focusable = sidebar.querySelectorAll('button:not([disabled]), input:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])');
+                var els = Array.prototype.slice.call(focusable).filter(function (el) { return el.offsetParent !== null; });
+                if (els.length === 0) return;
 
-                var focusable = sidebar.querySelectorAll(
-                    'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-                );
-                var focusableArray = Array.prototype.slice.call(focusable);
-                var firstFocusable = focusableArray[0];
-                var lastFocusable = focusableArray[focusableArray.length - 1];
+                var first = els[0];
+                var last = els[els.length - 1];
 
                 if (e.shiftKey) {
-                    // Shift+Tab: moving backwards
-                    if (document.activeElement === firstFocusable) {
+                    if (document.activeElement === first) {
                         e.preventDefault();
-                        lastFocusable.focus();
+                        last.focus();
                     }
                 } else {
-                    // Tab: moving forward
-                    if (document.activeElement === lastFocusable) {
+                    if (document.activeElement === last) {
                         e.preventDefault();
-                        firstFocusable.focus();
+                        first.focus();
                     }
                 }
             }
         };
-
         document.addEventListener('keydown', this._boundKeydown);
     };
 
@@ -330,17 +326,15 @@
     };
 
     CartUI.prototype.open = function () {
-        this._lastFocusedElement = document.activeElement;
         this.isOpen = true;
+        this._lastFocusedElement = document.activeElement;
         document.getElementById('cart-sidebar').classList.remove('translate-x-full');
         document.getElementById('cart-backdrop').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
-
-        // Focus on close button for accessibility
-        setTimeout(function () {
-            var closeBtn = document.querySelector('#cart-sidebar button[aria-label="Fechar carrinho"]');
-            if (closeBtn) closeBtn.focus();
-        }, 100);
+        // Focus the close button inside the sidebar for keyboard users
+        var sidebar = document.getElementById('cart-sidebar');
+        var closeBtn = sidebar ? sidebar.querySelector('button[aria-label="Fechar carrinho"]') : null;
+        if (closeBtn) setTimeout(function () { closeBtn.focus(); }, 100);
     };
 
     CartUI.prototype.close = function () {
@@ -348,10 +342,9 @@
         document.getElementById('cart-sidebar').classList.add('translate-x-full');
         document.getElementById('cart-backdrop').classList.add('hidden');
         document.body.style.overflow = '';
-
-        // Restore focus to previously focused element
-        if (this._lastFocusedElement && this._lastFocusedElement.focus) {
-            this._lastFocusedElement.focus();
+        // Restore focus to the element that had focus before opening
+        if (this._lastFocusedElement && typeof this._lastFocusedElement.focus === 'function') {
+            try { this._lastFocusedElement.focus(); } catch (e) { }
         }
         this._lastFocusedElement = null;
     };

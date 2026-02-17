@@ -8,11 +8,19 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { seedHamburgueria } from './seed-hamburgueria';
 import { seedPizzaria } from './seed-pizzaria';
+import { seedConfeitaria } from './seed-confeitaria';
 
 const prisma = new PrismaClient();
 
 async function seedRestaurante() {
     console.log('🍽  Seeding database — RESTAURANTE...\n');
+
+    // --- Cleanup ---
+    console.log('🧹 Limpando dados antigos...');
+    await prisma.dish.deleteMany({});
+    await prisma.category.deleteMany({});
+    await prisma.siteConfig.deleteMany({});
+    console.log('✅ Banco limpo.');
 
     // --- Admin user ---
     const adminEmail = process.env.SEED_ADMIN_EMAIL || 'admin@restaurante.com';
@@ -254,6 +262,9 @@ async function main() {
             break;
         case 'pizzaria':
             await seedPizzaria();
+            break;
+        case 'confeitaria':
+            await seedConfeitaria();
             break;
         case 'restaurante':
         default:
