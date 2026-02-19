@@ -21,8 +21,9 @@ Scripts para facilitar deploy, backup e manutenção dos clientes.
 **Etapas automatizadas:**
 - ✅ Cria banco de dados no Neon
 - ✅ Roda migrations + seed com dados customizados
-- ✅ Cria Web Service no Render
-- ✅ Configura todas as env vars automaticamente
+- ✅ Cria Application no Coolify (Docker build via API)
+- ✅ Configura todas as 12 env vars automaticamente
+- ✅ Configura domínio + SSL (Let's Encrypt)
 - ✅ Salva credenciais em `clients/nome-cliente.json`
 
 ### Setup Inicial (uma vez só)
@@ -33,14 +34,20 @@ Scripts para facilitar deploy, backup e manutenção dos clientes.
 # Acesse: https://console.neon.tech/app/settings/api-keys → Generate new API key
 $env:NEON_API_KEY="neon_api_xxx"
 
-# 2. API Key do Render
-# Acesse: https://dashboard.render.com/u/settings → API Keys → Generate new API key
-$env:RENDER_API_KEY="rnd_xxx"
+# 2. API Key do Coolify
+# Acesse: Coolify Dashboard → Settings → API → Generate Token
+$env:COOLIFY_API_KEY="coolify-token-xxx"
+$env:COOLIFY_BASE_URL="https://coolify.seudominio.com.br"
+$env:COOLIFY_SERVER_UUID="server-uuid-aqui"
+$env:COOLIFY_PROJECT_UUID="project-uuid-aqui"
 
 # 3. Repositório GitHub (seu repo privado)
 $env:GITHUB_REPO="https://github.com/seu-usuario/restaurant-template"
 
-# 4. Credenciais Cloudinary (mesmas para todos clientes)
+# 4. Domínio base para subdomínios dos clientes
+$env:BASE_DOMAIN="seudominio.com.br"
+
+# 5. Credenciais Cloudinary (mesmas para todos clientes)
 # Acesse: https://console.cloudinary.com → Dashboard → Product Environment Settings
 $env:CLOUDINARY_CLOUD_NAME="dmebhvwpo"
 $env:CLOUDINARY_API_KEY="123456789"
@@ -50,8 +57,12 @@ $env:CLOUDINARY_API_SECRET="AbCdEfGh12345"
 **Linux/Mac:**
 ```bash
 export NEON_API_KEY="neon_api_xxx"
-export RENDER_API_KEY="rnd_xxx"
+export COOLIFY_API_KEY="coolify-token-xxx"
+export COOLIFY_BASE_URL="https://coolify.seudominio.com.br"
+export COOLIFY_SERVER_UUID="server-uuid-aqui"
+export COOLIFY_PROJECT_UUID="project-uuid-aqui"
 export GITHUB_REPO="https://github.com/seu-usuario/restaurant-template"
+export BASE_DOMAIN="seudominio.com.br"
 export CLOUDINARY_CLOUD_NAME="dmebhvwpo"
 export CLOUDINARY_API_KEY="123456789"
 export CLOUDINARY_API_SECRET="AbCdEfGh12345"
@@ -67,24 +78,28 @@ node scripts/provision_client.js
 
 **O script vai perguntar:**
 1. Nome do cliente (ex: `pizzaria-napoli`)
-2. Tipo de seed (`restaurante`, `pizzaria`, `hamburgueria`)
+2. Tipo de seed (`restaurante`, `hamburgueria`, `confeitaria`)
 3. Email do admin
 4. Senha do admin
 5. Plano (`essential` ou `professional`)
 6. Região do Neon (`us-west-2`, `us-east-2`, `eu-central-1`)
+7. Domínio customizado (opcional — default: `nome-cliente.seudominio.com.br`)
 
 **Output esperado:**
 ```
 ✅ PROVISIONAMENTO CONCLUÍDO COM SUCESSO!
 
-🌐 URL do site:     https://pizzaria-napoli.onrender.com
-🔐 Painel admin:    https://pizzaria-napoli.onrender.com/admin
+🌐 URL do site:     https://pizzaria-napoli.seudominio.com.br
+🔐 Painel admin:    https://pizzaria-napoli.seudominio.com.br/admin
 📧 Email:           dono@napoli.com
 🔑 Senha:           NapoliSenha123!
 📦 Plano:           professional
+🚀 Coolify App:     https://coolify.seudominio.com.br/project/xxx
 ```
 
-**Arquivo criado:** `clients/pizzaria-napoli.json` com todas as informações (Neon, Render, credenciais).
+**Arquivo criado:** `clients/pizzaria-napoli.json` com todas as informações (Neon, Coolify, credenciais).
+
+> 📝 **Fallback Manual:** Se a API do Coolify não estiver disponível, siga o guia manual no [deploy_client.md](../.agent/workflows/deploy_client.md) (Opção B).
 
 ---
 
