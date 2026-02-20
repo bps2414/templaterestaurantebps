@@ -266,13 +266,13 @@
             </div>
             <form id="login-form" class="space-y-4">
                 <div>
-                    <label class="text-sm text-gray-400 mb-1 block">Email</label>
+                    <label class="text-sm text-gray-400 mb-1 block" for="login-email">Email</label>
                     <input type="email" id="login-email" required
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none transition"
                         placeholder="admin@confeitaria.com">
                 </div>
                 <div>
-                    <label class="text-sm text-gray-400 mb-1 block">Senha</label>
+                    <label class="text-sm text-gray-400 mb-1 block" for="login-password">Senha</label>
                     <input type="password" id="login-password" required
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none transition"
                         placeholder="••••••">
@@ -474,7 +474,7 @@
 
                     <!-- About Text 2 -->
                     <div class="bg-dark-800 rounded-xl p-6 border border-white/5 mb-8">
-                        <label class="text-sm text-gray-400 mb-2 block">Segundo parágrafo do Sobre</label>
+                        <label class="text-sm text-gray-400 mb-2 block" for="about-text-2-input">Segundo parágrafo do Sobre</label>
                         <textarea id="about-text-2-input" rows="3"
                             class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none resize-none"
                             placeholder="Segundo parágrafo da seção Sobre (opcional)"></textarea>
@@ -524,7 +524,7 @@
                             <p class="text-gray-400 text-sm mb-6">Gere um QR Code que direciona para o seu site. Ideal
                                 para imprimir em cardápios, flyers, mesas e balcão.</p>
                             <div class="bg-dark-700/50 rounded-xl p-4 mb-6">
-                                <label class="text-sm text-gray-400 mb-2 block text-left">URL do site</label>
+                                <label class="text-sm text-gray-400 mb-2 block text-left" for="qr-url">URL do site</label>
                                 <input type="url" id="qr-url"
                                     class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none text-sm"
                                     placeholder="https://suaconfeitaria.com.br">
@@ -577,24 +577,24 @@
             <form id="dish-form" class="space-y-4">
                 <input type="hidden" id="dish-id">
                 <div>
-                    <label class="text-sm text-gray-400 mb-1 block">Nome *</label>
+                    <label class="text-sm text-gray-400 mb-1 block" for="dish-name">Nome *</label>
                     <input type="text" id="dish-name" required
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none">
                 </div>
                 <div>
-                    <label class="text-sm text-gray-400 mb-1 block">Descrição</label>
+                    <label class="text-sm text-gray-400 mb-1 block" for="dish-description">Descrição</label>
                     <textarea id="dish-description" rows="3"
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none resize-none"></textarea>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="text-sm text-gray-400 mb-1 block">Preço (R$) *</label>
+                        <label class="text-sm text-gray-400 mb-1 block" for="dish-price">Preço (R$) *</label>
                         <input type="text" id="dish-price" inputmode="numeric" required
                             class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
                             placeholder="R$ 39,90">
                     </div>
                     <div>
-                        <label class="text-sm text-gray-400 mb-1 block">Categoria *</label>
+                        <label class="text-sm text-gray-400 mb-1 block" for="dish-category">Categoria *</label>
                         <select id="dish-category" required
                             class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none">
                             <option value="">Selecione...</option>
@@ -602,12 +602,12 @@
                     </div>
                 </div>
                 <div>
-                    <label class="text-sm text-gray-400 mb-1 block">Foto</label>
+                    <label class="text-sm text-gray-400 mb-1 block" for="dish-image">Foto</label>
                     <input type="file" id="dish-image" accept="image/*"
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white file:mr-4 file:rounded-lg file:border-0 file:bg-brand-500 file:px-4 file:py-2 file:text-sm file:text-white">
                 </div>
                 <div class="flex gap-6">
-                    <label class="flex items-center gap-2 cursor-pointer">
+                    <label class="flex items-center gap-2 cursor-pointer" for="category-name">
                         <input type="checkbox" id="dish-featured"
                             class="w-4 h-4 rounded bg-dark-900 border-white/10 text-brand-500 focus:ring-brand-500">
                         <span class="text-sm text-gray-300">Destaque</span>
@@ -641,7 +641,7 @@
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none">
                 </div>
                 <div>
-                    <label class="text-sm text-gray-400 mb-1 block">Ordem</label>
+                    <label class="text-sm text-gray-400 mb-1 block" for="category-sort">Ordem</label>
                     <input type="number" id="category-sort" value="0"
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none">
                 </div>
@@ -661,12 +661,12 @@
             <h2 class="text-xl font-bold text-white mb-6">Nova Imagem</h2>
             <form id="gallery-form" class="space-y-4">
                 <div>
-                    <label class="text-sm text-gray-400 mb-1 block">Imagem *</label>
+                    <label class="text-sm text-gray-400 mb-1 block" for="gallery-image">Imagem *</label>
                     <input type="file" id="gallery-image" accept="image/*" required
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white file:mr-4 file:rounded-lg file:border-0 file:bg-brand-500 file:px-4 file:py-2 file:text-sm file:text-white">
                 </div>
                 <div>
-                    <label class="text-sm text-gray-400 mb-1 block">Descrição (alt)</label>
+                    <label class="text-sm text-gray-400 mb-1 block" for="gallery-alt">Descrição (alt)</label>
                     <input type="text" id="gallery-alt"
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
                         placeholder="Descrição da imagem">
@@ -687,20 +687,20 @@
             <h2 class="text-xl font-bold text-white mb-6">🔑 Alterar Senha</h2>
             <form id="password-form" class="space-y-4">
                 <div>
-                    <label class="text-sm text-gray-400 mb-1 block">Senha Atual *</label>
+                    <label class="text-sm text-gray-400 mb-1 block" for="pw-current">Senha Atual *</label>
                     <input type="password" id="pw-current" required
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
                         placeholder="••••••">
                 </div>
                 <div>
-                    <label class="text-sm text-gray-400 mb-1 block">Nova Senha *</label>
+                    <label class="text-sm text-gray-400 mb-1 block" for="pw-new">Nova Senha *</label>
                     <input type="password" id="pw-new" required minlength="8"
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
                         placeholder="Mínimo 8 caracteres">
                     <p class="text-xs text-gray-500 mt-1">Deve conter maiúscula, minúscula e número</p>
                 </div>
                 <div>
-                    <label class="text-sm text-gray-400 mb-1 block">Confirmar Nova Senha *</label>
+                    <label class="text-sm text-gray-400 mb-1 block" for="pw-confirm">Confirmar Nova Senha *</label>
                     <input type="password" id="pw-confirm" required
                         class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
                         placeholder="••••••">
@@ -1196,8 +1196,8 @@
             <td class="px-6 py-4">${d.featured ? '<span class="text-yellow-400">★</span>' : '<span class="text-gray-600">-</span>'}</td>
             <td class="px-6 py-4">${d.active ? '<span class="text-green-400 text-xs bg-green-400/10 px-2 py-1 rounded-full">Ativo</span>' : '<span class="text-gray-500 text-xs bg-gray-500/10 px-2 py-1 rounded-full">Inativo</span>'}</td>
             <td class="px-6 py-4 text-right">
-                <button data-action="edit-dish" data-dish-id="${d.id}" class="text-brand-400 hover:text-brand-300 text-sm mr-3">Editar</button>
-                <button data-action="delete-dish" data-dish-id="${d.id}" class="text-red-400 hover:text-red-300 text-sm">Excluir</button>
+                <button data-action="edit-dish" data-dish-id="${d.id}" class="text-gray-400 hover:text-brand-400 text-sm mr-3 min-w-[44px] min-h-[44px] p-2 inline-flex items-center justify-center">Editar</button>
+                <button data-action="delete-dish" data-dish-id="${d.id}" class="text-gray-400 hover:text-red-400 text-sm min-w-[44px] min-h-[44px] p-2 inline-flex items-center justify-center">Excluir</button>
             </td>
         </tr>
     `;
@@ -1305,8 +1305,8 @@
             </div>
             <p class="text-gray-500 text-xs mb-4">Ordem: ${c.sortOrder}</p>
             <div class="flex gap-2">
-                <button data-action="edit-category" data-category-id="${c.id}" class="text-brand-400 hover:text-brand-300 text-sm">Editar</button>
-                <button data-action="delete-category" data-category-id="${c.id}" class="text-red-400 hover:text-red-300 text-sm">Excluir</button>
+                <button data-action="edit-category" data-category-id="${c.id}" class="text-gray-400 hover:text-brand-400 text-sm min-w-[44px] min-h-[44px] p-2 inline-flex items-center justify-center">Editar</button>
+                <button data-action="delete-category" data-category-id="${c.id}" class="text-gray-400 hover:text-red-400 text-sm min-w-[44px] min-h-[44px] p-2 inline-flex items-center justify-center">Excluir</button>
             </div>
         </div>
     `).join('');
@@ -1494,9 +1494,9 @@
                     <input type="file" data-upload-key="${key}" accept="image/png,image/jpeg,image/webp" aria-label="Upload de ${label}"
                         class="text-sm text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-brand-500 file:text-white file:font-medium file:cursor-pointer hover:file:bg-brand-600">
                     <button type="button" data-clear-key="${key}" onclick="clearConfigImage('${key}')" 
-                        class="text-red-400 hover:text-red-300 text-xs px-2 py-1 rounded-lg hover:bg-red-400/10 transition" 
+                        class="text-gray-400 hover:text-red-400 text-xs px-2 py-1 flex items-center justify-center min-w-[44px] min-h-[44px] rounded-lg hover:bg-red-400/10 transition" 
                         style="display: ${value ? 'inline-block' : 'none'}"
-                        title="Apagar imagem">🗑️</button>
+                        title="Apagar imagem" aria-label="Apagar imagem">🗑️</button>
                 </div>
                 <input type="text" data-key="${key}" value="${escapeAttr(value)}" aria-label="URL da imagem para ${label}"
                     class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white text-xs focus:border-brand-400 focus:outline-none"
@@ -1536,9 +1536,9 @@
                     <input type="file" data-upload-key="${key}" accept="image/png,image/jpeg,image/webp" aria-label="Upload de ${label}" ${disabledAttr}
                         class="text-sm text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-brand-500 file:text-white file:font-medium file:cursor-pointer hover:file:bg-brand-600">
                     ${isPro ? `<button type="button" data-clear-key="${key}" onclick="clearConfigImage('${key}')" 
-                        class="text-red-400 hover:text-red-300 text-xs px-2 py-1 rounded-lg hover:bg-red-400/10 transition" 
+                        class="text-gray-400 hover:text-red-400 text-xs px-2 py-1 flex items-center justify-center min-w-[44px] min-h-[44px] rounded-lg hover:bg-red-400/10 transition" 
                         style="display: ${value ? 'inline-block' : 'none'}"
-                        title="Apagar imagem">🗑️</button>` : ''}
+                        title="Apagar imagem" aria-label="Apagar imagem">🗑️</button>` : ''}
                 </div>
                 <input type="text" data-key="${key}" value="${escapeAttr(value)}" aria-label="URL da imagem para ${label}" ${disabledAttr}
                     class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white text-xs focus:border-brand-400 focus:outline-none"
@@ -1930,7 +1930,7 @@
                                     class="w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none resize-none">${escapeHTML(f.description)}</textarea>
                             </div>
                         </div>
-                        <button onclick="removeFeature(${i})" class="text-red-400 hover:text-red-300 text-sm mt-5 flex-shrink-0" title="Remover">✕</button>
+                        <button onclick="removeFeature(${i})" class="text-gray-400 hover:text-red-400 text-sm mt-5 flex-shrink-0 flex items-center justify-center min-w-[44px] min-h-[44px] p-2 rounded-lg" title="Remover" aria-label="Remover">✕</button>
                     </div>
                 </div>
             `).join('');
@@ -1971,18 +1971,18 @@
                     <div class="flex items-start gap-4">
                         <div class="flex-shrink-0">
                             <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-brand-500/30 mb-2">
-                                <img id="team-preview-${i}" src="${escapeAttr(imgSrc)}" 
+                                <img id="team-preview-${i}" src="${escapeAttr(imgSrc)}" alt="Preview Membro da Equipe" 
                                     alt="${escapeAttr(m.name || 'Preview')}"
                                     class="w-full h-full object-cover"
                                     onerror="this.src='${defaultAvatar}'">
                             </div>
                             <input type="file" id="team-upload-${i}" aria-label="Upload de foto do membro da equipe" accept="image/*" class="hidden">
                             <button onclick="document.getElementById('team-upload-${i}').click()" 
-                                class="text-xs text-brand-400 hover:text-brand-300 w-full text-center">
+                                class="text-xs text-gray-400 hover:text-brand-400 w-full text-center min-h-[44px] p-2 flex items-center justify-center" aria-label="Upload foto da equipe">
                                 📷 Upload
                             </button>
                             ${m.image && m.image.trim() !== '' ? `<button onclick="clearTeamImage(${i})"
-                                class="text-xs text-red-400 hover:text-red-300 w-full text-center mt-1">
+                                class="text-xs text-gray-400 hover:text-red-400 w-full text-center mt-1 min-h-[44px] p-2 flex items-center justify-center" aria-label="Apagar foto da equipe">
                                 🗑️ Apagar
                             </button>` : ''}
                         </div>
@@ -2009,7 +2009,7 @@
                                     placeholder="https://... (deixe vazio para usar upload)">
                             </div>
                         </div>
-                        <button onclick="removeTeamMember(${i})" class="text-red-400 hover:text-red-300 text-sm flex-shrink-0" title="Remover">✕</button>
+                        <button onclick="removeTeamMember(${i})" class="text-gray-400 hover:text-red-400 text-sm flex-shrink-0" title="Remover">✕</button>
                     </div>
                 `;
 
