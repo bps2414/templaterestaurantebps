@@ -139,6 +139,10 @@ export async function seedConfeitaria() {
     // --- Site Config ---
     const configs: Record<string, string> = {
         site_plan: 'professional',
+        brand_color: '#C4883A',
+        theme: 'confeitaria',
+        logo_url: '/logo-confeitaria.png',
+        favicon_url: '/favicon-confeitaria.ico',
         restaurant_name: 'Confeitaria Gourmet',
         restaurant_tagline: 'Doçura em cada detalhe',
         restaurant_description: 'Transformamos açúcar e afeto em obras de arte comestíveis. Nossa confeitaria une técnicas francesas com o calor da doçaria brasileira.',

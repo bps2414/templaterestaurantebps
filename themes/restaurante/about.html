@@ -109,12 +109,15 @@
 </head>
 
 <body>
+    <a data-nav="true" href="#main-content"
+        class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-[100] focus:p-4 focus:bg-brand-500 focus:text-white">Pular
+        para o conteúdo principal (skip)</a>
 
     <!-- NAVBAR -->
     <nav class="nav-glass fixed top-0 w-full z-50 border-b border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 md:h-20">
-                <a href="/" class="flex items-center gap-3">
+                <a data-nav="true" href="/" class="flex items-center gap-3">
                     <svg class="w-6 h-6 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -123,11 +126,11 @@
                     <span class="font-display text-xl md:text-2xl font-bold text-white" id="nav-brand"></span>
                 </a>
                 <div class="hidden md:flex items-center gap-8">
-                    <a href="/" class="text-gray-300 hover:text-brand-400 transition text-sm">Início</a>
-                    <a href="/menu" class="text-gray-300 hover:text-brand-400 transition text-sm">Cardápio</a>
-                    <a href="/gallery" class="text-gray-300 hover:text-brand-400 transition text-sm">Galeria</a>
-                    <a href="/about" class="text-brand-400 font-medium text-sm">Sobre</a>
-                    <a href="/contact" class="text-gray-300 hover:text-brand-400 transition text-sm">Contato</a>
+                    <a data-nav="true" href="/" class="text-gray-300 hover:text-brand-400 transition text-sm">Início</a>
+                    <a data-nav="true" href="/menu" class="text-gray-300 hover:text-brand-400 transition text-sm">Cardápio</a>
+                    <a data-nav="true" href="/gallery" class="text-gray-300 hover:text-brand-400 transition text-sm">Galeria</a>
+                    <a data-nav="true" href="/about" class="text-brand-400 font-medium text-sm">Sobre</a>
+                    <a data-nav="true" href="/contact" class="text-gray-300 hover:text-brand-400 transition text-sm">Contato</a>
                 </div>
                 <button id="menu-toggle" class="md:hidden text-white p-2"><svg class="w-6 h-6" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
@@ -138,71 +141,75 @@
         </div>
         <div id="mobile-menu" class="hidden md:hidden bg-dark-900/95 backdrop-blur border-t border-white/5">
             <div class="px-4 py-4 space-y-3">
-                <a href="/" class="block text-gray-300 py-2">Início</a>
-                <a href="/menu" class="block text-gray-300 py-2">Cardápio</a>
-                <a href="/gallery" class="block text-gray-300 py-2">Galeria</a>
-                <a href="/about" class="block text-brand-400 font-medium py-2">Sobre</a>
-                <a href="/contact" class="block text-gray-300 py-2">Contato</a>
+                <a data-nav="true" href="/" class="block text-gray-300 py-2">Início</a>
+                <a data-nav="true" href="/menu" class="block text-gray-300 py-2">Cardápio</a>
+                <a data-nav="true" href="/gallery" class="block text-gray-300 py-2">Galeria</a>
+                <a data-nav="true" href="/about" class="block text-brand-400 font-medium py-2">Sobre</a>
+                <a data-nav="true" href="/contact" class="block text-gray-300 py-2">Contato</a>
             </div>
         </div>
     </nav>
 
     <!-- HERO -->
-    <section class="pt-32 pb-16 bg-dark-900">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Sobre Nós</p>
-            <h1 class="font-display text-4xl md:text-6xl font-bold text-white mb-4" id="about-title">Nossa História</h1>
-        </div>
-    </section>
-
-    <!-- ABOUT CONTENT -->
-    <section class="pb-20 bg-dark-900">
-        <div class="max-w-6xl mx-auto px-4">
-            <!-- Story Section -->
-            <div class="grid md:grid-cols-2 gap-12 items-center mb-20 reveal">
-                <div>
-                    <img id="about-image" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80"
-                        alt="Interior" class="rounded-2xl w-full h-[400px] object-cover">
-                </div>
-                <div>
-                    <h2 class="font-display text-3xl font-bold text-white mb-6">Uma Paixão por Sabores</h2>
-                    <p class="text-gray-400 text-lg leading-relaxed mb-6" id="about-text">
-                        Carregando...
-                    </p>
-                    <p class="text-gray-400 text-lg leading-relaxed" id="about-text-2">
-                    </p>
-                </div>
+    <main id="main-content" aria-label="Main Content">
+        <section class="pt-32 pb-16 bg-dark-900">
+            <div class="max-w-7xl mx-auto px-4 text-center">
+                <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Sobre Nós</p>
+                <h1 class="font-display text-4xl md:text-6xl font-bold text-white mb-4" id="about-title">Nossa História
+                </h1>
             </div>
+        </section>
 
-            <!-- Values (dynamic) -->
-            <div class="grid md:grid-cols-3 gap-8 mb-20" id="about-features">
-                <div class="text-center py-12 col-span-3 text-gray-500">Carregando...</div>
-            </div>
-
-            <!-- Team (dynamic — PRO only) -->
-            <div id="team-section" style="display:none;">
-                <div class="text-center mb-12 reveal">
-                    <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Equipe</p>
-                    <h2 class="font-display text-3xl md:text-4xl font-bold text-white">Nosso Time</h2>
+        <!-- ABOUT CONTENT -->
+        <section class="pb-20 bg-dark-900">
+            <div class="max-w-6xl mx-auto px-4">
+                <!-- Story Section -->
+                <div class="grid md:grid-cols-2 gap-12 items-center mb-20 reveal">
+                    <div>
+                        <img id="about-image"
+                            src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Interior"
+                            class="rounded-2xl w-full h-[400px] object-cover">
+                    </div>
+                    <div>
+                        <h2 class="font-display text-3xl font-bold text-white mb-6">Uma Paixão por Sabores</h2>
+                        <p class="text-gray-400 text-lg leading-relaxed mb-6" id="about-text">
+                            Carregando...
+                        </p>
+                        <p class="text-gray-400 text-lg leading-relaxed" id="about-text-2">
+                        </p>
+                    </div>
                 </div>
-                <div class="grid md:grid-cols-3 gap-8 reveal" id="team-members">
+
+                <!-- Values (dynamic) -->
+                <div class="grid md:grid-cols-3 gap-8 mb-20" id="about-features">
                     <div class="text-center py-12 col-span-3 text-gray-500">Carregando...</div>
                 </div>
+
+                <!-- Team (dynamic — PRO only) -->
+                <div id="team-section" style="display:none;">
+                    <div class="text-center mb-12 reveal">
+                        <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Equipe</p>
+                        <h2 class="font-display text-3xl md:text-4xl font-bold text-white">Nosso Time</h2>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-8 reveal" id="team-members">
+                        <div class="text-center py-12 col-span-3 text-gray-500">Carregando...</div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <!-- FOOTER -->
     <footer class="bg-dark-900 border-t border-white/5 py-12">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-gray-600 text-sm" id="footer-copy">© 2026 Sabor & Arte</p>
-            <a href="/privacy" class="text-gray-500 hover:text-brand-400 text-xs mt-2 inline-block transition">Política
+            <a data-nav="true" href="/privacy" class="text-gray-500 hover:text-brand-400 text-xs mt-2 inline-block transition">Política
                 de Privacidade</a>
         </div>
     </footer>
 
     <!-- WHATSAPP -->
-    <a href="#" id="whatsapp-float" class="whatsapp-float" target="_blank" rel="noopener">
+    <a data-nav="true" href="#" id="whatsapp-float" class="whatsapp-float" target="_blank" rel="noopener">
         <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
             <path
                 d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />

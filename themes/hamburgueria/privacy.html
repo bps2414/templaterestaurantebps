@@ -42,11 +42,14 @@
 </head>
 
 <body class="bg-dark-900 text-stone-200">
+    <a data-nav="true" href="#main-content"
+        class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-[100] focus:p-4 focus:bg-amber-500 focus:text-white">Pular
+        para o conteúdo principal (skip)</a>
 
     <!-- NAV -->
     <nav class="fixed top-0 w-full z-50 bg-dark-900/80 backdrop-blur-lg border-b border-amber-400/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 md:h-20">
-            <a href="/" class="flex items-center gap-2">
+            <a data-nav="true" href="/" class="flex items-center gap-2">
                 <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     stroke-width="1.5">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -58,19 +61,19 @@
                     data-config>Hamburgueria</span>
             </a>
             <div class="hidden md:flex items-center gap-8">
-                <a href="/" class="text-stone-400 hover:text-brand-400 transition text-sm font-medium">Início</a>
-                <a href="/menu" class="text-stone-400 hover:text-brand-400 transition text-sm font-medium">Cardápio</a>
-                <a href="/gallery"
+                <a data-nav="true" href="/" class="text-stone-400 hover:text-brand-400 transition text-sm font-medium">Início</a>
+                <a data-nav="true" href="/menu" class="text-stone-400 hover:text-brand-400 transition text-sm font-medium">Cardápio</a>
+                <a data-nav="true" href="/gallery"
                     class="text-stone-400 hover:text-brand-400 transition text-sm font-medium">Galeria</a>
-                <a href="/about" class="text-stone-400 hover:text-brand-400 transition text-sm font-medium">Sobre</a>
-                <a href="/contact"
+                <a data-nav="true" href="/about" class="text-stone-400 hover:text-brand-400 transition text-sm font-medium">Sobre</a>
+                <a data-nav="true" href="/contact"
                     class="text-stone-400 hover:text-brand-400 transition text-sm font-medium">Contato</a>
             </div>
         </div>
     </nav>
 
     <!-- CONTENT -->
-    <main class="pt-28 pb-20">
+    <main id="main-content" class="pt-28 pb-20">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 class="font-display text-4xl md:text-5xl font-bold text-white uppercase tracking-wide mb-8">Política de
                 Privacidade</h1>
@@ -148,7 +151,7 @@
                 <section>
                     <h2 class="text-xl font-semibold text-white mb-4">8. Contato</h2>
                     <p>Para exercer seus direitos ou esclarecer dúvidas sobre esta política, entre em contato através da
-                        nossa <a href="/contact" class="text-brand-400 hover:text-brand-300 underline">página de
+                        nossa <a data-nav="true" href="/contact" class="text-brand-400 hover:text-brand-300 underline">página de
                             contato</a>.</p>
                 </section>
 
@@ -166,7 +169,7 @@
     <footer class="bg-zinc-950 border-t border-amber-400/10 py-12">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-stone-600 text-sm" id="footer-copy"></p>
-            <a href="/privacy" class="text-stone-600 hover:text-brand-400 text-xs mt-2 inline-block transition">Política
+            <a data-nav="true" href="/privacy" class="text-stone-600 hover:text-brand-400 text-xs mt-2 inline-block transition">Política
                 de Privacidade</a>
         </div>
     </footer>

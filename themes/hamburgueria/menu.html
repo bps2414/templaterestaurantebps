@@ -145,12 +145,15 @@
 </head>
 
 <body>
+    <a data-nav="true" href="#main-content"
+        class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-[100] focus:p-4 focus:bg-amber-500 focus:text-white">Pular
+        para o conteúdo principal (skip)</a>
 
     <!-- NAVBAR -->
     <nav class="nav-glass fixed top-0 w-full z-50 border-b border-amber-400/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 md:h-20">
-                <a href="/" class="flex items-center gap-3">
+                <a data-nav="true" href="/" class="flex items-center gap-3">
                     <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -161,13 +164,13 @@
                     <span class="font-display text-xl md:text-2xl font-bold text-amber-400" id="nav-brand"></span>
                 </a>
                 <div class="hidden md:flex items-center gap-8">
-                    <a href="/" class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Início</a>
-                    <a href="/menu" class="text-amber-400 font-medium text-sm tracking-wide">Cardápio</a>
-                    <a href="/gallery"
+                    <a data-nav="true" href="/" class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Início</a>
+                    <a data-nav="true" href="/menu" class="text-amber-400 font-medium text-sm tracking-wide">Cardápio</a>
+                    <a data-nav="true" href="/gallery"
                         class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Galeria</a>
-                    <a href="/about"
+                    <a data-nav="true" href="/about"
                         class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Sobre</a>
-                    <a href="/contact"
+                    <a data-nav="true" href="/contact"
                         class="text-stone-400 hover:text-amber-400 transition text-sm tracking-wide">Contato</a>
                 </div>
                 <button id="menu-toggle" class="md:hidden text-white p-2"><svg class="w-6 h-6" fill="none"
@@ -179,54 +182,56 @@
         </div>
         <div id="mobile-menu" class="hidden md:hidden bg-zinc-950/95 backdrop-blur border-t border-amber-400/10">
             <div class="px-4 py-4 space-y-3">
-                <a href="/" class="block text-stone-400 py-2">Início</a>
-                <a href="/menu" class="block text-amber-400 font-medium py-2">Cardápio</a>
-                <a href="/gallery" class="block text-stone-400 py-2">Galeria</a>
-                <a href="/about" class="block text-stone-400 py-2">Sobre</a>
-                <a href="/contact" class="block text-stone-400 py-2">Contato</a>
+                <a data-nav="true" href="/" class="block text-stone-400 py-2">Início</a>
+                <a data-nav="true" href="/menu" class="block text-amber-400 font-medium py-2">Cardápio</a>
+                <a data-nav="true" href="/gallery" class="block text-stone-400 py-2">Galeria</a>
+                <a data-nav="true" href="/about" class="block text-stone-400 py-2">Sobre</a>
+                <a data-nav="true" href="/contact" class="block text-stone-400 py-2">Contato</a>
             </div>
         </div>
     </nav>
 
     <!-- HERO -->
-    <section class="pt-32 pb-16 bg-zinc-950">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-amber-400 font-display font-medium tracking-[0.3em] text-sm mb-3">Cardápio</p>
-            <h1 class="font-display text-4xl md:text-6xl font-bold text-white mb-4">Nosso Cardápio</h1>
-            <p class="text-stone-400 text-lg max-w-2xl mx-auto">Blends artesanais, ingredientes premium e receitas
-                exclusivas — tudo feito na hora.</p>
-        </div>
-    </section>
-
-    <!-- CATEGORY TABS -->
-    <section class="sticky top-16 md:top-20 z-40 bg-zinc-950/90 backdrop-blur border-b border-amber-400/10">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex gap-2 overflow-x-auto py-4 scrollbar-hide" id="category-tabs">
-                <button
-                    class="category-tab active px-5 py-2 rounded-full border border-amber-400 text-amber-400 text-sm font-medium whitespace-nowrap"
-                    data-category="all">Todos</button>
+    <main id="main-content" aria-label="Main Content">
+        <section class="pt-32 pb-16 bg-zinc-950">
+            <div class="max-w-7xl mx-auto px-4 text-center">
+                <p class="text-amber-400 font-display font-medium tracking-[0.3em] text-sm mb-3">Cardápio</p>
+                <h1 class="font-display text-4xl md:text-6xl font-bold text-white mb-4">Nosso Cardápio</h1>
+                <p class="text-stone-400 text-lg max-w-2xl mx-auto">Blends artesanais, ingredientes premium e receitas
+                    exclusivas — tudo feito na hora.</p>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- MENU GRID -->
-    <section class="py-16 bg-zinc-950">
-        <div class="max-w-7xl mx-auto px-4" id="menu-container">
-            <div class="text-center py-20 text-stone-500">Carregando cardápio...</div>
-        </div>
-    </section>
+        <!-- CATEGORY TABS -->
+        <section class="sticky top-16 md:top-20 z-40 bg-zinc-950/90 backdrop-blur border-b border-amber-400/10">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="flex gap-2 overflow-x-auto py-4 scrollbar-hide" id="category-tabs">
+                    <button
+                        class="category-tab active px-5 py-2 rounded-full border border-amber-400 text-amber-400 text-sm font-medium whitespace-nowrap"
+                        data-category="all">Todos</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- MENU GRID -->
+        <section class="py-16 bg-zinc-950">
+            <div class="max-w-7xl mx-auto px-4" id="menu-container">
+                <div class="text-center py-20 text-stone-500">Carregando cardápio...</div>
+            </div>
+        </section>
+    </main>
 
     <!-- FOOTER -->
     <footer class="bg-zinc-950 border-t border-amber-400/10 py-12">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-stone-600 text-sm" id="footer-copy"></p>
-            <a href="/privacy" class="text-stone-600 hover:text-brand-400 text-xs mt-2 inline-block transition">Política
+            <a data-nav="true" href="/privacy" class="text-stone-600 hover:text-brand-400 text-xs mt-2 inline-block transition">Política
                 de Privacidade</a>
         </div>
     </footer>
 
     <!-- WHATSAPP -->
-    <a href="#" id="whatsapp-float" class="whatsapp-float" target="_blank" rel="noopener">
+    <a data-nav="true" href="#" id="whatsapp-float" class="whatsapp-float" target="_blank" rel="noopener">
         <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
             <path
                 d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />

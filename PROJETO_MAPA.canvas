@@ -1,0 +1,451 @@
+{
+  "nodes": [
+    {
+      "id": "title",
+      "type": "text",
+      "x": -200,
+      "y": -900,
+      "width": 600,
+      "height": 120,
+      "color": "1",
+      "text": "# 🗺️ Mapa do Projeto: Restaurante SaaS\n\nVisão geral de como tudo funciona — do clique do cliente até o banco de dados."
+    },
+
+    {
+      "id": "group-frontend",
+      "type": "group",
+      "x": -1200,
+      "y": -700,
+      "width": 900,
+      "height": 1300,
+      "color": "4",
+      "label": "🖥️ FRONTEND (O que o cliente vê)"
+    },
+    {
+      "id": "fe-html",
+      "type": "text",
+      "x": -1160,
+      "y": -640,
+      "width": 400,
+      "height": 200,
+      "color": "4",
+      "text": "## 📄 Página Principal (index.html)\n\nÉ a \"casca\" do site. Contém:\n- Menu de navegação\n- Seção Hero (banner principal)\n- Cardápio (menu de pratos)\n- Sobre nós\n- Galeria de fotos\n- Rodapé com contato"
+    },
+    {
+      "id": "fe-temas",
+      "type": "text",
+      "x": -720,
+      "y": -640,
+      "width": 380,
+      "height": 200,
+      "color": "4",
+      "text": "## 🎨 Temas Visuais\n\nCada cliente pode ter um visual diferente:\n- `themes/restaurante/` → Tema elegante\n- `themes/hamburgueria/` → Tema street food\n\nO script `select-theme.js` copia o tema escolhido para a pasta `public/` (que é o que o servidor mostra)"
+    },
+    {
+      "id": "fe-appjs",
+      "type": "text",
+      "x": -1160,
+      "y": -400,
+      "width": 400,
+      "height": 260,
+      "color": "4",
+      "text": "## ⚙️ app.js (Cérebro do Frontend)\n\nQuando a página abre, ele faz:\n1. **Busca configurações** do servidor (nome, cor, logo, WhatsApp)\n2. **Aplica a marca** — muda cores, logo, favicon dinamicamente\n3. **Gera SEO** — título, meta tags, Open Graph (preview do WhatsApp/Facebook)\n4. **Busca pratos** do servidor e mostra no cardápio\n5. **Busca galeria** de fotos\n6. **Preenche seção Sobre** com texto do admin\n7. **Ativa animações** de scroll e menu mobile"
+    },
+    {
+      "id": "fe-cart",
+      "type": "text",
+      "x": -720,
+      "y": -400,
+      "width": 380,
+      "height": 260,
+      "color": "4",
+      "text": "## 🛒 Carrinho (cart.js + cartUI.js)\n\n**cart.js** = A lógica invisível:\n- Salva itens no navegador (localStorage)\n- Controla quantidade, preço, limites\n- Valida preços com o servidor (anti-fraude)\n\n**cartUI.js** = O que aparece na tela:\n- Botão flutuante com contador\n- Painel lateral com lista de itens\n- Botões de + / - / Remover\n- Botão \"Finalizar Pedido\""
+    },
+    {
+      "id": "fe-order",
+      "type": "text",
+      "x": -1160,
+      "y": -100,
+      "width": 400,
+      "height": 220,
+      "color": "4",
+      "text": "## 📋 Modal de Pedido (orderModal.js)\n\nQuando clica \"Finalizar Pedido\":\n1. Abre um pop-up pedindo dados do cliente\n2. Cliente preenche: Nome, Telefone, Endereço\n3. Escolhe: Delivery ou Retirada\n4. Sistema monta a mensagem formatada\n5. **Redireciona para o WhatsApp** do restaurante com o pedido pronto!"
+    },
+    {
+      "id": "fe-whatsapp",
+      "type": "text",
+      "x": -720,
+      "y": -100,
+      "width": 380,
+      "height": 220,
+      "color": "4",
+      "text": "## 💬 WhatsApp (whatsappFormatter.js)\n\nMonta a mensagem de pedido para o WhatsApp:\n```\n🛒 *PEDIDO #1234*\n\n1x Hambúrguer Clássico — R$ 29,90\n2x Refrigerante — R$ 12,00\n\n💰 *Total: R$ 41,90*\n\n📍 Delivery\n📞 (11) 99999-8888\n```\nE abre: `wa.me/5511999998888?text=...`"
+    },
+    {
+      "id": "fe-admin",
+      "type": "text",
+      "x": -1060,
+      "y": 170,
+      "width": 550,
+      "height": 220,
+      "color": "6",
+      "text": "## 🔐 Painel Admin (admin.html)\n\nÁrea restrita para o dono do restaurante:\n- **Login** com email e senha\n- **Gerenciar Pratos** → Adicionar, editar, remover, mudar foto\n- **Gerenciar Categorias** → Criar seções do cardápio\n- **Configurações** → Nome, logo, cor, WhatsApp\n- **Galeria** → Upload de fotos\n- **Sobre** → Editar texto \"Sobre Nós\"\n\n⚠️ Tudo protegido por autenticação JWT"
+    },
+    {
+      "id": "fe-seguranca",
+      "type": "text",
+      "x": -1060,
+      "y": 430,
+      "width": 550,
+      "height": 120,
+      "color": "2",
+      "text": "## 🛡️ Segurança no Frontend\n\n- **CSRF Token**: Proteção anti-fraude em toda requisição\n- **escapeHTML()**: Impede injeção de código malicioso\n- **Validação de preço**: Servidor verifica se preço não foi alterado"
+    },
+
+    {
+      "id": "group-conexao",
+      "type": "group",
+      "x": -200,
+      "y": -500,
+      "width": 600,
+      "height": 700,
+      "color": "5",
+      "label": "🔗 COMO SE CONECTAM (API)"
+    },
+    {
+      "id": "api-explicacao",
+      "type": "text",
+      "x": -160,
+      "y": -440,
+      "width": 520,
+      "height": 160,
+      "color": "5",
+      "text": "## 🌐 API REST (a \"ponte\")\n\nO Frontend e o Backend se comunicam por **APIs**.\nÉ como um garçom: o Frontend faz o pedido, a API leva para a cozinha (Backend), e volta com a resposta.\n\nTodas as APIs começam com `/api/...`\nUsam formato **JSON** (texto estruturado)"
+    },
+    {
+      "id": "api-rotas-publicas",
+      "type": "text",
+      "x": -160,
+      "y": -250,
+      "width": 250,
+      "height": 300,
+      "color": "5",
+      "text": "## 📖 Rotas Públicas\n(qualquer pessoa acessa)\n\n| Rota | O que faz |\n|------|----------|\n| `GET /api/config` | Busca nome, cor, logo |\n| `GET /api/categories` | Lista categorias |\n| `GET /api/dishes` | Lista pratos ativos |\n| `GET /api/dishes/featured` | Pratos em destaque |\n| `GET /api/gallery` | Fotos da galeria |\n| `GET /api/about` | Texto \"Sobre Nós\" |"
+    },
+    {
+      "id": "api-rotas-admin",
+      "type": "text",
+      "x": 120,
+      "y": -250,
+      "width": 250,
+      "height": 300,
+      "color": "2",
+      "text": "## 🔒 Rotas Admin\n(precisa estar logado)\n\n| Rota | O que faz |\n|------|----------|\n| `POST /api/auth/login` | Login do admin |\n| `POST /api/dishes` | Criar prato |\n| `PUT /api/dishes/:id` | Editar prato |\n| `DELETE /api/dishes/:id` | Remover prato |\n| `PUT /api/config` | Atualizar configs |\n| `POST /api/upload` | Upload de imagem |\n| `PUT /api/about` | Editar Sobre |"
+    },
+    {
+      "id": "api-fluxo",
+      "type": "text",
+      "x": -160,
+      "y": 80,
+      "width": 520,
+      "height": 100,
+      "color": "5",
+      "text": "### Exemplo de Fluxo:\n`Página abre` → `GET /api/config` → Servidor busca no banco → Retorna JSON → Frontend aplica cor, logo, nome → `GET /api/categories` → Servidor busca pratos → Retorna lista → Frontend mostra o cardápio"
+    },
+
+    {
+      "id": "group-backend",
+      "type": "group",
+      "x": 500,
+      "y": -700,
+      "width": 900,
+      "height": 1300,
+      "color": "1",
+      "label": "⚙️ BACKEND (Servidor — o que o cliente NÃO vê)"
+    },
+    {
+      "id": "be-servidor",
+      "type": "text",
+      "x": 540,
+      "y": -640,
+      "width": 400,
+      "height": 200,
+      "color": "1",
+      "text": "## 🖧 Servidor Express (app.ts)\n\nO \"motor\" que roda no servidor:\n- Recebe todas as requisições da internet\n- Aplica segurança (CORS, Helmet, Rate Limit)\n- Direciona para a rota certa\n- Serve os arquivos do frontend (HTML/CSS/JS)\n- Gera sitemap.xml e robots.txt para Google\n\n**Linguagem:** TypeScript (JavaScript com tipos)\n**Framework:** Express.js"
+    },
+    {
+      "id": "be-rotas",
+      "type": "text",
+      "x": 980,
+      "y": -640,
+      "width": 380,
+      "height": 200,
+      "color": "1",
+      "text": "## 📂 Rotas (routes/)\n\nCada arquivo cuida de um assunto:\n- `auth.ts` → Login / Logout\n- `dishes.ts` → Pratos (CRUD)\n- `categories.ts` → Categorias\n- `config.ts` → Configurações do site\n- `gallery.ts` → Galeria de fotos\n- `about.ts` → Seção Sobre\n- `upload.ts` → Upload de imagens\n- `plans.ts` → Planos PRO/FREE"
+    },
+    {
+      "id": "be-middlewares",
+      "type": "text",
+      "x": 540,
+      "y": -400,
+      "width": 400,
+      "height": 260,
+      "color": "1",
+      "text": "## 🛡️ Middlewares (\"Seguranças da Porta\")\n\nAntes de qualquer requisição chegar na rota, passa por:\n\n1. **auth.ts** → Verifica se está logado (JWT)\n2. **csrf.ts** → Impede ataques de sites falsos\n3. **rateLimit.ts** → Bloqueia quem faz muitas requisições\n4. **upload.ts** → Verifica se imagem é real (magic bytes)\n5. **validate.ts** → Verifica se dados estão corretos\n6. **plan.ts** → Bloqueia funcionalidades PRO\n7. **errorHandler.ts** → Captura qualquer erro e responde bonitinho"
+    },
+    {
+      "id": "be-services",
+      "type": "text",
+      "x": 980,
+      "y": -400,
+      "width": 380,
+      "height": 260,
+      "color": "1",
+      "text": "## 🔧 Serviços (services/)\n\n**authService.ts** — Cuida de tudo sobre login:\n- Gera tokens JWT (como crachás digitais)\n- Valida senha com bcrypt\n- Protege contra tentativas de força bruta\n- Gerencia sessões (refresh token)\n\n**cloudinaryService.ts** — Cuida das imagens:\n- Faz upload para Cloudinary (nuvem)\n- Otimiza tamanho automaticamente\n- Converte para WebP (mais leve)\n- Deleta imagens antigas"
+    },
+    {
+      "id": "be-utils",
+      "type": "text",
+      "x": 540,
+      "y": -100,
+      "width": 400,
+      "height": 220,
+      "color": "1",
+      "text": "## 🧰 Utilitários (utils/)\n\n**errors.ts** — Erros personalizados:\n- `NotFoundError` (404) → \"Não encontrado\"\n- `UnauthorizedError` (401) → \"Não autorizado\"\n- `BadRequestError` (400) → \"Dados inválidos\"\n- `slugify()` → Transforma \"Hambúrguer Clássico\" em \"hamburguer-classico\"\n\n**validators.ts** — Regras de validação:\n- Senha: mín. 8 chars, 1 maiúscula, 1 número\n- WhatsApp: formato internacional (55...)\n\n**logger.ts** — Registra tudo que acontece"
+    },
+    {
+      "id": "be-prisma",
+      "type": "text",
+      "x": 980,
+      "y": -100,
+      "width": 380,
+      "height": 220,
+      "color": "3",
+      "text": "## 🗄️ Banco de Dados (Prisma + Neon)\n\n**Prisma** é o \"tradutor\" entre o código e o banco de dados.\n\n**Neon** é o banco PostgreSQL na nuvem.\n\nTabelas principais:\n- `AdminUser` → Usuários admin\n- `Category` → Categorias do cardápio\n- `Dish` → Pratos (nome, preço, foto)\n- `GalleryImage` → Fotos da galeria\n- `SiteConfig` → Configurações do site\n- `AboutContent` → Texto Sobre Nós"
+    },
+    {
+      "id": "be-seguranca-detalhe",
+      "type": "text",
+      "x": 640,
+      "y": 170,
+      "width": 550,
+      "height": 180,
+      "color": "2",
+      "text": "## 🔐 Como a Segurança Funciona\n\n1. **Admin faz login** → Servidor gera 2 tokens (Access + Refresh)\n2. **Access Token** → Válido por 15 min, usado em cada requisição\n3. **Refresh Token** → Válido por 7 dias, renova o Access Token\n4. **Troca de Senha** → Invalida TODOS os tokens imediatamente\n5. **Brute Force** → Após 5 tentativas erradas, conta bloqueia por 15 min\n6. **Upload** → Verifica MIME type + extensão + bytes mágicos do arquivo"
+    },
+    {
+      "id": "be-deploy",
+      "type": "text",
+      "x": 640,
+      "y": 390,
+      "width": 550,
+      "height": 160,
+      "color": "3",
+      "text": "## ☁️ Hospedagem & Deploy\n\n- **Servidor (Backend):** Render.com\n- **Banco de Dados:** Neon (PostgreSQL serverless)\n- **Imagens:** Cloudinary (CDN global)\n- **Domínio:** Configurável pelo cliente\n\nFluxo: `git push` → Render detecta → Build automático → Deploy → Site atualizado!"
+    },
+
+    {
+      "id": "group-fluxos",
+      "type": "group",
+      "x": -600,
+      "y": 700,
+      "width": 1400,
+      "height": 550,
+      "color": "6",
+      "label": "🎬 FLUXOS PRINCIPAIS (O que acontece quando...)"
+    },
+    {
+      "id": "fluxo-abrir-site",
+      "type": "text",
+      "x": -560,
+      "y": 770,
+      "width": 420,
+      "height": 200,
+      "color": "6",
+      "text": "### 🌐 Quando alguém abre o site:\n\n1. Navegador pede `index.html` ao servidor\n2. Servidor envia HTML + CSS + JS\n3. `app.js` inicia e busca `/api/config`\n4. Recebe nome, cor, logo, WhatsApp\n5. Aplica visualmente na página\n6. Busca `/api/categories` → Monta cardápio\n7. Busca `/api/gallery` → Mostra fotos\n8. Busca `/api/about` → Preenche Sobre"
+    },
+    {
+      "id": "fluxo-fazer-pedido",
+      "type": "text",
+      "x": -100,
+      "y": 770,
+      "width": 420,
+      "height": 200,
+      "color": "6",
+      "text": "### 🛒 Quando alguém faz um pedido:\n\n1. Cliente clica \"Adicionar\" no prato\n2. `cart.js` salva no localStorage do navegador\n3. Botão flutuante mostra quantidade\n4. Cliente clica \"Finalizar Pedido\"\n5. `orderModal.js` abre formulário de dados\n6. Cliente preenche nome, telefone, endereço\n7. `whatsappFormatter.js` monta mensagem\n8. **Abre WhatsApp** com pedido pronto!"
+    },
+    {
+      "id": "fluxo-admin",
+      "type": "text",
+      "x": 360,
+      "y": 770,
+      "width": 400,
+      "height": 200,
+      "color": "6",
+      "text": "### 🔐 Quando o admin edita um prato:\n\n1. Admin acessa `/admin` e faz login\n2. Servidor valida senha (bcrypt)\n3. Retorna tokens JWT\n4. Admin clica \"Editar\" no prato\n5. Muda nome/preço/foto\n6. Frontend envia `PUT /api/dishes/:id`\n7. Middleware verifica token + CSRF\n8. Servidor atualiza no banco Neon\n9. Se tem foto nova → Upload Cloudinary"
+    },
+    {
+      "id": "fluxo-novo-cliente",
+      "type": "text",
+      "x": -380,
+      "y": 1010,
+      "width": 960,
+      "height": 180,
+      "color": "3",
+      "text": "### 🆕 Quando você vende para um novo cliente (Deploy):\n\n1. Criar banco no **Neon** → Gera `DATABASE_URL`\n2. Rodar `npx prisma db push` → Cria tabelas\n3. Rodar `npx prisma db seed` → Popula dados iniciais (admin, pratos exemplo)\n4. Escolher tema → `THEME=hamburgueria npm run build`\n5. Fazer deploy no **Render** → Configurar variáveis de ambiente (.env)\n6. Configurar domínio do cliente\n7. Cliente acessa `/admin`, troca senha, personaliza tudo!"
+    },
+
+    {
+      "id": "group-arquivos",
+      "type": "group",
+      "x": -600,
+      "y": 1350,
+      "width": 1400,
+      "height": 380,
+      "color": "3",
+      "label": "📁 ESTRUTURA DE PASTAS (Resumo)"
+    },
+    {
+      "id": "pastas",
+      "type": "text",
+      "x": -560,
+      "y": 1420,
+      "width": 650,
+      "height": 280,
+      "color": "3",
+      "text": "```\nLandpage/\n├── themes/              ← 🎨 Temas (fonte da verdade do visual)\n│   ├── restaurante/     ← Tema elegante\n│   │   ├── index.html   ← Página principal\n│   │   ├── admin.html   ← Painel do admin\n│   │   ├── css/         ← Estilos visuais\n│   │   └── js/          ← Lógica (app, cart, order, etc)\n│   └── hamburgueria/    ← Tema street food (mesma estrutura)\n├── public/              ← ⚠️ GERADO automaticamente (NÃO editar)\n├── server/              ← ⚙️ Backend\n│   ├── src/\n│   │   ├── app.ts       ← Servidor Express\n│   │   ├── routes/      ← APIs (8 arquivos)\n│   │   ├── middlewares/ ← Segurança (7 arquivos)\n│   │   ├── services/    ← Lógica de negócio\n│   │   └── utils/       ← Funções auxiliares\n│   └── prisma/          ← 🗄️ Banco de dados + Seeds\n└── scripts/             ← 🔧 Automação (select-theme, deploy, etc)\n```"
+    },
+    {
+      "id": "legenda",
+      "type": "text",
+      "x": 130,
+      "y": 1420,
+      "width": 630,
+      "height": 280,
+      "color": "3",
+      "text": "## 🏷️ Legenda de Cores\n\n| Cor | Significado |\n|-----|------------|\n| 🟦 Azul | Frontend — o que o cliente vê |\n| 🟥 Vermelho | Backend — servidor invisível |\n| 🟪 Roxo | API — a ponte entre Frontend e Backend |\n| 🟨 Amarelo | Fluxos — o que acontece passo a passo |\n| 🟩 Verde | Infraestrutura — banco, deploy, arquivos |\n| 🟧 Laranja | Segurança — proteções |\n\n## 📌 Regra de Ouro\n\n> **Nunca** edite `/public` diretamente!\n> Sempre edite em `themes/{tema}/` e rode o build."
+    }
+  ],
+
+  "edges": [
+    {
+      "id": "e-html-appjs",
+      "fromNode": "fe-html",
+      "toNode": "fe-appjs",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "carrega"
+    },
+    {
+      "id": "e-appjs-api",
+      "fromNode": "fe-appjs",
+      "toNode": "api-explicacao",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "5",
+      "label": "busca dados via API"
+    },
+    {
+      "id": "e-cart-order",
+      "fromNode": "fe-cart",
+      "toNode": "fe-order",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "finalizar pedido"
+    },
+    {
+      "id": "e-order-whatsapp",
+      "fromNode": "fe-order",
+      "toNode": "fe-whatsapp",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "dados do cliente"
+    },
+    {
+      "id": "e-api-servidor",
+      "fromNode": "api-explicacao",
+      "toNode": "be-servidor",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "1",
+      "label": "requisição chega"
+    },
+    {
+      "id": "e-servidor-middlewares",
+      "fromNode": "be-servidor",
+      "toNode": "be-middlewares",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "passa pela segurança"
+    },
+    {
+      "id": "e-servidor-rotas",
+      "fromNode": "be-servidor",
+      "toNode": "be-rotas",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "direciona"
+    },
+    {
+      "id": "e-rotas-services",
+      "fromNode": "be-rotas",
+      "toNode": "be-services",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "usa lógica"
+    },
+    {
+      "id": "e-services-prisma",
+      "fromNode": "be-services",
+      "toNode": "be-prisma",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "color": "3",
+      "label": "lê/escreve no banco"
+    },
+    {
+      "id": "e-rotas-prisma",
+      "fromNode": "be-rotas",
+      "toNode": "be-prisma",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "color": "3",
+      "label": "consulta dados"
+    },
+    {
+      "id": "e-admin-api-admin",
+      "fromNode": "fe-admin",
+      "toNode": "api-rotas-admin",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "2",
+      "label": "requisições autenticadas"
+    },
+    {
+      "id": "e-temas-html",
+      "fromNode": "fe-temas",
+      "toNode": "fe-html",
+      "fromSide": "left",
+      "toSide": "right",
+      "label": "gera"
+    },
+    {
+      "id": "e-prisma-deploy",
+      "fromNode": "be-prisma",
+      "toNode": "be-deploy",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "color": "3",
+      "label": "hospedado no Neon"
+    },
+    {
+      "id": "e-services-cloudinary",
+      "fromNode": "be-services",
+      "toNode": "be-deploy",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "3",
+      "label": "imagens no Cloudinary"
+    }
+  ]
+}

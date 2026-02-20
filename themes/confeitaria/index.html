@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chocobites — Confeitaria Artesanal</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta name="description"
+        content="Doces artesanais feitos com os melhores ingredientes. Transformando momentos em doces memórias.">
+    <link rel="canonical" href="https://your-domain.com/">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:title" content="Chocobites — Confeitaria Artesanal">
+    <meta property="og:description"
+        content="Doces artesanais feitos com os melhores ingredientes. Transformando momentos em doces memórias.">
+    <!-- TODO: Update with client domain -->
+    <meta property="og:url" content="https://chocobites.com.br">
+    <meta property="og:site_name" content="Chocobites">
+    <!-- OG Image: Unsplash fallback (overwritten by JS with client config) -->
+    <meta property="og:image"
+        content="https://images.unsplash.com/photo-1606312619070-d48b4c652a52?auto=format&fit=crop&w=1200&h=630&q=80">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Chocobites — Confeitaria Artesanal">
+    <meta name="twitter:description"
+        content="Doces artesanais feitos com os melhores ingredientes. Transformando momentos em doces memórias.">
+    <meta name="twitter:image"
+        content="https://images.unsplash.com/photo-1606312619070-d48b4c652a52?auto=format&fit=crop&w=1200&h=630&q=80">
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://res.cloudinary.com">
+    <link rel="dns-prefetch" href="https://res.cloudinary.com">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Josefin+Sans:wght@300;400;700&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Josefin+Sans:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#fdf9f0', 100: '#faf0d8', 200: '#f5dfb0', 300: '#efca7f', 400: '#D4AF37', 500: '#C68642', 600: '#A0652D', 700: '#7a4a1e', 800: '#5D3A1A', 900: '#3B1F0A' },
+                        dark: { 800: '#5D3A1A', 900: '#3B1F0A' },
+                        cream: '#FFF8DC',
+                        beige: '#FDF4E3',
+                        'beige-gold': '#E8C99A',
+                        'off-white': '#FAF7F2',
+                    },
+                    fontFamily: {
+                        display: ['Fredoka One', 'cursive'],
+                        body: ['Josefin Sans', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Josefin Sans', sans-serif;
+            background: #FAF7F2;
+            color: #3B1F0A;
+        }
+
+        .font-display {
+            font-family: 'Fredoka One', cursive;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            ::before,
+            ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Fade in */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            opacity: 0;
+        }
+
+        body.config-loaded .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .delay-100 {
+            animation-delay: .1s;
+        }
+
+        .delay-200 {
+            animation-delay: .2s;
+        }
+
+        .delay-300 {
+            animation-delay: .3s;
+        }
+
+        /* Hover glow */
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .btn-glow::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s;
+        }
+
+        .btn-glow:hover::after {
+            transform: translateX(100%);
+        }
+
+        .btn-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(198, 134, 66, 0.4);
+        }
+
+        /* WhatsApp button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            z-index: 999;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #25d366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: pulse-green 2s infinite;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(37, 211, 102, 0.7);
+        }
+
+        @keyframes pulse-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+
+        /* Nav */
+        .nav-glass {
+            backdrop-filter: blur(12px);
+            background: rgba(59, 31, 10, 0.95);
+        }
+
+        /* Cards */
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(59, 31, 10, 0.15);
+        }
+
+        /* Hero parallax */
+        .hero-bg {
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* FOUC prevention */
+        body:not(.config-loaded) #main-content,
+        body:not(.config-loaded) #nav-brand,
+        body:not(.config-loaded) #footer-brand,
+        body:not(.config-loaded) #hero-title,
+        body:not(.config-loaded) #hero-subtitle,
+        body:not(.config-loaded) #footer-tagline,
+        body:not(.config-loaded) #footer-copy,
+        body:not(.config-loaded) #about-title,
+        body:not(.config-loaded) #about-text,
+        body:not(.config-loaded) #footer-address,
+        body:not(.config-loaded) #footer-phone,
+        body:not(.config-loaded) #footer-email {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        body.config-loaded #main-content,
+        body.config-loaded #nav-brand,
+        body.config-loaded #footer-brand,
+        body.config-loaded #hero-title,
+        body.config-loaded #hero-subtitle,
+        body.config-loaded #footer-tagline,
+        body.config-loaded #footer-copy,
+        body.config-loaded #about-title,
+        body.config-loaded #about-text,
+        body.config-loaded #footer-address,
+        body.config-loaded #footer-phone,
+        body.config-loaded #footer-email {
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        @keyframes configFadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar-track {
+            background: #FAF7F2;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #C68642;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Skip Link para acessibilidade -->
+    <a data-nav="true" href="#main-content"
+        class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-brand-500 focus:text-white focus:px-4 focus:py-2 focus:rounded">Pular
+        para o conteúdo principal</a>
+
+    <!-- ========== NAVBAR ========== -->
+    <nav class="nav-glass fixed top-0 w-full z-50 border-b border-beige-gold/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 md:h-20">
+                <a data-nav="true" href="/" class="flex items-center gap-3">
+                    <!-- Cookie icon for confectionery -->
+                    <svg class="w-6 h-6 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.871c1.355 0 2.697.056 4.024.166C17.155 8.51 18 9.473 18 10.608v2.513M15 8.25v-1.5m-6 1.5v-1.5m12 9.75l-1.5.75a3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0L3 16.5m15-3.379a48.474 48.474 0 00-6-.371c-2.032 0-4.034.126-6 .371m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.169c0 .621-.504 1.125-1.125 1.125H4.125A1.125 1.125 0 013 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 016 13.12M16.5 3.75V16.5" />
+                    </svg>
+                    <span class="font-display text-xl md:text-2xl font-bold text-cream" id="nav-brand"
+                        data-config></span>
+                </a>
+                <!-- Desktop nav -->
+                <div class="hidden md:flex items-center gap-6">
+                    <a data-nav="true" href="/" class="text-cream font-medium text-sm">Início</a>
+                    <a data-nav="true" href="/menu" class="text-beige-gold hover:text-cream transition text-sm">Produtos</a>
+                    <a data-nav="true" href="/about" class="text-beige-gold hover:text-cream transition text-sm">Sobre</a>
+                    <a data-nav="true" href="#" id="nav-instagram"
+                        class="text-beige-gold hover:text-cream transition text-sm">@choco.bites</a>
+                    <a data-nav="true" href="/menu"
+                        class="btn-glow bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-full text-base font-medium min-h-[44px] flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
+                        </svg>
+                        Carrinho(0)
+                    </a>
+                </div>
+                <!-- Mobile toggle -->
+                <button id="menu-toggle"
+                    class="md:hidden text-cream p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                    aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-dark-900/95 backdrop-blur border-t border-beige-gold/20">
+            <div class="px-4 py-4 space-y-3">
+                <a data-nav="true" href="/" class="block text-cream font-medium py-2">Início</a>
+                <a data-nav="true" href="/menu" class="block text-beige-gold hover:text-cream py-2">Produtos</a>
+                <a data-nav="true" href="/about" class="block text-beige-gold hover:text-cream py-2">Sobre</a>
+                <a data-nav="true" href="/contact" class="block text-beige-gold hover:text-cream py-2">Contato</a>
+                <a data-nav="true" href="/menu"
+                    class="block btn-glow bg-brand-500 text-white text-center px-6 py-3 rounded-full font-medium text-base min-h-[44px]">Ver
+                    Doces</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========== HERO (Two-Column Layout) ========== -->
+    <section id="main-content" class="relative min-h-screen flex items-center overflow-hidden bg-dark-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center pt-24 md:pt-0">
+                <!-- Left: Text -->
+                <div class="relative z-10">
+                    <h1 class="font-display text-4xl md:text-5xl lg:text-6xl text-cream leading-tight mb-6 animate-fade-in-up"
+                        id="hero-title">Feito com <span class="text-brand-400">amor</span>,<br>entregue com <span
+                            class="text-brand-400">sabor</span> 🍫</h1>
+                    <p class="text-beige-gold text-base md:text-lg max-w-lg mb-8 animate-fade-in-up delay-100 font-light"
+                        id="hero-subtitle">Doces artesanais feitos com os melhores ingredientes selecionados para adoçar
+                        o seu dia. Experimente a felicidade em cada mordida.</p>
+                    <div class="flex flex-col sm:flex-row items-start gap-4 animate-fade-in-up delay-200">
+                        <a data-nav="true" href="#" id="whatsapp-cta"
+                            class="btn-glow inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-full text-base font-medium min-h-[44px]">
+                            Peça pelo WhatsApp
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                            </svg>
+                        </a>
+                        <a data-nav="true" href="/menu"
+                            class="inline-flex items-center gap-2 border-2 border-brand-400 text-brand-400 hover:bg-brand-400 hover:text-dark-900 px-8 py-4 rounded-full text-base font-medium transition-all min-h-[44px]">
+                            Ver Cardápio
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <!-- Right: Hero Image Card -->
+                <div class="relative animate-fade-in-up delay-300">
+                    <div class="relative rounded-3xl overflow-hidden border-2 border-brand-400/30 shadow-2xl">
+                        <img src="https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=600&q=80"
+                            alt="Trufas de chocolate artesanais" class="w-full h-[350px] md:h-[450px] object-cover">
+                        <!-- "Mais Vendido" badge -->
+                        <div
+                            class="absolute bottom-4 left-4 bg-dark-900/80 backdrop-blur rounded-xl px-4 py-3 text-cream">
+                            <p class="text-sm font-bold">⭐ Mais Vendido</p>
+                            <p class="text-xs text-beige-gold">Trufas Artesanais Premium</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== DESTAQUES (Nossos Produtos) ========== -->
+    <section class="py-20 md:py-28 bg-off-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-12 reveal">
+                <div>
+                    <h2 class="font-display text-2xl md:text-4xl text-dark-900">Nossos Produtos ✨</h2>
+                    <p class="text-dark-800/70 text-sm mt-1">As melhores escolhas para o seu momento doce.</p>
+                </div>
+                <a data-nav="true" href="/menu" class="text-brand-400 hover:text-brand-500 font-medium text-sm transition">Ver tudo
+                    →</a>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8" id="featured-dishes">
+                <!-- Filled dynamically -->
+                <div class="text-center py-20 col-span-3 text-dark-800/50">Carregando destaques...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CATEGORIES ========== -->
+    <section class="py-20 md:py-28 bg-beige">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <p class="text-brand-500 font-medium tracking-widest uppercase text-sm mb-3">Cardápio</p>
+                <h2 class="font-display text-3xl md:text-5xl text-dark-900">Explore Nossas Categorias</h2>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" id="category-cards">
+                <div class="text-center py-20 col-span-4 text-dark-800/50">Carregando categorias...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== ABOUT PREVIEW ========== -->
+    <section class="py-20 md:py-28 bg-off-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="reveal">
+                    <p class="text-brand-500 font-medium tracking-widest uppercase text-sm mb-3">Sobre Nós</p>
+                    <h2 class="font-display text-3xl md:text-5xl text-dark-900 mb-6" id="about-title"></h2>
+                    <p class="text-dark-800/70 text-lg leading-relaxed mb-8 font-light" id="about-text"></p>
+                    <a data-nav="true" href="/about"
+                        class="btn-glow inline-block bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-full font-medium">
+                        Saiba Mais →
+                    </a>
+                </div>
+                <div class="reveal">
+                    <div class="relative rounded-2xl overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=800&q=80"
+                            alt="Nossa confeitaria" class="w-full h-[400px] object-cover rounded-2xl">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark-900/30 to-transparent rounded-2xl">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== COMO PEDIR (Steps) ========== -->
+    <section class="py-20 bg-dark-900" id="reserva">
+        <div class="max-w-4xl mx-auto px-4 text-center reveal">
+            <h2 class="font-display text-3xl md:text-4xl text-cream mb-12">Como fazer seu pedido? 🍪</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Step 1 -->
+                <div class="flex flex-col items-center gap-4">
+                    <div class="w-16 h-16 rounded-full bg-cream flex items-center justify-center">
+                        <svg class="w-8 h-8 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl text-cream">1. Escolha</h3>
+                    <p class="text-beige-gold text-sm font-light">Navegue pelo nosso cardápio e selecione seus doces
+                        favoritos.</p>
+                </div>
+                <!-- Step 2 -->
+                <div class="flex flex-col items-center gap-4">
+                    <div class="w-16 h-16 rounded-full bg-cream flex items-center justify-center">
+                        <svg class="w-8 h-8 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl text-cream">2. Envie</h3>
+                    <p class="text-beige-gold text-sm font-light">Clique no botão do WhatsApp e nos mande sua lista de
+                        desejos.</p>
+                </div>
+                <!-- Step 3 -->
+                <div class="flex flex-col items-center gap-4">
+                    <div class="w-16 h-16 rounded-full bg-cream flex items-center justify-center">
+                        <svg class="w-8 h-8 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl text-cream">3. Aproveite</h3>
+                    <p class="text-beige-gold text-sm font-light">Receba no conforto da sua casa e delicie-se com o
+                        sabor.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== OPENING HOURS ========== -->
+    <section class="py-20 bg-beige">
+        <div class="max-w-4xl mx-auto px-4 text-center reveal">
+            <p class="text-brand-500 font-medium tracking-widest uppercase text-sm mb-3">Horários</p>
+            <h2 class="font-display text-3xl md:text-4xl text-dark-900 mb-8">Horário de Funcionamento</h2>
+            <div class="bg-white/80 backdrop-blur rounded-2xl p-8 md:p-12 border border-beige-gold/30 shadow-sm">
+                <p class="text-dark-800/80 text-lg" id="opening-hours">Carregando horários...</p>
+                <div class="mt-8">
+                    <a data-nav="true" href="#" id="whatsapp-cta-2"
+                        class="btn-glow inline-flex items-center gap-2 bg-[#25d366] hover:bg-[#1da851] text-white px-8 py-4 rounded-full text-lg font-medium">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                        </svg>
+                        Falar pelo WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="bg-dark-900 border-t border-beige-gold/20 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <svg class="w-6 h-6 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.871c1.355 0 2.697.056 4.024.166C17.155 8.51 18 9.473 18 10.608v2.513M15 8.25v-1.5m-6 1.5v-1.5m12 9.75l-1.5.75a3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0L3 16.5m15-3.379a48.474 48.474 0 00-6-.371c-2.032 0-4.034.126-6 .371m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.169c0 .621-.504 1.125-1.125 1.125H4.125A1.125 1.125 0 013 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 016 13.12M16.5 3.75V16.5" />
+                        </svg>
+                        <span class="font-display text-xl font-bold text-brand-400" id="footer-brand"
+                            data-config></span>
+                    </div>
+                    <p class="text-beige-gold text-base" id="footer-tagline"></p>
+                </div>
+                <div>
+                    <h4 class="text-cream font-semibold mb-4">Navegação</h4>
+                    <ul class="space-y-2 text-base">
+                        <li><a data-nav="true" href="/" class="text-beige-gold hover:text-brand-400 transition">Início</a></li>
+                        <li><a data-nav="true" href="/menu" class="text-beige-gold hover:text-brand-400 transition">Cardápio</a></li>
+                        <li><a data-nav="true" href="/gallery" class="text-beige-gold hover:text-brand-400 transition">Galeria</a></li>
+                        <li><a data-nav="true" href="/about" class="text-beige-gold hover:text-brand-400 transition">Sobre</a></li>
+                        <li><a data-nav="true" href="/contact" class="text-beige-gold hover:text-brand-400 transition">Contato</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-cream font-semibold mb-4">Contato</h4>
+                    <ul class="space-y-2 text-base text-beige-gold">
+                        <li id="footer-address"></li>
+                        <li id="footer-phone"></li>
+                        <li id="footer-email"></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-cream font-semibold mb-4">Redes Sociais</h4>
+                    <div class="flex gap-4">
+                        <a data-nav="true" href="#" id="link-instagram" class="text-beige-gold hover:text-brand-400 transition"
+                            aria-label="Instagram">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                            </svg>
+                        </a>
+                        <a data-nav="true" href="#" id="link-facebook" class="text-beige-gold hover:text-brand-400 transition"
+                            aria-label="Facebook">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="border-t border-beige-gold/20 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between">
+                <p class="text-beige-gold/60 text-base" id="footer-copy"></p>
+                <a data-nav="true" href="/privacy"
+                    class="text-beige-gold/60 hover:text-brand-400 text-xs mt-2 md:mt-0 inline-block transition">Política
+                    de
+                    Privacidade</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== WHATSAPP FLOAT ========== -->
+    <a data-nav="true" href="#" id="whatsapp-float" class="whatsapp-float" aria-label="WhatsApp" target="_blank" rel="noopener">
+        <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+        </svg>
+    </a>
+
+    <script src="/js/performance.js"></script>
+    <script src="/js/mobile.js"></script>
+    <script src="/js/a11y.js"></script>
+    <script src="/js/feedback.js"></script>
+    <script src="/js/formValidation.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/cart.js"></script>
+    <script src="/js/whatsappFormatter.js"></script>
+    <script src="/js/orderModal.js"></script>
+    <script src="/js/cartUI.js"></script>
+</body>
+
+</html>

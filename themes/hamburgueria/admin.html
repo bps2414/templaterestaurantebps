@@ -260,7 +260,7 @@
     <div id="login-screen" class="min-h-screen flex items-center justify-center">
         <div class="bg-dark-800 rounded-2xl p-8 w-full max-w-md border border-white/5">
             <div class="text-center mb-8">
-                <span class="text-4xl">🍽</span>
+                <span class="text-4xl" aria-hidden="true">🍽</span>
                 <h1 class="text-2xl font-bold text-white mt-4">Painel Admin</h1>
                 <p class="text-gray-400 mt-2">Faça login para gerenciar o site</p>
             </div>
@@ -291,10 +291,11 @@
         <!-- Mobile header -->
         <div class="admin-mobile-header">
             <div class="flex items-center gap-2">
-                <span class="text-xl">🍽</span>
+                <span class="text-xl" aria-hidden="true">🍽</span>
                 <span class="text-white font-bold text-sm">Admin</span>
             </div>
-            <button onclick="toggleSidebar()" class="text-white p-2" aria-label="Menu">
+            <button onclick="toggleSidebar()" onkeydown="if(event.key === 'Enter' || event.key === ' ') toggleSidebar()"
+                class="text-white p-2" aria-label="Menu">
                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
@@ -307,7 +308,7 @@
             <aside class="sidebar bg-dark-800 border-r border-white/5 fixed h-full overflow-y-auto">
                 <div class="p-6 border-b border-white/5">
                     <div class="flex items-center gap-3">
-                        <span class="text-2xl">🍽</span>
+                        <span class="text-2xl" aria-hidden="true">🍽</span>
                         <div>
                             <h2 class="text-white font-bold">Admin</h2>
                             <p class="text-gray-500 text-xs" id="admin-email">admin@restaurante.com</p>
@@ -317,48 +318,57 @@
                 </div>
                 <nav class="p-4 space-y-1">
                     <button class="tab-btn active w-full text-left px-4 py-3 rounded-lg text-sm" data-tab="dishes"
-                        onclick="switchTab('dishes')">
+                        onclick="switchTab('dishes')"
+                        onkeydown="if(event.key === 'Enter' || event.key === ' ') switchTab('dishes')">
                         🍝 Pratos
                     </button>
                     <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400"
-                        data-tab="categories" onclick="switchTab('categories')">
+                        data-tab="categories" onclick="switchTab('categories')"
+                        onkeydown="if(event.key === 'Enter' || event.key === ' ') switchTab('categories')">
                         📂 Categorias
                     </button>
                     <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400"
-                        data-tab="gallery" onclick="switchTab('gallery')">
+                        data-tab="gallery" onclick="switchTab('gallery')"
+                        onkeydown="if(event.key === 'Enter' || event.key === ' ') switchTab('gallery')">
                         📸 Galeria
                     </button>
                     <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400"
-                        data-tab="config" onclick="switchTab('config')">
+                        data-tab="config" onclick="switchTab('config')"
+                        onkeydown="if(event.key === 'Enter' || event.key === ' ') switchTab('config')">
                         ⚙️ Configurações
                     </button>
                     <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400" data-tab="about"
-                        onclick="switchTab('about')">
+                        onclick="switchTab('about')"
+                        onkeydown="if(event.key === 'Enter' || event.key === ' ') switchTab('about')">
                         📝 Sobre / Equipe <span class="pro-badge pro-only-badge" style="display:none;">PRO</span>
                     </button>
                     <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400"
-                        data-tab="qrcode" onclick="switchTab('qrcode')">
+                        data-tab="qrcode" onclick="switchTab('qrcode')"
+                        onkeydown="if(event.key === 'Enter' || event.key === ' ') switchTab('qrcode')">
                         📱 QR Code <span class="pro-badge pro-only-badge" style="display:none;">PRO</span>
                     </button>
                 </nav>
                 <div class="absolute bottom-0 w-full p-4 border-t border-white/5">
                     <button onclick="previewSite()"
+                        onkeydown="if(event.key === 'Enter' || event.key === ' ') previewSite()"
                         class="w-full text-left px-4 py-3 rounded-lg text-sm text-brand-400 hover:bg-brand-500/10 transition font-medium">
                         👀 Visualizar Site
                     </button>
                     <button onclick="showOnboarding()"
+                        onkeydown="if(event.key === 'Enter' || event.key === ' ') showOnboarding()"
                         class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:text-brand-400 transition">
                         🚀 Primeiros Passos
                     </button>
                     <button onclick="openPasswordModal()"
+                        onkeydown="if(event.key === 'Enter' || event.key === ' ') openPasswordModal()"
                         class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:text-brand-400 transition">
                         🔑 Alterar Senha
                     </button>
-                    <button onclick="logout()"
+                    <button onclick="logout()" onkeydown="if(event.key === 'Enter' || event.key === ' ') logout()"
                         class="w-full text-left px-4 py-3 rounded-lg text-sm text-gray-400 hover:text-red-400 transition">
                         🚪 Sair
                     </button>
-                    <a href="/"
+                    <a data-nav="true" href="/"
                         class="block text-left px-4 py-2 rounded-lg text-xs text-gray-500 hover:text-gray-300 transition">
                         ← Voltar ao site
                     </a>
@@ -1483,15 +1493,15 @@
             <div class="bg-dark-800 rounded-xl p-6 border border-white/5">
                 <label class="text-sm text-gray-400 mb-2 block">${label}</label>
                 <div class="flex items-center gap-4 mb-3">
-                    ${value ? `<img src="${escapeAttr(value)}" class="w-20 h-14 rounded-lg object-cover border border-white/10" onerror="this.style.display='none'">` : ''}
-                    <input type="file" data-upload-key="${key}" accept="image/png,image/jpeg,image/webp"
+                    ${value ? `<img src="${escapeAttr(value)}" alt="Preview" class="w-20 h-14 rounded-lg object-cover border border-white/10" onerror="this.style.display='none'">` : ''}
+                    <input type="file" data-upload-key="${key}" accept="image/png,image/jpeg,image/webp" aria-label="Upload de ${label}"
                         class="text-sm text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-brand-500 file:text-white file:font-medium file:cursor-pointer hover:file:bg-brand-600">
                     <button type="button" data-clear-key="${key}" onclick="clearConfigImage('${key}')" 
                         class="text-red-400 hover:text-red-300 text-xs px-2 py-1 rounded-lg hover:bg-red-400/10 transition" 
                         style="display: ${value ? 'inline-block' : 'none'}"
                         title="Apagar imagem">🗑️</button>
                 </div>
-                <input type="text" data-key="${key}" value="${escapeAttr(value)}"
+                <input type="text" data-key="${key}" value="${escapeAttr(value)}" aria-label="URL da imagem para ${label}"
                     class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white text-xs focus:border-brand-400 focus:outline-none"
                     placeholder="URL preenchida automaticamente ao fazer upload">
             </div>
@@ -1502,8 +1512,8 @@
             <div class="bg-dark-800 rounded-xl p-6 border border-white/5">
                 <label class="text-sm text-gray-400 mb-2 block">${label}</label>
                 ${isLong
-                        ? `<textarea data-key="${key}" rows="3" class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none resize-none">${escapeHTML(value)}</textarea>`
-                        : `<input type="text" data-key="${key}" value="${escapeAttr(value)}" class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none">`
+                        ? `<textarea data-key="${key}" rows="3" aria-label="${label}" class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none resize-none">${escapeHTML(value)}</textarea>`
+                        : `<input type="text" data-key="${key}" value="${escapeAttr(value)}" aria-label="${label}" class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none">`
                     }
             </div>
         `;
@@ -1525,15 +1535,15 @@
             <div class="bg-dark-800 rounded-xl p-6 border border-white/5 ${opacityClass}">
                 <label class="text-sm text-gray-400 mb-2 block">${label} <span class="pro-badge">PRO</span></label>
                 <div class="flex items-center gap-4 mb-3">
-                    ${value ? `<img src="${escapeAttr(value)}" class="${previewSize} rounded-lg object-cover border border-white/10" onerror="this.style.display='none'">` : ''}
-                    <input type="file" data-upload-key="${key}" accept="image/png,image/jpeg,image/webp" ${disabledAttr}
+                    ${value ? `<img src="${escapeAttr(value)}" alt="Preview" class="${previewSize} rounded-lg object-cover border border-white/10" onerror="this.style.display='none'">` : ''}
+                    <input type="file" data-upload-key="${key}" accept="image/png,image/jpeg,image/webp" aria-label="Upload de ${label}" ${disabledAttr}
                         class="text-sm text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-brand-500 file:text-white file:font-medium file:cursor-pointer hover:file:bg-brand-600">
                     ${isPro ? `<button type="button" data-clear-key="${key}" onclick="clearConfigImage('${key}')" 
                         class="text-red-400 hover:text-red-300 text-xs px-2 py-1 rounded-lg hover:bg-red-400/10 transition" 
                         style="display: ${value ? 'inline-block' : 'none'}"
                         title="Apagar imagem">🗑️</button>` : ''}
                 </div>
-                <input type="text" data-key="${key}" value="${escapeAttr(value)}" ${disabledAttr}
+                <input type="text" data-key="${key}" value="${escapeAttr(value)}" aria-label="URL da imagem para ${label}" ${disabledAttr}
                     class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white text-xs focus:border-brand-400 focus:outline-none"
                     placeholder="${isPro ? 'URL preenchida automaticamente ao fazer upload' : 'Disponível no Plano Profissional'}">
             </div>
@@ -1544,10 +1554,9 @@
             <div class="bg-dark-800 rounded-xl p-6 border border-white/5 ${opacityClass}">
                 <label class="text-sm text-gray-400 mb-2 block">${label} <span class="pro-badge">PRO</span></label>
                 <div class="flex items-center gap-4">
-                    <input type="color" data-color-key="${key}" value="${value || '#ee7620'}" ${disabledAttr}
-                        class="w-12 h-12 rounded-lg cursor-pointer border border-white/10 bg-transparent"
-                        oninput="this.nextElementSibling.value = this.value">
-                    <input type="text" data-key="${key}" value="${escapeAttr(value)}" ${disabledAttr}
+                    <input type="color" data-color-key="${key}" value="${value || '#ee7620'}" aria-label="Cor para ${label}" ${disabledAttr}
+                        class="w-12 h-12 rounded cursor-pointer border-0 p-0 hidden md:block">
+                    <input type="text" data-key="${key}" value="${escapeAttr(value)}" aria-label="Código hexadecimal de ${label}" ${disabledAttr}
                         class="flex-1 bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none font-mono"
                         placeholder="${isPro ? '#FF0000' : 'Disponível no Plano Profissional'}"
                         oninput="this.previousElementSibling.value = this.value">
@@ -1559,7 +1568,7 @@
                     return `
             <div class="bg-dark-800 rounded-xl p-6 border border-white/5 ${opacityClass}">
                 <label class="text-sm text-gray-400 mb-2 block">${label} <span class="pro-badge">PRO</span></label>
-                <input type="text" data-key="${key}" value="${escapeAttr(value)}" ${disabledAttr}
+                <input type="text" data-key="${key}" value="${escapeAttr(value)}" aria-label="${label}" ${disabledAttr}
                     class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-400 focus:outline-none"
                     ${isPro ? '' : 'placeholder="Disponível no Plano Profissional"'}>
             </div>
@@ -1906,20 +1915,20 @@
                     <div class="flex items-start gap-3">
                         <div class="flex-shrink-0">
                             <label class="text-xs text-gray-500 block mb-1">Ícone</label>
-                            <input type="text" value="${escapeAttr(f.icon)}" maxlength="4"
+                            <input type="text" value="${escapeAttr(f.icon)}" maxlength="4" aria-label="Ícone do atributo ${i}"
                                 onchange="aboutFeatures[${i}].icon=this.value"
                                 class="w-16 bg-dark-900 border border-white/10 rounded-lg px-2 py-2 text-white text-center text-xl focus:border-brand-400 focus:outline-none">
                         </div>
                         <div class="flex-1 space-y-2">
                             <div>
                                 <label class="text-xs text-gray-500 block mb-1">Título</label>
-                                <input type="text" value="${escapeAttr(f.title)}" maxlength="60"
+                                <input type="text" value="${escapeAttr(f.title)}" maxlength="60" aria-label="Título do atributo ${i}"
                                     onchange="aboutFeatures[${i}].title=this.value"
                                     class="w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none">
                             </div>
                             <div>
                                 <label class="text-xs text-gray-500 block mb-1">Descrição</label>
-                                <textarea rows="2" maxlength="400"
+                                <textarea rows="2" maxlength="400" aria-label="Descrição do atributo ${i}"
                                     onchange="aboutFeatures[${i}].description=this.value"
                                     class="w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none resize-none">${escapeHTML(f.description)}</textarea>
                             </div>
@@ -1970,7 +1979,7 @@
                                     class="w-full h-full object-cover"
                                     onerror="this.src='${defaultAvatar}'">
                             </div>
-                            <input type="file" id="team-upload-${i}" accept="image/*" class="hidden">
+                            <input type="file" id="team-upload-${i}" aria-label="Upload de foto do membro da equipe" accept="image/*" class="hidden">
                             <button onclick="document.getElementById('team-upload-${i}').click()" 
                                 class="text-xs text-brand-400 hover:text-brand-300 w-full text-center">
                                 📷 Upload
@@ -1984,20 +1993,20 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                 <div>
                                     <label class="text-xs text-gray-500 block mb-1">Nome</label>
-                                    <input type="text" value="${escapeAttr(m.name)}" maxlength="80"
+                                    <input type="text" value="${escapeAttr(m.name)}" maxlength="80" aria-label="Nome do membro da equipe"
                                         data-team-index="${i}" data-field="name"
                                         class="team-input w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none">
                                 </div>
                                 <div>
                                     <label class="text-xs text-gray-500 block mb-1">Cargo</label>
-                                    <input type="text" value="${escapeAttr(m.role)}" maxlength="50"
+                                    <input type="text" value="${escapeAttr(m.role)}" maxlength="50" aria-label="Cargo do membro da equipe"
                                         data-team-index="${i}" data-field="role"
                                         class="team-input w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none">
                                 </div>
                             </div>
                             <div>
                                 <label class="text-xs text-gray-500 block mb-1">URL da Foto (opcional - sobrescreve upload)</label>
-                                <input type="url" value="${escapeAttr(m.image || '')}" maxlength="500"
+                                <input type="url" value="${escapeAttr(m.image || '')}" maxlength="500" aria-label="URL da foto do membro da equipe"
                                     data-team-index="${i}" data-field="image"
                                     class="team-input-image w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-brand-400 focus:outline-none"
                                     placeholder="https://... (deixe vazio para usar upload)">
