@@ -25,7 +25,8 @@ const app = express();
 
 // --- Trust proxy (only in production behind reverse proxy) ---
 if (process.env.NODE_ENV === 'production') {
-    app.set('trust proxy', 1);
+    // trust proxy true ensures we use the leftmost IP in X-Forwarded-For
+    app.set('trust proxy', true);
 }
 
 // --- Force HTTPS in production ---

@@ -1048,9 +1048,13 @@
                 } else {
                     // Handle 429 rate-limit specifically
                     if (res.status === 429) {
-                        const retryAfterSec = parseInt(res.headers.get('Retry-After') || '900', 10);
-                        const retryMinutes = Math.ceil(retryAfterSec / 60);
-                        errEl.textContent = `Muitas tentativas. Aguarde ${retryMinutes} minuto${retryMinutes > 1 ? 's' : ''}.`;
+                        if (json.error) {
+                            errEl.textContent = json.error;
+                        } else {
+                            const retryAfterSec = parseInt(res.headers.get('Retry-After') || '900', 10);
+                            const retryMinutes = Math.ceil(retryAfterSec / 60);
+                            errEl.textContent = `Muitas tentativas. Aguarde ${retryMinutes} minuto${retryMinutes > 1 ? 's' : ''}.`;
+                        }
                         // Keep button disabled permanently after rate limit
                         btn.disabled = true;
                         btn.classList.add('opacity-50', 'cursor-not-allowed');

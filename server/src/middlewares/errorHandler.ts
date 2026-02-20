@@ -62,9 +62,12 @@ export function errorHandler(
     // Zod validation errors
     if (err.name === 'ZodError') {
         const zodErr = err as Error & { errors?: Array<{ path?: string[]; message: string }> };
+        const detailsStr = zodErr.errors?.map(e => e.message).join(', ');
+        const errorMessage = detailsStr ? `Dados inválidos: ${detailsStr}` : 'Dados inválidos';
+
         res.status(400).json({
             success: false,
-            error: 'Dados inválidos',
+            error: errorMessage,
             details: zodErr.errors?.map((e) => ({
                 field: e.path?.join('.'),
                 message: e.message,

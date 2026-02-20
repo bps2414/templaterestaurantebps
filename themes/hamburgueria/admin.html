@@ -1048,18 +1048,18 @@
                 } else {
                     // Handle 429 rate-limit specifically
                     if (res.status === 429) {
-                        const retryAfterSec = parseInt(res.headers.get('Retry-After') || '900', 10);
-                        const retryMinutes = Math.ceil(retryAfterSec / 60);
-                        errEl.textContent = `Muitas tentativas. Aguarde ${retryMinutes} minuto${retryMinutes > 1 ? 's' : ''}.`;
+                        if (json.error) {
+                            errEl.textContent = json.error;
+                        } else {
+                            const retryAfterSec = parseInt(res.headers.get('Retry-After') || '900', 10);
+                            const retryMinutes = Math.ceil(retryAfterSec / 60);
+                            errEl.textContent = `Muitas tentativas. Aguarde ${retryMinutes} minuto${retryMinutes > 1 ? 's' : ''}.`;
+                        }
                         // Keep button disabled permanently after rate limit
                         btn.disabled = true;
                         btn.classList.add('opacity-50', 'cursor-not-allowed');
-                        return; // Don't execute finally block
-                        errEl.textContent = `Muitas tentativas. Aguarde ${retryMinutes} minuto${retryMinutes > 1 ? 's' : ''}.`;
-                        // Keep button disabled permanently after rate limit
-                        btn.disabled = true;
-                        btn.classList.add('opacity-50', 'cursor-not-allowed');
-                        return; // Don't execute finally block
+                        isLoginSubmitting = false;
+                        return; // Don't execute code below
                     } else if (res.status === 403 && json.error && json.error.includes('CSRF')) {
                         // CSRF token expired - show friendly message
                         errEl.textContent = 'Sessão expirou. Recarregando página...';
