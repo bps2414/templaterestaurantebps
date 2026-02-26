@@ -38,6 +38,11 @@
         .font-display {
             font-family: 'Playfair Display', serif;
         }
+    
+        /* Global Loader */
+        body:not(.config-loaded) { overflow: hidden; }
+        body:not(.config-loaded) #global-loader { opacity: 1; visibility: visible; }
+        body.config-loaded #global-loader { opacity: 0; visibility: hidden; pointer-events: none; }
     </style>
 </head>
 

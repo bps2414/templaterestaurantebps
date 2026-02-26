@@ -41,7 +41,7 @@ SKIP_DIRS = {
 SKIP_PATTERNS = [
     'config', 'setup', 'util', 'helper', 'hook', 'context', 'store',
     'service', 'api', 'lib', 'constant', 'type', 'interface', 'mock',
-    '.test.', '.spec.', '_test.', '_spec.'
+    '.test.', '.spec.', '_test.', '_spec.', 'admin', 'privacy', 'terms'
 ]
 
 

@@ -22,7 +22,9 @@
         "format": "prettier --write \"src/**/*.ts\"",
         "preflight": "powershell -ExecutionPolicy Bypass -File ../scripts/preflight.ps1",
         "dev:confeitaria": "cross-env THEME=confeitaria node ../scripts/select-theme.js && cross-env THEME=confeitaria ts-node-dev --respawn --transpile-only src/index.ts",
-        "seed:confeitaria": "cross-env SEED_TYPE=confeitaria ts-node prisma/seed.ts"
+        "seed:confeitaria": "cross-env SEED_TYPE=confeitaria ts-node prisma/seed.ts",
+        "dev:pizzaria": "cross-env THEME=pizzaria node ../scripts/select-theme.js && cross-env THEME=pizzaria ts-node-dev --respawn --transpile-only src/index.ts",
+        "seed:pizzaria": "cross-env SEED_TYPE=pizzaria ts-node prisma/seed.ts"
     },
     "prisma": {
         "seed": "ts-node prisma/seed.ts"
