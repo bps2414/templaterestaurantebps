@@ -156,7 +156,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            z-index: 49;
+            z-index: 65;
             background: rgba(0, 0, 0, 0.6);
         }
 
@@ -172,7 +172,7 @@
             .sidebar {
                 position: fixed;
                 left: -280px;
-                z-index: 50;
+                z-index: 70;
                 transition: left 0.3s ease;
                 width: 260px;
             }
@@ -187,14 +187,6 @@
                 padding-top: 70px;
                 max-width: 100vw;
                 overflow-x: hidden;
-            }
-
-            /* Table scroll wrapper */
-            .table-wrapper {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                margin: 0 -12px;
-                padding: 0 12px;
             }
 
             #admin-dashboard main table {
@@ -387,30 +379,19 @@
                             + Novo Prato
                         </button>
                     </div>
-                    <div class="bg-dark-800 rounded-2xl border border-white/5 overflow-hidden overflow-x-auto">
-                        <table class="w-full" style="min-width: 600px;">
-                            <thead class="bg-dark-700/50">
-                                <tr>
-                                    <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">Prato
-                                    </th>
-                                    <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">
-                                        Categoria</th>
-                                    <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">Preço
-                                    </th>
-                                    <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">
-                                        Destaque</th>
-                                    <th class="text-left px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">Ativo
-                                    </th>
-                                    <th class="text-right px-6 py-4 text-xs text-gray-400 uppercase tracking-wider">
-                                        Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="dishes-table" class="divide-y divide-white/5">
-                                <tr>
-                                    <td colspan="6" class="text-center py-12 text-gray-500">Carregando...</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="bg-dark-800 rounded-2xl border border-white/5 overflow-hidden">
+                        <!-- Desktop Header -->
+                        <div class="hidden md:grid grid-cols-6 gap-4 bg-dark-700/50 px-6 py-4 border-b border-white/5">
+                            <div class="text-left text-xs text-gray-400 uppercase tracking-wider col-span-2">Prato</div>
+                            <div class="text-left text-xs text-gray-400 uppercase tracking-wider">Categoria</div>
+                            <div class="text-left text-xs text-gray-400 uppercase tracking-wider">Preço</div>
+                            <div class="text-center text-xs text-gray-400 uppercase tracking-wider">Status</div>
+                            <div class="text-right text-xs text-gray-400 uppercase tracking-wider">Ações</div>
+                        </div>
+                        <!-- List Body -->
+                        <div id="dishes-table" class="divide-y divide-white/5">
+                            <div class="text-center py-12 text-gray-500">Carregando...</div>
+                        </div>
                     </div>
                 </div>
 
@@ -462,7 +443,7 @@
                     </div>
                     <!-- Floating Save Button -->
                     <button id="config-save-float" onclick="saveConfig()"
-                        class="fixed bottom-6 right-6 z-50 bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-full text-sm font-semibold shadow-lg shadow-brand-500/30 transition-all transform translate-y-20 opacity-0 pointer-events-none"
+                        class="fixed bottom-4 left-4 right-4 sm:left-auto sm:bottom-6 sm:right-6 z-[90] bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-full text-sm font-semibold shadow-lg shadow-brand-500/30 transition-all transform translate-y-20 opacity-0 pointer-events-none"
                         style="transition: transform 0.3s ease, opacity 0.3s ease;" aria-label="Salvar Configurações">
                         💾 Salvar
                     </button>
@@ -1182,7 +1163,7 @@
 
             const tbody = document.getElementById('dishes-table');
             if (res.data.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-12 text-gray-500">Nenhum prato cadastrado.</td></tr>';
+                tbody.innerHTML = '<div class="text-center py-12 text-gray-500">Nenhum prato cadastrado.</div>';
                 return;
             }
 
@@ -1195,22 +1176,32 @@
                     : PLACEHOLDER_SM;
 
                 return `
-        <tr class="hover:bg-white/[0.02] transition">
-            <td class="px-6 py-4">
-                <div class="flex items-center gap-3">
-                    <img src="${escapeAttr(imgSrc)}" class="w-10 h-10 rounded-lg object-cover" alt="${escapeAttr(d.name || '')}" onerror="this.src=PLACEHOLDER_SM">
-                    <span class="text-white font-medium text-sm">${escapeHTML(d.name || '')}</span>
+        <div class="flex flex-col md:grid md:grid-cols-6 items-start md:items-center gap-4 px-6 py-4 hover:bg-white/[0.02] transition">
+            <!-- Mobile Title & Image -->
+            <div class="flex items-center gap-3 w-full md:w-auto col-span-2">
+                <img src="${escapeAttr(imgSrc)}" class="w-12 h-12 rounded-lg object-cover flex-shrink-0" alt="${escapeAttr(d.name || '')}" onerror="this.src=PLACEHOLDER_SM">
+                <div class="min-w-0 flex-1">
+                   <div class="text-white font-medium text-sm truncate w-full" title="${escapeAttr(d.name || '')}">${escapeHTML(d.name || '')}</div>
+                   <div class="text-gray-400 text-xs md:hidden mt-1 truncate">${escapeHTML(d.category?.name || '-')} • <span class="text-brand-400 font-medium">${formatPrice(d.price)}</span></div>
                 </div>
-            </td>
-            <td class="px-6 py-4 text-gray-400 text-sm">${escapeHTML(d.category?.name || '-')}</td>
-            <td class="px-6 py-4 text-brand-400 font-medium text-sm">${formatPrice(d.price)}</td>
-            <td class="px-6 py-4">${d.featured ? '<span class="text-yellow-400">★</span>' : '<span class="text-gray-600">-</span>'}</td>
-            <td class="px-6 py-4">${d.active ? '<span class="text-green-400 text-xs bg-green-400/10 px-2 py-1 rounded-full">Ativo</span>' : '<span class="text-gray-500 text-xs bg-gray-500/10 px-2 py-1 rounded-full">Inativo</span>'}</td>
-            <td class="px-6 py-4 text-right">
-                <button data-action="edit-dish" data-dish-id="${d.id}" class="text-gray-400 hover:text-brand-400 text-sm mr-3 min-w-[44px] min-h-[44px] p-2 inline-flex items-center justify-center">Editar</button>
-                <button data-action="delete-dish" data-dish-id="${d.id}" class="text-gray-400 hover:text-red-400 text-sm min-w-[44px] min-h-[44px] p-2 inline-flex items-center justify-center">Excluir</button>
-            </td>
-        </tr>
+            </div>
+            
+            <!-- Desktop only pieces -->
+            <div class="hidden md:block text-gray-400 text-sm truncate">${escapeHTML(d.category?.name || '-')}</div>
+            <div class="hidden md:block text-brand-400 font-medium text-sm">${formatPrice(d.price)}</div>
+
+            <!-- Badges -->
+            <div class="flex items-center gap-2 md:justify-center w-full md:w-auto">
+                ${d.featured ? '<span class="text-yellow-400 bg-yellow-400/10 px-2 py-1 rounded-full text-xs">★ Destaque</span>' : ''}
+                ${d.active ? '<span class="text-green-400 text-xs bg-green-400/10 px-2 py-1 rounded-full whitespace-nowrap">Ativo</span>' : '<span class="text-gray-500 text-xs bg-gray-500/10 px-2 py-1 rounded-full whitespace-nowrap">Inativo</span>'}
+            </div>
+            
+            <!-- Actions -->
+            <div class="flex items-center justify-end w-full md:w-auto border-t md:border-transparent border-white/5 pt-3 md:pt-0 mt-2 md:mt-0 gap-2">
+                <button data-action="edit-dish" data-dish-id="${d.id}" class="text-gray-400 hover:text-brand-400 text-sm px-4 py-2 bg-dark-700/50 md:bg-transparent rounded-lg md:rounded-none inline-flex items-center justify-center flex-1 md:flex-none">Editar</button>
+                <button data-action="delete-dish" data-dish-id="${d.id}" class="text-gray-400 hover:text-red-400 text-sm px-4 py-2 bg-dark-700/50 md:bg-transparent rounded-lg md:rounded-none inline-flex items-center justify-center flex-1 md:flex-none">Excluir</button>
+            </div>
+        </div>
     `;
             }).join('');
 
@@ -1555,14 +1546,18 @@
                 ${dayNames.map((day, i) => {
                 const d = schedule.days[i];
                 return `
-                    <div class="flex items-center gap-3 flex-wrap sm:flex-nowrap">
-                        <label class="flex items-center gap-2 min-w-[100px]">
-                            <input type="checkbox" class="bh-day-open rounded" data-day="${i}" ${d.open ? 'checked' : ''} aria-label="${day} aberto">
-                            <span class="text-sm text-white">${day}</span>
+                    <div class="flex flex-col xl:flex-row xl:items-center gap-3 sm:gap-4 p-4 xl:p-0 bg-dark-900 xl:bg-transparent rounded-xl border border-white/5 xl:border-0 relative">
+                        <!-- Open toggle -->
+                        <label class="flex items-center gap-3 min-w-[120px] mb-1 xl:mb-0">
+                            <input type="checkbox" class="bh-day-open w-5 h-5 rounded border-gray-600 text-brand-500 focus:ring-brand-500 focus:ring-offset-gray-900" data-day="${i}" ${d.open ? 'checked' : ''} aria-label="${day} aberto">
+                            <span class="text-sm font-semibold xl:font-normal text-white">${day}</span>
                         </label>
-                        <input type="time" class="bh-day-from bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm" data-day="${i}" value="${d.from || '08:00'}" aria-label="${day} abertura" ${d.open ? '' : 'disabled'}>
-                        <span class="text-gray-500 text-sm">até</span>
-                        <input type="time" class="bh-day-to bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm" data-day="${i}" value="${d.to || '22:00'}" aria-label="${day} fechamento" ${d.open ? '' : 'disabled'}>
+                        <!-- Inputs -->
+                        <div class="flex items-center gap-2 w-full xl:w-auto">
+                            <input type="time" class="bh-day-from bg-dark-800 xl:bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm flex-1 xl:flex-none shadow-inner" data-day="${i}" value="${d.from || '08:00'}" aria-label="${day} abertura" ${d.open ? '' : 'disabled'}>
+                            <span class="text-gray-500 text-sm font-medium">até</span>
+                            <input type="time" class="bh-day-to bg-dark-800 xl:bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm flex-1 xl:flex-none shadow-inner" data-day="${i}" value="${d.to || '22:00'}" aria-label="${day} fechamento" ${d.open ? '' : 'disabled'}>
+                        </div>
                     </div>`;
             }).join('')}
                 </div>
@@ -1630,6 +1625,34 @@
 
             // Attach upload handlers for image fields (deferred: upload on save)
             document.querySelectorAll('#config-form [data-upload-key]').forEach(fileInput => {
+                const container = fileInput.closest('.p-6'); // The outer container for the field
+
+                // --- Drag and Drop Feature ---
+                container.addEventListener('dragover', (e) => {
+                    if (fileInput.disabled) return;
+                    e.preventDefault();
+                    container.classList.add('border-brand-500', 'bg-dark-700');
+                });
+
+                container.addEventListener('dragleave', () => {
+                    if (fileInput.disabled) return;
+                    container.classList.remove('border-brand-500', 'bg-dark-700');
+                });
+
+                container.addEventListener('drop', (e) => {
+                    if (fileInput.disabled) return;
+                    e.preventDefault();
+                    container.classList.remove('border-brand-500', 'bg-dark-700');
+
+                    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                        fileInput.files = e.dataTransfer.files;
+                        // Trigger change event manually so the existing handler picks it up
+                        const event = new Event('change', { bubbles: true });
+                        fileInput.dispatchEvent(event);
+                    }
+                });
+                // --- End Drag and Drop ---
+
                 fileInput.addEventListener('change', (e) => {
                     const file = e.target.files[0];
                     if (!file) return;
@@ -1637,6 +1660,7 @@
 
                     // Store file for upload on save
                     pendingUploads[key] = file;
+                    window._configDirty = true; // Mark as dirty
 
                     // Show local preview (no network request)
                     const blobUrl = URL.createObjectURL(file);
@@ -1652,11 +1676,20 @@
                     }
 
                     // Show delete button
-                    const container = fileInput.parentElement;
-                    const delBtn = container.querySelector('[data-clear-key]');
+                    const delBtn = fileInput.parentElement.querySelector('[data-clear-key]');
                     if (delBtn) delBtn.style.display = 'inline-block';
 
                     toast('Imagem selecionada. Clique "Salvar" para aplicar.', 'success');
+                });
+            });
+
+            // Track changes on inputs for unsaved warnings
+            document.querySelectorAll('#config-form input, #config-form textarea, #config-form select').forEach(el => {
+                el.addEventListener('input', () => {
+                    window._configDirty = true;
+                });
+                el.addEventListener('change', () => {
+                    window._configDirty = true;
                 });
             });
 
@@ -1783,6 +1816,7 @@
 
             if (res.success) {
                 toast('Configurações salvas!');
+                window._configDirty = false; // Reset dirty flag
                 // Reload config form to reflect any server-side sanitization
                 loadConfig();
                 // Refetch config em todas as abas abertas
@@ -1884,6 +1918,15 @@
                 }
             }, { passive: true });
         })();
+
+        // --- Unsaved Changes Warning ---
+        window._configDirty = false;
+        window.addEventListener('beforeunload', (e) => {
+            if (window._configDirty) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
 
         // --- Onboarding (First Steps) ---
         function showOnboarding() {

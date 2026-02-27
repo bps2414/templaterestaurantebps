@@ -155,11 +155,25 @@ app.use('/uploads', (req: Request, res: Response, next: NextFunction) => {
     },
 }));
 
-// --- Serve static frontend ---
+// --- Serve static frontend (JS, CSS, images) ---
+// ETag is enabled by default in Express. Combined with 'no-cache', the browser
+// always revalidates with the server. If the file hasn't changed (same ETag),
+// the server replies 304 (fast). After a deploy with new files, it replies 200.
+// This eliminates the need for users to Ctrl+Shift+R after a deploy.
 app.use(express.static(path.join(__dirname, '../../public'), {
     index: false,
     dotfiles: 'deny',
-    maxAge: process.env.NODE_ENV === 'production' ? '1h' : 0,
+    maxAge: process.env.NODE_ENV === 'production' ? '1d' : 0,
+    setHeaders: (res: Response, filePath: string) => {
+        // HTML files: always revalidate (ensures fresh content after deploy)
+        if (filePath.endsWith('.html')) {
+            res.setHeader('Cache-Control', 'no-cache');
+        }
+        // JS/CSS in dev: no cache at all
+        if (process.env.NODE_ENV !== 'production') {
+            res.setHeader('Cache-Control', 'no-cache');
+        }
+    }
 }));
 
 // --- Health check ---
@@ -256,6 +270,9 @@ pages.forEach(page => {
         if (noIndexPages.includes(page)) {
             res.setHeader('X-Robots-Tag', 'noindex, nofollow');
         }
+
+        // HTML pages always revalidate via ETag — no stale cache after deploy
+        res.setHeader('Cache-Control', 'no-cache');
         res.sendFile(path.join(publicDir, `${page}.html`));
     });
 });

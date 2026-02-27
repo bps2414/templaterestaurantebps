@@ -89,6 +89,8 @@ router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
             if (plan !== 'professional' && isProConfigKey(c.key)) return;
             configMap[c.key] = c.value;
         });
+        // Dynamic data: never cache API config responses
+        res.setHeader('Cache-Control', 'no-store');
         res.json({ success: true, data: configMap });
     } catch (error) {
         next(error);

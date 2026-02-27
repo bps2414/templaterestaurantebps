@@ -547,21 +547,56 @@
 
     // --- Store Open/Closed Logic ---
     function isStoreOpen(config) {
+        // Manual override: force closed
         if (config.store_force_closed === 'true') return false;
+
+        // Parse structured business hours
         var schedule;
-        try { schedule = JSON.parse(config.business_hours || '{}'); } catch (e) { return true; }
+        try {
+            schedule = JSON.parse(config.business_hours || '{}');
+        } catch (e) {
+            return true; // If no valid schedule, assume open
+        }
+
         if (!schedule || !schedule.days || !Array.isArray(schedule.days)) return true;
+
         var now = new Date();
-        var dayMap = [6, 0, 1, 2, 3, 4, 5];
-        var todaySchedule = schedule.days[dayMap[now.getDay()]];
+        var dayIndex = now.getDay(); // 0=Sun, 1=Mon...6=Sat
+        var dayMap = [6, 0, 1, 2, 3, 4, 5]; // JS Sun=0 → our Sun=6
+        var todayIndex = dayMap[dayIndex];
+        var todaySchedule = schedule.days[todayIndex];
+
         if (!todaySchedule || !todaySchedule.open) return false;
+
         var currentMinutes = now.getHours() * 60 + now.getMinutes();
-        function parseTime(str) { var p = (str || '00:00').split(':'); return parseInt(p[0], 10) * 60 + parseInt(p[1], 10); }
+
+        // Parse time string "HH:MM" to minutes
+        function parseTime(str) {
+            var parts = (str || '00:00').split(':');
+            return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+        }
+
         var openTime = parseTime(todaySchedule.from);
         var closeTime = parseTime(todaySchedule.to);
-        if (closeTime <= openTime) return currentMinutes >= openTime || currentMinutes < closeTime;
+
+        // Handle overnight hours (e.g., 18:00-02:00)
+        if (closeTime <= openTime) {
+            return currentMinutes >= openTime || currentMinutes < closeTime;
+        }
+
         return currentMinutes >= openTime && currentMinutes < closeTime;
     }
+
+    // Global reference to config for interval updates
+    window._siteConfig = null;
+
+    // Re-check store open status every 60 seconds
+    setInterval(function () {
+        if (window._siteConfig) {
+            var open = isStoreOpen(window._siteConfig);
+            applyStoreStatus(open);
+        }
+    }, 60000);
 
     function applyStoreStatus(open) {
         var body = document.body;

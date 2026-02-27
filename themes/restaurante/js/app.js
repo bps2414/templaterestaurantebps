@@ -365,6 +365,18 @@
         }
     }
 
+    // Global reference to config for interval updates
+    window._siteConfig = null;
+
+    // Re-check store open status every 60 seconds
+    setInterval(function () {
+        if (window._siteConfig) {
+            var open = isStoreOpen(window._siteConfig);
+            // Only trigger UI updates if the status logic demands a change
+            applyStoreStatus(open);
+        }
+    }, 60000);
+
     // --- Apply brand color dynamically ---
     function applyBrandColor(hex) {
         // Generate shades from hex
