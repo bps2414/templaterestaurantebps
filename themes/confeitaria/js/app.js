@@ -617,7 +617,7 @@
                 var nav = document.querySelector('nav.nav-glass, nav[class*="nav-glass"], nav:first-of-type');
                 if (nav) nav.style.top = banner.offsetHeight + 'px';
             }
-            setTimeout(function () { document.querySelectorAll('.order-btn').forEach(function (btn) { btn.disabled = true; btn.style.opacity = '0.5'; btn.style.cursor = 'not-allowed'; }); }, 500);
+            document.querySelectorAll('.order-btn').forEach(function (btn) { btn.disabled = true; btn.style.opacity = '0.5'; btn.style.cursor = 'not-allowed'; });
             var cartToggle2 = document.getElementById('cart-toggle');
             if (cartToggle2) { cartToggle2.disabled = true; cartToggle2.style.opacity = '0.5'; cartToggle2.style.cursor = 'not-allowed'; }
         }
