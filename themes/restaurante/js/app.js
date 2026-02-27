@@ -257,7 +257,17 @@
                 'addressCountry': 'BR',
             };
         }
-        if (c.opening_hours) {
+        if (c.business_hours) {
+            try {
+                var bh = JSON.parse(c.business_hours);
+                if (bh && bh.days) {
+                    var schemaNames = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+                    var ohArr = [];
+                    bh.days.forEach(function (d, i) { if (d.open) ohArr.push(schemaNames[i] + ' ' + d.from + '-' + d.to); });
+                    if (ohArr.length) structuredData.openingHours = ohArr.join(', ');
+                }
+            } catch (e) { }
+        } else if (c.opening_hours) {
             structuredData.openingHours = c.opening_hours;
         }
         jsonLd.textContent = JSON.stringify(structuredData);
@@ -309,8 +319,23 @@
         setText('about-title', c.about_title);
         setText('about-text', c.about_text);
 
-        // Opening hours
-        setText('opening-hours', c.opening_hours);
+        // Opening hours — generate from business_hours or fall back to opening_hours text
+        if (c.business_hours) {
+            try {
+                var bhData = JSON.parse(c.business_hours);
+                if (bhData && bhData.days) {
+                    var dayLabels = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+                    var lines = [];
+                    bhData.days.forEach(function (d, i) {
+                        if (d.open) lines.push(dayLabels[i] + ': ' + d.from + ' – ' + d.to);
+                        else lines.push(dayLabels[i] + ': Fechado');
+                    });
+                    setText('opening-hours', lines.join(' | '));
+                }
+            } catch (e) { setText('opening-hours', c.opening_hours || ''); }
+        } else {
+            setText('opening-hours', c.opening_hours || '');
+        }
 
         // WhatsApp — only show buttons if a valid number is configured
         const waNum = c.whatsapp_number ? c.whatsapp_number.replace(/\D/g, '') : '';

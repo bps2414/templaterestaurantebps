@@ -460,6 +460,12 @@
                     <div class="space-y-6" id="config-form">
                         <div class="text-center py-12 text-gray-500">Carregando...</div>
                     </div>
+                    <!-- Floating Save Button -->
+                    <button id="config-save-float" onclick="saveConfig()"
+                        class="fixed bottom-6 right-6 z-50 bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-full text-sm font-semibold shadow-lg shadow-brand-500/30 transition-all transform translate-y-20 opacity-0 pointer-events-none"
+                        style="transition: transform 0.3s ease, opacity 0.3s ease;" aria-label="Salvar Configurações">
+                        💾 Salvar
+                    </button>
                 </div>
 
                 <!-- TAB: ABOUT / TEAM -->
@@ -1456,7 +1462,6 @@
             about_title: 'Título do Sobre',
             about_text: 'Texto do Sobre (1º parágrafo)',
             about_text_2: 'Texto do Sobre (2º parágrafo)',
-            opening_hours: 'Horário de Funcionamento',
             google_maps_embed: 'URL do Google Maps (embed)',
             instagram_url: 'Instagram URL',
             facebook_url: 'Facebook URL',
@@ -1856,6 +1861,26 @@
             window.open('/', '_blank');
             markStepDone('preview');
         }
+
+        // --- Floating Save Button Observer ---
+        (function () {
+            var floatBtn = document.getElementById('config-save-float');
+            if (!floatBtn) return;
+            var configTab = document.getElementById('tab-config');
+            window.addEventListener('scroll', function () {
+                if (!configTab || configTab.classList.contains('hidden')) {
+                    floatBtn.style.transform = 'translateY(80px)'; floatBtn.style.opacity = '0'; floatBtn.style.pointerEvents = 'none'; return;
+                }
+                var topBtn = configTab.querySelector('button[onclick="saveConfig()"]');
+                if (!topBtn) return;
+                var rect = topBtn.getBoundingClientRect();
+                if (rect.bottom < 0) {
+                    floatBtn.style.transform = 'translateY(0)'; floatBtn.style.opacity = '1'; floatBtn.style.pointerEvents = 'auto';
+                } else {
+                    floatBtn.style.transform = 'translateY(80px)'; floatBtn.style.opacity = '0'; floatBtn.style.pointerEvents = 'none';
+                }
+            }, { passive: true });
+        })();
 
         // --- Onboarding (First Steps) ---
         function showOnboarding() {
