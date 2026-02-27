@@ -55,9 +55,10 @@ No Dashboard do **Render**, conecte o repositório do projeto:
    - **Name:** Nome do cliente (ex: `cliente-pizzaria`).
    - **Region:** A mais próxima (ex: Ohio, US East).
    - **Branch:** `main` (ou a branch de produção correta).
-   - **Runtime:** `Node`.
-   - **Build Command:** `npm install && npm run build` (certifique-se de que script build engloba o Next.js/Front e Back).
-   - **Start Command:** `npm start` (ou `node server/index.js` dependendo do seu script).
+   - **Root Directory:** `server`
+   - **Runtime:** `Node` (NÃO ESCOLHA DOCKER).
+   - **Build Command:** `npm ci --include=dev && npx prisma generate && npm run build`
+   - **Start Command:** `sh scripts/start.sh`
    - **Plan:** Escolha (Free tier para testes, Starter/Pro para produção).
 
 ---

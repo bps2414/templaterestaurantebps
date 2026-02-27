@@ -1518,6 +1518,49 @@
         `;
             }).join('');
 
+            // --- Business Hours Schedule UI ---
+            const businessHoursValue = json.data['business_hours'] || '';
+            let schedule = { days: [] };
+            try { schedule = JSON.parse(businessHoursValue) || { days: [] }; } catch (e) { }
+            if (!schedule.days || !Array.isArray(schedule.days)) schedule.days = [];
+            const dayNames = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
+            while (schedule.days.length < 7) schedule.days.push({ open: false, from: '08:00', to: '22:00' });
+
+            const forceClosedValue = json.data['store_force_closed'] || 'false';
+
+            html += `
+            <div class="mt-8 mb-4"><h2 class="text-lg font-semibold text-white">⏰ Horário de Funcionamento</h2>
+                <p class="text-gray-500 text-xs mt-1">Configure os dias e horários em que a loja aceita pedidos. Fora destes horários, os botões de pedido serão desabilitados automaticamente.</p>
+            </div>
+            <div class="bg-dark-800 rounded-xl p-6 border border-white/5 mb-4">
+                <div class="flex items-center justify-between mb-4">
+                    <label class="text-sm text-gray-400">🚫 Forçar Loja Fechada (Override Manual)</label>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="store-force-closed-toggle" class="sr-only peer" ${forceClosedValue === 'true' ? 'checked' : ''} aria-label="Forçar loja fechada">
+                        <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                    </label>
+                </div>
+                <input type="hidden" data-key="store_force_closed" id="store-force-closed-input" value="${escapeAttr(forceClosedValue)}">
+            </div>
+            <div class="bg-dark-800 rounded-xl p-6 border border-white/5 mb-4">
+                <div class="space-y-3" id="business-hours-grid">
+                ${dayNames.map((day, i) => {
+                const d = schedule.days[i];
+                return `
+                    <div class="flex items-center gap-3 flex-wrap sm:flex-nowrap">
+                        <label class="flex items-center gap-2 min-w-[100px]">
+                            <input type="checkbox" class="bh-day-open rounded" data-day="${i}" ${d.open ? 'checked' : ''} aria-label="${day} aberto">
+                            <span class="text-sm text-white">${day}</span>
+                        </label>
+                        <input type="time" class="bh-day-from bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm" data-day="${i}" value="${d.from || '08:00'}" aria-label="${day} abertura" ${d.open ? '' : 'disabled'}>
+                        <span class="text-gray-500 text-sm">até</span>
+                        <input type="time" class="bh-day-to bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white text-sm" data-day="${i}" value="${d.to || '22:00'}" aria-label="${day} fechamento" ${d.open ? '' : 'disabled'}>
+                    </div>`;
+            }).join('')}
+                </div>
+                <input type="hidden" data-key="business_hours" id="business-hours-input" value="${escapeAttr(businessHoursValue)}">
+            </div>`;
+
             // PRO config fields
             html += `<div class="mt-8 mb-4"><h2 class="text-lg font-semibold text-white">Personalização Avançada <span class="pro-badge">PRO</span></h2></div>`;
             html += Object.entries(proConfigLabels).map(([key, label]) => {
@@ -1608,6 +1651,23 @@
                     toast('Imagem selecionada. Clique "Salvar" para aplicar.', 'success');
                 });
             });
+
+            // --- Business Hours event handlers ---
+            document.querySelectorAll('.bh-day-open').forEach(cb => {
+                cb.addEventListener('change', function () {
+                    const day = this.dataset.day;
+                    const fromInput = document.querySelector(`.bh-day-from[data-day="${day}"]`);
+                    const toInput = document.querySelector(`.bh-day-to[data-day="${day}"]`);
+                    if (fromInput) fromInput.disabled = !this.checked;
+                    if (toInput) toInput.disabled = !this.checked;
+                });
+            });
+            const forceClosedToggle = document.getElementById('store-force-closed-toggle');
+            if (forceClosedToggle) {
+                forceClosedToggle.addEventListener('change', function () {
+                    document.getElementById('store-force-closed-input').value = this.checked ? 'true' : 'false';
+                });
+            }
         }
 
         function clearConfigImage(key) {
@@ -1636,7 +1696,24 @@
             toast('Foto removida. Clique "Salvar" para aplicar.');
         }
 
+        function serializeBusinessHours() {
+            const days = [];
+            for (let i = 0; i < 7; i++) {
+                const openCb = document.querySelector(`.bh-day-open[data-day="${i}"]`);
+                const fromInput = document.querySelector(`.bh-day-from[data-day="${i}"]`);
+                const toInput = document.querySelector(`.bh-day-to[data-day="${i}"]`);
+                days.push({
+                    open: openCb ? openCb.checked : false,
+                    from: fromInput ? fromInput.value : '08:00',
+                    to: toInput ? toInput.value : '22:00'
+                });
+            }
+            const input = document.getElementById('business-hours-input');
+            if (input) input.value = JSON.stringify({ days });
+        }
+
         async function saveConfig() {
+            serializeBusinessHours();
             const saveBtn = document.querySelector('#tab-config button[onclick="saveConfig()"]');
             const data = {};
             let hasError = false;

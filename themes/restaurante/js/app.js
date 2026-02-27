@@ -129,7 +129,7 @@
         try {
             // Force cache-busting by appending a timestamp
             const data = await api(`/config?_=${Date.now()}`);
-            
+
             if (data) {
                 siteConfig = validateConfig(data);
                 applyConfig();
@@ -331,6 +331,9 @@
         setHref('link-instagram', c.instagram_url);
         setHref('link-facebook', c.facebook_url);
 
+        // Store status (open/closed)
+        applyStoreStatus(isStoreOpen(c));
+
         // Page-specific config
         if (typeof applyPageConfig === 'function') {
             applyPageConfig(c);
@@ -516,6 +519,104 @@
         return div.innerHTML;
     }
 
+    // --- Store Open/Closed Logic ---
+    function isStoreOpen(config) {
+        // Manual override: force closed
+        if (config.store_force_closed === 'true') return false;
+
+        // Parse structured business hours
+        var schedule;
+        try {
+            schedule = JSON.parse(config.business_hours || '{}');
+        } catch (e) {
+            return true; // If no valid schedule, assume open
+        }
+
+        if (!schedule || !schedule.days || !Array.isArray(schedule.days)) return true;
+
+        var now = new Date();
+        var dayIndex = now.getDay(); // 0=Sun, 1=Mon...6=Sat
+        var dayMap = [6, 0, 1, 2, 3, 4, 5]; // JS Sun=0 → our Sun=6
+        var todayIndex = dayMap[dayIndex];
+        var todaySchedule = schedule.days[todayIndex];
+
+        if (!todaySchedule || !todaySchedule.open) return false;
+
+        var currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+        // Parse time string "HH:MM" to minutes
+        function parseTime(str) {
+            var parts = (str || '00:00').split(':');
+            return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+        }
+
+        var openTime = parseTime(todaySchedule.from);
+        var closeTime = parseTime(todaySchedule.to);
+
+        // Handle overnight hours (e.g., 18:00-02:00)
+        if (closeTime <= openTime) {
+            return currentMinutes >= openTime || currentMinutes < closeTime;
+        }
+
+        return currentMinutes >= openTime && currentMinutes < closeTime;
+    }
+
+    function applyStoreStatus(open) {
+        var body = document.body;
+        var existingBanner = document.getElementById('closed-banner');
+
+        if (open) {
+            body.dataset.storeClosed = 'false';
+            if (existingBanner) existingBanner.style.display = 'none';
+            // Re-enable order buttons
+            document.querySelectorAll('.order-btn[disabled]').forEach(function (btn) {
+                btn.disabled = false;
+                btn.style.opacity = '';
+                btn.style.cursor = '';
+            });
+            // Re-enable cart toggle
+            var cartToggle = document.getElementById('cart-toggle');
+            if (cartToggle) {
+                cartToggle.disabled = false;
+                cartToggle.style.opacity = '';
+                cartToggle.style.cursor = '';
+            }
+        } else {
+            body.dataset.storeClosed = 'true';
+            // Show or create banner
+            if (existingBanner) {
+                existingBanner.style.display = '';
+            } else {
+                var banner = document.createElement('div');
+                banner.id = 'closed-banner';
+                banner.style.cssText = 'background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;text-align:center;padding:12px 16px;font-size:14px;font-weight:600;position:fixed;top:0;left:0;right:0;z-index:9999;box-shadow:0 2px 8px rgba(0,0,0,0.3);';
+                banner.innerHTML = '🔒 Estamos fechados no momento. Volte no horário de funcionamento!';
+                document.body.prepend(banner);
+                // Push nav down
+                var nav = document.querySelector('nav.nav-glass, nav[class*="nav-glass"], nav:first-of-type');
+                if (nav) nav.style.top = banner.offsetHeight + 'px';
+            }
+            // Disable order buttons visually
+            setTimeout(function () {
+                document.querySelectorAll('.order-btn').forEach(function (btn) {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.5';
+                    btn.style.cursor = 'not-allowed';
+                });
+            }, 500);
+            // Disable cart toggle
+            var cartToggle2 = document.getElementById('cart-toggle');
+            if (cartToggle2) {
+                cartToggle2.disabled = true;
+                cartToggle2.style.opacity = '0.5';
+                cartToggle2.style.cursor = 'not-allowed';
+            }
+        }
+
+        // Expose status globally
+        window.isStoreCurrentlyOpen = open;
+    }
+
     function escapeAttr(value) {
         return escapeHTML(value).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
@@ -683,6 +784,16 @@
     document.addEventListener('click', (e) => {
         const btn = e.target.closest('.order-btn');
         if (!btn) return;
+
+        // Block orders when store is closed
+        if (document.body.dataset.storeClosed === 'true') {
+            if (window.feedback) {
+                window.feedback.error('Estamos fechados no momento. Volte no horário de funcionamento! 🕐');
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+        }
 
         const action = btn.dataset.action;
         const id = btn.dataset.id;

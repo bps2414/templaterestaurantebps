@@ -64,6 +64,8 @@ const ALLOWED_KEYS = [
     'about_text_2',
     'about_image',
     'opening_hours',
+    'business_hours',
+    'store_force_closed',
     'google_maps_embed',
     'instagram_url',
     'facebook_url',
