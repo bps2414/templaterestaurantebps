@@ -334,10 +334,13 @@
                     var dayLabels = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
                     var lines = [];
                     bhData.days.forEach(function (d, i) {
-                        if (d.open) lines.push(dayLabels[i] + ': ' + d.from + ' – ' + d.to);
-                        else lines.push(dayLabels[i] + ': Fechado');
+                        var label = dayLabels[i] || 'Dia';
+                        if (d.open) lines.push(label + ': ' + d.from + ' – ' + d.to);
+                        else lines.push(label + ': Fechado');
                     });
-                    setText('opening-hours', lines.join(' | '));
+                    var formattedHours = lines.join(' | ');
+                    c.opening_hours = formattedHours;
+                    setText('opening-hours', formattedHours);
                 }
             } catch (e) { setText('opening-hours', c.opening_hours || ''); }
         } else {

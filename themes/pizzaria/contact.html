@@ -282,21 +282,7 @@
             setText('contact-phone', c.restaurant_phone);
             setText('contact-email', c.restaurant_email);
 
-            // Opening hours from business_hours JSON
-            var hoursText = c.opening_hours || '';
-            try {
-                var bh = JSON.parse(c.business_hours);
-                if (bh && bh.days) {
-                    var dayNames = { seg: 'Seg', ter: 'Ter', qua: 'Qua', qui: 'Qui', sex: 'Sex', sab: 'Sáb', dom: 'Dom' };
-                    var parts = [];
-                    bh.days.forEach(function (d) {
-                        var label = dayNames[d.day] || d.day;
-                        parts.push(d.open ? label + ': ' + d.from + ' – ' + d.to : label + ': Fechado');
-                    });
-                    if (parts.length) hoursText = parts.join(' | ');
-                }
-            } catch (e) { }
-            setText('contact-hours', hoursText);
+            setText('contact-hours', c.opening_hours);
 
             // Google Maps embed
             var mapEl = document.getElementById('contact-map');
