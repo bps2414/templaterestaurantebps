@@ -121,10 +121,13 @@
     }
 
     async function loadConfig() {
-        // Fallback: força visibilidade após 800ms (tempo seguro para evitar FOUC)
-        const fallbackTimer = setTimeout(() => {
+        // Last-resort safety valve: only fires if JS hangs completely (config fetch
+        // never resolves/rejects). In normal flow, clearTimeout in finally cancels
+        // this before it fires. 800ms was too short and caused FOUC on slow/cold
+        // start servers — config-loaded was added before applyConfig() ran.
+        const emergencyTimer = setTimeout(() => {
             document.body.classList.add('config-loaded');
-        }, 800);
+        }, 10000);
 
         try {
             // Force cache-busting by appending a timestamp
@@ -147,8 +150,11 @@
             };
             applyConfig(); // Apply defaults
         } finally {
-            clearTimeout(fallbackTimer);
-            // Ensure strictly distinct frame for transition
+            // Cancel the emergency timer — applyConfig() already ran above (success
+            // or catch). Reveal content only AFTER config has been applied to the DOM.
+            clearTimeout(emergencyTimer);
+            // Two rAF frames ensure the browser has painted the updated DOM before
+            // the fade-in transition starts (avoids seeing stale placeholder text).
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
                     document.body.classList.add('config-loaded');

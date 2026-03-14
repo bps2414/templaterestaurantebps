@@ -121,10 +121,12 @@
     }
 
     async function loadConfig() {
-        // Fallback: força visibilidade após 800ms (tempo seguro para evitar FOUC)
-        const fallbackTimer = setTimeout(() => {
+        // Last-resort safety valve: only fires if JS hangs completely. In normal
+        // flow, clearTimeout in finally cancels this before it fires.
+        // 800ms was too short — caused FOUC when the API took > 800ms (cold starts).
+        const emergencyTimer = setTimeout(() => {
             document.body.classList.add('config-loaded');
-        }, 800);
+        }, 10000);
 
         try {
             // Force cache-busting by appending a timestamp
@@ -147,8 +149,9 @@
             };
             applyConfig(); // Apply defaults
         } finally {
-            clearTimeout(fallbackTimer);
-            // Ensure strictly distinct frame for transition
+            // Cancel the emergency timer — applyConfig() already ran above.
+            // Reveal content only AFTER config has been applied to the DOM.
+            clearTimeout(emergencyTimer);
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
                     document.body.classList.add('config-loaded');

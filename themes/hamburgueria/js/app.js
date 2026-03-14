@@ -121,21 +121,23 @@
     }
 
     async function loadConfig() {
-        // Fallback: força visibilidade após 500ms se config não carregar
-        const fallbackTimer = setTimeout(() => {
+        // Last-resort safety valve: only fires if JS hangs completely. In normal
+        // flow, clearTimeout below cancels this before it fires.
+        // 500ms was too short — caused FOUC when the API took > 500ms (cold starts).
+        const emergencyTimer = setTimeout(() => {
             if (!document.body.classList.contains('config-loaded')) {
                 document.body.classList.add('config-loaded');
             }
-        }, 500);
+        }, 10000);
 
         try {
             // Force cache-busting by appending a timestamp
             const data = await api(`/config?_=${Date.now()}`);
-            clearTimeout(fallbackTimer);
+            clearTimeout(emergencyTimer);
             if (data) {
                 siteConfig = validateConfig(data);
                 applyConfig();
-                // Mark config as loaded to trigger fade-in
+                // Reveal content only AFTER config has been applied to the DOM.
                 document.body.classList.add('config-loaded');
             } else {
                 showToast('Erro ao carregar configurações.', 'error');
@@ -150,7 +152,7 @@
                 document.body.classList.add('config-loaded');
             }
         } catch (e) {
-            clearTimeout(fallbackTimer);
+            clearTimeout(emergencyTimer);
             showToast('Erro ao carregar configurações.', 'error');
             siteConfig = {
                 restaurant_name: 'Restaurante',
@@ -159,6 +161,7 @@
                 hero_subtitle: 'Ingredientes frescos, técnicas refinadas e sabores que contam histórias',
                 footer_text: '© 2026 Restaurante. Todos os direitos reservados.',
             };
+            applyConfig(); // Apply defaults before revealing
             document.body.classList.add('config-loaded');
         }
     }
