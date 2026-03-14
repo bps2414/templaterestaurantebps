@@ -82,4 +82,51 @@ cleanDir(DEST);
 console.log(`📦 Copiando tema "${THEME}"...`);
 const fileCount = copyDir(SRC, DEST);
 
-console.log(`\n✅ Tema "${THEME}" aplicado com sucesso! (${fileCount} arquivos copiados)\n`);
+console.log(`✅ Tema "${THEME}" aplicado com sucesso! (${fileCount} arquivos copiados)`);
+
+// --- Compile Tailwind CSS ---
+const inputCss = path.join(SRC, 'input.css');
+if (fs.existsSync(inputCss)) {
+  const outDir = path.join(DEST, 'css');
+  if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+
+  const outFile = path.join(outDir, 'styles.css');
+  console.log(`\n🎨 Compilando Tailwind CSS...`);
+
+  const { execSync } = require('child_process');
+  try {
+    execSync(
+      `npx @tailwindcss/cli -i "${inputCss}" -o "${outFile}" --minify`,
+      { cwd: ROOT, stdio: 'inherit', env: { ...process.env, NODE_ENV: 'production' } }
+    );
+    console.log(`✅ CSS compilado → ${outFile}\n`);
+  } catch (err) {
+    console.error('❌ Tailwind CSS build falhou:', err.message);
+    process.exit(1);
+  }
+} else {
+  console.log(`⚠️  Sem input.css no tema "${THEME}" — CSS não compilado.`);
+}
+
+// --- Minify JS files ---
+const jsDir = path.join(DEST, 'js');
+if (fs.existsSync(jsDir)) {
+  const jsFiles = fs.readdirSync(jsDir).filter(f => f.endsWith('.js'));
+  if (jsFiles.length > 0) {
+    console.log(`📦 Minificando ${jsFiles.length} arquivos JS...`);
+    const { execSync } = require('child_process');
+    let minified = 0;
+    for (const jsFile of jsFiles) {
+      const jsPath = path.join(jsDir, jsFile);
+      try {
+        execSync(`npx terser "${jsPath}" -o "${jsPath}" -c -m`, {
+          cwd: ROOT, stdio: 'pipe'
+        });
+        minified++;
+      } catch (err) {
+        console.error(`  ⚠️  Falha ao minificar ${jsFile}: ${err.message}`);
+      }
+    }
+    console.log(`✅ ${minified}/${jsFiles.length} JS files minificados\n`);
+  }
+}

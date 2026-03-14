@@ -33,30 +33,15 @@
     <!-- Preconnect -->
     <link rel="preconnect" href="https://res.cloudinary.com">
     <link rel="dns-prefetch" href="https://res.cloudinary.com">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://images.unsplash.com">
+    <link rel="preload" as="image" fetchpriority="high"
+        href="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1920&q=80&fm=webp">
+    <link rel="stylesheet" href="/css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style"
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:wght@400;700&family=Karla:wght@300;400;500;600;700&display=swap">
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:wght@400;700&family=Karla:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: { 50: '#fef2f2', 100: '#fee2e2', 200: '#fecaca', 300: '#fca5a5', 400: '#f87171', 500: '#ef4444', 600: '#dc2626', 700: '#b91c1c', 800: '#991b1b', 900: '#7f1d1d' },
-                        dark: { 800: '#1c1917', 900: '#0c0a09' },
-                    },
-                    fontFamily: {
-                        display: ['Playfair Display SC', 'serif'],
-                        body: ['Karla', 'sans-serif'],
-                    },
-                },
-            },
-        };
-    </script>
     <style>
         * {
             margin: 0;
@@ -200,7 +185,6 @@
         .hero-bg {
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
         }
 
         /* FOUC prevention */
@@ -245,17 +229,29 @@
                 opacity: 1;
             }
         }
-    
+
         /* Global Loader */
-        body:not(.config-loaded) { overflow: hidden; }
-        body:not(.config-loaded) #global-loader { opacity: 1; visibility: visible; }
-        body.config-loaded #global-loader { opacity: 0; visibility: hidden; pointer-events: none; }
+        body:not(.config-loaded) {
+            overflow: hidden;
+        }
+
+        body:not(.config-loaded) #global-loader {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        body.config-loaded #global-loader {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
     </style>
 </head>
 
 <body>
     <!-- Global Loader (prevent FOUC) -->
-    <div id="global-loader" class="fixed inset-0 z-[99999] flex items-center justify-center bg-dark-900 transition-all duration-800">
+    <div id="global-loader"
+        class="fixed inset-0 z-[99999] flex items-center justify-center bg-dark-900 transition-all duration-800">
         <div class="w-12 h-12 border-4 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
     </div>
     <!-- Skip Link para acessibilidade -->
@@ -268,13 +264,14 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 md:h-20">
                 <a data-nav="true" href="/" class="flex items-center gap-3">
-                    <svg class="w-6 h-6 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M15 11h.01"></path>
-                            <path d="M11 15h.01"></path>
-                            <path d="M16 16h.01"></path>
-                            <path d="m2 16 20 6-6-20A20 20 0 0 0 2 16"></path>
-                            <path d="M5.71 17.11a17.04 17.04 0 0 1 11.4-11.4"></path>
-                        </svg>
+                    <svg class="w-6 h-6 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 11h.01"></path>
+                        <path d="M11 15h.01"></path>
+                        <path d="M16 16h.01"></path>
+                        <path d="m2 16 20 6-6-20A20 20 0 0 0 2 16"></path>
+                        <path d="M5.71 17.11a17.04 17.04 0 0 1 11.4-11.4"></path>
+                    </svg>
                     <span class="font-display text-xl md:text-2xl font-bold text-white" id="nav-brand"
                         data-config></span>
                 </a>
@@ -324,7 +321,7 @@
     <section id="main-content" class="relative min-h-screen flex items-center justify-center overflow-hidden">
         <!-- Background -->
         <div class="absolute inset-0 hero-bg"
-            style="background-image:url('https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1920&q=80');">
+            style="background-image:url('https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1920&q=80&fm=webp');">
             <div class="absolute inset-0 bg-gradient-to-b from-dark-900/70 via-dark-900/50 to-dark-900"></div>
         </div>
         <!-- Content -->
@@ -433,7 +430,8 @@
             <div class="grid md:grid-cols-4 gap-12">
                 <div>
                     <div class="flex items-center gap-2 mb-4">
-                        <svg class="w-6 h-6 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="w-6 h-6 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M15 11h.01"></path>
                             <path d="M11 15h.01"></path>
                             <path d="M16 16h.01"></path>
@@ -505,17 +503,15 @@
                 d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
         </svg>
     </a>
-
-    <script src="/js/performance.js"></script>
-    <script src="/js/mobile.js"></script>
-    <script src="/js/a11y.js"></script>
-    <script src="/js/feedback.js"></script>
-    <script src="/js/formValidation.js"></script>
-    <script src="/js/app.js"></script>
-    <script src="/js/cart.js"></script>
-    <script src="/js/whatsappFormatter.js"></script>
-    <script src="/js/orderModal.js"></script>
-    <script src="/js/cartUI.js"></script>
+    <script defer src="/js/mobile.js"></script>
+    <script defer src="/js/a11y.js"></script>
+    <script defer src="/js/feedback.js"></script>
+    <script defer src="/js/formValidation.js"></script>
+    <script defer src="/js/app.js"></script>
+    <script defer src="/js/cart.js"></script>
+    <script defer src="/js/whatsappFormatter.js"></script>
+    <script defer src="/js/orderModal.js"></script>
+    <script defer src="/js/cartUI.js"></script>
 </body>
 
 </html>
