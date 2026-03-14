@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "buildCommand": "cd server && npm ci && npx prisma generate && npx tsc && cd .. && node scripts/select-theme.js",
+    "buildCommand": "cd server && npm ci && npx prisma generate && npm run build",
     "outputDirectory": "public",
     "functions": {
         "api/index.js": {
