@@ -1,0 +1,61 @@
+{
+    "version": 2,
+    "buildCommand": "cd server && npm ci && npx prisma generate && npx tsc && cd .. && node scripts/select-theme.js",
+    "outputDirectory": "public",
+    "functions": {
+        "api/index.js": {
+            "includeFiles": "../server/dist/**,../server/node_modules/.prisma/**,../public/**",
+            "maxDuration": 30
+        }
+    },
+    "rewrites": [
+        {
+            "source": "/api/:path*",
+            "destination": "/api/index"
+        },
+        {
+            "source": "/sitemap.xml",
+            "destination": "/api/index"
+        },
+        {
+            "source": "/robots.txt",
+            "destination": "/api/index"
+        },
+        {
+            "source": "/healthz",
+            "destination": "/api/index"
+        },
+        {
+            "source": "/ping",
+            "destination": "/api/index"
+        },
+        {
+            "source": "/",
+            "destination": "/api/index"
+        },
+        {
+            "source": "/menu",
+            "destination": "/api/index"
+        },
+        {
+            "source": "/gallery",
+            "destination": "/api/index"
+        },
+        {
+            "source": "/about",
+            "destination": "/api/index"
+        },
+        {
+            "source": "/contact",
+            "destination": "/api/index"
+        },
+        {
+            "source": "/privacy",
+            "destination": "/api/index"
+        },
+        {
+            "source": "/admin",
+            "destination": "/api/index"
+        }
+    ]
+}

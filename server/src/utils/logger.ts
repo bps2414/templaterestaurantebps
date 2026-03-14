@@ -27,7 +27,8 @@ const logger = winston.createLogger({
     ],
 });
 
-if (process.env.NODE_ENV === 'production') {
+// Skip file transport on Vercel — filesystem is read-only outside /tmp
+if (process.env.NODE_ENV === 'production' && !process.env.VERCEL) {
     logger.add(
         new winston.transports.File({
             filename: 'logs/error.log',

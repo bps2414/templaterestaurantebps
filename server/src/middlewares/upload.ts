@@ -9,7 +9,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { Request } from 'express';
 import { BadRequestError } from '../utils/errors';
 
-const UPLOAD_DIR = path.join(__dirname, '../../assets/uploads');
+// On Vercel, only /tmp is writable. Locally, use the assets/uploads folder.
+const UPLOAD_DIR = process.env.VERCEL
+    ? '/tmp/uploads'
+    : path.join(__dirname, '../../assets/uploads');
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
 // Ensure upload directory exists
