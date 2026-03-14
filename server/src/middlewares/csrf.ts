@@ -15,6 +15,7 @@ const CSRF_HEADER_NAME = 'x-csrf-token';
 export function csrfSetToken(req: Request, res: Response, next: NextFunction) {
     // Skip if already has valid token
     if (req.cookies[CSRF_COOKIE_NAME]) {
+        res.locals.csrfToken = req.cookies[CSRF_COOKIE_NAME];
         return next();
     }
 
@@ -27,6 +28,9 @@ export function csrfSetToken(req: Request, res: Response, next: NextFunction) {
         sameSite: 'lax', // 'strict' blocks same-site POST forms
         maxAge: 3600000, // 1 hour
     });
+
+    // Store in res.locals so getCsrfToken can use it in the same request
+    res.locals.csrfToken = token;
 
     next();
 }
@@ -65,6 +69,6 @@ export function csrfVerifyToken(req: Request, res: Response, next: NextFunction)
  * Get CSRF token endpoint (public)
  */
 export function getCsrfToken(req: Request, res: Response) {
-    const token = req.cookies[CSRF_COOKIE_NAME];
+    const token = res.locals.csrfToken || req.cookies[CSRF_COOKIE_NAME];
     res.json({ success: true, token });
 }
