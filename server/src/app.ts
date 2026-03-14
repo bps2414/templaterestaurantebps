@@ -100,15 +100,26 @@ app.use((_req: Request, res: Response, next: NextFunction) => {
 });
 
 // --- CORS ---
-const allowedOrigins = (process.env.CORS_ORIGINS || process.env.APP_URL || 'http://localhost:3000').split(',').map((o: string) => o.trim());
+const allowedOrigins = (process.env.CORS_ORIGINS || process.env.APP_URL || 'http://localhost:3000')
+    .split(',')
+    .map((o: string) => o.trim().replace(/\/$/, '')); // Remove trailing slashes
+
 app.use(cors({
     origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            logger.warn('CORS blocked request', { origin });
-            callback(new Error('Not allowed by CORS'));
+        // 1. Allow if no origin (e.g., mobile apps, curl, or same-origin requests where browser doesn't send Origin)
+        if (!origin) return callback(null, true);
+
+        // 2. Exact match in allowedOrigins (sanitized)
+        if (allowedOrigins.includes(origin)) return callback(null, true);
+
+        // 3. Allow Vercel preview/deployment domains in production
+        if (process.env.NODE_ENV === 'production' && origin.endsWith('.vercel.app')) {
+            return callback(null, true);
         }
+
+        // 4. Block otherwise
+        logger.warn('CORS blocked request', { origin, allowedOrigins });
+        callback(new Error('Not allowed by CORS'));
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
