@@ -71,4 +71,31 @@ router.post('/', requireAuth, requireAdmin, upload.single('image'), async (req: 
     }
 });
 
+/**
+ * GET /api/upload/signature?folder=dishes
+ *
+ * Returns short-lived signed parameters for a direct browser → Cloudinary upload.
+ * The signature locks the upload to the tenant's folder and expires in 1 hour.
+ *
+ * Browser usage:
+ *   const { data } = await fetch('/api/upload/signature?folder=dishes').then(r => r.json());
+ *   const form = new FormData();
+ *   form.append('file', file);
+ *   form.append('api_key', data.api_key);
+ *   form.append('timestamp', data.timestamp);
+ *   form.append('signature', data.signature);
+ *   form.append('folder', data.folder);
+ *   form.append('eager', data.eager);
+ *   await fetch(`https://api.cloudinary.com/v1_1/${data.cloud_name}/image/upload`, { method: 'POST', body: form });
+ */
+router.get('/signature', requireAuth, requireAdmin, (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+        const folder = typeof req.query.folder === 'string' ? req.query.folder : 'uploads';
+        const params = cloudinaryService.generateSignature(folder);
+        res.json({ success: true, data: params });
+    } catch (error) {
+        next(error);
+    }
+});
+
 export default router;
