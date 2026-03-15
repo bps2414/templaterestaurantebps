@@ -9,6 +9,10 @@ import bcrypt from 'bcryptjs';
 import { seedHamburgueria } from './seed-hamburgueria';
 import { seedPizzaria } from './seed-pizzaria';
 import { seedConfeitaria } from './seed-confeitaria';
+import { seedRestaurantLite } from './seed-restaurant-lite';
+import { seedBurgerLite } from './seed-burger-lite';
+import { seedPizzaLite } from './seed-pizza-lite';
+import { seedAcai } from './seed-acai';
 
 const prisma = new PrismaClient();
 
@@ -267,11 +271,16 @@ async function main() {
             await seedConfeitaria();
             break;
         case 'restaurant-lite':
+            await seedRestaurantLite();
+            break;
         case 'burger-lite':
+            await seedBurgerLite();
+            break;
         case 'pizza-lite':
+            await seedPizzaLite();
+            break;
         case 'acai':
-            console.error(`❌ Seed "${seedType}" ainda não implementado (Phase 2).`);
-            process.exit(1);
+            await seedAcai();
             break;
         case 'restaurante':
         default:
