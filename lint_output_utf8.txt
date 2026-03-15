@@ -1,0 +1,18 @@
+﻿
+============================================================
+[LINT RUNNER] Unified Linting
+============================================================
+Project: F:\VSCode\Landpage
+Time: 2026-03-07 16:36:49
+Type: unknown
+Linters: 0
+------------------------------------------------------------
+No linters found for this project type.
+{
+  "script": "lint_runner",
+  "project": "F:\\VSCode\\Landpage",
+  "type": "unknown",
+  "checks": [],
+  "passed": true,
+  "message": "No linters configured"
+}
