@@ -21,6 +21,11 @@ const ROOT = path.resolve(__dirname, '..');
 const SRC = path.join(ROOT, 'themes', THEME);
 const DEST = path.join(ROOT, 'public');
 
+// Starter/lite themes use shared JS from themes/_shared/js/
+const LITE_THEMES = ['restaurant-lite', 'burger-lite', 'pizza-lite', 'acai'];
+const isLiteTheme = LITE_THEMES.includes(THEME);
+const SHARED_JS = path.join(ROOT, 'themes', '_shared', 'js');
+
 console.log(`\n🎨 Select Theme: "${THEME}"`);
 console.log(`   Source:  ${SRC}`);
 console.log(`   Dest:    ${DEST}\n`);
@@ -28,7 +33,7 @@ console.log(`   Dest:    ${DEST}\n`);
 // --- Validate theme exists ---
 if (!fs.existsSync(SRC)) {
   const available = fs.readdirSync(path.join(ROOT, 'themes')).filter((d) =>
-    fs.statSync(path.join(ROOT, 'themes', d)).isDirectory()
+    d !== '_shared' && fs.statSync(path.join(ROOT, 'themes', d)).isDirectory()
   );
   console.error(`❌ Tema "${THEME}" não encontrado em themes/`);
   console.error(`   Temas disponíveis: ${available.join(', ')}`);
@@ -83,6 +88,19 @@ console.log(`📦 Copiando tema "${THEME}"...`);
 const fileCount = copyDir(SRC, DEST);
 
 console.log(`✅ Tema "${THEME}" aplicado com sucesso! (${fileCount} arquivos copiados)`);
+
+// --- Copy shared JS for lite themes ---
+if (isLiteTheme) {
+  if (fs.existsSync(SHARED_JS)) {
+    const jsDestDir = path.join(DEST, 'js');
+    console.log(`📦 Copiando JS compartilhado (_shared/js/) para tema lite...`);
+    const jsCount = copyDir(SHARED_JS, jsDestDir);
+    console.log(`✅ ${jsCount} arquivos JS compartilhados copiados`);
+  } else {
+    console.error('❌ themes/_shared/js/ não encontrado!');
+    process.exit(1);
+  }
+}
 
 // --- Compile Tailwind CSS ---
 const inputCss = path.join(SRC, 'input.css');
