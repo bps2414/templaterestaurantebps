@@ -5,6 +5,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import prisma from '../prisma/client';
 import { requireAuth, requireAdmin } from '../middlewares/auth';
+import { getCurrentPlan, STARTER_LIMITS } from '../middlewares/plan';
 import { AuthenticatedRequest } from '../types';
 import { z } from 'zod';
 import { NotFoundError } from '../utils/errors';
@@ -63,6 +64,18 @@ router.get('/all', requireAuth, requireAdmin, async (_req: AuthenticatedRequest,
 // POST /api/categories — Admin: create category
 router.post('/', requireAuth, requireAdmin, async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
+        // Enforce starter plan category limit
+        const plan = await getCurrentPlan();
+        if (plan === 'starter') {
+            const categoryCount = await prisma.category.count();
+            if (categoryCount >= STARTER_LIMITS.maxCategories) {
+                return res.status(403).json({
+                    success: false,
+                    error: `O Plano Starter permite no máximo ${STARTER_LIMITS.maxCategories} categorias. Faça upgrade para o Plano Essencial para categorias ilimitadas.`,
+                });
+            }
+        }
+
         const data = categorySchema.parse(req.body);
         const slug = slugify(data.name);
 

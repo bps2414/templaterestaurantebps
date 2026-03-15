@@ -51,6 +51,12 @@ const ABOUT_KEYS = ['about_features', 'team_members', 'about_text_2'];
 router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
     try {
         const plan = await getCurrentPlan();
+
+        // Starter plan: no about content at all
+        if (plan === 'starter') {
+            return res.json({ success: true, data: {} });
+        }
+
         const configs = await prisma.siteConfig.findMany({
             where: { key: { in: ABOUT_KEYS } },
         });
@@ -80,6 +86,14 @@ router.put('/', requireAuth, requireAdmin, async (req: AuthenticatedRequest, res
     try {
         const data = aboutContentSchema.parse(req.body);
         const plan = await getCurrentPlan();
+
+        // Block all about-content updates on Starter plan
+        if (plan === 'starter') {
+            return res.status(403).json({
+                success: false,
+                error: 'A página Sobre não está disponível no Plano Starter. Faça upgrade para o Plano Essencial.',
+            });
+        }
 
         // Block team_members updates on Essential plan
         if (data.team_members !== undefined && plan !== 'professional') {

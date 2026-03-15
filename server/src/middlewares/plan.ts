@@ -1,7 +1,7 @@
 // ============================================
 // Plan Middleware — Feature gating by plan level
 // ============================================
-// Plans: 'essential' (default) | 'professional'
+// Plans: 'starter' | 'essential' (default) | 'professional'
 // Stored as SiteConfig key 'site_plan'
 // ============================================
 
@@ -10,7 +10,13 @@ import prisma from '../prisma/client';
 import { AuthenticatedRequest } from '../types';
 import { ForbiddenError } from '../utils/errors';
 
-export type PlanType = 'essential' | 'professional';
+export type PlanType = 'starter' | 'essential' | 'professional';
+
+// Starter plan limits
+export const STARTER_LIMITS = {
+    maxDishes: 30,
+    maxCategories: 5,
+} as const;
 
 // PRO-only config keys (cannot be set on essential plan)
 export const PRO_CONFIG_KEYS = [
@@ -32,7 +38,7 @@ export async function getCurrentPlan(): Promise<PlanType> {
         const config = await prisma.siteConfig.findUnique({
             where: { key: 'site_plan' },
         });
-        if (config && (config.value === 'essential' || config.value === 'professional')) {
+        if (config && (config.value === 'starter' || config.value === 'essential' || config.value === 'professional')) {
             return config.value as PlanType;
         }
         return 'essential';
@@ -47,6 +53,14 @@ export async function getCurrentPlan(): Promise<PlanType> {
 export async function isProfessional(): Promise<boolean> {
     const plan = await getCurrentPlan();
     return plan === 'professional';
+}
+
+/**
+ * Check if the current plan is starter
+ */
+export async function isStarter(): Promise<boolean> {
+    const plan = await getCurrentPlan();
+    return plan === 'starter';
 }
 
 /**

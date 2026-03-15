@@ -5,6 +5,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import prisma from '../prisma/client';
 import { requireAuth, requireAdmin } from '../middlewares/auth';
+import { getCurrentPlan, STARTER_LIMITS } from '../middlewares/plan';
 import { AuthenticatedRequest } from '../types';
 import { upload, validateImageMagicBytes, UPLOAD_DIR } from '../middlewares/upload';
 import cloudinaryService from '../services/cloudinaryService';
@@ -104,6 +105,18 @@ router.get('/all', requireAuth, requireAdmin, async (_req: AuthenticatedRequest,
 // POST /api/dishes — Admin: create dish
 router.post('/', requireAuth, requireAdmin, upload.single('image'), async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
+        // Enforce starter plan dish limit
+        const plan = await getCurrentPlan();
+        if (plan === 'starter') {
+            const dishCount = await prisma.dish.count();
+            if (dishCount >= STARTER_LIMITS.maxDishes) {
+                return res.status(403).json({
+                    success: false,
+                    error: `O Plano Starter permite no máximo ${STARTER_LIMITS.maxDishes} pratos. Faça upgrade para o Plano Essencial para pratos ilimitados.`,
+                });
+            }
+        }
+
         // Parse numeric/boolean fields from multipart form
         const body = {
             ...req.body,

@@ -1,6 +1,6 @@
 // ============================================
 // Seed Router — escolhe seed por SEED_TYPE
-// Tipos: restaurante (default) | hamburgueria | pizzaria
+// Tipos: restaurante (default) | hamburgueria | pizzaria | restaurant-lite | burger-lite | pizza-lite | acai
 // Uso: SEED_TYPE=hamburgueria PLAN=professional npx prisma db seed
 // ============================================
 
@@ -190,10 +190,10 @@ async function seedRestaurante() {
 
     // --- Site Config ---
     const plan = (process.env.PLAN || 'essential').toLowerCase().trim();
-    if (plan !== 'essential' && plan !== 'professional') {
+    if (plan !== 'starter' && plan !== 'essential' && plan !== 'professional') {
         console.warn(`⚠️  PLAN="${plan}" inválido. Usando "essential".`);
     }
-    const validPlan = plan === 'professional' ? 'professional' : 'essential';
+    const validPlan = plan === 'professional' ? 'professional' : plan === 'starter' ? 'starter' : 'essential';
 
     const configs: Record<string, string> = {
         site_plan: validPlan,
@@ -265,6 +265,13 @@ async function main() {
             break;
         case 'confeitaria':
             await seedConfeitaria();
+            break;
+        case 'restaurant-lite':
+        case 'burger-lite':
+        case 'pizza-lite':
+        case 'acai':
+            console.error(`❌ Seed "${seedType}" ainda não implementado (Phase 2).`);
+            process.exit(1);
             break;
         case 'restaurante':
         default:

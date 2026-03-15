@@ -5,9 +5,10 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import prisma from '../prisma/client';
 import { requireAuth, requireAdmin } from '../middlewares/auth';
+import { getCurrentPlan } from '../middlewares/plan';
 import { AuthenticatedRequest } from '../types';
 import { upload, validateImageMagicBytes, UPLOAD_DIR } from '../middlewares/upload';
-import { NotFoundError } from '../utils/errors';
+import { NotFoundError, ForbiddenError } from '../utils/errors';
 import cloudinaryService from '../services/cloudinaryService';
 import fs from 'fs';
 import path from 'path';
@@ -17,6 +18,11 @@ const router = Router();
 // GET /api/gallery — Public: list active gallery images
 router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
     try {
+        const plan = await getCurrentPlan();
+        if (plan === 'starter') {
+            return res.json({ success: true, data: [] });
+        }
+
         const images = await prisma.galleryImage.findMany({
             where: { active: true },
             orderBy: { sortOrder: 'asc' },
@@ -30,6 +36,11 @@ router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
 // GET /api/gallery/all — Admin: list all gallery images
 router.get('/all', requireAuth, requireAdmin, async (_req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
+        const plan = await getCurrentPlan();
+        if (plan === 'starter') {
+            throw new ForbiddenError('A galeria de fotos não está disponível no Plano Starter. Faça upgrade para o Plano Essencial.');
+        }
+
         const images = await prisma.galleryImage.findMany({
             orderBy: { sortOrder: 'asc' },
         });
@@ -42,6 +53,11 @@ router.get('/all', requireAuth, requireAdmin, async (_req: AuthenticatedRequest,
 // POST /api/gallery — Admin: upload gallery image
 router.post('/', requireAuth, requireAdmin, upload.single('image'), async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
+        const plan = await getCurrentPlan();
+        if (plan === 'starter') {
+            throw new ForbiddenError('A galeria de fotos não está disponível no Plano Starter. Faça upgrade para o Plano Essencial.');
+        }
+
         if (!req.file) {
             return res.status(400).json({ success: false, error: 'Imagem é obrigatória' });
         }
@@ -79,6 +95,11 @@ router.post('/', requireAuth, requireAdmin, upload.single('image'), async (req: 
 // PUT /api/gallery/:id — Admin: update gallery image metadata
 router.put('/:id', requireAuth, requireAdmin, async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
+        const plan = await getCurrentPlan();
+        if (plan === 'starter') {
+            throw new ForbiddenError('A galeria de fotos não está disponível no Plano Starter. Faça upgrade para o Plano Essencial.');
+        }
+
         const { id } = req.params;
         const existing = await prisma.galleryImage.findUnique({ where: { id } });
         if (!existing) throw new NotFoundError('Imagem não encontrada');
@@ -102,6 +123,11 @@ router.put('/:id', requireAuth, requireAdmin, async (req: AuthenticatedRequest, 
 // DELETE /api/gallery/:id — Admin: delete gallery image
 router.delete('/:id', requireAuth, requireAdmin, async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
+        const plan = await getCurrentPlan();
+        if (plan === 'starter') {
+            throw new ForbiddenError('A galeria de fotos não está disponível no Plano Starter. Faça upgrade para o Plano Essencial.');
+        }
+
         const { id } = req.params;
         const existing = await prisma.galleryImage.findUnique({ where: { id } });
         if (!existing) throw new NotFoundError('Imagem não encontrada');
