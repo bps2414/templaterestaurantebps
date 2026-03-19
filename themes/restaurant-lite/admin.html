@@ -1122,7 +1122,11 @@
         if (!retry.ok) { const e = await retry.json().catch(() => ({})); throw new Error(e.message || retry.statusText); }
         const rj = await retry.json(); return rj.data !== undefined ? rj.data : rj;
       }
-      if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.message || res.statusText); }
+      if (!res.ok) {
+        const e = await res.json().catch(() => ({}));
+        if (res.status === 429) throw new Error('Muitas tentativas. Tente novamente em breve.');
+        throw new Error(e.message || res.statusText);
+      }
       const json = await res.json();
       return json.data !== undefined ? json.data : json;
     }
@@ -1233,7 +1237,11 @@
       try {
         await fetchCsrfToken();
         const r = await fetch(API_BASE + '/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-csrf-token': csrfToken }, body: JSON.stringify({ email: document.getElementById('login-email').value, password: document.getElementById('login-password').value }), credentials: 'include' });
-        if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.message || 'Credenciais inválidas'); }
+        if (!r.ok) {
+          if (r.status === 429) throw new Error('Muitas tentativas. Tente novamente em breve.');
+          const e = await r.json().catch(() => ({}));
+          throw new Error(e.message || 'Credenciais inválidas');
+        }
         const j = await r.json(); const d = j.data || j;
         token = d.accessToken; localStorage.setItem('admin_token', token);
         if (d.refreshToken) localStorage.setItem('admin_refresh', d.refreshToken);
@@ -1570,9 +1578,6 @@
 
     document.getElementById('form-password').addEventListener('submit', async e => {
       e.preventDefault();
-      const btn = e.target.querySelector('button[type="submit"]');
-      setLoading(btn, true);
-      const errEl = document.getElementById('pw-error');
       const currentPassword = document.getElementById('pw-current').value;
       const newPassword = document.getElementById('pw-new').value;
       const confirm = document.getElementById('pw-confirm').value;
@@ -1582,6 +1587,8 @@
       if (!/[A-Z]/.test(newPassword)) { errEl.textContent = 'Deve conter letra maiúscula'; return; }
       if (!/[a-z]/.test(newPassword)) { errEl.textContent = 'Deve conter letra minúscula'; return; }
       if (!/[0-9]/.test(newPassword)) { errEl.textContent = 'Deve conter um número'; return; }
+      
+      setLoading(btn, true);
       try {
         await api('/auth/change-password', { method: 'PUT', body: JSON.stringify({ currentPassword, newPassword }) });
         closeModal('modal-password');

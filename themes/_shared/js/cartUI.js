@@ -53,7 +53,7 @@
         var self = this;
         var button = document.createElement('button');
         button.id = 'cart-button';
-        button.className = 'fixed bottom-6 right-6 z-50 bg-brand-500 hover:bg-brand-600 text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center transition-all transform hover:scale-110';
+        button.className = 'fixed bottom-8 right-6 z-[9999] bg-brand-500 hover:bg-brand-600 text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center transition-all transform hover:scale-110';
         button.setAttribute('aria-label', 'Abrir Carrinho');
         button.innerHTML = [
             '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">',

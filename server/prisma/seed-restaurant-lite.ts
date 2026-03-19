@@ -77,7 +77,7 @@ export async function seedRestaurantLite() {
             slug: 'frango-grelhado-arroz',
             description: 'Filé de frango grelhado, arroz branco, feijão e salada. Prato feito na hora.',
             price: 1890,
-            image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c3?w=600&q=80',
+            image: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?w=600&q=80',
             categoryId: pratoDia.id,
             featured: true,
             sortOrder: 1,

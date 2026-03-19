@@ -925,6 +925,13 @@
                 headers['Content-Type'] = 'application/json';
             }
             const res = await fetch(`${API}/api${endpoint}`, { ...options, headers, credentials: 'include' });
+            
+            if (!res.ok) {
+                const e = await res.json().catch(() => ({}));
+                if (res.status === 429) throw new Error('Muitas tentativas. Tente novamente em breve.');
+                throw new Error(e.message || res.statusText);
+            }
+
             const json = await res.json();
 
             // Handle 401 (JWT expired) - try refresh

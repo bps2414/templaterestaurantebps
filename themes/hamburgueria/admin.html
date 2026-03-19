@@ -836,6 +836,11 @@
         async function fetchCsrfToken() {
             try {
                 const res = await fetch(`${API}/api/csrf-token`, { credentials: 'include' });
+                if (!res.ok) {
+                    if (res.status === 429) throw new Error('Muitas tentativas. Tente novamente em breve.');
+                    const e = await res.json().catch(() => ({}));
+                    throw new Error(e.message || 'Erro ao obter token de segurança.');
+                }
                 const data = await res.json();
                 csrfToken = data.token;
             } catch (error) {
@@ -853,6 +858,11 @@
         async function fetchPlanInfo() {
             try {
                 const res = await fetch(`${API}/api/plan`);
+                if (!res.ok) {
+                    const e = await res.json().catch(() => ({}));
+                    if (res.status === 429) throw new Error('Muitas tentativas. Tente novamente em breve.');
+                    throw new Error(e.message || res.statusText);
+                }
                 const json = await res.json();
                 if (json.success && json.data) {
                     currentPlan = json.data.plan;
