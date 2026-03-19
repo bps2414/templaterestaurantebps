@@ -464,11 +464,11 @@
       margin-bottom: 1rem;
     }
 
-    .modal .form-group {
+    .form-group {
       margin-bottom: .85rem;
     }
 
-    .modal .form-group label {
+    .form-group label {
       display: block;
       font-size: .78rem;
       font-weight: 600;
@@ -476,9 +476,9 @@
       margin-bottom: .25rem;
     }
 
-    .modal .form-group input,
-    .modal .form-group textarea,
-    .modal .form-group select {
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
       width: 100%;
       border: 2px solid var(--border);
       border-radius: 10px;
@@ -491,9 +491,9 @@
       transition: border-color .2s;
     }
 
-    .modal .form-group input:focus,
-    .modal .form-group textarea:focus,
-    .modal .form-group select:focus {
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
       border-color: var(--brand);
     }
 
@@ -1210,8 +1210,14 @@
       loadDashboard(); loadSettings();
     }
 
+    let isLoginSubmitting = false;
+
     document.getElementById('login-form').addEventListener('submit', async function (e) {
       e.preventDefault();
+      if (isLoginSubmitting) return;
+      isLoginSubmitting = true;
+      const btn = e.target.querySelector('button[type="submit"]');
+      setLoading(btn, true);
       const errEl = document.getElementById('login-error');
       errEl.style.display = 'none';
       try {
@@ -1223,6 +1229,7 @@
         if (d.refreshToken) localStorage.setItem('admin_refresh', d.refreshToken);
         showDashboard();
       } catch (err) { errEl.textContent = err.message; errEl.style.display = 'block'; }
+      finally { isLoginSubmitting = false; setLoading(btn, false, 'Entrar'); }
     });
 
     // TABS
@@ -1312,8 +1319,8 @@
         tbody.innerHTML = cats.map(c => `<tr>
           <td>${esc(c.name)}</td><td>${c.sortOrder ?? 0}</td><td>${c._count?.dishes ?? 0}</td>
           <td class="actions">
-            <button class="btn btn-outline btn-sm" onclick="editCategory('${c.id}')">Editar</button>
-            <button class="btn btn-danger btn-sm" onclick="deleteCategory('${c.id}')">Excluir</button>
+            <button class="btn btn-outline btn-sm" onclick="editCategory('${escapeAttr(String(c.id))}')">Editar</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteCategory('${escapeAttr(String(c.id))}')">Excluir</button>
           </td>
         </tr>`).join('');
       } catch (e) { toast('Erro ao carregar categorias', 'error'); }
@@ -1406,6 +1413,8 @@
 
     document.getElementById('form-category').addEventListener('submit', async e => {
       e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      setLoading(btn, true);
       const id = document.getElementById('cat-id').value;
       const body = {
         name: document.getElementById('cat-name').value.trim(),
@@ -1417,6 +1426,7 @@
         toast(id ? 'Categoria atualizada!' : 'Categoria criada!');
         closeModal('modal-category'); loadCategories(); loadDashboard();
       } catch (e) { toast(e.message || 'Erro ao salvar categoria', 'error'); }
+      finally { setLoading(btn, false, 'Salvar'); }
     });
 
     async function deleteCategory(id) {
@@ -1550,6 +1560,8 @@
 
     document.getElementById('form-password').addEventListener('submit', async e => {
       e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      setLoading(btn, true);
       const errEl = document.getElementById('pw-error');
       const currentPassword = document.getElementById('pw-current').value;
       const newPassword = document.getElementById('pw-new').value;
@@ -1566,6 +1578,7 @@
         toast('Senha alterada! Faça login novamente.');
         setTimeout(() => { logout(); }, 2000);
       } catch (err) { errEl.textContent = err.message || 'Erro ao alterar senha'; }
+      finally { setLoading(btn, false, 'Alterar Senha'); }
     });
 
     // INIT

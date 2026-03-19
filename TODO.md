@@ -15,7 +15,7 @@
 | **FASE 4** | ✅ UI/UX — carrinho, modal, botão "Pedir Agora" por item | Bug 3, Bug 4, Bug 5, Bug 9 |
 | **FASE 5** | ✅ Horários de funcionamento — paridade com padrão | Item 12 |
 | **FASE 6** | ✅ Maps embed configurável no admin lite | Item 13 |
-| **FASE 7** | 🔒 Segurança — auditoria de paridade com temas padrão | Item 14 |
+| **FASE 7** | 🔵 Planejamento: Segurança — auditoria de paridade com temas padrão | Item 14 |
 
 ---
 
