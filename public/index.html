@@ -1,506 +1,900 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurante</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <meta name="description"
-        content="Gastronomia contemporânea que encanta os sentidos. Ingredientes frescos e técnicas refinadas.">
-    <link rel="canonical" href="https://your-domain.com/">
-    <!-- Open Graph -->
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="pt_BR">
-    <meta property="og:title" content="Restaurante — Gastronomia Contemporânea">
-    <meta property="og:description"
-        content="Gastronomia contemporânea que encanta os sentidos. Ingredientes frescos e técnicas refinadas.">
-    <!-- TODO: Update with client domain -->
-    <meta property="og:url" content="https://restaurante.com.br">
-    <meta property="og:site_name" content="Restaurante">
-    <!-- OG Image: Unsplash fallback (overwritten by JS with client config) -->
-    <meta property="og:image"
-        content="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&h=630&q=80">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Restaurante — Gastronomia Contemporânea">
-    <meta name="twitter:description"
-        content="Gastronomia contemporânea que encanta os sentidos. Ingredientes frescos e técnicas refinadas.">
-    <meta name="twitter:image"
-        content="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&h=630&q=80">
-    <!-- Preconnect -->
-    <link rel="preconnect" href="https://res.cloudinary.com">
-    <link rel="dns-prefetch" href="https://res.cloudinary.com">
-    <link rel="preconnect" href="https://images.unsplash.com">
-    <link rel="preload" as="image" fetchpriority="high"
-        href="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&q=80&fm=webp">
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"></noscript>
-    <style>
-        /* Tailwind v4 preflight handles *, margin, padding, box-sizing in @layer base */
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurante — Comida Caseira</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="description"
+    content="Comida caseira de qualidade, feita com carinho. Confira nosso cardápio e peça pelo WhatsApp.">
+  <link rel="canonical" href="">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Restaurante — Comida Caseira">
+  <meta property="og:description" content="Comida caseira de qualidade, feita com carinho.">
+  <meta property="og:url" content="">
+  <meta property="og:site_name" content="Restaurante">
+  <meta property="og:image"
+    content="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&h=630&q=80">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Restaurante — Comida Caseira">
+  <meta name="twitter:description" content="Comida caseira de qualidade, feita com carinho.">
+  <meta name="twitter:image"
+    content="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&h=630&q=80">
+  <link rel="preconnect" href="https://res.cloudinary.com">
+  <link rel="dns-prefetch" href="https://res.cloudinary.com">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload"
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap"
+    as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap">
+  </noscript>
+  <style>
+    :root {
+      --brand: #DC2626;
+      --brand-dark: #B91C1C;
+      --accent: #CA8A04;
+      --bg: #FFFBF5;
+      --surface: #FEF9F0;
+      --text: #450A0A;
+      --muted: #92400E;
+    }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #0f0f1a;
-            color: #f5f5f5;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        .font-display {
-            font-family: 'Playfair Display', serif;
-        }
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
 
+    h1,
+    h2,
+    h3 {
+      font-family: 'Caveat', cursive;
+    }
 
+    a {
+      text-decoration: none;
+    }
 
-        @media (prefers-reduced-motion: reduce) {
+    /* Nav */
+    .topnav {
+      background: #fff;
+      border-bottom: 2px solid #FCA5A5;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 1px 4px rgba(220, 38, 38, .08);
+    }
 
-            *,
-            ::before,
-            ::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
-        }
+    .topnav-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
 
-        /* Scroll reveal */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
+    .topnav-brand {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
 
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .topnav-brand .logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--brand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
 
-        /* Fade in */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
+    .topnav-brand .logo-icon svg {
+      width: 20px;
+      height: 20px;
+      color: #fff;
+    }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    #nav-brand {
+      font-family: 'Caveat', cursive;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--brand);
+    }
 
-        .animate-fade-in-up {
-            opacity: 0;
-        }
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
 
-        body.config-loaded .animate-fade-in-up {
-            animation: fadeInUp 0.8s ease forwards;
-        }
+    .nav-links a {
+      font-size: .875rem;
+      font-weight: 600;
+      color: var(--muted);
+      transition: color .2s;
+    }
 
-        .delay-100 {
-            animation-delay: .1s;
-        }
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--brand);
+    }
 
-        .delay-200 {
-            animation-delay: .2s;
-        }
+    .nav-ham {
+      display: none;
+      background: none;
+      border: none;
+      padding: .25rem;
+      cursor: pointer;
+      color: var(--brand);
+    }
 
-        .delay-300 {
-            animation-delay: .3s;
-        }
+    #mobile-nav {
+      display: none;
+      background: #fff;
+      border-top: 1px solid #FCA5A5;
+    }
 
-        /* Hover glow */
-        .btn-glow {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
+    #mobile-nav a {
+      display: block;
+      padding: .75rem 1rem;
+      font-weight: 600;
+      color: var(--muted);
+      font-size: .95rem;
+    }
 
-        .btn-glow::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.15), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.5s;
-        }
+    #mobile-nav a:hover,
+    #mobile-nav a.active {
+      color: var(--brand);
+    }
 
-        .btn-glow:hover::after {
-            transform: translateX(100%);
-        }
+    @media(max-width:640px) {
+      .nav-links {
+        display: none;
+      }
 
-        .btn-glow:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(238, 118, 32, 0.4);
-        }
+      .nav-ham {
+        display: block;
+      }
+    }
 
-        /* WhatsApp button */
-        .whatsapp-float {
-            position: fixed;
-            bottom: 24px;
-            left: 24px;
-            z-index: 999;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: #25d366;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
+    /* Hero */
+    .hero {
+      position: relative;
+      min-height: 380px;
+      display: flex;
+      align-items: center;
+      background: #FEF2F2 url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=70') center/cover no-repeat;
+    }
 
-        .whatsapp-float:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 30px rgba(37, 211, 102, 0.7);
-        }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=70') center/cover no-repeat;
+    }
 
-        /* Nav */
-        .nav-glass {
-            backdrop-filter: blur(12px);
-            background: rgba(15, 15, 26, 0.8);
-        }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 251, 245, .82);
+    }
 
-        /* Cards */
-        .card-hover {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 1rem;
+    }
 
-        .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
+    .hero-tag {
+      display: inline-block;
+      background: var(--brand);
+      color: #fff;
+      font-size: .75rem;
+      font-weight: 700;
+      padding: .25rem .75rem;
+      border-radius: 999px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin-bottom: .75rem;
+    }
 
-        /* Hero parallax */
-        .hero-bg {
-            background-size: cover;
-            background-position: center;
-        }
+    #hero-title {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(2.2rem, 6vw, 3.5rem);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: .5rem;
+    }
 
-        /* FOUC prevention — hide configurable text until JS populates it */
-        body:not(.config-loaded) #main-content,
-        body:not(.config-loaded) #nav-brand,
-        body:not(.config-loaded) #footer-brand,
-        body:not(.config-loaded) #hero-title,
-        body:not(.config-loaded) #hero-subtitle,
-        body:not(.config-loaded) #footer-tagline,
-        body:not(.config-loaded) #footer-copy,
-        body:not(.config-loaded) #about-title,
-        body:not(.config-loaded) #about-text,
-        body:not(.config-loaded) #footer-address,
-        body:not(.config-loaded) #footer-phone,
-        body:not(.config-loaded) #footer-email {
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
+    #hero-title span,
+    .text-brand-400 {
+      color: var(--brand);
+    }
 
-        body.config-loaded #main-content,
-        body.config-loaded #nav-brand,
-        body.config-loaded #footer-brand,
-        body.config-loaded #hero-title,
-        body.config-loaded #hero-subtitle,
-        body.config-loaded #footer-tagline,
-        body.config-loaded #footer-copy,
-        body.config-loaded #about-title,
-        body.config-loaded #about-text,
-        body.config-loaded #footer-address,
-        body.config-loaded #footer-phone,
-        body.config-loaded #footer-email {
-            opacity: 1;
-            transition: opacity 0.5s ease;
-        }
+    #hero-subtitle {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      max-width: 480px;
+    }
 
-        @keyframes configFadeIn {
-            from {
-                opacity: 0;
-            }
+    .hero-actions {
+      display: flex;
+      gap: .75rem;
+      flex-wrap: wrap;
+    }
 
-            to {
-                opacity: 1;
-            }
-        }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: var(--brand);
+      color: #fff;
+      font-weight: 700;
+      padding: .7rem 1.5rem;
+      border-radius: 999px;
+      font-size: .95rem;
+      cursor: pointer;
+      border: none;
+      transition: background .2s, transform .15s;
+      white-space: nowrap;
+    }
 
-        /* Global Loader */
-        body:not(.config-loaded) {
-            overflow: hidden;
-        }
+    .btn-primary:hover {
+      background: var(--brand-dark);
+      transform: translateY(-1px);
+    }
 
-        body:not(.config-loaded) #global-loader {
-            opacity: 1;
-            visibility: visible;
-        }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: #fff;
+      color: var(--brand);
+      border: 2px solid var(--brand);
+      font-weight: 700;
+      padding: .65rem 1.4rem;
+      border-radius: 999px;
+      font-size: .95rem;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
 
-        body.config-loaded #global-loader {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-    </style>
+    .btn-secondary:hover {
+      background: var(--brand);
+      color: #fff;
+    }
+
+    /* Banner status */
+    #store-status-banner {
+      display: none;
+      background: #FEF2F2;
+      border-bottom: 1px solid #FCA5A5;
+      padding: .4rem 1rem;
+      text-align: center;
+      font-size: .8rem;
+      font-weight: 600;
+      color: #B91C1C;
+    }
+
+    #store-status-banner.closed {
+      display: block;
+    }
+
+    /* Categorias destaque */
+    .section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2.5rem 1rem;
+    }
+
+    .section-title {
+      font-family: 'Caveat', cursive;
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .category-chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .5rem;
+      margin-bottom: 2rem;
+    }
+
+    .chip {
+      background: var(--surface);
+      border: 1.5px solid #FCA5A5;
+      color: var(--brand);
+      font-size: .8rem;
+      font-weight: 600;
+      padding: .3rem .9rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .chip:hover,
+    .chip.active {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+    }
+
+    /* Pratos destaque */
+    .dishes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .dish-card {
+      background: #fff;
+      border: 1.5px solid #FCA5A5;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
+      cursor: pointer;
+    }
+
+    .dish-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(220, 38, 38, .12);
+    }
+
+    .dish-img {
+      width: 100%;
+      height: 170px;
+      object-fit: cover;
+      background: #FEF2F2;
+    }
+
+    .dish-img-placeholder {
+      width: 100%;
+      height: 170px;
+      background: #FEF2F2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+
+    .dish-body {
+      padding: .75rem;
+    }
+
+    .dish-name {
+      font-family: 'Caveat', cursive;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: .2rem;
+      line-height: 1.2;
+    }
+
+    .dish-desc {
+      font-size: .72rem;
+      color: var(--muted);
+      margin-bottom: .5rem;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .dish-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .dish-price {
+      font-weight: 700;
+      font-size: .95rem;
+      color: var(--brand);
+    }
+
+    .dish-unavailable {
+      opacity: .55;
+    }
+
+    .add-btn {
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      width: 36px;
+      height: 36px;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .add-btn:hover {
+      background: var(--brand-dark);
+    }
+
+    /* CTA WhatsApp */
+    .wa-banner {
+      background: var(--brand);
+      color: #fff;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin: 1.5rem 0;
+      border-radius: 20px;
+    }
+
+    .wa-banner h2 {
+      font-family: 'Caveat', cursive;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: .4rem;
+    }
+
+    .wa-banner p {
+      font-size: .9rem;
+      margin-bottom: 1.25rem;
+      opacity: .9;
+    }
+
+    .btn-wa {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: #fff;
+      color: #DC2626;
+      font-weight: 700;
+      padding: .7rem 1.5rem;
+      border-radius: 999px;
+      font-size: .95rem;
+      transition: transform .2s;
+    }
+
+    .btn-wa:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    footer {
+      background: #FEF2F2;
+      border-top: 2px solid #FCA5A5;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    #footer-brand {
+      font-family: 'Caveat', cursive;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--brand);
+      display: block;
+      margin-bottom: .25rem;
+    }
+
+    #footer-tagline {
+      font-size: .8rem;
+      color: var(--muted);
+      display: block;
+      margin-bottom: .5rem;
+    }
+
+    .footer-info {
+      font-size: .78rem;
+      color: var(--muted);
+      margin-top: .5rem;
+    }
+
+    #footer-copy {
+      font-size: .72rem;
+      color: #B0837A;
+      margin-top: .5rem;
+      display: block;
+    }
+
+    .footer-links a {
+      font-size: .72rem;
+      color: var(--muted);
+      margin: 0 .5rem;
+    }
+
+    .footer-links a:hover {
+      color: var(--brand);
+    }
+
+    /* WhatsApp float */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 999;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #25D366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 14px rgba(37, 211, 102, .45);
+      transition: transform .2s;
+    }
+
+    .whatsapp-float:hover {
+      transform: scale(1.1);
+    }
+
+    /* Loader */
+    #global-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      transition: opacity .4s, visibility .4s;
+    }
+
+    #global-loader .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #FCA5A5;
+      border-top-color: var(--brand);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    body:not(.config-loaded) #global-loader {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    body.config-loaded #global-loader {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    body:not(.config-loaded) {
+      overflow: hidden;
+    }
+
+    /* Reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Shared JS modal/cart dark-theme compat */
+    .bg-dark-700 {
+      background-color: #334155
+    }
+
+    .bg-dark-800 {
+      background-color: #1e293b
+    }
+
+    .bg-dark-900 {
+      background-color: #0f172a
+    }
+
+    .bg-dark-800\/60 {
+      background-color: rgba(30, 41, 59, .6)
+    }
+
+    .bg-brand-500 {
+      background-color: var(--brand)
+    }
+
+    .bg-brand-600 {
+      background-color: var(--brand-dark)
+    }
+
+    .hover\:bg-brand-600:hover {
+      background-color: var(--brand-dark)
+    }
+
+    .hover\:bg-dark-900:hover {
+      background-color: #0f172a
+    }
+
+    .text-brand-400 {
+      color: var(--brand)
+    }
+
+    .focus\:border-brand-400:focus {
+      border-color: var(--brand)
+    }
+
+    .border-white\/10 {
+      border-color: rgba(255, 255, 255, .1)
+    }
+
+    .border-white\/5 {
+      border-color: rgba(255, 255, 255, .05)
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+
+      *,
+      ::before,
+      ::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <!-- Global Loader (prevent FOUC) -->
-    <div id="global-loader"
-        class="fixed inset-0 z-[99999] flex items-center justify-center bg-dark-900 transition-all duration-800">
-        <div class="w-12 h-12 border-4 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
-    </div>
-    <!-- Skip Link para acessibilidade -->
-    <a data-nav="true" href="#main-content"
-        class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-brand-500 focus:text-white focus:px-4 focus:py-2 focus:rounded">Pular
-        para o conteúdo principal</a>
+  <div id="global-loader">
+    <div class="spinner"></div>
+  </div>
 
-    <!-- ========== NAVBAR ========== -->
-    <nav class="nav-glass fixed top-0 w-full z-50 border-b border-white/5">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16 md:h-20">
-                <a data-nav="true" href="/" class="flex items-center gap-3">
-                    <svg class="w-6 h-6 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.871c1.355 0 2.697.056 4.024.166C17.155 8.51 18 9.473 18 10.608v2.513M15 8.25v-1.5m-6 1.5v-1.5m12 9.75l-1.5.75a3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0L3 16.5m15-3.379a48.474 48.474 0 00-6-.371c-2.032 0-4.034.126-6 .371m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.169c0 .621-.504 1.125-1.125 1.125H4.125A1.125 1.125 0 013 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 016 13.12M16.5 3.75V16.5" />
-                    </svg>
-                    <span class="font-display text-xl md:text-2xl font-bold text-white" id="nav-brand"
-                        data-config></span>
-                </a>
-                <!-- Desktop nav -->
-                <div class="hidden md:flex items-center gap-8">
-                    <a data-nav="true" href="/" class="text-brand-400 font-medium text-sm">Início</a>
-                    <a data-nav="true" href="/menu"
-                        class="text-gray-300 hover:text-brand-400 transition text-sm">Cardápio</a>
-                    <a data-nav="true" href="/gallery"
-                        class="text-gray-300 hover:text-brand-400 transition text-sm">Galeria</a>
-                    <a data-nav="true" href="/about"
-                        class="text-gray-300 hover:text-brand-400 transition text-sm">Sobre</a>
-                    <a data-nav="true" href="/contact"
-                        class="text-gray-300 hover:text-brand-400 transition text-sm">Contato</a>
-                    <a data-nav="true" href="#reserva"
-                        class="btn-glow bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-full text-base font-medium min-h-[44px]">
-                        Reservar Mesa
-                    </a>
-                </div>
-                <!-- Mobile toggle -->
-                <button id="menu-toggle"
-                    class="md:hidden text-white p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                    aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
-                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <!-- Mobile menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-dark-900/95 backdrop-blur border-t border-white/5">
-            <div class="px-4 py-4 space-y-3">
-                <a data-nav="true" href="/" class="block text-brand-400 font-medium py-2">Início</a>
-                <a data-nav="true" href="/menu" class="block text-gray-300 hover:text-brand-400 py-2">Cardápio</a>
-                <a data-nav="true" href="/gallery" class="block text-gray-300 hover:text-brand-400 py-2">Galeria</a>
-                <a data-nav="true" href="/about" class="block text-gray-300 hover:text-brand-400 py-2">Sobre</a>
-                <a data-nav="true" href="/contact" class="block text-gray-300 hover:text-brand-400 py-2">Contato</a>
-                <a data-nav="true" href="#reserva"
-                    class="block btn-glow bg-brand-500 text-white text-center px-6 py-3 rounded-full font-medium text-base min-h-[44px]">Reservar
-                    Mesa</a>
-            </div>
-        </div>
-    </nav>
+  <a href="#main-content"
+    class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-[100] focus:p-3 focus:bg-red-600 focus:text-white">Pular
+    para o conteúdo</a>
 
-    <!-- ========== HERO ========== -->
-    <section id="main-content" class="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <!-- Background -->
-        <div class="absolute inset-0 hero-bg"
-            style="background-image:url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&q=80&fm=webp');">
-            <div class="absolute inset-0 bg-gradient-to-b from-dark-900/70 via-dark-900/50 to-dark-900"></div>
-        </div>
-        <!-- Content -->
-        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
-            <p class="text-brand-400 font-medium tracking-[0.3em] uppercase text-sm mb-6 animate-fade-in-up">Bem-vindo
-                ao</p>
-            <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 animate-fade-in-up delay-100"
-                id="hero-title">Restaurante</h1>
-            <p class="text-gray-200 text-lg md:text-xl max-w-2xl mx-auto mb-10 animate-fade-in-up delay-200"
-                id="hero-subtitle"></p>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-300">
-                <a data-nav="true" href="/menu"
-                    class="btn-glow bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-full text-base font-medium min-h-[44px]">
-                    Ver Cardápio
-                </a>
-                <a data-nav="true" href="#reserva"
-                    class="border border-white/20 hover:border-brand-400 text-white hover:text-brand-400 px-8 py-4 rounded-full text-base font-medium transition-all min-h-[44px]">
-                    Reservar Mesa
-                </a>
-            </div>
-        </div>
-        <!-- Scroll indicator -->
-        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-            <svg class="w-6 h-6 text-white/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-        </div>
-    </section>
+  <div id="store-status-banner">Estamos fechados no momento. Volte logo!</div>
 
-    <!-- ========== DESTAQUES ========== -->
-    <section class="py-20 md:py-28 bg-dark-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 reveal">
-                <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Destaques</p>
-                <h2 class="font-display text-3xl md:text-5xl font-bold text-white">Nossos Pratos Especiais</h2>
-            </div>
-            <div class="grid md:grid-cols-3 gap-8" id="featured-dishes">
-                <!-- Filled dynamically -->
-                <div class="text-center py-20 col-span-3 text-gray-500">Carregando destaques...</div>
-            </div>
+  <!-- NAV -->
+  <nav class="topnav" role="navigation" aria-label="Menu principal">
+    <div class="topnav-inner">
+      <a href="/" class="topnav-brand">
+        <div class="logo-icon" aria-hidden="true">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
         </div>
-    </section>
-
-    <!-- ========== CATEGORIES ========== -->
-    <section class="py-20 md:py-28 bg-dark-800/50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 reveal">
-                <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Cardápio</p>
-                <h2 class="font-display text-3xl md:text-5xl font-bold text-white">Explore Nossas Categorias</h2>
-            </div>
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" id="category-cards">
-                <div class="text-center py-20 col-span-4 text-gray-500">Carregando categorias...</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== ABOUT PREVIEW ========== -->
-    <section class="py-20 md:py-28 bg-dark-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div class="reveal">
-                    <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Sobre Nós</p>
-                    <h2 class="font-display text-3xl md:text-5xl font-bold text-white mb-6" id="about-title"></h2>
-                    <p class="text-gray-400 text-lg leading-relaxed mb-8" id="about-text"></p>
-                    <a data-nav="true" href="/about"
-                        class="btn-glow inline-block bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-full font-medium">
-                        Saiba Mais →
-                    </a>
-                </div>
-                <div class="reveal">
-                    <div class="relative rounded-2xl overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80"
-                            alt="Interior do restaurante" class="w-full h-[400px] object-cover rounded-2xl">
-                        <div class="absolute inset-0 bg-gradient-to-t from-dark-900/50 to-transparent rounded-2xl">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== OPENING HOURS ========== -->
-    <section class="py-20 bg-dark-800/50" id="reserva">
-        <div class="max-w-4xl mx-auto px-4 text-center reveal">
-            <p class="text-brand-400 font-medium tracking-widest uppercase text-sm mb-3">Horários</p>
-            <h2 class="font-display text-3xl md:text-4xl font-bold text-white mb-8">Horário de Funcionamento</h2>
-            <div class="bg-dark-900/60 backdrop-blur rounded-2xl p-8 md:p-12 border border-white/5">
-                <p class="text-gray-300 text-lg" id="opening-hours">Carregando horários...</p>
-                <div class="mt-8">
-                    <a data-nav="true" href="#" id="whatsapp-cta"
-                        class="btn-glow inline-flex items-center gap-2 bg-[#25d366] hover:bg-[#1da851] text-white px-8 py-4 rounded-full text-lg font-medium">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                            <path
-                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                        </svg>
-                        Falar pelo WhatsApp
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== FOOTER ========== -->
-    <footer class="bg-dark-900 border-t border-white/5 py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-4 gap-12">
-                <div>
-                    <div class="flex items-center gap-2 mb-4">
-                        <svg class="w-6 h-6 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.871c1.355 0 2.697.056 4.024.166C17.155 8.51 18 9.473 18 10.608v2.513M15 8.25v-1.5m-6 1.5v-1.5m12 9.75l-1.5.75a3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0L3 16.5m15-3.379a48.474 48.474 0 00-6-.371c-2.032 0-4.034.126-6 .371m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.169c0 .621-.504 1.125-1.125 1.125H4.125A1.125 1.125 0 013 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 016 13.12M16.5 3.75V16.5" />
-                        </svg>
-                        <span class="font-display text-xl font-bold text-white" id="footer-brand" data-config></span>
-                    </div>
-                    <p class="text-gray-400 text-base" id="footer-tagline"></p>
-                </div>
-                <div>
-                    <h4 class="text-white font-semibold mb-4">Navegação</h4>
-                    <ul class="space-y-2 text-base">
-                        <li><a data-nav="true" href="/"
-                                class="block py-2 text-gray-400 hover:text-brand-400 transition">Início</a></li>
-                        <li><a data-nav="true" href="/menu"
-                                class="block py-2 text-gray-400 hover:text-brand-400 transition">Cardápio</a></li>
-                        <li><a data-nav="true" href="/gallery"
-                                class="block py-2 text-gray-400 hover:text-brand-400 transition">Galeria</a></li>
-                        <li><a data-nav="true" href="/about"
-                                class="block py-2 text-gray-400 hover:text-brand-400 transition">Sobre</a></li>
-                        <li><a data-nav="true" href="/contact"
-                                class="block py-2 text-gray-400 hover:text-brand-400 transition">Contato</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-white font-semibold mb-4">Contato</h4>
-                    <ul class="space-y-2 text-base text-gray-400">
-                        <li id="footer-address"></li>
-                        <li id="footer-phone"></li>
-                        <li id="footer-email"></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-white font-semibold mb-4">Redes Sociais</h4>
-                    <div class="flex gap-4">
-                        <a data-nav="true" href="#" id="link-instagram"
-                            class="text-gray-400 hover:text-brand-400 transition" aria-label="Instagram">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
-                            </svg>
-                        </a>
-                        <a data-nav="true" href="#" id="link-facebook"
-                            class="text-gray-400 hover:text-brand-400 transition" aria-label="Facebook">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="border-t border-white/5 mt-12 pt-8 text-center">
-                <p class="text-gray-500 text-base" id="footer-copy"></p>
-                <a data-nav="true" href="/privacy"
-                    class="text-gray-500 hover:text-brand-400 text-xs mt-2 inline-flex items-center justify-center min-h-[44px] py-2 transition">Política
-                    de
-                    Privacidade</a>
-            </div>
-        </div>
-    </footer>
-
-    <!-- ========== WHATSAPP FLOAT ========== -->
-    <a data-nav="true" href="#" id="whatsapp-float" class="whatsapp-float" aria-label="WhatsApp" target="_blank"
-        rel="noopener">
-        <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path
-                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+        <span id="nav-brand">Restaurante</span>
+      </a>
+      <div class="nav-links" role="menubar">
+        <a href="/" class="active" role="menuitem">Início</a>
+        <a href="/menu" role="menuitem">Cardápio</a>
+        <a href="/contact" role="menuitem">Contato</a>
+      </div>
+      <button class="nav-ham" id="nav-ham-btn" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-nav">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="26" height="26" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
-    </a>
-    <script defer src="/js/mobile.js"></script>
-    <script defer src="/js/a11y.js"></script>
-    <script defer src="/js/feedback.js"></script>
-    <script defer src="/js/formValidation.js"></script>
-    <script defer src="/js/app.js"></script>
-    <script defer src="/js/cart.js"></script>
-    <script defer src="/js/whatsappFormatter.js"></script>
-    <script defer src="/js/orderModal.js"></script>
-    <script defer src="/js/cartUI.js"></script>
+      </button>
+    </div>
+    <div id="mobile-nav" role="menu" aria-label="Menu mobile">
+      <a href="/" class="active" role="menuitem">Início</a>
+      <a href="/menu" role="menuitem">Cardápio</a>
+      <a href="/contact" role="menuitem">Contato</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <main id="main-content">
+    <section class="hero" aria-label="Bem-vindo">
+      <div class="hero-bg"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <span class="hero-tag">Feito com carinho</span>
+        <h1 id="hero-title">Comida caseira de <span class="text-brand-400">verdade</span></h1>
+        <p id="hero-subtitle">Pratos do dia, marmitas e lanches feitos na hora. Como em casa, só que melhor.</p>
+        <div class="hero-actions">
+          <a href="/menu" class="btn-primary">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            Ver Cardápio
+          </a>
+          <a href="#" id="whatsapp-cta" class="btn-secondary">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+            </svg>
+            Pedir no WhatsApp
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- DESTAQUES -->
+    <section class="section reveal" aria-label="Destaques do cardápio">
+      <h2 class="section-title">O que tá saindo hoje 🍽️</h2>
+      <div class="category-chips" id="home-category-chips"></div>
+      <div class="dishes-grid" id="featured-dishes"></div>
+      <div style="text-align:center;margin-top:1.5rem;">
+        <a href="/menu" class="btn-primary">Ver cardápio completo &rarr;</a>
+      </div>
+    </section>
+
+    <!-- INFO RÁPIDA -->
+    <section class="section reveal" aria-label="Informações">
+      <h2 class="section-title">Venha nos visitar</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;">
+        <div style="background:#fff;border:1.5px solid #FCA5A5;border-radius:16px;padding:1.25rem;text-align:center;">
+          <div style="font-size:1.6rem;margin-bottom:.4rem;">&#128336;</div>
+          <div
+            style="font-family:'Caveat',cursive;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.2rem;">
+            Horários</div>
+          <div id="opening-hours" style="font-size:.78rem;color:var(--muted);">Seg–Sex: 11h–15h</div>
+        </div>
+        <div style="background:#fff;border:1.5px solid #FCA5A5;border-radius:16px;padding:1.25rem;text-align:center;">
+          <div style="font-size:1.6rem;margin-bottom:.4rem;">&#128205;</div>
+          <div
+            style="font-family:'Caveat',cursive;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.2rem;">
+            Endereço</div>
+          <div id="footer-address" style="font-size:.78rem;color:var(--muted);">Rua da Esquina, 42</div>
+        </div>
+        <div style="background:#fff;border:1.5px solid #FCA5A5;border-radius:16px;padding:1.25rem;text-align:center;">
+          <div style="font-size:1.6rem;margin-bottom:.4rem;">&#128222;</div>
+          <div
+            style="font-family:'Caveat',cursive;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.2rem;">
+            Telefone</div>
+          <div id="footer-phone" style="font-size:.78rem;color:var(--muted);"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WA BANNER -->
+    <div class="section" style="padding-top:0;">
+      <div class="wa-banner reveal">
+        <h2>Quer pedir agora?</h2>
+        <p>Manda uma mensagem no WhatsApp e a gente te atende na hora!</p>
+        <a href="#" id="whatsapp-cta-2" class="btn-wa">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+          </svg>
+          Pedir pelo WhatsApp
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <div class="logo-icon" style="margin:0 auto .5rem;">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
+          style="width:20px;height:20px;color:#fff;">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+      </div>
+      <span id="footer-brand">Restaurante</span>
+      <span id="footer-tagline">Comida caseira de verdade</span>
+      <div class="footer-info">
+        <span id="footer-email"></span>
+      </div>
+      <span id="footer-copy"></span>
+      <div class="footer-links" style="margin-top:.4rem;">
+        <a href="/contact">Contato</a>
+        <a href="/admin">Admin</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WA FLOAT -->
+  <a href="#" id="whatsapp-float" class="whatsapp-float" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <svg width="28" height="28" fill="white" viewBox="0 0 24 24">
+      <path
+        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+    </svg>
+  </a>
+
+  <script defer src="/js/mobile.js"></script>
+  <script defer src="/js/a11y.js"></script>
+  <script defer src="/js/feedback.js"></script>
+  <script defer src="/js/formValidation.js"></script>
+  <script defer src="/js/app.js"></script>
+  <script defer src="/js/cart.js"></script>
+  <script defer src="/js/whatsappFormatter.js"></script>
+  <script defer src="/js/orderModal.js"></script>
+  <script defer src="/js/cartUI.js"></script>
+  <script>
+    // Mobile nav toggle
+    document.getElementById('nav-ham-btn').addEventListener('click', function () {
+      const mn = document.getElementById('mobile-nav');
+      const expanded = this.getAttribute('aria-expanded') === 'true';
+      mn.style.display = expanded ? 'none' : 'block';
+      this.setAttribute('aria-expanded', String(!expanded));
+    });
+    // Scroll reveal
+    const obs = new IntersectionObserver(els => els.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: .12 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    // Store status
+    window.applyStoreStatus = function (open) {
+      const b = document.getElementById('store-status-banner');
+      if (b) { b.classList.toggle('closed', !open); }
+    };
+    // Homepage: load categories + featured dishes
+    function escapeHTML(v) { const d = document.createElement('div'); d.textContent = v ?? ""; return d.innerHTML; }
+    async function loadHomepage() {
+      const cats = await api('/categories');
+      if (!cats || !cats.length) return;
+      // Chips
+      const chipsEl = document.getElementById('home-category-chips');
+      if (chipsEl) {
+        cats.forEach((cat, i) => {
+          const ch = document.createElement('span');
+          ch.className = 'chip' + (i === 0 ? ' active' : '');
+          ch.textContent = cat.name;
+          ch.addEventListener('click', () => {
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            ch.classList.add('active');
+            renderDishes(cats, cat.id);
+          });
+          chipsEl.appendChild(ch);
+        });
+      }
+      renderDishes(cats, cats[0].id);
+    }
+    function renderDishes(cats, catId) {
+      const grid = document.getElementById('featured-dishes');
+      if (!grid) return;
+      const cat = cats.find(c => c.id === catId);
+      const dishes = cat ? cat.dishes.slice(0, 6) : [];
+      if (!dishes.length) { grid.innerHTML = '<p style="color:var(--muted);font-size:.85rem;">Nenhum prato disponível.</p>'; return; }
+      grid.innerHTML = dishes.map(d => `
+        <div class="dish-card ${d.is_available === false ? 'dish-unavailable' : ''}" role="article">
+          ${d.image_url
+          ? `<img class="dish-img" src="${escapeHTML(d.image_url)}" alt="${escapeHTML(d.name)}" loading="lazy">`
+          : `<div class="dish-img-placeholder" aria-hidden="true">🍽️</div>`}
+          <div class="dish-body">
+            <div class="dish-name">${escapeHTML(d.name)}</div>
+            <div class="dish-desc">${escapeHTML(d.description || '')}</div>
+            <div class="dish-footer">
+              <span class="dish-price">R$ ${(d.price / 100).toFixed(2).replace('.', ',')}</span>
+              ${d.is_available !== false
+          ? `<button class="add-btn" aria-label="Adicionar ${escapeHTML(d.name)} ao carrinho"
+                    data-id="${escapeHTML(String(d.id))}" data-name="${escapeHTML(d.name)}"
+                    data-price="${d.price}" onclick="window.addToCart&&addToCart(this)">+</button>`
+          : `<span style="font-size:.7rem;color:#B91C1C;">Indisponível</span>`}
+            </div>
+          </div>
+        </div>`).join('');
+    }
+    window.applyPageConfig = loadHomepage;
+  </script>
 </body>
 
 </html>

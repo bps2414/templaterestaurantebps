@@ -105,11 +105,14 @@ async function main() {
   console.log('  4. Configurar env vars + domínio + SSL\n');
 
   // ====== COLETAR DADOS ======
+  const LITE_THEMES = ['restaurant-lite', 'burger-lite', 'pizza-lite', 'acai'];
+
   const clientName = (await ask('Nome do cliente (ex: pizzaria-napoli): ')).trim().toLowerCase().replace(/\s+/g, '-');
-  const seedType = await ask('Tipo (restaurante/hamburgueria/confeitaria) [restaurante]: ') || 'restaurante';
+  const seedType = (await ask('Tipo (restaurante/hamburgueria/pizzaria/restaurant-lite/burger-lite/pizza-lite/acai) [restaurante]: ') || 'restaurante').trim();
   const adminEmail = (await ask('Email do admin: ')).trim();
   const adminPassword = await ask('Senha do admin (min 8 chars): ');
-  const plan = await ask('Plano (essential/professional) [essential]: ') || 'essential';
+  const isLiteTheme = LITE_THEMES.includes(seedType);
+  const plan = isLiteTheme ? 'starter' : ((await ask('Plano (essential/professional) [professional]: ') || 'professional').trim());
   const neonRegion = await ask('Região Neon (us-east-2/us-west-2/eu-central-1) [us-west-2]: ') || 'us-west-2';
   const customDomain = await ask(`Domínio customizado (vazio = ${clientName}.${baseDomain}): `) || '';
 
@@ -135,7 +138,7 @@ async function main() {
   console.log(`Cliente:       ${clientName}`);
   console.log(`Tipo:          ${seedType}`);
   console.log(`Admin:         ${adminEmail}`);
-  console.log(`Plano:         ${plan}`);
+  console.log(`Plano:         ${plan}${isLiteTheme ? ' (Starter: 30 pratos · 5 categorias · sem Galeria/Sobre)' : ''}`);
   console.log(`Região:        ${neonRegion}`);
   console.log(`Domínio:       ${finalDomain}`);
   console.log(`URL:           ${appUrl}`);
@@ -250,6 +253,8 @@ async function main() {
       { key: 'JWT_SECRET', value: jwtSecret, is_preview: false },
       { key: 'NODE_ENV', value: 'production', is_preview: false },
       { key: 'THEME', value: seedType, is_preview: false },
+      { key: 'PLAN', value: plan, is_preview: false },
+      { key: 'SEED_TYPE', value: seedType, is_preview: false },
       { key: 'APP_URL', value: appUrl, is_preview: false },
       { key: 'CORS_ORIGINS', value: appUrl, is_preview: false },
       { key: 'PORT', value: '3000', is_preview: false },

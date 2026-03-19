@@ -1,0 +1,2 @@
+O admin tem que ser iguais dos temas padroes, apenas ser limitado e configurado e adaptado aos plano starter, tem a aba pedidos que NAO e pra ter, e configuracoes do plano professional sendo que isso e incorreto.
+As imagens em alguns temas LITE nao carregam

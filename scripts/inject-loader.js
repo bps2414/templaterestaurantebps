@@ -2,7 +2,8 @@ const fs = require('fs');
 const path = require('path');
 
 const themesDir = path.join(__dirname, '..', 'themes');
-const themes = ['restaurante', 'hamburgueria', 'pizzaria'];
+// Lite themes already have the loader embedded — the duplicate guard below handles them safely
+const themes = ['restaurante', 'hamburgueria', 'pizzaria', 'restaurant-lite', 'burger-lite', 'pizza-lite', 'acai'];
 
 const cssSnippet = `
         /* Global Loader */

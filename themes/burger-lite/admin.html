@@ -1,12 +1,1574 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>burger-lite — admin</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <meta name="page-name" content="Admin">
+  <title>Admin — Hamburgueria</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload"
+    href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+  </noscript>
+  <style>
+    :root {
+      --brand: #D97706;
+      --brand-dark: #B45309;
+      --accent: #F59E0B;
+      --bg: #FFFBEB;
+      --surface: #FEF3C7;
+      --text: #451A03;
+      --muted: #92400E;
+      --border: #FDE68A;
+      --danger: #EF4444;
+      --success: #22C55E;
+      --warn: #F59E0B;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: 'Caveat', cursive;
+      font-weight: 600;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 220px;
+      background: #fff;
+      border-right: 2px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 40;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-brand .logo-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--brand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .sidebar-brand .logo-icon svg {
+      width: 18px;
+      height: 18px;
+      color: #fff;
+    }
+
+    .sidebar-brand span {
+      font-family: 'Caveat', cursive;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--brand);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: .5rem 0;
+    }
+
+    .sidebar-nav button {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      width: 100%;
+      padding: .7rem 1rem;
+      border: none;
+      background: transparent;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--muted);
+      transition: all .15s;
+      text-align: left;
+    }
+
+    .sidebar-nav button:hover {
+      background: var(--surface);
+      color: var(--brand);
+    }
+
+    .sidebar-nav button.active {
+      background: var(--surface);
+      color: var(--brand);
+      border-right: 3px solid var(--brand);
+    }
+
+    .sidebar-nav button svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-footer {
+      padding: .75rem 1rem;
+      border-top: 1px solid var(--border);
+      font-size: .7rem;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+    }
+
+    .sidebar-footer a,
+    .sidebar-footer button {
+      color: var(--brand);
+      font-weight: 600;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: .7rem;
+      text-align: left;
+      padding: 0;
+      font-family: inherit;
+    }
+
+    .sidebar-footer button:hover,
+    .sidebar-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* MAIN */
+    .main {
+      margin-left: 220px;
+      flex: 1;
+      padding: 1.5rem;
+      min-height: 100vh;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: .75rem;
+    }
+
+    .top-bar h1 {
+      font-size: 1.5rem;
+      color: var(--text);
+    }
+
+    .store-toggle {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+
+    .store-toggle span {
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: #D1D5DB;
+      border-radius: 999px;
+      transition: .25s;
+      cursor: pointer;
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 3px;
+      bottom: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: .25s;
+    }
+
+    .toggle-switch input:checked+.toggle-slider {
+      background: var(--success);
+    }
+
+    .toggle-switch input:checked+.toggle-slider::before {
+      transform: translateX(20px);
+    }
+
+    /* PANELS */
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* STATS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-family: 'Caveat', cursive;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--brand);
+    }
+
+    .stat-label {
+      font-size: .72rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: .2rem;
+    }
+
+    /* LIMIT BARS */
+    .limit-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .limit-bar {
+      margin-bottom: .75rem;
+    }
+
+    .limit-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: .3rem;
+    }
+
+    .limit-track {
+      height: 8px;
+      background: var(--surface);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .limit-fill {
+      height: 100%;
+      background: var(--brand);
+      border-radius: 999px;
+      transition: width .4s;
+    }
+
+    .limit-fill.warn {
+      background: var(--warn);
+    }
+
+    .limit-fill.danger {
+      background: var(--danger);
+    }
+
+    /* TABLE */
+    .data-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: .65rem .75rem;
+      text-align: left;
+      font-size: .82rem;
+    }
+
+    .data-table th {
+      background: var(--surface);
+      font-weight: 700;
+      color: var(--muted);
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .data-table td {
+      border-top: 1px solid var(--border);
+    }
+
+    .data-table tr:hover td {
+      background: var(--bg);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: .15rem .5rem;
+      border-radius: 999px;
+      font-size: .68rem;
+      font-weight: 700;
+    }
+
+    .badge-ok {
+      background: #DCFCE7;
+      color: #166534;
+    }
+
+    .badge-off {
+      background: #FEE2E2;
+      color: #991B1B;
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      padding: .5rem 1rem;
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 700;
+      border: none;
+      transition: all .15s;
+    }
+
+    .btn-brand {
+      background: var(--brand);
+      color: #fff;
+    }
+
+    .btn-brand:hover {
+      background: var(--brand-dark);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .btn-danger:hover {
+      background: #DC2626;
+    }
+
+    .btn-sm {
+      padding: .35rem .7rem;
+      font-size: .72rem;
+    }
+
+    .actions {
+      display: flex;
+      gap: .4rem;
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 27, 75, .5);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: #fff;
+      border-radius: 18px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 1.5rem;
+      box-shadow: 0 12px 40px rgba(220, 38, 38, .2);
+    }
+
+    .modal h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .modal .form-group {
+      margin-bottom: .85rem;
+    }
+
+    .modal .form-group label {
+      display: block;
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: .25rem;
+    }
+
+    .modal .form-group input,
+    .modal .form-group textarea,
+    .modal .form-group select {
+      width: 100%;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: .55rem .7rem;
+      font-size: .85rem;
+      font-family: 'Quicksand', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .modal .form-group input:focus,
+    .modal .form-group textarea:focus,
+    .modal .form-group select:focus {
+      border-color: var(--brand);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: .5rem;
+      justify-content: flex-end;
+      margin-top: 1rem;
+    }
+
+    /* CONFIG */
+    .config-card {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .config-card h3 {
+      font-size: 1rem;
+      margin-bottom: .75rem;
+    }
+
+    .config-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+      margin-bottom: .75rem;
+    }
+
+    @media(max-width:640px) {
+      .config-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .config-field label {
+      display: block;
+      font-size: .72rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: .2rem;
+    }
+
+    .config-field input {
+      width: 100%;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: .5rem .7rem;
+      font-size: .85rem;
+      font-family: 'Quicksand', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .config-field input:focus {
+      border-color: var(--brand);
+    }
+
+    /* TOAST */
+    .toast-container {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+
+    .toast {
+      padding: .65rem 1rem;
+      border-radius: 10px;
+      font-size: .8rem;
+      font-weight: 600;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+      animation: toastIn .3s ease;
+    }
+
+    .toast-success {
+      background: var(--success);
+    }
+
+    .toast-error {
+      background: var(--danger);
+    }
+
+    .toast-info {
+      background: var(--brand);
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* RESPONSIVE */
+    .mobile-ham {
+      display: none;
+      position: fixed;
+      top: .75rem;
+      left: .75rem;
+      z-index: 50;
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      width: 40px;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media(max-width:768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform .25s;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .mobile-ham {
+        display: flex;
+      }
+    }
+
+    /* LOGIN SCREEN */
+    .login-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: var(--bg);
+      width: 100%;
+    }
+
+    .login-card {
+      background: var(--surface);
+      padding: 2.5rem 2rem;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, .08);
+    }
+
+    .login-brand {
+      text-align: center;
+      font-size: 3rem;
+      margin-bottom: .5rem;
+    }
+
+    .login-title {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.35rem;
+    }
+
+    .login-error {
+      color: var(--danger);
+      margin-bottom: .75rem;
+      font-size: .85rem;
+      display: none;
+    }
+
+    .login-submit {
+      width: 100%;
+      padding: .7rem;
+      font-size: .95rem;
+      cursor: pointer;
+    }
+
+    /* PASSWORD MODAL */
+    .pw-hint {
+      font-size: .75rem;
+      color: var(--muted);
+      margin-top: .25rem;
+    }
+
+    .pw-error {
+      color: var(--danger);
+      font-size: .85rem;
+      display: none;
+      margin-bottom: .5rem;
+    }
+
+    /* BUSINESS HOURS */
+    .bh-card-title {
+      font-size: 1rem;
+      margin-bottom: .3rem;
+    }
+
+    .bh-card-desc {
+      font-size: .72rem;
+      color: var(--muted);
+      margin-bottom: .75rem;
+    }
+
+    .bh-row {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .55rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .bh-row:last-child {
+      border-bottom: none;
+    }
+
+    .bh-day-label {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      min-width: 115px;
+      font-size: .8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .bh-day-label input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--brand);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .bh-times {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      flex: 1;
+    }
+
+    .bh-times input[type="time"] {
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: .3rem .45rem;
+      font-size: .78rem;
+      font-family: 'Quicksand', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .bh-times input[type="time"]:focus {
+      border-color: var(--brand);
+    }
+
+    .bh-times input[type="time"]:disabled {
+      opacity: .35;
+      cursor: not-allowed;
+    }
+
+    .bh-times span {
+      font-size: .72rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .toggle-switch.toggle-danger input:checked+.toggle-slider {
+      background: var(--danger);
+    }
+
+    @media(max-width:480px) {
+      .bh-row {
+        flex-wrap: wrap;
+      }
+
+      .bh-day-label {
+        min-width: 100%;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <!-- TODO: /ui-ux-pro-max -->
+  <div id="login-screen" class="login-screen">
+    <form id="login-form" class="login-card">
+      <div class="login-brand" aria-hidden="true">🍔</div>
+      <h2 class="login-title">Painel Admin</h2>
+      <div class="form-group">
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" required placeholder="admin@restaurante.com">
+      </div>
+      <div class="form-group">
+        <label for="login-password">Senha</label>
+        <input type="password" id="login-password" required placeholder="••••••">
+      </div>
+      <div id="login-error" class="login-error"></div>
+      <button type="submit" id="login-btn" class="btn btn-brand login-submit">Entrar</button>
+    </form>
+  </div>
+  <button class="mobile-ham" id="mobile-ham" aria-label="Menu admin">
+    <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  </button>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo-icon" aria-hidden="true">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+        </svg>
+      </div>
+      <span>Restaurante</span>
+    </div>
+    <nav class="sidebar-nav" aria-label="Admin navigation">
+      <button class="active" data-tab="dashboard">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+        </svg>
+        Dashboard
+      </button>
+      <button data-tab="dishes">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
+        Cardápio
+      </button>
+      <button data-tab="categories">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+        </svg>
+        Categorias
+      </button>
+      <button data-tab="settings">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        Configurações
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <button onclick="previewSite()">👀 Visualizar Site</button>
+      <button onclick="openPasswordModal()">🔑 Alterar Senha</button>
+      <button onclick="logout()">🚪 Sair</button>
+      <a href="/">🏠 Voltar ao site</a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <!-- DASHBOARD -->
+    <div class="tab-panel active" id="panel-dashboard">
+      <div class="top-bar">
+        <h1>Dashboard</h1>
+        <div class="store-toggle">
+          <span>Loja</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="store-open-toggle" checked>
+            <span class="toggle-slider"></span>
+          </label>
+          <span id="store-status-label">Aberta</span>
+        </div>
+      </div>
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-dishes">0</div>
+          <div class="stat-label">Pratos</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-categories">0</div>
+          <div class="stat-label">Categorias</div>
+        </div>
+      </div>
+      <div class="limit-section">
+        <div class="limit-bar">
+          <div class="limit-header"><span>Pratos</span><span id="dish-limit-text">0 / 30</span></div>
+          <div class="limit-track">
+            <div class="limit-fill" id="dish-limit-fill" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="limit-bar">
+          <div class="limit-header"><span>Categorias</span><span id="cat-limit-text">0 / 5</span></div>
+          <div class="limit-track">
+            <div class="limit-fill" id="cat-limit-fill" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DISHES -->
+    <div class="tab-panel" id="panel-dishes">
+      <div class="top-bar">
+        <h1>Cardápio</h1>
+        <button class="btn btn-brand" id="btn-add-dish">+ Novo Prato</button>
+      </div>
+      <table class="data-table" id="dishes-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Categoria</th>
+            <th>Preço</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div class="tab-panel" id="panel-categories">
+      <div class="top-bar">
+        <h1>Categorias</h1>
+        <button class="btn btn-brand" id="btn-add-cat">+ Nova Categoria</button>
+      </div>
+      <table class="data-table" id="categories-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Ordem</th>
+            <th>Pratos</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="tab-panel" id="panel-settings">
+      <div class="top-bar">
+        <h1>Configurações</h1>
+      </div>
+      <form id="settings-form">
+        <div class="config-card">
+          <h3>Informações da Loja</h3>
+          <div class="config-row">
+            <div class="config-field"><label for="cfg-name">Nome</label><input type="text" id="cfg-name"
+                placeholder="Restaurante Caseiro"></div>
+            <div class="config-field"><label for="cfg-phone">Telefone / WhatsApp</label><input type="tel" id="cfg-phone"
+                placeholder="(11) 99999-9999"></div>
+          </div>
+          <div class="config-row">
+            <div class="config-field"><label for="cfg-email">Email</label><input type="email" id="cfg-email"
+                placeholder="contato@restaurante.com"></div>
+            <div class="config-field"><label for="cfg-address">Endereço</label><input type="text" id="cfg-address"
+                placeholder="Rua..."></div>
+          </div>
+          <div class="config-row">
+            <div class="config-field"><label for="cfg-whatsapp-msg">Mensagem WhatsApp</label><input type="text"
+                id="cfg-whatsapp-msg" placeholder="Olá! Gostaria de fazer um pedido"></div>
+            <div class="config-field"><label for="cfg-description">Descrição</label><textarea id="cfg-description"
+                rows="2" placeholder="Breve descrição do restaurante"></textarea></div>
+          </div>
+        </div>
+        <div class="config-card">
+          <h3>Aparência</h3>
+          <div class="config-row">
+            <div class="config-field"><label for="cfg-tagline">Tagline</label><input type="text" id="cfg-tagline"
+                placeholder="Comida caseira feita com carinho"></div>
+          </div>
+          <div class="config-row">
+            <div class="config-field"><label for="cfg-hero-title">Título Hero</label><input type="text"
+                id="cfg-hero-title" placeholder="Bem-vindo ao nosso restaurante"></div>
+            <div class="config-field"><label for="cfg-hero-subtitle">Subtítulo Hero</label><input type="text"
+                id="cfg-hero-subtitle" placeholder="Os melhores pratos da cidade"></div>
+          </div>
+          <div class="config-row">
+            <div class="config-field"><label for="cfg-footer-text">Texto Rodapé</label><input type="text"
+                id="cfg-footer-text" placeholder="© 2025 Restaurante"></div>
+          </div>
+        </div>
+        <div class="config-card">
+          <h3>Redes Sociais</h3>
+          <div class="config-row">
+            <div class="config-field"><label for="cfg-instagram">Instagram</label><input type="url" id="cfg-instagram"
+                placeholder="https://instagram.com/..."></div>
+            <div class="config-field"><label for="cfg-facebook">Facebook</label><input type="url" id="cfg-facebook"
+                placeholder="https://facebook.com/..."></div>
+          </div>
+        </div>
+        <div class="config-card">
+          <h3>Mapa</h3>
+          <div class="config-row">
+            <div class="config-field" style="flex:1"><label for="cfg-maps">Google Maps Embed URL</label><input
+                type="url" id="cfg-maps" placeholder="https://www.google.com/maps/embed?pb=..."></div>
+          </div>
+        </div>
+        <!-- BUSINESS HOURS -->
+        <div class="config-card">
+          <h3 class="bh-card-title">⏰ Horário de Funcionamento</h3>
+          <p class="bh-card-desc">Configure os dias e horários em que a loja aceita pedidos. Fora destes horários, os botões de pedido são desabilitados automaticamente.</p>
+          <div class="config-row" style="margin-bottom:.75rem;">
+            <div class="config-field"
+              style="display:flex;align-items:center;justify-content:space-between;gap:.5rem;">
+              <label style="font-size:.78rem;font-weight:600;color:var(--muted);">🚫 Forçar Loja Fechada (override manual)</label>
+              <label class="toggle-switch toggle-danger" style="flex-shrink:0;">
+                <input type="checkbox" id="store-force-closed-toggle" aria-label="Forçar loja fechada">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          <div id="bh-grid"></div>
+          <input type="hidden" id="business-hours-input">
+        </div>
+        <button type="submit" class="btn btn-brand">Salvar Configurações</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODALS -->
+  <div class="modal-overlay" id="modal-dish" role="dialog" aria-modal="true" aria-labelledby="modal-dish-title">
+    <div class="modal">
+      <h2 id="modal-dish-title">Novo Prato</h2>
+      <form id="form-dish">
+        <div class="form-group"><label for="dish-name">Nome</label><input type="text" id="dish-name" required></div>
+        <div class="form-group"><label for="dish-desc">Descrição</label><textarea id="dish-desc" rows="3"></textarea>
+        </div>
+        <div class="form-group"><label for="dish-price">Preço (R$)</label><input type="text" inputmode="numeric"
+            id="dish-price" placeholder="R$ 0,00" required></div>
+        <div class="form-group"><label for="dish-category">Categoria</label><select id="dish-category"
+            required></select></div>
+        <div class="form-group"><label for="dish-image">Imagem</label><input type="file" id="dish-image"
+            accept="image/*"></div>
+        <div class="form-group"><label><input type="checkbox" id="dish-featured"> Destaque</label></div>
+        <div class="form-group"><label><input type="checkbox" id="dish-active" checked> Ativo</label></div>
+        <input type="hidden" id="dish-id">
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modal-dish')">Cancelar</button>
+          <button type="submit" class="btn btn-brand">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-category">
+    <div class="modal">
+      <h2 id="modal-cat-title">Nova Categoria</h2>
+      <form id="form-category">
+        <div class="form-group"><label for="cat-name">Nome</label><input type="text" id="cat-name" required></div>
+        <div class="form-group"><label for="cat-order">Ordem</label><input type="number" id="cat-order" min="0"
+            value="0"></div>
+        <input type="hidden" id="cat-id">
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modal-category')">Cancelar</button>
+          <button type="submit" class="btn btn-brand">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- PASSWORD CHANGE MODAL -->
+  <div class="modal-overlay" id="modal-password" role="dialog" aria-modal="true" aria-label="Alterar Senha">
+    <div class="modal">
+      <h2>🔑 Alterar Senha</h2>
+      <form id="form-password">
+        <div class="form-group"><label for="pw-current">Senha Atual</label><input type="password" id="pw-current"
+            required placeholder="••••••"></div>
+        <div class="form-group"><label for="pw-new">Nova Senha</label><input type="password" id="pw-new" required
+            minlength="8" placeholder="Mínimo 8 caracteres">
+          <p class="pw-hint">Deve conter maiúscula, minúscula e número</p>
+        </div>
+        <div class="form-group"><label for="pw-confirm">Confirmar Nova Senha</label><input type="password"
+            id="pw-confirm" required placeholder="••••••"></div>
+        <p id="pw-error" class="pw-error"></p>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modal-password')">Cancelar</button>
+          <button type="submit" class="btn btn-brand">Alterar Senha</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    const DISH_LIMIT = 30, CAT_LIMIT = 5;
+    const API_BASE = window.location.origin + '/api';
+    let token = localStorage.getItem('admin_token');
+    let csrfToken = null;
+
+    async function fetchCsrfToken() {
+      try { const r = await fetch(API_BASE + '/csrf-token', { credentials: 'include' }); const j = await r.json(); csrfToken = j.token; } catch (_) { }
+    }
+
+    async function api(path, opts = {}, _retried = false) {
+      const headers = {};
+      if (token) headers['Authorization'] = 'Bearer ' + token;
+      if (csrfToken) headers['x-csrf-token'] = csrfToken;
+      if (!(opts.body instanceof FormData)) headers['Content-Type'] = 'application/json';
+      const res = await fetch(API_BASE + path, { ...opts, headers: { ...headers, ...(opts.headers || {}) }, credentials: 'include' });
+      if (res.status === 401) {
+        if (!_retried) { const refreshed = await tryRefreshToken(); if (refreshed) return api(path, opts, true); }
+        showLogin(); throw new Error('Sessão expirada');
+      }
+      if (res.status === 403) {
+        await fetchCsrfToken();
+        const retry = await fetch(API_BASE + path, { ...opts, headers: { ...headers, 'x-csrf-token': csrfToken, ...(opts.headers || {}) }, credentials: 'include' });
+        if (!retry.ok) { const e = await retry.json().catch(() => ({})); throw new Error(e.message || retry.statusText); }
+        const rj = await retry.json(); return rj.data !== undefined ? rj.data : rj;
+      }
+      if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.message || res.statusText); }
+      const json = await res.json();
+      return json.data !== undefined ? json.data : json;
+    }
+
+    async function tryRefreshToken() {
+      const rt = localStorage.getItem('admin_refresh');
+      if (!rt) return false;
+      try {
+        const r = await fetch(API_BASE + '/auth/refresh', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ refreshToken: rt }) });
+        if (!r.ok) return false;
+        const j = await r.json(); const d = j.data || j;
+        token = d.accessToken; localStorage.setItem('admin_token', token);
+        if (d.refreshToken) localStorage.setItem('admin_refresh', d.refreshToken);
+        return true;
+      } catch (_) { return false; }
+    }
+
+    // --- Price formatting (BRL) ---
+    function formatPrice(cents) {
+      return (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function initPriceMask() {
+      const priceInput = document.getElementById('dish-price');
+      if (!priceInput) return;
+      priceInput.addEventListener('input', function (e) {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length === 0) { e.target.value = ''; return; }
+        v = v.replace(/^0+/, '') || '0';
+        const cents = parseInt(v, 10);
+        e.target.value = (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      });
+      priceInput.addEventListener('keydown', function (e) {
+        if (['Backspace', 'Delete', 'Tab', 'Escape', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+        if (!/[0-9]/.test(e.key)) e.preventDefault();
+      });
+    }
+
+    function getPriceCents() {
+      const raw = document.getElementById('dish-price').value.replace(/\D/g, '');
+      return parseInt(raw, 10) || 0;
+    }
+
+    function setPriceFromCents(cents) {
+      const priceInput = document.getElementById('dish-price');
+      if (!priceInput) return;
+      if (!cents || cents === 0) { priceInput.value = ''; return; }
+      priceInput.value = (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    // --- Escape helpers ---
+    function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+    function escapeAttr(s) { return esc(s).replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
+
+    // --- Loading state helper ---
+    function setLoading(btn, isLoading, originalText) {
+      if (typeof btn === 'string') btn = document.querySelector(btn);
+      if (!btn) return;
+      if (isLoading) {
+        btn._originalText = btn._originalText || originalText || btn.textContent;
+        btn.disabled = true;
+        btn.style.opacity = '0.6';
+        btn.style.pointerEvents = 'none';
+        btn.textContent = 'Salvando...';
+      } else {
+        btn.disabled = false;
+        btn.style.opacity = '';
+        btn.style.pointerEvents = '';
+        btn.textContent = btn._originalText || originalText || 'Salvar';
+      }
+    }
+
+    // --- Preview & Logout ---
+    function previewSite() { window.open('/', '_blank'); }
+    function logout() {
+      token = null;
+      localStorage.removeItem('admin_token');
+      localStorage.removeItem('admin_refresh');
+      showLogin();
+      toast('Sessão encerrada');
+    }
+
+    function showLogin() {
+      token = null; localStorage.removeItem('admin_token'); localStorage.removeItem('admin_refresh');
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('mobile-ham').style.display = 'none';
+      document.getElementById('sidebar').style.display = 'none';
+      document.querySelector('.main').style.display = 'none';
+    }
+    function showDashboard() {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('mobile-ham').style.display = '';
+      document.getElementById('sidebar').style.display = '';
+      document.querySelector('.main').style.display = '';
+      loadDashboard(); loadSettings();
+    }
+
+    document.getElementById('login-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const errEl = document.getElementById('login-error');
+      errEl.style.display = 'none';
+      try {
+        await fetchCsrfToken();
+        const r = await fetch(API_BASE + '/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-csrf-token': csrfToken }, body: JSON.stringify({ email: document.getElementById('login-email').value, password: document.getElementById('login-password').value }), credentials: 'include' });
+        if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.message || 'Credenciais inválidas'); }
+        const j = await r.json(); const d = j.data || j;
+        token = d.accessToken; localStorage.setItem('admin_token', token);
+        if (d.refreshToken) localStorage.setItem('admin_refresh', d.refreshToken);
+        showDashboard();
+      } catch (err) { errEl.textContent = err.message; errEl.style.display = 'block'; }
+    });
+
+    // TABS
+    document.querySelectorAll('.sidebar-nav button[data-tab]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.sidebar-nav button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        const panel = document.getElementById('panel-' + btn.dataset.tab);
+        if (panel) panel.classList.add('active');
+        if (btn.dataset.tab === 'dishes') loadDishes();
+        if (btn.dataset.tab === 'categories') loadCategories();
+      });
+    });
+
+    // MOBILE SIDEBAR
+    document.getElementById('mobile-ham').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+
+    // TOAST
+    function toast(msg, type = 'success') {
+      const c = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      t.className = 'toast toast-' + type;
+      t.textContent = msg;
+      c.appendChild(t);
+      setTimeout(() => t.remove(), 3500);
+    }
+
+    // MODAL
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    // STORE TOGGLE
+    document.getElementById('store-open-toggle').addEventListener('change', async function () {
+      const open = this.checked;
+      document.getElementById('store-status-label').textContent = open ? 'Aberta' : 'Fechada';
+      try { await api('/config', { method: 'PUT', body: JSON.stringify({ store_force_closed: open ? 'false' : 'true' }) }); toast(open ? 'Loja aberta!' : 'Loja fechada'); } catch (e) { toast(e.message || 'Erro ao alterar status', 'error'); }
+    });
+
+    // LIMIT BARS
+    function updateLimits(dishes, cats) {
+      const dp = Math.min((dishes / DISH_LIMIT) * 100, 100);
+      const cp = Math.min((cats / CAT_LIMIT) * 100, 100);
+      const df = document.getElementById('dish-limit-fill');
+      const cf = document.getElementById('cat-limit-fill');
+      df.style.width = dp + '%'; df.className = 'limit-fill' + (dp >= 90 ? ' danger' : dp >= 70 ? ' warn' : '');
+      cf.style.width = cp + '%'; cf.className = 'limit-fill' + (cp >= 90 ? ' danger' : cp >= 70 ? ' warn' : '');
+      document.getElementById('dish-limit-text').textContent = dishes + ' / ' + DISH_LIMIT;
+      document.getElementById('cat-limit-text').textContent = cats + ' / ' + CAT_LIMIT;
+    }
+
+    // LOAD DATA
+    async function loadDashboard() {
+      try {
+        const [dishes, cats] = await Promise.all([api('/dishes'), api('/categories')]);
+        document.getElementById('stat-dishes').textContent = dishes.length;
+        document.getElementById('stat-categories').textContent = cats.length;
+        updateLimits(dishes.length, cats.length);
+      } catch (e) { toast('Erro ao carregar dashboard', 'error'); }
+    }
+
+    async function loadDishes() {
+      try {
+        const [dishes, cats] = await Promise.all([api('/dishes'), api('/categories')]);
+        const catMap = Object.fromEntries(cats.map(c => [c.id, c.name]));
+        const tbody = document.querySelector('#dishes-table tbody');
+        tbody.innerHTML = dishes.map(d => `<tr>
+          <td style="width:48px">${d.image ? '<img src="' + escapeAttr(d.image) + '" alt="" style="width:40px;height:40px;object-fit:cover;border-radius:6px">' : '<span style="display:inline-block;width:40px;height:40px;background:var(--border);border-radius:6px"></span>'}</td>
+          <td>${esc(d.name)}${d.featured ? ' <span class="badge badge-ok">★ Destaque</span>' : ''}</td>
+          <td>${esc(catMap[d.categoryId] || '-')}</td>
+          <td>${formatPrice(d.price)}</td>
+          <td><span class="badge ${d.active !== false ? 'badge-ok' : 'badge-off'}">${d.active !== false ? 'Ativo' : 'Inativo'}</span></td>
+          <td class="actions">
+            <button class="btn btn-outline btn-sm" onclick="editDish('${escapeAttr(d.id)}')">Editar</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteDish('${escapeAttr(d.id)}')">Excluir</button>
+          </td>
+        </tr>`).join('');
+      } catch (e) { toast('Erro ao carregar pratos', 'error'); }
+    }
+
+    async function loadCategories() {
+      try {
+        const cats = await api('/categories');
+        const tbody = document.querySelector('#categories-table tbody');
+        tbody.innerHTML = cats.map(c => `<tr>
+          <td>${esc(c.name)}</td><td>${c.sortOrder ?? 0}</td><td>${c._count?.dishes ?? 0}</td>
+          <td class="actions">
+            <button class="btn btn-outline btn-sm" onclick="editCategory('${c.id}')">Editar</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteCategory('${c.id}')">Excluir</button>
+          </td>
+        </tr>`).join('');
+      } catch (e) { toast('Erro ao carregar categorias', 'error'); }
+    }
+
+    // CRUD DISHES
+    document.getElementById('btn-add-dish').addEventListener('click', async () => {
+      const dishes = await api('/dishes').catch(() => []);
+      if (dishes.length >= DISH_LIMIT) { toast('Limite de ' + DISH_LIMIT + ' pratos atingido!', 'error'); return; }
+      document.getElementById('modal-dish-title').textContent = 'Novo Prato';
+      document.getElementById('form-dish').reset();
+      document.getElementById('dish-id').value = '';
+      document.getElementById('dish-featured').checked = false;
+      document.getElementById('dish-active').checked = true;
+      setPriceFromCents(0);
+      await populateCategorySelect();
+      openModal('modal-dish');
+    });
+
+    async function populateCategorySelect() {
+      const cats = await api('/categories').catch(() => []);
+      const sel = document.getElementById('dish-category');
+      sel.innerHTML = cats.map(c => '<option value="' + escapeAttr(c.id) + '">' + esc(c.name) + '</option>').join('');
+    }
+
+    async function editDish(id) {
+      const allDishes = await api('/dishes').catch(() => []);
+      const d = allDishes.find(x => x.id === id);
+      if (!d) return;
+      document.getElementById('modal-dish-title').textContent = 'Editar Prato';
+      document.getElementById('dish-id').value = d.id;
+      document.getElementById('dish-name').value = d.name;
+      document.getElementById('dish-desc').value = d.description || '';
+      setPriceFromCents(d.price || 0);
+      document.getElementById('dish-featured').checked = !!d.featured;
+      document.getElementById('dish-active').checked = d.active !== false;
+      await populateCategorySelect();
+      document.getElementById('dish-category').value = d.categoryId || '';
+      openModal('modal-dish');
+    }
+
+    document.getElementById('form-dish').addEventListener('submit', async e => {
+      e.preventDefault();
+      const id = document.getElementById('dish-id').value;
+      const btn = e.target.querySelector('button[type="submit"]');
+      setLoading(btn, true);
+      const fd = new FormData();
+      fd.append('name', document.getElementById('dish-name').value.trim());
+      fd.append('description', document.getElementById('dish-desc').value.trim());
+      fd.append('price', String(getPriceCents()));
+      fd.append('categoryId', document.getElementById('dish-category').value);
+      fd.append('featured', document.getElementById('dish-featured').checked);
+      fd.append('active', document.getElementById('dish-active').checked);
+      const fileInput = document.getElementById('dish-image');
+      if (fileInput.files && fileInput.files[0]) fd.append('image', fileInput.files[0]);
+      try {
+        const url = id ? '/dishes/' + id : '/dishes';
+        const method = id ? 'PUT' : 'POST';
+        await fetch(API_BASE + url, { method, headers: { 'Authorization': 'Bearer ' + token }, body: fd });
+        toast(id ? 'Prato atualizado!' : 'Prato criado!');
+        closeModal('modal-dish'); loadDishes(); loadDashboard();
+      } catch (err) { toast(err.message || 'Erro ao salvar prato', 'error'); }
+      finally { setLoading(btn, false, 'Salvar'); }
+    });
+
+    async function deleteDish(id) {
+      if (!confirm('Excluir este prato?')) return;
+      try { await api('/dishes/' + id, { method: 'DELETE' }); toast('Prato excluído'); loadDishes(); loadDashboard(); } catch (e) { toast(e.message || 'Erro ao excluir prato', 'error'); }
+    }
+
+    // CRUD CATEGORIES
+    document.getElementById('btn-add-cat').addEventListener('click', async () => {
+      const cats = await api('/categories').catch(() => []);
+      if (cats.length >= CAT_LIMIT) { toast('Limite de ' + CAT_LIMIT + ' categorias atingido!', 'error'); return; }
+      document.getElementById('modal-cat-title').textContent = 'Nova Categoria';
+      document.getElementById('form-category').reset();
+      document.getElementById('cat-id').value = '';
+      openModal('modal-category');
+    });
+
+    async function editCategory(id) {
+      const c = await api('/categories/' + id).catch(() => null);
+      if (!c) return;
+      document.getElementById('modal-cat-title').textContent = 'Editar Categoria';
+      document.getElementById('cat-id').value = c.id;
+      document.getElementById('cat-name').value = c.name;
+      document.getElementById('cat-order').value = c.sortOrder ?? 0;
+      openModal('modal-category');
+    }
+
+    document.getElementById('form-category').addEventListener('submit', async e => {
+      e.preventDefault();
+      const id = document.getElementById('cat-id').value;
+      const body = {
+        name: document.getElementById('cat-name').value.trim(),
+        sortOrder: parseInt(document.getElementById('cat-order').value) || 0,
+      };
+      try {
+        if (id) await api('/categories/' + id, { method: 'PUT', body: JSON.stringify(body) });
+        else await api('/categories', { method: 'POST', body: JSON.stringify(body) });
+        toast(id ? 'Categoria atualizada!' : 'Categoria criada!');
+        closeModal('modal-category'); loadCategories(); loadDashboard();
+      } catch (e) { toast(e.message || 'Erro ao salvar categoria', 'error'); }
+    });
+
+    async function deleteCategory(id) {
+      if (!confirm('Excluir esta categoria?')) return;
+      try { await api('/categories/' + id, { method: 'DELETE' }); toast('Categoria excluída'); loadCategories(); loadDashboard(); } catch (e) { toast(e.message || 'Erro ao excluir categoria', 'error'); }
+    }
+
+    // BUSINESS HOURS HELPERS
+    const BH_DAY_NAMES = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
+
+    function initBusinessHoursUI(schedule) {
+      const grid = document.getElementById('bh-grid');
+      if (!grid) return;
+      if (!schedule || !schedule.days || !Array.isArray(schedule.days)) schedule = { days: [] };
+      while (schedule.days.length < 7) schedule.days.push({ open: false, from: '08:00', to: '22:00' });
+      grid.innerHTML = schedule.days.map((d, i) => `
+        <div class="bh-row">
+          <label class="bh-day-label">
+            <input type="checkbox" class="bh-day-open" data-day="${i}" ${d.open ? 'checked' : ''} aria-label="${BH_DAY_NAMES[i]} aberto">
+            ${BH_DAY_NAMES[i]}
+          </label>
+          <div class="bh-times">
+            <input type="time" class="bh-day-from" data-day="${i}" value="${d.from || '08:00'}" aria-label="${BH_DAY_NAMES[i]} abertura" ${d.open ? '' : 'disabled'}>
+            <span>até</span>
+            <input type="time" class="bh-day-to" data-day="${i}" value="${d.to || '22:00'}" aria-label="${BH_DAY_NAMES[i]} fechamento" ${d.open ? '' : 'disabled'}>
+          </div>
+        </div>`).join('');
+      grid.querySelectorAll('.bh-day-open').forEach(cb => {
+        cb.addEventListener('change', function () {
+          const day = this.dataset.day;
+          const from = grid.querySelector(`.bh-day-from[data-day="${day}"]`);
+          const to = grid.querySelector(`.bh-day-to[data-day="${day}"]`);
+          if (from) from.disabled = !this.checked;
+          if (to) to.disabled = !this.checked;
+        });
+      });
+    }
+
+    function serializeBusinessHours() {
+      const days = [];
+      for (let i = 0; i < 7; i++) {
+        const openCb = document.querySelector(`.bh-day-open[data-day="${i}"]`);
+        const fromInput = document.querySelector(`.bh-day-from[data-day="${i}"]`);
+        const toInput = document.querySelector(`.bh-day-to[data-day="${i}"]`);
+        days.push({
+          open: openCb ? openCb.checked : false,
+          from: fromInput ? fromInput.value : '08:00',
+          to: toInput ? toInput.value : '22:00'
+        });
+      }
+      const input = document.getElementById('business-hours-input');
+      if (input) input.value = JSON.stringify({ days });
+    }
+
+    // SETTINGS
+    document.getElementById('settings-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      serializeBusinessHours();
+      const btn = e.target.querySelector('button[type="submit"]');
+      setLoading(btn, true);
+      const fcToggle = document.getElementById('store-force-closed-toggle');
+      const bhInput = document.getElementById('business-hours-input');
+      const body = {
+        restaurant_name: document.getElementById('cfg-name').value.trim(),
+        whatsapp_number: document.getElementById('cfg-phone').value.replace(/\D/g, ''),
+        restaurant_phone: document.getElementById('cfg-phone').value.trim(),
+        restaurant_email: document.getElementById('cfg-email').value.trim(),
+        restaurant_address: document.getElementById('cfg-address').value.trim(),
+        whatsapp_message: document.getElementById('cfg-whatsapp-msg').value.trim(),
+        restaurant_description: document.getElementById('cfg-description').value.trim(),
+        restaurant_tagline: document.getElementById('cfg-tagline').value.trim(),
+        hero_title: document.getElementById('cfg-hero-title').value.trim(),
+        hero_subtitle: document.getElementById('cfg-hero-subtitle').value.trim(),
+        footer_text: document.getElementById('cfg-footer-text').value.trim(),
+        instagram_url: document.getElementById('cfg-instagram').value.trim(),
+        facebook_url: document.getElementById('cfg-facebook').value.trim(),
+        google_maps_embed: document.getElementById('cfg-maps').value.trim(),
+        store_force_closed: (fcToggle && fcToggle.checked) ? 'true' : 'false',
+        business_hours: bhInput ? bhInput.value : '',
+      };
+      try { await api('/config', { method: 'PUT', body: JSON.stringify(body) }); toast('Configurações salvas!'); }
+      catch (err) { toast(err.message || 'Erro ao salvar configurações', 'error'); }
+      finally { setLoading(btn, false, 'Salvar Configurações'); }
+    });
+
+    async function loadSettings() {
+      try {
+        const cfg = await api('/config');
+        if (cfg.restaurant_name) document.getElementById('cfg-name').value = cfg.restaurant_name;
+        document.getElementById('cfg-phone').value = cfg.whatsapp_number || cfg.restaurant_phone || '';
+        if (cfg.restaurant_email) document.getElementById('cfg-email').value = cfg.restaurant_email;
+        if (cfg.restaurant_address) document.getElementById('cfg-address').value = cfg.restaurant_address;
+        if (cfg.whatsapp_message) document.getElementById('cfg-whatsapp-msg').value = cfg.whatsapp_message;
+        if (cfg.restaurant_description) document.getElementById('cfg-description').value = cfg.restaurant_description;
+        if (cfg.restaurant_tagline) document.getElementById('cfg-tagline').value = cfg.restaurant_tagline;
+        if (cfg.hero_title) document.getElementById('cfg-hero-title').value = cfg.hero_title;
+        if (cfg.hero_subtitle) document.getElementById('cfg-hero-subtitle').value = cfg.hero_subtitle;
+        if (cfg.footer_text) document.getElementById('cfg-footer-text').value = cfg.footer_text;
+        if (cfg.instagram_url) document.getElementById('cfg-instagram').value = cfg.instagram_url;
+        if (cfg.facebook_url) document.getElementById('cfg-facebook').value = cfg.facebook_url;
+        if (cfg.google_maps_embed) document.getElementById('cfg-maps').value = cfg.google_maps_embed;
+        // Store open toggle (dashboard)
+        const isOpen = cfg.store_force_closed !== 'true';
+        document.getElementById('store-open-toggle').checked = isOpen;
+        document.getElementById('store-status-label').textContent = isOpen ? 'Aberta' : 'Fechada';
+        // Force-closed toggle in settings
+        const fcToggle = document.getElementById('store-force-closed-toggle');
+        if (fcToggle) fcToggle.checked = cfg.store_force_closed === 'true';
+        // Business hours
+        let schedule = { days: [] };
+        try { schedule = JSON.parse(cfg.business_hours || '{}') || { days: [] }; } catch (_) { }
+        initBusinessHoursUI(schedule);
+      } catch (e) { toast('Erro ao carregar configurações', 'error'); }
+    }
+
+    // PASSWORD CHANGE
+    function openPasswordModal() {
+      document.getElementById('pw-current').value = '';
+      document.getElementById('pw-new').value = '';
+      document.getElementById('pw-confirm').value = '';
+      document.getElementById('pw-error').textContent = '';
+      openModal('modal-password');
+    }
+
+    document.getElementById('form-password').addEventListener('submit', async e => {
+      e.preventDefault();
+      const errEl = document.getElementById('pw-error');
+      const currentPassword = document.getElementById('pw-current').value;
+      const newPassword = document.getElementById('pw-new').value;
+      const confirm = document.getElementById('pw-confirm').value;
+      errEl.textContent = '';
+      if (newPassword !== confirm) { errEl.textContent = 'As senhas não coincidem'; return; }
+      if (newPassword.length < 8) { errEl.textContent = 'Mínimo de 8 caracteres'; return; }
+      if (!/[A-Z]/.test(newPassword)) { errEl.textContent = 'Deve conter letra maiúscula'; return; }
+      if (!/[a-z]/.test(newPassword)) { errEl.textContent = 'Deve conter letra minúscula'; return; }
+      if (!/[0-9]/.test(newPassword)) { errEl.textContent = 'Deve conter um número'; return; }
+      try {
+        await api('/auth/change-password', { method: 'PUT', body: JSON.stringify({ currentPassword, newPassword }) });
+        closeModal('modal-password');
+        toast('Senha alterada! Faça login novamente.');
+        setTimeout(() => { logout(); }, 2000);
+      } catch (err) { errEl.textContent = err.message || 'Erro ao alterar senha'; }
+    });
+
+    // INIT
+    window.addEventListener('DOMContentLoaded', async function () {
+      initPriceMask();
+      if (token) {
+        try { await api('/auth/me'); showDashboard(); } catch (_) { showLogin(); }
+      } else { showLogin(); }
+    });
+  </script>
 </body>
+
 </html>

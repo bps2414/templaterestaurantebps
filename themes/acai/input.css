@@ -1,3 +1,44 @@
 ﻿/* Starter theme: acai */
-/* TODO: design tokens via /ui-ux-pro-max */
+/* Design tokens — Açaí do Bairro */
 @import 'tailwindcss';
+
+@theme {
+    --color-brand: #7C3AED;
+    --color-brand-dark: #6D28D9;
+    --color-brand-light: #DDD6FE;
+    --color-accent: #84CC16;
+    --color-bg: #FAF5FF;
+    --color-surface: #F3E8FF;
+    --color-text: #1E1B4B;
+    --color-muted: #6B21A8;
+    --color-border: #DDD6FE;
+
+    --font-display: 'Fredoka', sans-serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+:root {
+    --brand: #7C3AED;
+    --brand-dark: #6D28D9;
+    --brand-light: #DDD6FE;
+    --accent: #84CC16;
+    --bg: #FAF5FF;
+    --surface: #F3E8FF;
+    --text: #1E1B4B;
+    --muted: #6B21A8;
+    --border: #DDD6FE;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+h1,
+h2,
+h3,
+.font-display {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+}

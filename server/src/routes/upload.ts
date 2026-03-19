@@ -50,8 +50,13 @@ router.post('/', requireAuth, requireAdmin, upload.single('image'), async (req: 
         }
 
         // Cleanup old Cloudinary image if previousUrl was provided
+        // Tenant isolation is enforced inside cloudinaryService.delete() via isTenantUrl()
         const previousUrl = req.body?.previousUrl;
-        if (previousUrl && typeof previousUrl === 'string' && previousUrl.includes('cloudinary.com')) {
+        if (
+            previousUrl &&
+            typeof previousUrl === 'string' &&
+            /^https:\/\/res\.cloudinary\.com\//i.test(previousUrl)
+        ) {
             cloudinaryService.delete(previousUrl).catch(() => {
                 // Non-blocking: log handled inside service
             });

@@ -24,7 +24,15 @@
         "dev:confeitaria": "cross-env THEME=confeitaria node ../scripts/select-theme.js && cross-env THEME=confeitaria ts-node-dev --respawn --transpile-only src/index.ts",
         "seed:confeitaria": "cross-env SEED_TYPE=confeitaria ts-node prisma/seed.ts",
         "dev:pizzaria": "cross-env THEME=pizzaria node ../scripts/select-theme.js && cross-env THEME=pizzaria ts-node-dev --respawn --transpile-only src/index.ts",
-        "seed:pizzaria": "cross-env SEED_TYPE=pizzaria ts-node prisma/seed.ts"
+        "seed:pizzaria": "cross-env SEED_TYPE=pizzaria ts-node prisma/seed.ts",
+        "dev:restaurant-lite": "cross-env THEME=restaurant-lite PLAN=starter node ../scripts/select-theme.js && cross-env THEME=restaurant-lite PLAN=starter ts-node-dev --respawn --transpile-only src/index.ts",
+        "seed:restaurant-lite": "cross-env SEED_TYPE=restaurant-lite PLAN=starter ts-node prisma/seed.ts",
+        "dev:burger-lite": "cross-env THEME=burger-lite PLAN=starter node ../scripts/select-theme.js && cross-env THEME=burger-lite PLAN=starter ts-node-dev --respawn --transpile-only src/index.ts",
+        "seed:burger-lite": "cross-env SEED_TYPE=burger-lite PLAN=starter ts-node prisma/seed.ts",
+        "dev:pizza-lite": "cross-env THEME=pizza-lite PLAN=starter node ../scripts/select-theme.js && cross-env THEME=pizza-lite PLAN=starter ts-node-dev --respawn --transpile-only src/index.ts",
+        "seed:pizza-lite": "cross-env SEED_TYPE=pizza-lite PLAN=starter ts-node prisma/seed.ts",
+        "dev:acai": "cross-env THEME=acai PLAN=starter node ../scripts/select-theme.js && cross-env THEME=acai PLAN=starter ts-node-dev --respawn --transpile-only src/index.ts",
+        "seed:acai": "cross-env SEED_TYPE=acai PLAN=starter ts-node prisma/seed.ts"
     },
     "prisma": {
         "seed": "ts-node prisma/seed.ts"

@@ -16,7 +16,14 @@ export async function requireAuth(req: AuthenticatedRequest, _res: Response, nex
         }
 
         const token = authHeader.split(' ')[1];
-        const payload = authService.verifyAccessToken(token);
+
+        let payload;
+        try {
+            payload = authService.verifyAccessToken(token);
+        } catch {
+            // Any JWT verification failure (expired, malformed, invalid signature) → 401
+            throw new UnauthorizedError('Token inválido ou expirado');
+        }
 
         // Verify tokenVersion — immediately invalidates JWTs after password change
         const user = await prisma.adminUser.findUnique({

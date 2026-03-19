@@ -1,3 +1,43 @@
-﻿/* Starter theme: restaurant-lite */
-/* TODO: design tokens via /ui-ux-pro-max */
+﻿/* restaurant-lite — Comida Caseira / Pensão */
 @import 'tailwindcss';
+
+@layer base {
+    :root {
+        --brand: #DC2626;
+        --brand-dark: #B91C1C;
+        --brand-light: #FEE2E2;
+        --accent: #CA8A04;
+        --bg: #FFFBF5;
+        --surface: #FEF2F2;
+        --text: #450A0A;
+        --muted: #92400E;
+        --border: #FCA5A5;
+    }
+
+    body {
+        font-family: 'Quicksand', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+    }
+
+    h1,
+    h2,
+    h3,
+    .font-display {
+        font-family: 'Caveat', cursive;
+    }
+}
+
+@layer utilities {
+    .brand-bg {
+        background-color: var(--brand);
+    }
+
+    .brand-text {
+        color: var(--brand);
+    }
+
+    .accent-text {
+        color: var(--accent);
+    }
+}

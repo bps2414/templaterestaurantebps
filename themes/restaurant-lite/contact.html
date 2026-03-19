@@ -1,12 +1,733 @@
 ﻿<!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>restaurant-lite — contact</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <meta name="page-name" content="Contato">
+  <title>Contato — Restaurante</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="description" content="Entre em contato, veja nosso endereço e horários de funcionamento.">
+  <link rel="canonical" href="">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Contato — Restaurante">
+  <meta property="og:description" content="Entre em contato, veja nosso endereço e horários de funcionamento.">
+  <meta property="og:url" content="">
+  <meta property="og:site_name" content="Restaurante">
+  <meta property="og:image" content="">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Contato — Restaurante">
+  <meta name="twitter:description" content="Entre em contato, veja nosso endereço e horários de funcionamento.">
+  <meta name="twitter:image" content="">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload"
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap"
+    as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap">
+  </noscript>
+  <style>
+    :root {
+      --brand: #DC2626;
+      --brand-dark: #B91C1C;
+      --accent: #CA8A04;
+      --bg: #FFFBF5;
+      --surface: #FEF9F0;
+      --text: #450A0A;
+      --muted: #92400E;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: 'Caveat', cursive;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    .topnav {
+      background: #fff;
+      border-bottom: 2px solid #FCA5A5;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 1px 4px rgba(220, 38, 38, .08);
+    }
+
+    .topnav-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+
+    .topnav-brand {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--brand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-icon svg {
+      width: 20px;
+      height: 20px;
+      color: #fff;
+    }
+
+    #nav-brand {
+      font-family: 'Caveat', cursive;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--brand);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      font-size: .875rem;
+      font-weight: 600;
+      color: var(--muted);
+      transition: color .2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--brand);
+    }
+
+    .nav-ham {
+      display: none;
+      background: none;
+      border: none;
+      padding: .25rem;
+      cursor: pointer;
+      color: var(--brand);
+    }
+
+    #mobile-nav {
+      display: none;
+      background: #fff;
+      border-top: 1px solid #FCA5A5;
+    }
+
+    #mobile-nav a {
+      display: block;
+      padding: .75rem 1rem;
+      font-weight: 600;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    #mobile-nav a.active {
+      color: var(--brand);
+    }
+
+    @media(max-width:640px) {
+      .nav-links {
+        display: none;
+      }
+
+      .nav-ham {
+        display: block;
+      }
+    }
+
+    .page-header {
+      background: #FEF2F2;
+      border-bottom: 1.5px solid #FCA5A5;
+      padding: 1.5rem 1rem;
+    }
+
+    .page-header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .page-header h1 {
+      font-family: 'Caveat', cursive;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .page-header p {
+      font-size: .85rem;
+      color: var(--muted);
+      margin-top: .2rem;
+    }
+
+    .section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media(max-width:640px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: #fff;
+      border: 1.5px solid #FCA5A5;
+      border-radius: 16px;
+      padding: 1.25rem;
+    }
+
+    .card-label {
+      font-family: 'Caveat', cursive;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: .75rem;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: .5rem;
+      margin-bottom: .6rem;
+    }
+
+    .info-icon {
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: .1rem;
+    }
+
+    .info-text {
+      font-size: .85rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .info-text a {
+      color: var(--brand);
+      font-weight: 600;
+    }
+
+    .info-text a:hover {
+      text-decoration: underline;
+    }
+
+    .hours-list {
+      list-style: none;
+    }
+
+    .hours-list li {
+      display: flex;
+      justify-content: space-between;
+      font-size: .82rem;
+      color: var(--muted);
+      padding: .3rem 0;
+      border-bottom: 1px solid #FEE2E2;
+    }
+
+    .hours-list li:last-child {
+      border: none;
+    }
+
+    .hours-list span.day {
+      font-weight: 600;
+    }
+
+    .hours-list span.time {
+      color: var(--text);
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: .3rem;
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: .6rem .9rem;
+      border: 1.5px solid #FCA5A5;
+      border-radius: 10px;
+      font-family: 'Quicksand', sans-serif;
+      font-size: .9rem;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+      transition: border .2s;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: var(--brand);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .btn-submit {
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: .7rem 1.5rem;
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s;
+      width: 100%;
+    }
+
+    .btn-submit:hover {
+      background: var(--brand-dark);
+    }
+
+    .social-links {
+      display: flex;
+      gap: .75rem;
+      margin-top: 1rem;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      background: var(--surface);
+      border: 1.5px solid #FCA5A5;
+      border-radius: 999px;
+      padding: .35rem .85rem;
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--brand);
+      transition: all .2s;
+    }
+
+    .social-link:hover {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+    }
+
+    #store-status-banner {
+      display: none;
+      background: #FEF2F2;
+      border-bottom: 1px solid #FCA5A5;
+      padding: .4rem 1rem;
+      text-align: center;
+      font-size: .8rem;
+      font-weight: 600;
+      color: #B91C1C;
+    }
+
+    #store-status-banner.closed {
+      display: block;
+    }
+
+    footer {
+      background: #FEF2F2;
+      border-top: 2px solid #FCA5A5;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    #footer-brand {
+      font-family: 'Caveat', cursive;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--brand);
+      display: block;
+      margin-bottom: .25rem;
+    }
+
+    #footer-tagline {
+      font-size: .8rem;
+      color: var(--muted);
+      display: block;
+      margin-bottom: .5rem;
+    }
+
+    #footer-copy {
+      font-size: .72rem;
+      color: #B0837A;
+      margin-top: .5rem;
+      display: block;
+    }
+
+    .footer-links a {
+      font-size: .72rem;
+      color: var(--muted);
+      margin: 0 .5rem;
+    }
+
+    .footer-links a:hover {
+      color: var(--brand);
+    }
+
+    .whatsapp-float {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 999;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #25D366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 14px rgba(37, 211, 102, .45);
+      transition: transform .2s;
+    }
+
+    .whatsapp-float:hover {
+      transform: scale(1.1);
+    }
+
+    #global-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      transition: opacity .4s, visibility .4s;
+    }
+
+    #global-loader .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #FCA5A5;
+      border-top-color: var(--brand);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    body:not(.config-loaded) #global-loader {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    body.config-loaded #global-loader {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    body:not(.config-loaded) {
+      overflow: hidden;
+    }
+
+    /* Shared JS modal/cart dark-theme compat */
+    .bg-dark-700 {
+      background-color: #334155
+    }
+
+    .bg-dark-800 {
+      background-color: #1e293b
+    }
+
+    .bg-dark-900 {
+      background-color: #0f172a
+    }
+
+    .bg-dark-800\/60 {
+      background-color: rgba(30, 41, 59, .6)
+    }
+
+    .bg-brand-500 {
+      background-color: var(--brand)
+    }
+
+    .bg-brand-600 {
+      background-color: var(--brand-dark)
+    }
+
+    .hover\:bg-brand-600:hover {
+      background-color: var(--brand-dark)
+    }
+
+    .hover\:bg-dark-900:hover {
+      background-color: #0f172a
+    }
+
+    .text-brand-400 {
+      color: var(--brand)
+    }
+
+    .focus\:border-brand-400:focus {
+      border-color: var(--brand)
+    }
+
+    .border-white\/10 {
+      border-color: rgba(255, 255, 255, .1)
+    }
+
+    .border-white\/5 {
+      border-color: rgba(255, 255, 255, .05)
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+
+      *,
+      ::before,
+      ::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <!-- TODO: /ui-ux-pro-max -->
+  <div id="global-loader">
+    <div class="spinner"></div>
+  </div>
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0">Pular para o
+    conteúdo</a>
+  <div id="store-status-banner">Fechado no momento. Entre em contato pelo WhatsApp!</div>
+
+  <nav class="topnav" role="navigation" aria-label="Menu principal">
+    <div class="topnav-inner">
+      <a href="/" class="topnav-brand">
+        <div class="logo-icon" aria-hidden="true">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        </div>
+        <span id="nav-brand">Restaurante</span>
+      </a>
+      <div class="nav-links">
+        <a href="/">Início</a>
+        <a href="/menu">Cardápio</a>
+        <a href="/contact" class="active">Contato</a>
+      </div>
+      <button class="nav-ham" id="nav-ham-btn" aria-label="Abrir menu" aria-expanded="false">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="26" height="26" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+    <div id="mobile-nav">
+      <a href="/">Início</a>
+      <a href="/menu">Cardápio</a>
+      <a href="/contact" class="active">Contato</a>
+    </div>
+  </nav>
+
+  <main id="main-content">
+    <div class="page-header">
+      <div class="page-header-inner">
+        <h1>📍 Contato</h1>
+        <p>Venha nos visitar ou mande uma mensagem!</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="contact-grid">
+        <!-- Informações -->
+        <div>
+          <div class="card" style="margin-bottom:1rem;">
+            <div class="card-label">📋 Informações</div>
+            <div class="info-row">
+              <span class="info-icon">📍</span>
+              <div class="info-text" id="footer-address">Rua da Esquina, 42 — Centro</div>
+            </div>
+            <div class="info-row">
+              <span class="info-icon">📞</span>
+              <div class="info-text"><a id="footer-phone" href="#">(00) 90000-0000</a></div>
+            </div>
+            <div class="info-row">
+              <span class="info-icon">✉️</span>
+              <div class="info-text"><a id="footer-email" href="#">contato@restaurante.com</a></div>
+            </div>
+            <div class="social-links">
+              <a id="link-instagram" href="#" class="social-link" target="_blank" rel="noopener" aria-label="Instagram">
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                </svg>
+                Instagram
+              </a>
+              <a id="link-facebook" href="#" class="social-link" target="_blank" rel="noopener" aria-label="Facebook">
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                </svg>
+                Facebook
+              </a>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-label">🕐 Horários</div>
+            <ul class="hours-list" id="opening-hours">
+              <li><span class="day">Seg – Sex</span><span class="time">11h – 15h</span></li>
+              <li><span class="day">Sábado</span><span class="time">11h – 16h</span></li>
+              <li><span class="day">Domingo</span><span class="time">Fechado</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Formulário -->
+        <div class="card">
+          <div class="card-label">💬 Mande uma mensagem</div>
+          <form id="contact-form" novalidate>
+            <div class="form-group">
+              <label class="form-label" for="contact-name">Nome *</label>
+              <input type="text" id="contact-name" name="name" class="form-input" placeholder="Seu nome" required
+                autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contact-phone">WhatsApp</label>
+              <input type="tel" id="contact-phone" name="phone" class="form-input" placeholder="(00) 90000-0000"
+                autocomplete="tel">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contact-message">Mensagem *</label>
+              <textarea id="contact-message" name="message" class="form-textarea" placeholder="Digite sua mensagem..."
+                required></textarea>
+            </div>
+            <button type="submit" class="btn-submit" id="contact-submit-btn">Enviar pelo WhatsApp</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="map-container" style="display:none;border-radius:8px;overflow:hidden;margin:2rem 1rem 0;">
+      <iframe id="google-map" width="100%" height="300" style="border:0;display:block;" loading="lazy" allowfullscreen
+        referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <span id="footer-brand">Restaurante</span>
+      <span id="footer-tagline">Comida caseira de verdade</span>
+      <span id="footer-copy"></span>
+      <div class="footer-links" style="margin-top:.4rem;">
+        <a href="/contact">Contato</a>
+        <a href="/admin">Admin</a>
+      </div>
+    </div>
+  </footer>
+
+  <a href="#" id="whatsapp-float" class="whatsapp-float" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <svg width="28" height="28" fill="white" viewBox="0 0 24 24">
+      <path
+        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+    </svg>
+  </a>
+
+  <script defer src="/js/mobile.js"></script>
+  <script defer src="/js/a11y.js"></script>
+  <script defer src="/js/feedback.js"></script>
+  <script defer src="/js/formValidation.js"></script>
+  <script defer src="/js/app.js"></script>
+  <script defer src="/js/cart.js"></script>
+  <script defer src="/js/whatsappFormatter.js"></script>
+  <script defer src="/js/orderModal-lite.js"></script>
+  <script defer src="/js/cartUI-lite.js"></script>
+  <script>
+    document.getElementById('nav-ham-btn').addEventListener('click', function () {
+      const mn = document.getElementById('mobile-nav');
+      const exp = this.getAttribute('aria-expanded') === 'true';
+      mn.style.display = exp ? 'none' : 'block';
+      this.setAttribute('aria-expanded', String(!exp));
+    });
+    window.applyStoreStatus = function (open) {
+      const b = document.getElementById('store-status-banner'); if (b) b.classList.toggle('closed', !open);
+    };
+    // Contact form → WhatsApp
+    document.getElementById('contact-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = (document.getElementById('contact-name').value || '').trim();
+      const msg = (document.getElementById('contact-message').value || '').trim();
+      if (!name || !msg) { alert('Por favor, preencha nome e mensagem.'); return; }
+      const wa = document.getElementById('whatsapp-float');
+      const tel = (wa && wa.href && wa.href !== '#')
+        ? new URL(wa.href).searchParams.get('phone') || ''
+        : '';
+      const text = encodeURIComponent(`Olá! Sou ${name}.\n\n${msg}`);
+      window.open(`https://wa.me/${tel}?text=${text}`, '_blank', 'noopener');
+    });
+    // Email link
+    const emailEl = document.getElementById('footer-email');
+    if (emailEl && emailEl.textContent && emailEl.textContent !== '')
+      emailEl.href = 'mailto:' + emailEl.textContent.trim();
+    const phoneEl = document.getElementById('footer-phone');
+    if (phoneEl && phoneEl.textContent && phoneEl.textContent !== '')
+      phoneEl.href = 'tel:' + phoneEl.textContent.replace(/\D/g, '');
+    function applyPageConfig(c) {
+      if (c.google_maps_embed) {
+        const m = document.getElementById('google-map');
+        const mc = document.getElementById('map-container');
+        if (m) m.src = c.google_maps_embed;
+        if (mc) mc.style.display = 'block';
+      }
+    }
+  </script>
 </body>
+
 </html>

@@ -1,12 +1,956 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>restaurant-lite — index</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <title>Restaurante — Comida Caseira</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="description"
+    content="Comida caseira de qualidade, feita com carinho. Confira nosso cardápio e peça pelo WhatsApp.">
+  <link rel="canonical" href="">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Restaurante — Comida Caseira">
+  <meta property="og:description" content="Comida caseira de qualidade, feita com carinho.">
+  <meta property="og:url" content="">
+  <meta property="og:site_name" content="Restaurante">
+  <meta property="og:image"
+    content="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&h=630&q=80">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Restaurante — Comida Caseira">
+  <meta name="twitter:description" content="Comida caseira de qualidade, feita com carinho.">
+  <meta name="twitter:image"
+    content="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&h=630&q=80">
+  <link rel="preconnect" href="https://res.cloudinary.com">
+  <link rel="dns-prefetch" href="https://res.cloudinary.com">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload"
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap"
+    as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap">
+  </noscript>
+  <style>
+    :root {
+      --brand: #DC2626;
+      --brand-dark: #B91C1C;
+      --accent: #CA8A04;
+      --bg: #FFFBF5;
+      --surface: #FEF9F0;
+      --text: #450A0A;
+      --muted: #92400E;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: 'Caveat', cursive;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    /* Nav */
+    .topnav {
+      background: #fff;
+      border-bottom: 2px solid #FCA5A5;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 1px 4px rgba(220, 38, 38, .08);
+    }
+
+    .topnav-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+
+    .topnav-brand {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .topnav-brand .logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--brand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .topnav-brand .logo-icon svg {
+      width: 20px;
+      height: 20px;
+      color: #fff;
+    }
+
+    #nav-brand {
+      font-family: 'Caveat', cursive;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--brand);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      font-size: .875rem;
+      font-weight: 600;
+      color: var(--muted);
+      transition: color .2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--brand);
+    }
+
+    .nav-ham {
+      display: none;
+      background: none;
+      border: none;
+      padding: .25rem;
+      cursor: pointer;
+      color: var(--brand);
+    }
+
+    #mobile-nav {
+      display: none;
+      background: #fff;
+      border-top: 1px solid #FCA5A5;
+    }
+
+    #mobile-nav a {
+      display: block;
+      padding: .75rem 1rem;
+      font-weight: 600;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    #mobile-nav a:hover,
+    #mobile-nav a.active {
+      color: var(--brand);
+    }
+
+    @media(max-width:640px) {
+      .nav-links {
+        display: none;
+      }
+
+      .nav-ham {
+        display: block;
+      }
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      min-height: 380px;
+      display: flex;
+      align-items: center;
+      background: #FEF2F2 url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=70') center/cover no-repeat;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=70') center/cover no-repeat;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 251, 245, .82);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 1rem;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: var(--brand);
+      color: #fff;
+      font-size: .75rem;
+      font-weight: 700;
+      padding: .25rem .75rem;
+      border-radius: 999px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin-bottom: .75rem;
+    }
+
+    #hero-title {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(2.2rem, 6vw, 3.5rem);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: .5rem;
+    }
+
+    #hero-title span,
+    .text-brand-400 {
+      color: var(--brand);
+    }
+
+    #hero-subtitle {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      max-width: 480px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: .75rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: var(--brand);
+      color: #fff;
+      font-weight: 700;
+      padding: .7rem 1.5rem;
+      border-radius: 999px;
+      font-size: .95rem;
+      cursor: pointer;
+      border: none;
+      transition: background .2s, transform .15s;
+      white-space: nowrap;
+    }
+
+    .btn-primary:hover {
+      background: var(--brand-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: #fff;
+      color: var(--brand);
+      border: 2px solid var(--brand);
+      font-weight: 700;
+      padding: .65rem 1.4rem;
+      border-radius: 999px;
+      font-size: .95rem;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+
+    .btn-secondary:hover {
+      background: var(--brand);
+      color: #fff;
+    }
+
+    /* Banner status */
+    #store-status-banner {
+      display: none;
+      background: #FEF2F2;
+      border-bottom: 1px solid #FCA5A5;
+      padding: .4rem 1rem;
+      text-align: center;
+      font-size: .8rem;
+      font-weight: 600;
+      color: #B91C1C;
+    }
+
+    #store-status-banner.closed {
+      display: block;
+    }
+
+    /* Categorias destaque */
+    .section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2.5rem 1rem;
+    }
+
+    .section-title {
+      font-family: 'Caveat', cursive;
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .category-chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .5rem;
+      margin-bottom: 2rem;
+    }
+
+    .chip {
+      background: var(--surface);
+      border: 1.5px solid #FCA5A5;
+      color: var(--brand);
+      font-size: .8rem;
+      font-weight: 600;
+      padding: .3rem .9rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .chip:hover,
+    .chip.active {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+    }
+
+    /* Pratos destaque */
+    .dishes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .dish-card {
+      background: #fff;
+      border: 1.5px solid #FCA5A5;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
+      cursor: pointer;
+    }
+
+    .dish-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(220, 38, 38, .12);
+    }
+
+    .dish-img {
+      width: 100%;
+      height: 170px;
+      object-fit: cover;
+      background: #FEF2F2;
+    }
+
+    .dish-img-placeholder {
+      width: 100%;
+      height: 170px;
+      background: #FEF2F2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+
+    .dish-body {
+      padding: .75rem;
+    }
+
+    .dish-name {
+      font-family: 'Caveat', cursive;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: .2rem;
+      line-height: 1.2;
+    }
+
+    .dish-desc {
+      font-size: .72rem;
+      color: var(--muted);
+      margin-bottom: .5rem;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .dish-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .dish-price {
+      font-weight: 700;
+      font-size: .95rem;
+      color: var(--brand);
+    }
+
+    .dish-unavailable {
+      opacity: .55;
+    }
+
+    .add-btn {
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      width: 36px;
+      height: 36px;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .add-btn:hover {
+      background: var(--brand-dark);
+    }
+
+    /* CTA WhatsApp */
+    .wa-banner {
+      background: var(--brand);
+      color: #fff;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin: 1.5rem 0;
+      border-radius: 20px;
+    }
+
+    .wa-banner h2 {
+      font-family: 'Caveat', cursive;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: .4rem;
+    }
+
+    .wa-banner p {
+      font-size: .9rem;
+      margin-bottom: 1.25rem;
+      opacity: .9;
+    }
+
+    .btn-wa {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: #fff;
+      color: #DC2626;
+      font-weight: 700;
+      padding: .7rem 1.5rem;
+      border-radius: 999px;
+      font-size: .95rem;
+      transition: transform .2s;
+    }
+
+    .btn-wa:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    footer {
+      background: #FEF2F2;
+      border-top: 2px solid #FCA5A5;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    #footer-brand {
+      font-family: 'Caveat', cursive;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--brand);
+      display: block;
+      margin-bottom: .25rem;
+    }
+
+    #footer-tagline {
+      font-size: .8rem;
+      color: var(--muted);
+      display: block;
+      margin-bottom: .5rem;
+    }
+
+    .footer-info {
+      font-size: .78rem;
+      color: var(--muted);
+      margin-top: .5rem;
+    }
+
+    #footer-copy {
+      font-size: .72rem;
+      color: #B0837A;
+      margin-top: .5rem;
+      display: block;
+    }
+
+    .footer-links a {
+      font-size: .72rem;
+      color: var(--muted);
+      margin: 0 .5rem;
+    }
+
+    .footer-links a:hover {
+      color: var(--brand);
+    }
+
+    /* WhatsApp float */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 999;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #25D366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 14px rgba(37, 211, 102, .45);
+      transition: transform .2s;
+    }
+
+    .whatsapp-float:hover {
+      transform: scale(1.1);
+    }
+
+    /* Loader */
+    #global-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      transition: opacity .4s, visibility .4s;
+    }
+
+    #global-loader .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #FCA5A5;
+      border-top-color: var(--brand);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    body:not(.config-loaded) #global-loader {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    body.config-loaded #global-loader {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    body:not(.config-loaded) {
+      overflow: hidden;
+    }
+
+    /* Reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Map Section */
+    .map-section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1rem 2.5rem;
+    }
+
+    .map-section-title {
+      font-family: 'Caveat', cursive;
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .map-frame-wrap {
+      border-radius: 18px;
+      overflow: hidden;
+      border: 2px solid #FCA5A5;
+      box-shadow: 0 4px 18px rgba(220, 38, 38, .1);
+      height: 340px;
+    }
+
+    .map-frame-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    @media(max-width:640px) {
+      .map-frame-wrap {
+        height: 240px;
+      }
+    }
+
+    /* Shared JS modal/cart dark-theme compat */
+    .bg-dark-700 {
+      background-color: #334155
+    }
+
+    .bg-dark-800 {
+      background-color: #1e293b
+    }
+
+    .bg-dark-900 {
+      background-color: #0f172a
+    }
+
+    .bg-dark-800\/60 {
+      background-color: rgba(30, 41, 59, .6)
+    }
+
+    .bg-brand-500 {
+      background-color: var(--brand)
+    }
+
+    .bg-brand-600 {
+      background-color: var(--brand-dark)
+    }
+
+    .hover\:bg-brand-600:hover {
+      background-color: var(--brand-dark)
+    }
+
+    .hover\:bg-dark-900:hover {
+      background-color: #0f172a
+    }
+
+    .text-brand-400 {
+      color: var(--brand)
+    }
+
+    .focus\:border-brand-400:focus {
+      border-color: var(--brand)
+    }
+
+    .border-white\/10 {
+      border-color: rgba(255, 255, 255, .1)
+    }
+
+    .border-white\/5 {
+      border-color: rgba(255, 255, 255, .05)
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+
+      *,
+      ::before,
+      ::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <!-- TODO: /ui-ux-pro-max -->
+  <div id="global-loader">
+    <div class="spinner"></div>
+  </div>
+
+  <a href="#main-content"
+    class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-[100] focus:p-3 focus:bg-red-600 focus:text-white">Pular
+    para o conteúdo</a>
+
+  <div id="store-status-banner">Estamos fechados no momento. Volte logo!</div>
+
+  <!-- NAV -->
+  <nav class="topnav" role="navigation" aria-label="Menu principal">
+    <div class="topnav-inner">
+      <a href="/" class="topnav-brand">
+        <div class="logo-icon" aria-hidden="true">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        </div>
+        <span id="nav-brand">Restaurante</span>
+      </a>
+      <div class="nav-links" role="menubar">
+        <a href="/" class="active" role="menuitem">Início</a>
+        <a href="/menu" role="menuitem">Cardápio</a>
+        <a href="/contact" role="menuitem">Contato</a>
+      </div>
+      <button class="nav-ham" id="nav-ham-btn" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-nav">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="26" height="26" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+    <div id="mobile-nav" role="menu" aria-label="Menu mobile">
+      <a href="/" class="active" role="menuitem">Início</a>
+      <a href="/menu" role="menuitem">Cardápio</a>
+      <a href="/contact" role="menuitem">Contato</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <main id="main-content">
+    <section class="hero" aria-label="Bem-vindo">
+      <div class="hero-bg"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <span class="hero-tag">Feito com carinho</span>
+        <h1 id="hero-title">Comida caseira de <span class="text-brand-400">verdade</span></h1>
+        <p id="hero-subtitle">Pratos do dia, marmitas e lanches feitos na hora. Como em casa, só que melhor.</p>
+        <div class="hero-actions">
+          <a href="/menu" class="btn-primary">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            Ver Cardápio
+          </a>
+          <a href="#" id="whatsapp-cta" class="btn-secondary">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+            </svg>
+            Pedir no WhatsApp
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- DESTAQUES -->
+    <section class="section reveal" aria-label="Destaques do cardápio">
+      <h2 class="section-title">O que tá saindo hoje 🍽️</h2>
+      <div class="category-chips" id="home-category-chips"></div>
+      <div class="dishes-grid" id="featured-dishes"></div>
+      <div style="text-align:center;margin-top:1.5rem;">
+        <a href="/menu" class="btn-primary">Ver cardápio completo &rarr;</a>
+      </div>
+    </section>
+
+    <!-- INFO RÁPIDA -->
+    <section class="section reveal" aria-label="Informações">
+      <h2 class="section-title">Venha nos visitar</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;">
+        <div style="background:#fff;border:1.5px solid #FCA5A5;border-radius:16px;padding:1.25rem;text-align:center;">
+          <div style="font-size:1.6rem;margin-bottom:.4rem;">&#128336;</div>
+          <div
+            style="font-family:'Caveat',cursive;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.2rem;">
+            Horários</div>
+          <div id="opening-hours" style="font-size:.78rem;color:var(--muted);">Seg–Sex: 11h–15h</div>
+        </div>
+        <div style="background:#fff;border:1.5px solid #FCA5A5;border-radius:16px;padding:1.25rem;text-align:center;">
+          <div style="font-size:1.6rem;margin-bottom:.4rem;">&#128205;</div>
+          <div
+            style="font-family:'Caveat',cursive;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.2rem;">
+            Endereço</div>
+          <div id="footer-address" style="font-size:.78rem;color:var(--muted);">Rua da Esquina, 42</div>
+        </div>
+        <div style="background:#fff;border:1.5px solid #FCA5A5;border-radius:16px;padding:1.25rem;text-align:center;">
+          <div style="font-size:1.6rem;margin-bottom:.4rem;">&#128222;</div>
+          <div
+            style="font-family:'Caveat',cursive;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.2rem;">
+            Telefone</div>
+          <div id="footer-phone" style="font-size:.78rem;color:var(--muted);"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WA BANNER -->
+    <div class="section" style="padding-top:0;">
+      <div class="wa-banner reveal">
+        <h2>Quer pedir agora?</h2>
+        <p>Manda uma mensagem no WhatsApp e a gente te atende na hora!</p>
+        <a href="#" id="whatsapp-cta-2" class="btn-wa">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+          </svg>
+          Pedir pelo WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <!-- MAP SECTION -->
+    <section id="map-section" class="map-section reveal" style="display:none;" aria-label="Localização">
+      <h2 class="map-section-title">Como nos encontrar 📍</h2>
+      <div class="map-frame-wrap">
+        <iframe id="map-iframe" src="" allowfullscreen loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade" title="Localização do restaurante"></iframe>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <div class="logo-icon" style="margin:0 auto .5rem;">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
+          style="width:20px;height:20px;color:#fff;">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+      </div>
+      <span id="footer-brand">Restaurante</span>
+      <span id="footer-tagline">Comida caseira de verdade</span>
+      <div class="footer-info">
+        <span id="footer-email"></span>
+      </div>
+      <span id="footer-copy"></span>
+      <div class="footer-links" style="margin-top:.4rem;">
+        <a href="/contact">Contato</a>
+        <a href="/admin">Admin</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WA FLOAT -->
+  <a href="#" id="whatsapp-float" class="whatsapp-float" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <svg width="28" height="28" fill="white" viewBox="0 0 24 24">
+      <path
+        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+    </svg>
+  </a>
+
+  <script defer src="/js/mobile.js"></script>
+  <script defer src="/js/a11y.js"></script>
+  <script defer src="/js/feedback.js"></script>
+  <script defer src="/js/formValidation.js"></script>
+  <script defer src="/js/app.js"></script>
+  <script defer src="/js/cart.js"></script>
+  <script defer src="/js/whatsappFormatter.js"></script>
+  <script defer src="/js/orderModal-lite.js"></script>
+  <script defer src="/js/cartUI-lite.js"></script>
+  <script>
+    // Mobile nav toggle
+    document.getElementById('nav-ham-btn').addEventListener('click', function () {
+      const mn = document.getElementById('mobile-nav');
+      const expanded = this.getAttribute('aria-expanded') === 'true';
+      mn.style.display = expanded ? 'none' : 'block';
+      this.setAttribute('aria-expanded', String(!expanded));
+    });
+    // Scroll reveal
+    const obs = new IntersectionObserver(els => els.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: .12 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    // Store status
+    window.applyStoreStatus = function (open) {
+      const b = document.getElementById('store-status-banner');
+      if (b) { b.classList.toggle('closed', !open); }
+    };
+    // Homepage: load categories + featured dishes
+    function escapeHTML(v) { const d = document.createElement('div'); d.textContent = v ?? ""; return d.innerHTML; }
+    async function loadHomepage() {
+      const cats = await api('/categories');
+      if (!cats || !cats.length) return;
+      // Chips
+      const chipsEl = document.getElementById('home-category-chips');
+      if (chipsEl) {
+        cats.forEach((cat, i) => {
+          const ch = document.createElement('span');
+          ch.className = 'chip' + (i === 0 ? ' active' : '');
+          ch.textContent = cat.name;
+          ch.addEventListener('click', () => {
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            ch.classList.add('active');
+            renderDishes(cats, cat.id);
+          });
+          chipsEl.appendChild(ch);
+        });
+      }
+      renderDishes(cats, cats[0].id);
+    }
+    function renderDishes(cats, catId) {
+      const grid = document.getElementById('featured-dishes');
+      if (!grid) return;
+      const cat = cats.find(c => c.id === catId);
+      const dishes = cat ? cat.dishes.slice(0, 6) : [];
+      if (!dishes.length) { grid.innerHTML = '<p style="color:var(--muted);font-size:.85rem;">Nenhum prato disponível.</p>'; return; }
+      grid.innerHTML = dishes.map(d => `
+        <div class="dish-card ${d.is_available === false ? 'dish-unavailable' : ''}" role="article">
+          ${d.image
+          ? `<img class="dish-img" src="${escapeHTML(d.image)}" alt="${escapeHTML(d.name)}" loading="lazy">`
+          : `<div class="dish-img-placeholder" aria-hidden="true">🍽️</div>`}
+          <div class="dish-body">
+            <div class="dish-name">${escapeHTML(d.name)}</div>
+            <div class="dish-desc">${escapeHTML(d.description || '')}</div>
+            <div class="dish-footer">
+              <span class="dish-price">R$ ${(d.price / 100).toFixed(2).replace('.', ',')}</span>
+              ${d.is_available !== false
+          ? `<button class="add-btn order-btn" aria-label="Adicionar ${escapeHTML(d.name)} ao carrinho"
+                    data-action="cart" data-id="${escapeHTML(String(d.id))}" data-name="${escapeHTML(d.name)}"
+                    data-image="${escapeHTML(d.image || '')}" data-price="${d.price}">+</button>`
+          : `<span style="font-size:.7rem;color:#B91C1C;">Indisponível</span>`}
+            </div>
+          </div>
+        </div>`).join('');
+    }
+    window.applyPageConfig = function (cfg) {
+      // Google Maps embed
+      if (cfg && cfg.google_maps_embed) {
+        const mapSection = document.getElementById('map-section');
+        const mapIframe = document.getElementById('map-iframe');
+        if (mapSection) mapSection.style.display = '';
+        if (mapIframe) mapIframe.src = cfg.google_maps_embed;
+      }
+      loadHomepage();
+    };
+  </script>
 </body>
+
 </html>

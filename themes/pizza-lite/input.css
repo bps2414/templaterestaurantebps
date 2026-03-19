@@ -1,3 +1,40 @@
 ﻿/* Starter theme: pizza-lite */
-/* TODO: design tokens via /ui-ux-pro-max */
 @import 'tailwindcss';
+
+@theme {
+    --color-brand: #3B82F6;
+    --color-brand-dark: #2563EB;
+    --color-brand-light: #BFDBFE;
+    --color-accent: #F97316;
+    --color-bg: #F8FAFC;
+    --color-surface: #EFF6FF;
+    --color-text: #1E293B;
+    --color-muted: #64748B;
+    --color-border: #BFDBFE;
+}
+
+:root {
+    --brand: #3B82F6;
+    --brand-dark: #2563EB;
+    --brand-light: #BFDBFE;
+    --accent: #F97316;
+    --bg: #F8FAFC;
+    --surface: #EFF6FF;
+    --text: #1E293B;
+    --muted: #64748B;
+    --border: #BFDBFE;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+h1,
+h2,
+h3,
+.font-display {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+}
