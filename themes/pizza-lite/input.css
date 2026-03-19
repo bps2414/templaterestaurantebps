@@ -14,6 +14,7 @@
 }
 
 :root {
+    color-scheme: light;
     --brand: #3B82F6;
     --brand-dark: #2563EB;
     --brand-light: #BFDBFE;

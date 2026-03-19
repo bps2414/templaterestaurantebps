@@ -2,6 +2,16 @@
 <html lang="pt-BR">
 
 <head>
+  <meta name="color-scheme" content="light">
+  <style>
+    /* iOS input zoom fix */
+    input, textarea, select { font-size: 16px !important; }
+    /* Prevent horizontal scroll */
+    html, body { overflow-x: hidden; width: 100%; }
+    /* Safe area inset for cart button */
+    #cart-button { bottom: max(1.5rem, calc(1.5rem + env(safe-area-inset-bottom))) !important; }
+  </style>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Restaurante — Comida Caseira</title>

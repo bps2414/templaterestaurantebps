@@ -326,7 +326,7 @@
         try {
             var el = document.createElement("div");
             var cls = "error" === type ? "bg-red-600" : "success" === type ? "bg-green-600" : "bg-brand-500";
-            el.className = "fixed bottom-4 right-4 z-[10000] px-6 py-3 rounded-xl text-white font-medium shadow-lg transform transition-all " + cls;
+            el.className = "fixed bottom-24 right-4 z-[10000] px-6 py-3 rounded-xl text-white font-medium shadow-lg transform transition-all " + cls;
             el.textContent = msg;
             document.body.appendChild(el);
             setTimeout(function () { el.style.opacity = "0"; el.style.transform = "translateY(20px)"; setTimeout(function () { el.remove(); }, 300); }, 3000);

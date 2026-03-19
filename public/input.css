@@ -1,8 +1,9 @@
-﻿/* restaurant-lite — Comida Caseira / Pensão */
+/* restaurant-lite — Comida Caseira / Pensão */
 @import 'tailwindcss';
 
 @layer base {
     :root {
+        color-scheme: light;
         --brand: #DC2626;
         --brand-dark: #B91C1C;
         --brand-light: #FEE2E2;

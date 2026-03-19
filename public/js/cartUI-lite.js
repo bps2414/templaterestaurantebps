@@ -57,7 +57,10 @@
     CartUI.prototype._createCartButton = function () {
         var btn = document.createElement("button");
         btn.id = "cart-button";
-        btn.className = "fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full shadow-2xl flex items-center justify-center transition-all transform hover:scale-110";
+        btn.className = "fixed right-6 z-50 w-16 h-16 rounded-full shadow-2xl flex items-center justify-center transition-all transform hover:scale-110";
+        Object.assign(btn.style, {
+            bottom: "max(1.5rem, env(safe-area-inset-bottom, 1.5rem))"
+        });
         btn.setAttribute("aria-label", "Abrir Carrinho");
         btn.innerHTML = [
             '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">',
