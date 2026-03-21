@@ -1,0 +1,8 @@
+# Project Tracks
+
+This file tracks all major tracks for the project. Each track has its own detailed plan in its respective folder.
+
+---
+
+- [ ] **Track: Configure deployment environment and set up Neon database connection**
+  *Link: [./tracks/configure_deploy_20260321/](./tracks/configure_deploy_20260321/)*
