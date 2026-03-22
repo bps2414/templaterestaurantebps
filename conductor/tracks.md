@@ -9,5 +9,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Revamp and execute advanced pre-deployment checklist before deploying demo website**
+- [x] **Track: Revamp and execute advanced pre-deployment checklist before deploying demo website**
   *Link: [./tracks/advanced_pre_deploy_20260321/](./tracks/advanced_pre_deploy_20260321/)*
