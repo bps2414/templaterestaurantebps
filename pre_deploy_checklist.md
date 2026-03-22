@@ -25,21 +25,21 @@ Use esta lista rigorosa antes de declarar o projeto como pronto para venda (depl
 ---
 
 ## 📱 3. UI/UX e Responsividade (Cross-Device)
-- [ ] **iOS Safari Bottom Bar:** O carrinho/botão fixo no rodapé (`position: fixed; bottom: 0`) fica coberto pela barra de navegação do Safari/Chrome no iOS? (Necessário testar com 100vh vs padding-bottom).
-- [ ] **Modais Mobile:** Modais de Produto e Categorias cabem na tela de celulares menores (ex: iPhone SE)? Eles scrollam internamente sem scrollar também a página da lista (scroll lock na tag `body`)?
-- [ ] **Line-Clamp:** Nomes enormes de pratos ou descrições gigantes expandem a caixa (quebrando o grid) ou usamos corretamente o `-webkit-line-clamp: 2` com fallback? (Feito na última fase!)
-- [ ] **Dark Mode / Light Mode Fallback:** Em temas explícitos (ex: `restaurant-lite`), forçar o light-mode via root properties ou color-scheme para garantir que configurações de OS do usuário não injetem cores de dark mode e deixem textos invisíveis.
-- [ ] **Favicon e Títulos Dinâmicos:** As tags `<title>` no `<head>` acompanham os novos settings do Admin para dar a branding exata do cliente.
+- [x] **iOS Safari Bottom Bar:** O carrinho/botão fixo no rodapé (`position: fixed; bottom: 0`) fica coberto pela barra de navegação do Safari/Chrome no iOS? (Necessário testar com 100vh vs padding-bottom).
+- [x] **Modais Mobile:** Modais de Produto e Categorias cabem na tela de celulares menores (ex: iPhone SE)? Eles scrollam internamente sem scrollar também a página da lista (scroll lock na tag `body`)?
+- [x] **Line-Clamp:** Nomes enormes de pratos ou descrições gigantes expandem a caixa (quebrando o grid) ou usamos corretamente o `-webkit-line-clamp: 2` com fallback? (Feito na última fase!)
+- [x] **Dark Mode / Light Mode Fallback:** Em temas explícitos (ex: `restaurant-lite`), forçar o light-mode via root properties ou color-scheme para garantir que configurações de OS do usuário não injetem cores de dark mode e deixem textos invisíveis.
+- [x] **Favicon e Títulos Dinâmicos:** As tags `<title>` no `<head>` acompanham os novos settings do Admin para dar a branding exata do cliente.
 
 ---
 
 ## 🛠️ 4. Fluxos do Painel Admin (Gestor)
-- [ ] **Preço Mask:** O input "Preço" do cadastro de pratos está bloqueando caracteres não numéricos perfeitamente? O formato salvo converte certo pra centavos (ex: R$ 19,90 = 1990 centavos)?
-- [ ] **Exclusão com Dependência:** Ao deletar uma categoria, a API deleta os pratos vinculados em cascata ou dá erro 500 informando falha de Foreign Key no BD? O painel recarrega suavemente essa informação?
-- [ ] **Limites do Plano do Cliente:** O restaurante está impedido de criar o 31º prato e 6º categoria no front AND no backend (validação crucial para os pacotes SaaS que você vai vender). 
-- [ ] **Imagens Faltantes e Deletadas:** Ao deletar um prato, a URL antiga no storage/bucket (S3, Cloudinary) também é excluída, evitando contas altíssimas de armazenamento morto do servidor SaaS?
-- [ ] **Edição em Tempo Real:** Edições alteram o número no contador do Dashboard? Testar fluidez dos stats na tela principal.
-- [ ] **Feedback Emocional UI:** Todo salvamento gera Toast Verde e erros geram Toast Vermelho. Erros do backend são legíveis e descritivos (ex: `Email já existe`).
+- [x] **Preço Mask:** O input "Preço" do cadastro de pratos está bloqueando caracteres não numéricos perfeitamente? O formato salvo converte certo pra centavos (ex: R$ 19,90 = 1990 centavos)?
+- [x] **Exclusão com Dependência:** Ao deletar uma categoria, a API deleta os pratos vinculados em cascata ou dá erro 500 informando falha de Foreign Key no BD? O painel recarrega suavemente essa informação?
+- [x] **Limites do Plano do Cliente:** O restaurante está impedido de criar o 31º prato e 6º categoria no front AND no backend (validação crucial para os pacotes SaaS que você vai vender). 
+- [x] **Imagens Faltantes e Deletadas:** Ao deletar um prato, a URL antiga no storage/bucket (S3, Cloudinary) também é excluída, evitando contas altíssimas de armazenamento morto do servidor SaaS?
+- [x] **Edição em Tempo Real:** Edições alteram o número no contador do Dashboard? Testar fluidez dos stats na tela principal.
+- [x] **Feedback Emocional UI:** Todo salvamento gera Toast Verde e erros geram Toast Vermelho. Erros do backend são legíveis e descritivos (ex: `Email já existe`).
 
 ---
 
