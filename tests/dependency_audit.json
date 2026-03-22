@@ -1,0 +1,18 @@
+﻿node.exe : npm error code ENOLOCK
+No linha:1 caractere:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm error code ENOLOCK:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+npm error audit This command requires an existing lockfile.
+npm error audit Try creating one first with: npm i --package-lock-only
+npm error audit Original error: loadVirtual requires existing shrinkwrap file
+{
+  "error": {
+    "code": "ENOLOCK",
+    "summary": "This command requires an existing lockfile.",
+    "detail": "Try creating one first with: npm i --package-lock-only\nOriginal error: loadVirtual requires existing shrinkwrap file"
+  }
+}
+npm error A complete log of this run can be found in: C:\Users\Administrator\AppData\Local\npm-cache\_logs\2026-02-11T02_31_05_980Z-debug-0.log
