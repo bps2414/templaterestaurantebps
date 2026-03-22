@@ -49,4 +49,33 @@ Use esta lista rigorosa antes de declarar o projeto como pronto para venda (depl
 - [ ] **Logs Básicos no Servidor:** Backend registra crash com stacktrace? Logs de requisições malformadas funcionam? (Utilize PM2 / Vercel Logs dependendo de onde está a API).
 - [ ] **Métricas Web Vitals Inicial:** Rodar um Lighthouse basic na vitrine simulada de um cliente para não entregar um site travado (FRP e LCP verdes).
 
+---
+
+## ⚙️ 6. CI/CD Pipeline & Build Verification
+- [ ] **Build Automático:** O comando de build (ex: `npm run build` ou equivalente TypeScript) roda sem falhas, avisos de tipo pendentes ou arquivos não compilados?
+- [ ] **Variáveis de Ambiente (CI):** O processo de CI consegue acessar corretamente os secrets de staging/produção e o deploy falha graciosamente (fail-fast) se faltar algum ENV crucial (como `DATABASE_URL` ou `JWT_SECRET`)?
+- [ ] **Automação de Deploy:** O hook do Github/Vercel/Coolify está configurado para não subir código que falha no linter ou testes automatizados?
+
+---
+
+## 🤖 7. E2E Testing (User Journey Simulations)
+- [ ] **Fluxo de Carrinho (Storefront):** Teste E2E automatizado valida: abrir loja, adicionar 2 itens diferentes ao carrinho (com e sem adicionais), e gerar o link do WhatsApp final com sucesso?
+- [ ] **Fluxo de Admin:** Teste automatizado simula um login de gerente, criação de nova categoria e adição de um novo prato nela, finalizando com deleção bem-sucedida de ambos?
+- [ ] **Resiliência a Erros:** E2E verifica se o usuário recebe a mensagem "Loja Fechada" caso o horário seja ultrapassado.
+
+---
+
+## ⚡ 8. Performance & Load Simulation
+- [ ] **Teste de Carga Básica:** API aguenta 100 requisições simultâneas em `/menu/:restaurant_id` (endpoint público mais acessado) mantendo tempo de resposta aceitável (< 300ms)?
+- [ ] **Otimização de Banco de Dados:** Query de Menu faz eager-loading (join/include) de Categorias e Pratos numa única chamada pra evitar o problema de N+1 queries?
+- [ ] **Simulação de Tráfego Múltiplo:** Múltiplos tenants acessando seus dados via Admin simultaneamente não geram lock de banco ou overhead na CPU do servidor.
+
+---
+
+## 🛡️ 9. Advanced Security & Auditing
+- [ ] **Dependências Vulneráveis:** `npm audit` ou equivalente reporta ZERO vulnerabilidades altas/críticas? E scripts de terceiros na vitrine estão usando SRI (Subresource Integrity) se via CDN?
+- [ ] **JWT e Refresh Audits:** Token não contém PII sensíveis (apenas IDs) e é assinado com chave criptográfica robusta.
+- [ ] **Proteção Avançada (Helmet/CORS):** Cabeçalhos de segurança estão ativos no Express (HSTS, NoSniff) e CORS bloqueia explicitamente métodos DELETE/PUT não autenticados?
+- [ ] **Rate Limiting Global:** Além de `/auth/login`, existe um rate limit mais flexível na API como um todo (ex: 200 reqs/min por IP) para prevenir raspagem de dados (scraping)?
+
 > 🔥 **Dica de Venda:** Se você conseguir fechar 100% dos checks de "Fluxo do Cliente Final" e "Isolamento de Dados", o projeto tem MÍNIMO VIÁVEL COMERCIAL. Você já pode plugar o Stripe / PagarMe e cobrar a mensalidade.
