@@ -15,6 +15,10 @@
 - **Image Hosting:** Cloudinary
 - **Authentication:** JSON Web Tokens (JWT)
 
+## Testing
+- **E2E Testing:** Playwright
+- **Performance Testing:** k6
+
 ## Deployment & Infrastructure
 - **Demo Hosting:** Vercel
 - **Production Hosting:** VPS (Virtual Private Server) with Coolify
