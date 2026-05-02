@@ -1,36 +1,50 @@
-# === Ambiente ===
+# Ambiente
 .env
-.env.local
-.env.production
+.env.*
+!.env.example
+!server/.env.example
 
-# === Node ===
+# Node
 node_modules/
+server/node_modules/
 dist/
+server/dist/
 
-# === Uploads do usuário ===
+# Uploads de usuario
 server/assets/uploads/*
 !server/assets/uploads/.gitkeep
 
-# === OS ===
+# Artefatos gerados/local-only
+coverage/
+server/coverage/
+playwright-report/
+test-results/
+report/
+tmp/
+migration_logs/
+lint_output*.txt
+server/backups/*.json
+server/temp_*.json
+
+# Ferramental local de agentes
+.agents/
+.copilot-vault/
+
+# OS
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# === IDE ===
+# IDE
 .vscode/
 .idea/
 *.swp
 
-# === Logs ===
+# Logs
 *.log
 npm-debug.log*
 
-# === Backups (não enviar ao GitHub) ===
+# Backups locais
 backup_before_saas/
 backup_before_security_phase1/
 backup_before_security_ui/
-
-# === Testes/relatórios locais ===
-tests/
-report/
-migration_logs/

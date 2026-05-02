@@ -1,5 +1,5 @@
 {
-    "name": "restaurant-saas",
+    "name": "restaurant-templates-bps",
     "version": "2.0.0",
     "private": true,
     "engines": {
@@ -13,7 +13,7 @@
     "devDependencies": {
         "@playwright/test": "^1.50.1",
         "@tailwindcss/cli": "^4.2.1",
-        "@types/k6": "^0.55.0",
+        "@types/k6": "^1.7.0",
         "k6": "^0.0.0",
         "tailwindcss": "^4.2.1",
         "terser": "^5.46.0"

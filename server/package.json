@@ -1,7 +1,7 @@
 {
     "name": "restaurant-template-server",
     "version": "2.0.0",
-    "description": "Template Premium de Site para Restaurante — Express + Prisma + Stripe",
+    "description": "Backend/admin experimental para templates de alimentacao",
     "main": "dist/index.js",
     "scripts": {
         "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
@@ -68,8 +68,13 @@
         "@types/node": "^22.0.0",
         "@types/supertest": "^6.0.3",
         "@types/uuid": "^9.0.7",
+        "@typescript-eslint/eslint-plugin": "^7.18.0",
+        "@typescript-eslint/parser": "^7.18.0",
         "cross-env": "^10.1.0",
+        "eslint": "^8.57.1",
+        "eslint-config-prettier": "^9.1.2",
         "jest": "^30.2.0",
+        "prettier": "^3.8.3",
         "prisma": "5.22.0",
         "supertest": "^7.2.2",
         "ts-jest": "^29.4.6",
